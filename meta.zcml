@@ -5,6 +5,5 @@
 
   <include package=".browser" file="meta.zcml" />
   <include package=".xmlrpc" file="meta.zcml" />
-  <include package=".vfs" file="meta.zcml" />
 
 </zopeConfigure>
