@@ -11,10 +11,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
+"""Page Template based Resources Test
+
 $Id$
 """
-
 import os
 from unittest import TestCase, main, makeSuite
 
