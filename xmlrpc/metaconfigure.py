@@ -13,7 +13,7 @@
 ##############################################################################
 """XMLRPC configuration code
 
-$Id: metaconfigure.py,v 1.17 2004/03/05 15:55:52 eddala Exp $
+$Id: metaconfigure.py,v 1.18 2004/03/15 20:42:19 jim Exp $
 """
 
 from zope.component.servicenames import Presentation
@@ -70,18 +70,19 @@ def view(_context, name, class_=None, for_=None, layer=None,
 
     # Register the new view.
     _context.action(
-        discriminator = ('view', for_, name, IXMLRPCRequest),
+        discriminator = ('view', tuple(for_), name, IXMLRPCRequest),
         callable = handler,
-        args = (Presentation, 'provideView', for_, name,
-                IXMLRPCRequest, [class_]) )
+        args = (Presentation, 'provideAdapter', IXMLRPCRequest, class_,
+                name, for_) )
 
     # Register the used interfaces with the interface service
-    if for_ is not None:
-        _context.action(
-            discriminator = None,
-            callable = provideInterface,
-            args = (for_.__module__+'.'+for_.getName(), for_)
-            )
+    for iface in for_:
+        if iface is not None:
+            _context.action(
+                discriminator = None,
+                callable = provideInterface,
+                args = ('', iface)
+                )
         
 
 def defaultView(_context, name, for_=None):
