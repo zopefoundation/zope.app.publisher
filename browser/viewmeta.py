@@ -184,7 +184,7 @@ def page(_context, name, permission, for_,
 # Note that a class might want to access one of the defined
 # templates. If it does though, it should use getView.
 
-class pages:
+class pages(object):
 
     def __init__(self, _context, for_, permission,
                  layer='default', class_=None,
@@ -213,7 +213,7 @@ class pages:
 # This is a different case. We actually build a class with attributes
 # for all of the given pages.
 
-class view:
+class view(object):
 
     default = None
 

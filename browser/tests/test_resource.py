@@ -23,7 +23,7 @@ from zope.app.site.interfaces import ISite
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.app.traversing.interfaces import IContainmentRoot
 
-class Site:
+class Site(object):
     implements(ISite, IContainmentRoot)
 
 site = Site()

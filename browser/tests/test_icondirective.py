@@ -46,7 +46,7 @@ template = """<configure
 
 request = TestRequest()
 
-class Ob:
+class Ob(object):
     implements(IC, ISite, IContainmentRoot)
 
 ob = Ob()

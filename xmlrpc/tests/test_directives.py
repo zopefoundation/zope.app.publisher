@@ -34,7 +34,7 @@ from zope.interface import implements
 
 request = Request(IXMLRPCRequest)
 
-class Ob:
+class Ob(object):
     implements(IC)
 
 ob = Ob()

@@ -57,10 +57,10 @@ from zope.app.publisher.browser.metaconfigure import addMenuItem, test_reset
 
 atre = re.compile(' at [0-9a-fA-Fx]+')
 
-class X:
+class X(object):
     pass
 
-class Context:
+class Context(object):
     actions = ()
     
     def action(self, discriminator, callable, args):

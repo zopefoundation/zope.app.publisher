@@ -11,13 +11,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
-Internationalized file resource.
+"""Internationalized file resource.
 
 $Id$
 """
-__metaclass__ = type # All classes are new style when run with Python 2.2+
-
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
 from zope.app.publisher.browser.fileresource import FileResource
@@ -82,7 +79,7 @@ class I18nFileResource(FileResource):
     ############################################################
 
 
-class I18nFileResourceFactory:
+class I18nFileResourceFactory(object):
 
     def __init__(self, data, defaultLanguage):
         self.__data = data

@@ -11,5 +11,9 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-class templateclass:
+"""Template test class
+
+$Id$
+"""
+class templateclass(object):
     def data(self): return 42

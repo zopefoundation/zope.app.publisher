@@ -40,7 +40,7 @@ class Test(PlacelessSetup, TestCase):
         from zope.app.publisher.browser.resources import Resources
         request = TestRequest()
 
-        class Resource:
+        class Resource(object):
             def __init__(self, request): pass
             def __call__(self): return 42
 
@@ -53,7 +53,7 @@ class Test(PlacelessSetup, TestCase):
         from zope.app.publisher.browser.resources import Resources
         request = TestRequest()
 
-        class Resource:
+        class Resource(object):
             def __init__(self, request): pass
             def __call__(self): return 42
 

@@ -32,7 +32,7 @@ from resources import empty
 _marker = []
 
 # we only need this class a context for DirectoryResource
-class Directory:
+class Directory(object):
 
     def __init__(self, path, checker):
         self.path = path
@@ -82,7 +82,7 @@ class DirectoryResource(BrowserView, Resource):
         resource.__name__ = name
         return resource
 
-class DirectoryResourceFactory:
+class DirectoryResourceFactory(object):
 
     def __init__(self, path, checker):
         self.__dir = Directory(path, checker)

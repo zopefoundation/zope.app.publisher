@@ -40,7 +40,7 @@ from zope.app.site.interfaces import ISimpleService
 def d(title, action):
     return {'action': action, 'title': title, 'description': ''}
 
-class Service:
+class Service(object):
     implements(IBrowserMenuService, ISimpleService)
 
     def getMenu(self, name, ob, req):
@@ -49,7 +49,7 @@ class Service:
                 d('l3', '@@a3'),]
 
 class I(Interface): pass
-class C:
+class C(object):
     implements(I)
 
     def __call__(self):
@@ -62,7 +62,7 @@ ob.a2.a3 = C()
 ob.abad = C()
 ob.abad.bad = 1
 
-class V:
+class V(object):
     implements(IBrowserView)
 
     def __init__(self, context, request):
@@ -72,7 +72,7 @@ class V:
     def __call__(self):
         pass
 
-class ParticipationStub:
+class ParticipationStub(object):
 
     def __init__(self, principal):
         self.principal = principal

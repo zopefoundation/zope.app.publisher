@@ -41,7 +41,7 @@ class PageTemplateResource(BrowserView, Resource):
         pt = self.context
         return pt(self.request)
 
-class PageTemplateResourceFactory:
+class PageTemplateResourceFactory(object):
 
     def __init__(self, path, checker):
         self.__pt = PageTemplate(path)

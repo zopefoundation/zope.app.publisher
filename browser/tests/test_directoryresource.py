@@ -11,10 +11,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
+"""Directory-based resources test
+
 $Id$
 """
-
 import os
 from unittest import TestCase, main, makeSuite
 
@@ -42,7 +42,7 @@ checker = NamesChecker(
     ('get', '__getitem__', 'request', 'publishTraverse')
     )
 
-class Site:
+class Site(object):
     implements(ISite, IContainmentRoot)
 
 class Ob(Contained): pass
