@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.9 2003/02/02 23:22:59 jack-e Exp $
+$Id: viewmeta.py,v 1.10 2003/02/03 16:34:37 stevea Exp $
 """
 
 import os
@@ -41,8 +41,7 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from zope.app.security.permission import checkPermission
 
-# from zope.proxy.context import ContextMethod, ContextAware
-from zope.proxy.context import ContextMethod
+from zope.proxy.context import ContextMethod, ContextAware
 
 from zope.app.publisher.browser.globalbrowsermenuservice \
      import menuItemDirective
@@ -109,7 +108,7 @@ def page(_context, name, permission, for_,
     required = {}
 
     permission = _handle_permission(_context, permission, actions)
-            
+
     if not (class_ or template):
         raise ConfigurationError("Must specify a class or template")
 
@@ -154,10 +153,10 @@ def page(_context, name, permission, for_,
 
             cdict['__page_attribute__'] = attribute
             class_ = type(class_.__name__, (class_, simple,), cdict)
-            
+
     else:
         class_ = SimpleViewClass(template)
-        
+
     for n in (attribute, 'browserDefault', '__call__', 'publishTraverse'):
         required[n] = permission
 
@@ -215,7 +214,7 @@ class pages:
 
     def __call__(self):
         return ()
-                    
+
 # view (named view with pages)
 
 # This is a different case. We actually build a class with attributes
@@ -269,10 +268,10 @@ class view:
          allowed_interface, allowed_attributes, actions) = self.args
 
         required = {}
-                
+
         cdict = {}
         pages = {}
-        
+
         for pname, attribute, template in self.pages:
             if template:
                 cdict[pname] = ViewPageTemplateFile(template)
@@ -287,7 +286,7 @@ class view:
             required[pname] = permission
 
             pages[pname] = attribute
-            
+
         if hasattr(class_, 'publishTraverse'):
 
             # XXX This context trickery is a hack around a problem, I
@@ -295,7 +294,7 @@ class view:
 
             def publishTraverse(self, request, name,
                                 pages=pages, getattr=getattr):
-                
+
                 if name in pages:
                     return getattr(self, pages[name])
 
@@ -307,12 +306,12 @@ class view:
         else:
             def publishTraverse(self, request, name,
                                 pages=pages, getattr=getattr):
-                
+
                 if name in pages:
                     return getattr(self, pages[name])
-                
+
                 raise NotFoundError(self, name, request)
-            
+
         cdict['publishTraverse'] = publishTraverse
 
         if not hasattr(class_, 'browserDefault'):
@@ -445,10 +444,10 @@ def _handle_allowed_attributes(_context, allowed_attributes, permission,
 def _handle_for(_context, for_, actions):
     if for_ == '*':
         for_ = None
-        
+
     if for_ is not None:
         for_ = _context.resolve(for_)
-        
+
         actions .append(
             Action(discriminator = None, callable = handler,
                    args = ('Interfaces', 'provideInterface', None, for_)
@@ -456,8 +455,7 @@ def _handle_for(_context, for_, actions):
 
     return for_
 
-# class simple(ContextAware, BrowserView):
-class simple(BrowserView):
+class simple(BrowserView, ContextAware):
     __implements__ = IBrowserPublisher, BrowserView.__implements__
 
     def publishTraverse(self, request, name):
@@ -473,6 +471,3 @@ class simple(BrowserView):
 
         meth = getattr(self, attr)
         return meth(*a, **k)
-    
-        
-        
