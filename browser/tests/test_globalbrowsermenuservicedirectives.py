@@ -15,7 +15,7 @@
 
 XXX longer description goes here.
 
-$Id: test_globalbrowsermenuservicedirectives.py,v 1.4 2003/05/01 19:35:28 faassen Exp $
+$Id: test_globalbrowsermenuservicedirectives.py,v 1.5 2003/07/28 22:20:06 jim Exp $
 """
 
 from StringIO import StringIO
@@ -40,7 +40,6 @@ class Test(PlacelessSetup, TestCase):
 
     def setUp(self):
         PlacelessSetup.setUp(self)
-        XMLConfig('metameta.zcml', zope.configuration)()
         XMLConfig('meta.zcml', zope.app.publisher.browser)()
 
     def test(self):

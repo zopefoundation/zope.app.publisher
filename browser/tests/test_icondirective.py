@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_icondirective.py,v 1.6 2003/06/07 05:46:03 stevea Exp $
+$Id: test_icondirective.py,v 1.7 2003/07/28 22:20:06 jim Exp $
 """
 import os
 from StringIO import StringIO
@@ -60,7 +60,6 @@ class Test(PlacelessSetup, TestCase):
 
     def setUp(self):
         PlacelessSetup.setUp(self)
-        XMLConfig('metameta.zcml', zope.configuration)()
         XMLConfig('meta.zcml', zope.app.publisher.browser)()
         defineCheckers()
 
