@@ -62,7 +62,7 @@
     />
 
 <!-- Management view selector -->
-<!-- Get first accessable item from zmi_views menu -->
+<!-- Get first accessible item from zmi_views menu -->
 <browser:page
     for="*"
     name="SelectedManagementView.html"

@@ -76,7 +76,8 @@ class IViewDirective(IPagesDirective):
         description=u"""
           Many views are included in menus. It's convenient to name
           the menu in the page directive, rather than having to give a
-          separate menuItem directive.
+          separate menuItem directive.  'zmi_views' is the menu most often
+          used in the Zope management interface.
           </description>
           """,
         required=False
