@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.40 2004/03/05 15:55:51 eddala Exp $
+$Id: viewmeta.py,v 1.41 2004/03/15 20:42:18 jim Exp $
 """
 import os
 
@@ -106,7 +106,7 @@ def page(_context, name, permission, for_,
     else:
         s.useUsage(usage)
 
-    _handle_menu(_context, menu, title, for_, name, permission)
+    _handle_menu(_context, menu, title, [for_], name, permission)
 
     required = {}
 
@@ -171,15 +171,15 @@ def page(_context, name, permission, for_,
     _handle_allowed_attributes(_context, allowed_interface, permission,
                                required)
 
-    _handle_for(_context, for_)
+    _handle_for(_context, [for_])
 
     defineChecker(new_class, Checker(required))
 
     _context.action(
         discriminator = ('view', for_, name, IBrowserRequest, layer),
         callable = handler,
-        args = (zapi.servicenames.Presentation, 'provideView',
-                for_, name, IBrowserRequest, [new_class], layer),
+        args = (zapi.servicenames.Presentation, 'provideAdapter',
+                IBrowserRequest, new_class, name, [for_], Interface, layer),
         )
 
     if not usage and menu:
@@ -369,20 +369,19 @@ class view:
             _context.action(
                 discriminator = None,
                 callable = provideInterface,
-                args = (self.provides.__module__+'.'+self.provides.__name__,
-                        self.provides)
+                args = ('', self.provides)
                 )
 
             
 
 
         _context.action(
-            discriminator = ('view', for_, name, IBrowserRequest, layer,
+            discriminator = ('view', tuple(for_), name, IBrowserRequest, layer,
                              self.provides),
             callable = handler,
-            args = (zapi.servicenames.Presentation, 'provideView',
-                    for_, name, IBrowserRequest, [newclass], layer,
-                    self.provides),
+            args = (zapi.servicenames.Presentation, 'provideAdapter',
+                    IBrowserRequest, newclass, name, for_,  self.provides,
+                    layer),
             )
 
 def addview(_context, name, permission,
@@ -412,7 +411,7 @@ def defaultView(_context, name, for_=None):
         _context.action(
             discriminator = None,
             callable = provideInterface,
-            args = (for_.__module__+'.'+for_.getName(), for_)
+            args = ('', for_)
             )
         
 
@@ -423,8 +422,13 @@ def _handle_menu(_context, menu, title, for_, name, permission):
                 "If either menu or title are specified, they must "
                 "both be specified.")
 
+        if len(for_) != 1:
+            raise ConfigurationError(
+                "Menus can be specified only for single-view, not for "
+                "multi-views.")
+            
         return menuItemDirective(
-            _context, menu, for_, '@@' + name, title,
+            _context, menu, for_[0], '@@' + name, title,
             permission=permission)
 
     return []
@@ -468,13 +472,13 @@ def _handle_usage_from_menu(view, menu_id):
     view.usage = usage
 
 def _handle_for(_context, for_):
-    if for_ is not None:
-        _context.action(
-            discriminator = None,
-            callable = provideInterface,
-            args = (None, for_)
-            )
-        
+    for iface in for_:
+        if iface is not None:
+            _context.action(
+                discriminator = None,
+                callable = provideInterface,
+                args = ('', iface)
+                )        
 
 class simple(BrowserView):
     implements(IBrowserPublisher)
