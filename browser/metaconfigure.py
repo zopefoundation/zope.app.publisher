@@ -15,45 +15,100 @@
 
 $Id$
 """
+from zope.component.interfaces import IDefaultViewName
+from zope.interface.interface import InterfaceClass
+from zope.publisher.interfaces.browser import ILayer, ISkin, IDefaultSkin
+from zope.publisher.interfaces.browser import IBrowserRequest
 
 from zope.app import zapi
-from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.app.component.metaconfigure import handler
 from zope.app.container.interfaces import IAdding
 from zope.app.publisher.browser.globalbrowsermenuservice \
      import menuItemDirective
 from zope.app.component.contentdirective import ContentDirective
-from zope.app.servicenames import Presentation
 
 # referred to through ZCML
-from zope.app.publisher.browser.resourcemeta import resource, \
-     resourceDirectory
+from zope.app.publisher.browser.resourcemeta import resource
+from zope.app.publisher.browser.resourcemeta import resourceDirectory
 from zope.app.publisher.browser.i18nresourcemeta import I18nResource
 from zope.app.publisher.browser.viewmeta import view
 from zope.app.component.interface import provideInterface
 
-def layer(_context, name):
+from zope.app.component.interface import provideInterface
+
+# Create special modules that contain all layers and skins
+from types import ModuleType as module
+import sys
+layers = module('layers')
+sys.modules['zope.app.layers'] = layers
+
+skins = module('skins')
+sys.modules['zope.app.skins'] = skins
+
+
+def layer(_context, name, base=IBrowserRequest):
+    if ',' in name:
+        raise TypeError("Commas are not allowed in layer names.")
+
+    layer = InterfaceClass(name, (base, ),
+                           __doc__='Layer: %s' %name,
+                           __module__='zope.app.layers')
+
+    # Add the layer to the skins module.
+    # Note: We have to do this immediately, so that directives using the
+    # InterfaceField can find the layer.
+    setattr(layers, name, layer)
+
+    # Register the layer interface as an interface
+    _context.action(
+        discriminator = ('interface', 'zope.app.layers.'+name),
+        callable = provideInterface,
+        args = ('zope.app.layers.'+name, layer),
+        kw = {'info': _context.info}
+        )
+
+    # Register the layer interface as a layer
     _context.action(
         discriminator = ('layer', name),
-        callable = handler,
-        args = (Presentation, 'defineLayer', name, _context.info)
+        callable = provideInterface,
+        args = (name, layer, ILayer, _context.info)
         )
 
 def skin(_context, name, layers):
-    if ',' in ''.join(layers):
-        raise TypeError("Commas are not allowed in layer names.")
 
+    skin = InterfaceClass(name, layers,
+                          __doc__='Skin: %s' %name,
+                          __module__='zope.app.skins')
+
+    # Register the layer interface as an interface
+    # Note: We have to do this immediately, so that directives using the
+    # InterfaceField can find the layer.
     _context.action(
-        discriminator = ('skin', name),
-        callable = handler,
-        args = (Presentation, 'defineSkin', name, layers, _context.info)
+        discriminator = ('interface', 'zope.app.skins.'+name),
+        callable = provideInterface,
+        args = ('zope.app.skins.'+name, skin),
+        kw = {'info': _context.info}
         )
 
+    # Register the layer interface as a layer
+    _context.action(
+        discriminator = ('skin', name),
+        callable = provideInterface,
+        args = (name, skin, ISkin, _context.info)
+        )
+
+def setDefaultSkin(name, info):
+    # XXX: Test
+    skin = zapi.getUtility(ISkin, name)
+    handler('Adapters', 'register',
+            (IBrowserRequest,), IDefaultSkin, '', skin, info),
+
 def defaultSkin(_context, name):
+
     _context.action(
         discriminator = 'defaultSkin',
-        callable = handler,
-        args = (Presentation, 'setDefaultSkin', name, _context.info)
+        callable = setDefaultSkin,
+        args = (name, _context.info)
         )
 
 def defaultView(_context, name, for_=None):
@@ -63,8 +118,8 @@ def defaultView(_context, name, for_=None):
     _context.action(
         discriminator = ('defaultViewName', for_, type, name),
         callable = handler,
-        args = (zapi.servicenames.Presentation,
-                'setDefaultViewName', for_, type, name),
+        args = (zapi.servicenames.Adapters, 'register',
+                (for_, type), IDefaultViewName, '', name, _context.info)
         )
 
     if for_ is not None:

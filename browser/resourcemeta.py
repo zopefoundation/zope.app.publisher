@@ -17,10 +17,12 @@ $Id$
 """
 import os
 
-from zope.app import zapi
-from zope.security.checker import CheckerPublic, NamesChecker
 from zope.configuration.exceptions import ConfigurationError
+from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.security.checker import CheckerPublic, NamesChecker
+
+from zope.app import zapi
 from zope.app.component.metaconfigure import handler
 
 from fileresource import FileResourceFactory, ImageResourceFactory
@@ -30,7 +32,7 @@ from directoryresource import DirectoryResourceFactory
 allowed_names = ('GET', 'HEAD', 'publishTraverse', 'browserDefault',
                  'request', '__call__')
 
-def resource(_context, name, layer='default', permission='zope.Public',
+def resource(_context, name, layer=IBrowserRequest, permission='zope.Public',
              file=None, image=None, template=None):
 
     if permission == 'zope.Public':
@@ -55,11 +57,11 @@ def resource(_context, name, layer='default', permission='zope.Public',
     _context.action(
         discriminator = ('resource', name, IBrowserRequest, layer),
         callable = handler,
-        args = (zapi.servicenames.Presentation, 'provideResource',
-                name, IBrowserRequest, factory, layer),
+        args = (zapi.servicenames.Adapters, 'register',
+                (layer,), Interface, name, factory, _context.info),
         )
 
-def resourceDirectory(_context, name, directory, layer='default',
+def resourceDirectory(_context, name, directory, layer=IBrowserRequest,
                       permission='zope.Public'):
     if permission == 'zope.Public':
         permission = CheckerPublic
@@ -76,6 +78,6 @@ def resourceDirectory(_context, name, directory, layer='default',
     _context.action(
         discriminator = ('resource', name, IBrowserRequest, layer),
         callable = handler,
-        args = (zapi.servicenames.Presentation, 'provideResource',
-                name, IBrowserRequest, factory, layer),
+        args = (zapi.servicenames.Adapters, 'register',
+                (layer,), Interface, name, factory, _context.info),
         )

@@ -16,11 +16,12 @@
 $Id$
 """
 import zope.interface
+from zope.interface import Interface
 from zope.security.checker import CheckerPublic, Checker
-from zope.component.servicenames import Presentation
 from zope.configuration.exceptions import ConfigurationError
 from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
 
+from zope.app import zapi
 from zope.app.location import Location
 from zope.app.component.interface import provideInterface
 from zope.app.component.metaconfigure import handler
@@ -68,8 +69,10 @@ def view(_context, for_=None, interface=None, methods=None,
         _context.action(
             discriminator = ('view', for_, name, IXMLRPCRequest),
             callable = handler,
-            args = (Presentation, 'provideAdapter', IXMLRPCRequest, class_,
-                    name, (for_, )) )
+            args = (zapi.servicenames.Adapters, 'register',
+                    (for_, IXMLRPCRequest), Interface, name, class_,
+                    _context.info)
+            )
     else:
         if permission:
             checker = Checker({'__call__': permission})
@@ -86,8 +89,10 @@ def view(_context, for_=None, interface=None, methods=None,
             _context.action(
                 discriminator = ('view', for_, name, IXMLRPCRequest),
                 callable = handler,
-                args = (Presentation, 'provideAdapter', IXMLRPCRequest,
-                        new_class, name, (for_, )) )
+                args = (zapi.servicenames.Adapters, 'register',
+                        (for_, IXMLRPCRequest), Interface, name, new_class,
+                        _context.info)
+                )
 
     # Register the used interfaces with the interface service
     if for_ is not None:

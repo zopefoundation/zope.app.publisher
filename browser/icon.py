@@ -18,13 +18,15 @@ $Id$
 import os
 import re
 
+from zope.interface import Interface
+from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.configuration.exceptions import ConfigurationError
+
 from zope.app import zapi
+from zope.app.component.interface import provideInterface
 from zope.app.component.metaconfigure import handler
 from zope.app.publisher.browser import metaconfigure
 from zope.app.traversing.namespace import getResource
-from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.configuration.exceptions import ConfigurationError
-from zope.app.component.interface import provideInterface
 
 IName = re.compile('I[A-Z][a-z]')
 
@@ -60,7 +62,7 @@ class IconViewFactory(object):
         return IconView(context, request, self.rname, self.alt)
 
 def IconDirective(_context, name, for_, file=None, resource=None,
-                  layer='default', alt=None):
+                  layer=IBrowserRequest, alt=None):
 
     iname = for_.getName()
 
@@ -93,9 +95,8 @@ def IconDirective(_context, name, for_, file=None, resource=None,
     _context.action(
         discriminator = ('view', name, vfactory, layer),
         callable = handler,
-        args = (zapi.servicenames.Presentation, 'provideView',
-                for_, name, IBrowserRequest,
-                vfactory, layer)
+        args = (zapi.servicenames.Adapters, 'register',
+                (for_, layer), Interface, name, vfactory, _context.info)
         )
 
     _context.action(

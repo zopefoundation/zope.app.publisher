@@ -19,17 +19,16 @@ import os
 from StringIO import StringIO
 from unittest import TestCase, main, makeSuite
 
-from zope.component import queryView, getView, getResource
 from zope.configuration.exceptions import ConfigurationError
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.interface import implements
-from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import TestRequest
 from zope.security.checker import ProxyFactory, CheckerPublic
 from zope.security.interfaces import Forbidden
+from zope.security.proxy import removeSecurityProxy
 
 import zope.app.publisher.browser
-
+from zope.app import zapi
 from zope.app.component.tests.views import IC
 from zope.app.site.interfaces import ISite
 from zope.app.publisher.browser.tests import support
@@ -67,23 +66,23 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
         super(Test, self).setUp()
         XMLConfig('meta.zcml', zope.app.publisher.browser)()
         defineCheckers()
-
+        
     def test(self):
-        self.assertEqual(queryView(ob, 'zmi_icon', request), None)
+        self.assertEqual(zapi.queryView(ob, 'zmi_icon', request), None)
 
         import zope.app.publisher.browser.tests as p
         path = os.path.dirname(p.__file__)
         path = os.path.join(path, 'testfiles', 'test.gif')
 
         xmlconfig(StringIO(template % (
-            """
+            '''
             <browser:icon name="zmi_icon"
                       for="zope.app.component.tests.views.IC"
                       file="%s" />
-            """ % path
+            ''' % path
             )))
 
-        view = getView(ob, 'zmi_icon', request)
+        view = zapi.getView(ob, 'zmi_icon', request)
         rname = 'zope-app-component-tests-views-IC-zmi_icon.gif'
         self.assertEqual(
             view(),
@@ -91,29 +90,29 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
             'width="16" height="16" border="0" />'
             % rname)
 
-        resource = ProxyFactory(getResource(rname, request))
+        resource = ProxyFactory(zapi.getResource(rname, request))
         self.assertRaises(Forbidden, getattr, resource, '_testData')
         resource = removeSecurityProxy(resource)
         self.assertEqual(resource._testData(), open(path, 'rb').read())
 
     def testResource(self):
-        self.assertEqual(queryView(ob, 'zmi_icon', request), None)
+        self.assertEqual(zapi.queryView(ob, 'zmi_icon', request), None)
 
         import zope.app.publisher.browser.tests as p
         path = os.path.dirname(p.__file__)
         path = os.path.join(path, 'testfiles', 'test.gif')
 
         xmlconfig(StringIO(template % (
-            """
+            '''
             <browser:resource name="zmi_icon_res"
                       image="%s" />
             <browser:icon name="zmi_icon"
                       for="zope.app.component.tests.views.IC"
                       resource="zmi_icon_res" />
-            """ % path
+            ''' % path
             )))
 
-        view = getView(ob, 'zmi_icon', request)
+        view = zapi.getView(ob, 'zmi_icon', request)
         rname = "zmi_icon_res"
         self.assertEqual(
             view(),
@@ -121,28 +120,28 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
             'height="16" border="0" />'
             % rname)
 
-        resource = ProxyFactory(getResource(rname, request))
+        resource = ProxyFactory(zapi.getResource(rname, request))
 
         self.assertRaises(Forbidden, getattr, resource, '_testData')
         resource = removeSecurityProxy(resource)
         self.assertEqual(resource._testData(), open(path, 'rb').read())
 
     def testResourceErrors(self):
-        self.assertEqual(queryView(ob, 'zmi_icon', request), None)
+        self.assertEqual(zapi.queryView(ob, 'zmi_icon', request), None)
 
         import zope.app.publisher.browser.tests as p
         path = os.path.dirname(p.__file__)
         path = os.path.join(path, 'testfiles', 'test.gif')
 
         config = StringIO(template % (
-            """
+            '''
             <browser:resource name="zmi_icon_res"
                       image="%s" />
             <browser:icon name="zmi_icon"
                       for="zope.app.component.tests.views.IC"
                       file="%s"
                       resource="zmi_icon_res" />
-            """ % (path, path)
+            ''' % (path, path)
             ))
         self.assertRaises(ConfigurationError, xmlconfig, config)
 

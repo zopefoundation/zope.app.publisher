@@ -19,13 +19,11 @@ import os
 import unittest
 from cStringIO import StringIO
 
-from zope.interface import Interface, implements
+from zope.interface import Interface, implements, directlyProvides, providedBy
 
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.configuration.exceptions import ConfigurationError
 from zope.app.component.tests.views import IC, V1, VZMI, R1, IV
-from zope.component import getView, queryView, queryResource
-from zope.component import getDefaultViewName, getResource
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.security.proxy import ProxyFactory
 import zope.security.management
@@ -42,6 +40,8 @@ import zope.app.publisher.browser
 from zope.component.service import serviceManager
 
 from zope.publisher.interfaces.browser import IBrowserPublisher
+from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.publisher.interfaces.browser import ISkin, IDefaultSkin
 from zope.app import zapi
 from zope.app.tests import ztapi
 from zope.app.traversing.adapters import DefaultTraversable
@@ -98,15 +98,12 @@ class Test(PlacelessSetup, unittest.TestCase):
 
     def setUp(self):
         super(Test, self).setUp()
-        
         XMLConfig('meta.zcml', zope.app.publisher.browser)()
-
         ztapi.provideAdapter(None, ITraversable, DefaultTraversable)
 
-        ps =  zapi.getGlobalService(zapi.servicenames.Presentation)
 
     def testPage(self):
-        self.assertEqual(queryView(ob, 'test', request),
+        self.assertEqual(zapi.queryView(ob, 'test', request),
                          None)
 
         xmlconfig(StringIO(template % (
@@ -121,11 +118,11 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             )))
 
-        v = queryView(ob, 'test', request)
+        v = zapi.queryView(ob, 'test', request)
         self.assert_(issubclass(v.__class__, V1))
 
     def testPageWithClassWithMenu(self):
-        self.assertEqual(queryView(ob, 'test', request),
+        self.assertEqual(zapi.queryView(ob, 'test', request),
                          None)
         testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
                          
@@ -150,12 +147,12 @@ class Test(PlacelessSetup, unittest.TestCase):
             'test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
-        v = queryView(ob, 'test', request)
+        v = zapi.queryView(ob, 'test', request)
         self.assertEqual(v(), "<html><body><p>test</p></body></html>\n")
 
 
     def testPageWithTemplateWithMenu(self):
-        self.assertEqual(queryView(ob, 'test', request),
+        self.assertEqual(zapi.queryView(ob, 'test', request),
                          None)
         testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
                          
@@ -178,12 +175,12 @@ class Test(PlacelessSetup, unittest.TestCase):
             'test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
-        v = queryView(ob, 'test', request)
+        v = zapi.queryView(ob, 'test', request)
         self.assertEqual(v(), "<html><body><p>test</p></body></html>\n")
 
 
     def testPageInPagesWithTemplateWithMenu(self):
-        self.assertEqual(queryView(ob, 'test', request),
+        self.assertEqual(zapi.queryView(ob, 'test', request),
                          None)
         testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
 
@@ -208,12 +205,12 @@ class Test(PlacelessSetup, unittest.TestCase):
             'test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
-        v = queryView(ob, 'test', request)
+        v = zapi.queryView(ob, 'test', request)
         self.assertEqual(v(), "<html><body><p>test</p></body></html>\n")
 
 
     def testPageInPagesWithClassWithMenu(self):
-        self.assertEqual(queryView(ob, 'test', request),
+        self.assertEqual(zapi.queryView(ob, 'test', request),
                          None)
         testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
                          
@@ -240,11 +237,11 @@ class Test(PlacelessSetup, unittest.TestCase):
             'test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
-        v = queryView(ob, 'test', request)
+        v = zapi.queryView(ob, 'test', request)
         self.assertEqual(v(), "<html><body><p>test</p></body></html>\n")
 
     def testDefaultView(self):
-        self.assertEqual(queryView(ob, 'test', request,
+        self.assertEqual(zapi.queryView(ob, 'test', request,
                                    None), None)
 
         xmlconfig(StringIO(template % (
@@ -255,7 +252,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             )))
 
-        self.assertEqual(getDefaultViewName(ob, request
+        self.assertEqual(zapi.getDefaultViewName(ob, request
                                  ), 'test')
 
     def testSkinResource(self):
@@ -265,7 +262,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         xmlconfig(StringIO(template % (
             '''
             <browser:layer name="zmi" />
-            <browser:skin name="zmi" layers="zmi default" />
+            <browser:skin name="zmi" layers="zmi" />
             <browser:resource
                 name="test"
                 factory="zope.app.component.tests.views.RZMI"
@@ -278,16 +275,19 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         self.assertEqual(
             zapi.queryResource('test', request, None).__class__, R1)
+        zmi = zapi.getUtility(ISkin, 'zmi')
         self.assertEqual(
-            zapi.queryResource('test', TestRequest(skin='zmi'), None).__class__,
+            zapi.queryResource('test', TestRequest(skin=zmi), None).__class__,
             RZMI)
 
     def testDefaultSkin(self):
-        self.assertEqual(queryView(ob, 'test', request, None), None)
+        request = TestRequest()
+
+        self.assertEqual(zapi.queryView(ob, 'test', request, None), None)
         xmlconfig(StringIO(template % (
             '''
             <browser:layer name="zmi" />
-            <browser:skin name="zmi" layers="zmi default" />
+            <browser:skin name="zmi" layers="zmi" />
             <browser:defaultSkin name="zmi" />
             <browser:page name="test"
                 class="zope.app.component.tests.views.VZMI"
@@ -304,16 +304,22 @@ class Test(PlacelessSetup, unittest.TestCase):
                 />
             '''
             )))
-        v = queryView(ob, 'test', TestRequest(skin=''))
+
+        # Simulate Zope Publication behavior in beforeTraversal()
+        adapters = zapi.getService(zapi.servicenames.Adapters)
+        skin = adapters.lookup((providedBy(request),), IDefaultSkin, '')
+        directlyProvides(request, skin)
+
+        v = zapi.queryView(ob, 'test', request)
         self.assert_(issubclass(v.__class__, VZMI))
 
     def testSkinPage(self):
-        self.assertEqual(queryView(ob, 'test', request, None), None)
+        self.assertEqual(zapi.queryView(ob, 'test', request, None), None)
 
         xmlconfig(StringIO(template % (
             '''
             <browser:layer name="zmi" />
-            <browser:skin name="zmi" layers="zmi default" />
+            <browser:skin name="zmi" layers="zmi" />
             <browser:page name="test"
                 class="zope.app.component.tests.views.VZMI"
                 layer="zmi"
@@ -330,13 +336,14 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             )))
 
-        v = queryView(ob, 'test', request)
+        v = zapi.queryView(ob, 'test', request)
         self.assert_(issubclass(v.__class__, V1))
-        v = queryView(ob, 'test', TestRequest(skin='zmi'))
+        zmi = zapi.getUtility(ISkin, 'zmi')
+        v = zapi.queryView(ob, 'test', TestRequest(skin=zmi))
         self.assert_(issubclass(v.__class__, VZMI))
 
     def testI18nResource(self):
-        self.assertEqual(queryResource('test', request, None), None)
+        self.assertEqual(zapi.queryResource('test', request, None), None)
 
         path1 = os.path.join(tests_path, 'testfiles', 'test.pt')
         path2 = os.path.join(tests_path, 'testfiles', 'test2.pt')
@@ -350,9 +357,9 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % (path1, path2)
             )))
 
-        v = getResource('test', request)
+        v = zapi.getResource('test', request)
         self.assertEqual(
-            queryResource('test', request).__class__,
+            zapi.queryResource('test', request).__class__,
             I18nFileResource)
         self.assertEqual(v._testData('en'), open(path1, 'rb').read())
         self.assertEqual(v._testData('fr'), open(path2, 'rb').read())
@@ -392,7 +399,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = getView(ob, 'test', request)
+        v = zapi.getView(ob, 'test', request)
         v = ProxyFactory(v)
         self.assertEqual(v.index(), 'V1 here')
         self.assertRaises(Exception, getattr, v, 'action')
@@ -410,7 +417,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = getView(ob, 'test', request)
+        v = zapi.getView(ob, 'test', request)
         v = ProxyFactory(v)
         self.assertEqual(v.action(), 'done')
         self.assertRaises(Exception, getattr, v, 'index')
@@ -429,7 +436,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = getView(ob, 'test', request)
+        v = zapi.getView(ob, 'test', request)
         self.assertEqual(v.index(), 'V1 here')
         self.assertEqual(v.action(), 'done')
 
@@ -447,7 +454,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = getView(ob, 'test', request)
+        v = zapi.getView(ob, 'test', request)
         self.assertEqual(v.index(), 'V1 here')
         self.assertEqual(v.action(), 'done')
 
@@ -465,7 +472,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = getView(ob, 'test', request)
+        v = zapi.getView(ob, 'test', request)
         self.assertEqual(v.index(), v)
         self.assert_(IBrowserPublisher.providedBy(v))
 
@@ -486,7 +493,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
 
     def testPageViews(self):
-        self.assertEqual(queryView(ob, 'test', request), None)
+        self.assertEqual(zapi.queryView(ob, 'test', request), None)
         test3 = os.path.join(tests_path, 'testfiles', 'test3.pt')
 
         xmlconfig(StringIO(template %
@@ -504,15 +511,15 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % test3
             ))
 
-        v = getView(ob, 'index.html', request)
+        v = zapi.getView(ob, 'index.html', request)
         self.assertEqual(v(), 'V1 here')
-        v = getView(ob, 'action.html', request)
+        v = zapi.getView(ob, 'action.html', request)
         self.assertEqual(v(), 'done')
-        v = getView(ob, 'test.html', request)
+        v = zapi.getView(ob, 'test.html', request)
         self.assertEqual(str(v()), '<html><body><p>done</p></body></html>\n')
 
     def testNamedViewPageViewsCustomTraversr(self):
-        self.assertEqual(queryView(ob, 'test', request), None)
+        self.assertEqual(zapi.queryView(ob, 'test', request), None)
 
         xmlconfig(StringIO(template %
             '''
@@ -529,7 +536,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        view = getView(ob, 'test', request)
+        view = zapi.getView(ob, 'test', request)
         view = removeSecurityProxy(view)
         self.assertEqual(view.browserDefault(request)[1], (u'index.html', ))
 
@@ -543,7 +550,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
 
     def testNamedViewNoPagesForCallable(self):
-        self.assertEqual(queryView(ob, 'test', request), None)
+        self.assertEqual(zapi.queryView(ob, 'test', request), None)
 
         xmlconfig(StringIO(template %
             '''
@@ -556,12 +563,12 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        view = getView(ob, 'test', request)
+        view = zapi.getView(ob, 'test', request)
         view = removeSecurityProxy(view)
         self.assertEqual(view.browserDefault(request), (view, ()))
 
     def testNamedViewNoPagesForNonCallable(self):
-        self.assertEqual(queryView(ob, 'test', request), None)
+        self.assertEqual(zapi.queryView(ob, 'test', request), None)
 
         xmlconfig(StringIO(template %
             '''
@@ -574,12 +581,12 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        view = getView(ob, 'test', request)
+        view = zapi.getView(ob, 'test', request)
         view = removeSecurityProxy(view)
         self.assertEqual(getattr(view, 'browserDefault', None), None)
 
     def testNamedViewPageViewsNoDefault(self):
-        self.assertEqual(queryView(ob, 'test', request), None)
+        self.assertEqual(zapi.queryView(ob, 'test', request), None)
         test3 = os.path.join(tests_path, 'testfiles', 'test3.pt')
 
         xmlconfig(StringIO(template %
@@ -598,7 +605,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % test3
             ))
 
-        view = getView(ob, 'test', request)
+        view = zapi.getView(ob, 'test', request)
         view = removeSecurityProxy(view)
         self.assertEqual(view.browserDefault(request)[1], (u'index.html', ))
 
@@ -614,7 +621,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(str(v()), '<html><body><p>done</p></body></html>\n')
 
     def testNamedViewPageViewsWithDefault(self):
-        self.assertEqual(queryView(ob, 'test', request), None)
+        self.assertEqual(zapi.queryView(ob, 'test', request), None)
         test3 = os.path.join(tests_path, 'testfiles', 'test3.pt')
 
         xmlconfig(StringIO(template %
@@ -634,7 +641,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % test3
             ))
 
-        view = getView(ob, 'test', request)
+        view = zapi.getView(ob, 'test', request)
         view = removeSecurityProxy(view)
         self.assertEqual(view.browserDefault(request)[1], (u'test.html', ))
 
@@ -667,7 +674,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        view = getView(ob, 'test', request)
+        view = zapi.getView(ob, 'test', request)
         view = removeSecurityProxy(view)
         view.publishTraverse(request, 'index.html')
         
@@ -694,7 +701,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        view = getView(ob, 'test', request)
+        view = zapi.getView(ob, 'test', request)
         view = removeSecurityProxy(view)
         view.publishTraverse(request, 'index.html')
 
@@ -702,7 +709,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         ztapi.provideUtility(IPermission, Permission('p', 'P'), 'p')
 
         request = TestRequest()
-        self.assertEqual(queryView(ob, 'test', request),
+        self.assertEqual(zapi.queryView(ob, 'test', request),
                          None)
 
         xmlconfig(StringIO(template %
@@ -723,16 +730,16 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = getView(ob, 'index.html', request)
+        v = zapi.getView(ob, 'index.html', request)
         v = ProxyFactory(v)
         zope.security.management.getInteraction().add(request)
         self.assertRaises(Exception, v)
-        v = getView(ob, 'action.html', request)
+        v = zapi.getView(ob, 'action.html', request)
         v = ProxyFactory(v)
         self.assertRaises(Exception, v)
 
     def testProtectedNamedViewPageViews(self):
-        self.assertEqual(queryView(ob, 'test', request),
+        self.assertEqual(zapi.queryView(ob, 'test', request),
                          None)
 
         xmlconfig(StringIO(template %
@@ -754,19 +761,19 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        view = getView(ob, 'test', request)
+        view = zapi.getView(ob, 'test', request)
         self.assertEqual(view.browserDefault(request)[1], (u'index.html', ))
 
         v = view.publishTraverse(request, 'index.html')
         self.assertEqual(v(), 'V1 here')
 
     def testSkinnedPageView(self):
-        self.assertEqual(queryView(ob, 'test', request), None)
+        self.assertEqual(zapi.queryView(ob, 'test', request), None)
 
         xmlconfig(StringIO(template %
             '''
             <browser:layer name="layer" />
-            <browser:skin name="skinny" layers="layer default" />
+            <browser:skin name="skinny" layers="layer" />
             <browser:pages
                 for="*"
                 class="zope.app.component.tests.views.V1"
@@ -787,15 +794,16 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = getView(ob, 'index.html', request)
+        v = zapi.getView(ob, 'index.html', request)
         self.assertEqual(v(), 'V1 here')
-        v = getView(ob, 'index.html', TestRequest(skin="skinny"))
+        skinny = zapi.getUtility(ISkin, 'skinny')
+        v = zapi.getView(ob, 'index.html', TestRequest(skin=skinny))
         self.assertEqual(v(), 'done')
 
     def testFile(self):
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
 
-        self.assertEqual(queryResource('test', request), None)
+        self.assertEqual(zapi.queryResource('test', request), None)
 
         xmlconfig(StringIO(template %
             '''
@@ -806,7 +814,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % path
             ))
 
-        r = getResource('index.html', request)
+        r = zapi.getResource('index.html', request)
         self.assertEquals(r.__class__, FileResource)
         r = ProxyFactory(r)
         self.assertEqual(r.__name__, "index.html")
@@ -825,7 +833,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
     def testSkinResource(self):
         self.assertEqual(
-            queryResource('test', request, None),
+            zapi.queryResource('test', request, None),
             None)
 
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
@@ -833,22 +841,23 @@ class Test(PlacelessSetup, unittest.TestCase):
         xmlconfig(StringIO(template % (
             '''
             <browser:layer name="zmi" />
-            <browser:skin name="zmi" layers="zmi default" />
+            <browser:skin name="zmi" layers="zmi" />
             <browser:resource name="test" file="%s" 
                   layer="zmi" />
             ''' % path
             )))
 
-        self.assertEqual(queryResource('test', request), None)
+        self.assertEqual(zapi.queryResource('test', request), None)
 
-        r = getResource('test', TestRequest(skin='zmi'))
+        zmi = zapi.getUtility(ISkin, 'zmi')
+        r = zapi.getResource('test', TestRequest(skin=zmi))
         r = removeSecurityProxy(r)
         self.assertEqual(r._testData(), open(path, 'rb').read())
 
     def test_template_page(self):
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
 
-        self.assertEqual(queryView(ob, 'index.html', request),
+        self.assertEqual(zapi.queryView(ob, 'index.html', request),
                          None)
 
         xmlconfig(StringIO(template %
@@ -861,13 +870,13 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % path
             ))
 
-        v = getView(ob, 'index.html', request)
+        v = zapi.getView(ob, 'index.html', request)
         self.assertEqual(v().strip(), '<html><body><p>test</p></body></html>')
 
     def testtemplateWClass(self):
         path = os.path.join(tests_path, 'testfiles', 'test2.pt')
 
-        self.assertEqual(queryView(ob, 'index.html', request),
+        self.assertEqual(zapi.queryView(ob, 'index.html', request),
                          None)
 
         xmlconfig(StringIO(template %
@@ -881,7 +890,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % path
             ))
 
-        v = getView(ob, 'index.html', request)
+        v = zapi.getView(ob, 'index.html', request)
         self.assertEqual(v().strip(), '<html><body><p>42</p></body></html>')
 
     def testProtectedtemplate(self):
@@ -889,7 +898,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
 
         request = TestRequest()
-        self.assertEqual(queryView(ob, 'test', request),
+        self.assertEqual(zapi.queryView(ob, 'test', request),
                          None)
 
         xmlconfig(StringIO(template %
@@ -916,12 +925,12 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % path
             ))
 
-        v = getView(ob, 'xxx.html', request)
+        v = zapi.getView(ob, 'xxx.html', request)
         v = ProxyFactory(v)
         zope.security.management.getInteraction().add(request)
         self.assertRaises(Exception, v)
 
-        v = getView(ob, 'index.html', request)
+        v = zapi.getView(ob, 'index.html', request)
         v = ProxyFactory(v)
         self.assertEqual(v().strip(), '<html><body><p>test</p></body></html>')
 
@@ -960,7 +969,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
     def testViewThatProvidesAnInterface(self):
         request = TestRequest()
-        self.assertEqual(queryView(ob, 'test', request, None), None)
+        self.assertEqual(zapi.queryView(ob, 'test', request, None), None)
 
         xmlconfig(StringIO(template %
             '''
@@ -973,7 +982,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = queryView(ob, 'test', request, None, providing=IV)
+        v = zapi.queryView(ob, 'test', request, providing=IV)
         self.assertEqual(v, None)
 
         xmlconfig(StringIO(template %
@@ -988,13 +997,13 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = queryView(ob, 'test', request, None, providing=IV)
-
+        v = zapi.queryView(ob, 'test', request, providing=IV)
         self.assert_(isinstance(v, V1))
 
     def testUnnamedViewThatProvidesAnInterface(self):
         request = TestRequest()
-        self.assertEqual(queryView(ob, '', request, None, providing=IV), None)
+        self.assertEqual(zapi.queryView(ob, '', request, None, providing=IV),
+                         None)
 
         xmlconfig(StringIO(template %
             '''
@@ -1006,7 +1015,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = queryView(ob, '', request, None, providing=IV)
+        v = zapi.queryView(ob, '', request, None, providing=IV)
         self.assertEqual(v, None)
 
         xmlconfig(StringIO(template %
@@ -1020,7 +1029,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = queryView(ob, '', request, None, providing=IV)
+        v = zapi.queryView(ob, '', request, None, providing=IV)
 
         self.assert_(isinstance(v, V1))
 

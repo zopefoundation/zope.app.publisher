@@ -22,7 +22,6 @@ from zope.interface import implements
 
 from zope.app import zapi
 from zope.app.location import locate
-from zope.app.servicenames import Presentation
 
 class Resources(BrowserView):
     """Provide a URL-accessible resource namespace
@@ -33,12 +32,12 @@ class Resources(BrowserView):
     def publishTraverse(self, request, name):
         '''See interface IBrowserPublisher'''
 
-        resource_service = zapi.getService(Presentation)
-        resource = resource_service.queryResource(name, request)
+        resource = zapi.queryResource(name, request)
         if resource is None:
             raise NotFoundError(self, name)
 
-        locate(resource, resource_service, name)
+        adapters = zapi.getService(zapi.servicenames.Adapters)
+        locate(resource, adapters, name)
         return resource
 
     def browserDefault(self, request):

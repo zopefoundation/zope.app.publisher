@@ -18,6 +18,7 @@ $Id$
 import os
 
 from zope.component.exceptions import ComponentLookupError
+from zope.component.interfaces import IDefaultViewName
 from zope.interface import implements, classImplements, Interface
 from zope.exceptions import NotFoundError
 from zope.security.checker import CheckerPublic, Checker
@@ -88,15 +89,10 @@ from zope.app.publisher.browser.globalbrowsermenuservice import \
 # page
 
 def page(_context, name, permission, for_,
-         layer='default', template=None, class_=None,
+         layer=IBrowserRequest, template=None, class_=None,
          allowed_interface=None, allowed_attributes=None,
          attribute='__call__', menu=None, title=None, 
          ):
-
-    try:
-        s = zapi.getGlobalService(zapi.servicenames.Presentation)
-    except ComponentLookupError, err:
-        pass
 
     _handle_menu(_context, menu, title, [for_], name, permission)
 
@@ -168,9 +164,8 @@ def page(_context, name, permission, for_,
     _context.action(
         discriminator = ('view', for_, name, IBrowserRequest, layer),
         callable = handler,
-        args = (zapi.servicenames.Presentation, 'provideAdapter',
-                IBrowserRequest, new_class, name, [for_], Interface, layer,
-                _context.info),
+        args = (zapi.servicenames.Adapters, 'register',
+                (for_, layer), Interface, name, new_class, _context.info),
         )
 
 
@@ -182,7 +177,7 @@ def page(_context, name, permission, for_,
 class pages(object):
 
     def __init__(self, _context, for_, permission,
-                 layer='default', class_=None,
+                 layer=IBrowserRequest, class_=None,
                  allowed_interface=None, allowed_attributes=None,
                  ):
         self.opts = dict(for_=for_, permission=permission,
@@ -213,7 +208,7 @@ class view(object):
     default = None
 
     def __init__(self, _context, for_, permission,
-                 name='', layer='default', class_=None,
+                 name='', layer=IBrowserRequest, class_=None,
                  allowed_interface=None, allowed_attributes=None,
                  menu=None, title=None, provides=Interface,
                  ):
@@ -256,10 +251,6 @@ class view(object):
         pages = {}
 
         for pname, attribute, template in self.pages:
-            try:
-                s = zapi.getGlobalService(zapi.servicenames.Presentation)
-            except ComponentLookupError, err:
-                pass
 
             if template:
                 cdict[pname] = ViewPageTemplateFile(template)
@@ -350,13 +341,13 @@ class view(object):
             discriminator = ('view', for_, name, IBrowserRequest, layer,
                              self.provides),
             callable = handler,
-            args = (zapi.servicenames.Presentation, 'provideAdapter',
-                    IBrowserRequest, newclass, name, [for_],  self.provides,
-                    layer, _context.info),
+            args = (zapi.servicenames.Adapters, 'register',
+                    (for_, layer), self.provides, name, newclass,
+                    _context.info),
             )
 
 def addview(_context, name, permission,
-            layer='default', class_=None,
+            layer=IBrowserRequest, class_=None,
             allowed_interface=None, allowed_attributes=None,
             menu=None, title=None
             ):
@@ -373,9 +364,9 @@ def defaultView(_context, name, for_=None):
     _context.action(
         discriminator = ('defaultViewName', for_, IBrowserRequest, name),
         callable = handler,
-        args = (zapi.servicenames.Presentation,'setDefaultViewName',
-                for_, IBrowserRequest,
-                name),
+        args = (zapi.servicenames.Presentation.Adapters, 'register',
+                (for_, IBrowserRequest), IDefaultViewName, '', name,
+                _context.info)
         )
 
     if for_ is not None:
