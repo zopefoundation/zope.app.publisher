@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.19 2003/04/09 20:51:32 philikon Exp $
+$Id: viewmeta.py,v 1.20 2003/04/11 22:15:47 gotcha Exp $
 """
 
 import os
@@ -50,7 +50,7 @@ from zope.app.security.permission import checkPermission
 from zope.proxy.context import ContextMethod
 
 from zope.app.publisher.browser.globalbrowsermenuservice \
-     import menuItemDirective
+     import menuItemDirective, globalBrowserMenuService
 
 # There are three cases we want to suport:
 #
@@ -143,6 +143,7 @@ def page(_context, name, permission, for_,
                     "The provided class doesn't have the specified attribute "
                     )
         if template:
+            # class and template
             template = str(_context.path(template))
             new_class = SimpleViewClass(
                 template, bases=(original_class, ), usage=usage
@@ -162,12 +163,14 @@ def page(_context, name, permission, for_,
             new_class = type(original_class.__name__,
                           (original_class, simple,),
                           cdict)
+            new_class.usage = usage              
 
         if hasattr(original_class, '__implements__'):
             implements(new_class, IBrowserPublisher)
             implements(new_class, IBrowserPresentation, check=False)
 
     else:
+        # template
         new_class = SimpleViewClass(template, usage=usage)
 
     for n in (attribute, 'browserDefault', '__call__', 'publishTraverse'):
@@ -188,6 +191,14 @@ def page(_context, name, permission, for_,
           args = ('Views', 'provideView',
                   for_, name, IBrowserPresentation, [new_class], layer),
           )
+        )
+
+    if not usage and menu:
+        actions.append(
+            Action(discriminator = None,
+            callable = _handle_usage_from_menu,
+            args = (new_class, menu, ),
+            )
         )
 
     return actions
@@ -260,6 +271,7 @@ class view:
         self.pages = []
         # default usage is u''
         self.usage = usage
+        self.menu = menu
 
     def page(self, _context, name, attribute=None, template=None, usage=None):
         if template:
@@ -463,6 +475,10 @@ def _handle_allowed_attributes(_context, allowed_attributes, permission,
     if allowed_attributes.strip():
         for name in allowed_attributes.strip().split():
             required[name] = permission
+
+def _handle_usage_from_menu(view, menu_id):
+    usage = globalBrowserMenuService.getMenuUsage(menu_id)
+    view.usage = usage
 
 def _handle_for(_context, for_, actions):
     if for_ == '*':

@@ -15,7 +15,7 @@
 
 XXX longer description goes here.
 
-$Id: test_globalbrowsermenuservice.py,v 1.7 2003/02/12 02:17:28 seanb Exp $
+$Id: test_globalbrowsermenuservice.py,v 1.8 2003/04/11 22:15:47 gotcha Exp $
 """
 
 from unittest import TestCase, TestSuite, main, makeSuite
@@ -157,6 +157,13 @@ class Test(PlacelessSetup, TestCase):
         r.menu('test_id', 'test menu')
         menu = r.getMenu('test_id', X(), TestRequest())
         self.assertEqual(list(menu), [])
+
+    def testUsage(self):
+        r = self.__reg()
+        r.menu('test_id', 'test menu', usage=u'objectview')
+        self.assertEqual(r.getMenuUsage('test_id'), u'objectview')
+        r.menu('test_id2', 'test menu')
+        self.assertEqual(r.getMenuUsage('test_id2'), u'')
 
 
 def test_suite():

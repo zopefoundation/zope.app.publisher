@@ -33,7 +33,18 @@ from zope.app.interfaces.publisher.browser import IBrowserMenuService
 from zope.app.pagetemplate.engine import Engine
 from zope.app.publication.browser import PublicationTraverser
 
-class GlobalBrowserMenuService:
+class Menu(object):
+    '''Browser menu
+    '''
+    
+    def __init__(self, title, description=u'', usage=u''):
+        self.title = title
+        self.description = description
+        self.usage = usage
+        self.registry = TypeRegistry()
+        
+
+class GlobalBrowserMenuService(object):
     """Global Browser Menu Service
     """
 
@@ -44,19 +55,19 @@ class GlobalBrowserMenuService:
 
     _clear = __init__
 
-    def menu(self, menu_id, title, description=''):
+    def menu(self, menu_id, title, description=u'', usage=u''):
         # XXX we have nothing to do with the title and description. ;)
 
         if menu_id in self._registry:
             raise DuplicationError("Menu %s is already defined." % menu_id)
 
-        self._registry[menu_id] = TypeRegistry()
+        self._registry[menu_id] = Menu(title, description, usage)
 
     def menuItem(self, menu_id, interface, action, title,
                  description='', filter_string=None, permission=None,
                  ):
 
-        registry = self._registry[menu_id]
+        registry = self._registry[menu_id].registry
 
         if filter_string:
             filter = Engine.compile(filter_string)
@@ -74,7 +85,7 @@ class GlobalBrowserMenuService:
         registry.register(interface, data)
 
     def getMenu(self, menu_id, object, request, max=999999):
-        registry = self._registry[menu_id]
+        registry = self._registry[menu_id].registry
         traverser = PublicationTraverser()
 
         result = []
@@ -139,17 +150,21 @@ class GlobalBrowserMenuService:
 
         return result
 
+    def getMenuUsage(self, menu_id):
+        return self._registry[menu_id].usage
+        
+
     def getFirstMenuItem(self, menu_id, object, request):
         r = self.getMenu(menu_id, object, request, max=1)
         if r:
             return r[0]
         return None
 
-def menuDirective(_context, id, title, description=''):
+def menuDirective(_context, id, title, description='', usage=u''):
     return [Action(
         discriminator = ('browser:menu', id),
         callable = globalBrowserMenuService.menu,
-        args = (id, title, description),
+        args = (id, title, description, usage),
         )]
 
 def menuItemDirective(_context, menu, for_,
@@ -207,5 +222,5 @@ del addCleanUp
 
 __doc__ = GlobalBrowserMenuService.__doc__ + """
 
-$Id: globalbrowsermenuservice.py,v 1.12 2003/04/09 20:51:32 philikon Exp $
+$Id: globalbrowsermenuservice.py,v 1.13 2003/04/11 22:15:47 gotcha Exp $
 """

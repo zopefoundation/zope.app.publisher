@@ -130,6 +130,20 @@
           </description>
       </attribute>
 
+      <attribute name="usage" required="no">
+        <description>
+          The template usage top-level variable
+
+          See the usage documentation in the README.txt in the 
+          zope/app/browser/skins directory.
+          If this view is associated with a menu item, this attribute should
+          not be supplied as the view will get its usage from the menu the
+          menu item is registered to.
+          This attribute is available for views not associated with a menu
+          item.
+        </description>
+      </attribute>
+
     </directive>
 
     <directive name="pages" handler=".viewmeta.pages">
@@ -681,16 +695,30 @@
               The name of the menu.
 
               This is, effectively, an id.     
-      </description>
-   </attribute>
+        </description>
+      </attribute>
 
 
       <attribute
           name="title"
           description="A descriptive title for documentation purposes"
           />
-      </directive>
 
+      <attribute name="usage">
+        <description>
+          The templates usage top-level variable
+
+          See the usage documentation in the README.txt in the 
+          zope/app/browser/skins directory.
+          If a view is associated with a menu item, the view will get its 
+          usage from the menu the menu item is registered to.
+        </description>
+      </attribute>
+
+    </directive>
+
+
+    
     <directive
         name="menuItems"
         attributes="menu for" 

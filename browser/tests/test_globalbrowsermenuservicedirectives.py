@@ -15,7 +15,7 @@
 
 XXX longer description goes here.
 
-$Id: test_globalbrowsermenuservicedirectives.py,v 1.2 2002/12/25 14:13:10 jim Exp $
+$Id: test_globalbrowsermenuservicedirectives.py,v 1.3 2003/04/11 22:15:47 gotcha Exp $
 """
 
 from StringIO import StringIO
@@ -25,6 +25,8 @@ from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.browser import TestRequest
 from zope.app.tests.placelesssetup import PlacelessSetup
+from zope.app.publisher.browser.globalbrowsermenuservice \
+    import globalBrowserMenuService
 import zope.configuration
 
 import zope.app.publisher.browser
@@ -43,9 +45,6 @@ class Test(PlacelessSetup, TestCase):
         XMLConfig('meta.zcml', zope.app.publisher.browser)()
 
     def test(self):
-        from zope.app.publisher.browser.globalbrowsermenuservice \
-             import globalBrowserMenuService
-
         xmlconfig(StringIO(template % (
             """
             <browser:menu id="test_id" title="test menu" />
@@ -106,6 +105,20 @@ class Test(PlacelessSetup, TestCase):
             'test_id', X(), TestRequest())
 
         self.assertEqual(first, d(5))
+
+    def testUsage(self):
+
+        xmlconfig(StringIO(template % (
+            """
+            <browser:menu id="test_id" title="test menu" usage="objectview" />
+
+            <browser:menu id="test_id2" title="test menu" />
+
+            """)))
+
+        self.assertEqual(globalBrowserMenuService.getMenuUsage('test_id'), u'objectview')
+        self.assertEqual(globalBrowserMenuService.getMenuUsage('test_id2'), u'')
+
 
 def test_suite():
     return makeSuite(Test)

@@ -29,7 +29,10 @@ from zope.security.proxy import ProxyFactory
 from zope.proxy.introspection import removeAllProxies
 import zope.configuration
 
+from zope.app.publisher.browser.globalbrowsermenuservice import \
+    globalBrowserMenuService
 from zope.component.tests.request import Request
+from zope.publisher.browser import TestRequest
 
 from zope.publisher.interfaces.browser import IBrowserPresentation
 
@@ -119,6 +122,204 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         v = queryView(ob, 'test', request)
         self.assert_(issubclass(v.__class__, V1))
+
+    def testPageWithClassWithMenu(self):
+        self.assertEqual(queryView(ob, 'test', request),
+                         None)
+        testusage = os.path.join(tests_path, 'testusage.pt')
+                         
+
+        xmlconfig(StringIO(template % (
+            """
+            <browser:menu id="test_menu" title="Test menu" usage="objectview"/>
+            <browser:page name="test"
+                          class="zope.component.tests.views.V1"
+                          for="zope.component.tests.views.IC"
+                          permission="zope.Public"
+                          template="%s" 
+                          menu="test_menu"
+                          title="Test View"
+                          />
+            """ % testusage
+            )))
+
+        menuItem = globalBrowserMenuService.getFirstMenuItem('test_menu', ob, TestRequest())
+        self.assertEqual(menuItem["title"], "Test View")
+        self.assertEqual(menuItem["action"], "@@test")
+        v = queryView(ob, 'test', request)
+        self.assertEqual(v(), "objectview\n")
+
+    def testPageWithClassWithUsage(self):
+        self.assertEqual(queryView(ob, 'test', request),
+                         None)
+        testusage = os.path.join(tests_path, 'testusage.pt')
+                         
+
+        xmlconfig(StringIO(template % (
+            """
+            <browser:page name="test"
+                          class="zope.component.tests.views.V1"
+                          for="zope.component.tests.views.IC"
+                          permission="zope.Public"
+                          template="%s" 
+                          usage="objectview"
+                          />
+            """ % testusage
+            )))
+
+        v = queryView(ob, 'test', request)
+        self.assertEqual(v(), "objectview\n")
+
+    def testPageWithClassWithMenuAndUsage(self):
+        self.assertEqual(queryView(ob, 'test', request),
+                         None)
+        testusage = os.path.join(tests_path, 'testusage.pt')
+                         
+
+        xmlconfig(StringIO(template % (
+            """
+            <browser:menu id="test_menu" title="Test menu" usage="overridden"/>
+            <browser:page name="test"
+                          class="zope.component.tests.views.V1"
+                          for="zope.component.tests.views.IC"
+                          permission="zope.Public"
+                          template="%s" 
+                          menu="test_menu"
+                          title="Test View"
+                          usage="objectview"
+                          />
+            """ % testusage
+            )))
+
+        menuItem = globalBrowserMenuService.getFirstMenuItem('test_menu', ob, TestRequest())
+        self.assertEqual(menuItem["title"], "Test View")
+        self.assertEqual(menuItem["action"], "@@test")
+        v = queryView(ob, 'test', request)
+        self.assertEqual(v(), "objectview\n")
+
+    def testPageWithTemplateWithMenu(self):
+        self.assertEqual(queryView(ob, 'test', request),
+                         None)
+        testusage = os.path.join(tests_path, 'testusage.pt')
+                         
+
+        xmlconfig(StringIO(template % (
+            """
+            <browser:menu id="test_menu" title="Test menu" usage="objectview"/>
+            <browser:page name="test"
+                          for="zope.component.tests.views.IC"
+                          permission="zope.Public"
+                          template="%s" 
+                          menu="test_menu"
+                          title="Test View"
+                          />
+            """ % testusage
+            )))
+
+        menuItem = globalBrowserMenuService.getFirstMenuItem('test_menu', ob, TestRequest())
+        self.assertEqual(menuItem["title"], "Test View")
+        self.assertEqual(menuItem["action"], "@@test")
+        v = queryView(ob, 'test', request)
+        self.assertEqual(v(), "objectview\n")
+
+    def testPageWithTemplateWithUsage(self):
+        self.assertEqual(queryView(ob, 'test', request),
+                         None)
+        testusage = os.path.join(tests_path, 'testusage.pt')
+                         
+
+        xmlconfig(StringIO(template % (
+            """
+            <browser:page name="test"
+                          for="zope.component.tests.views.IC"
+                          permission="zope.Public"
+                          template="%s" 
+                          usage="objectview"
+                          />
+            """ % testusage
+            )))
+
+        v = queryView(ob, 'test', request)
+        self.assertEqual(v(), "objectview\n")
+
+    def testPageWithTemplateWithMenuAndUsage(self):
+        self.assertEqual(queryView(ob, 'test', request),
+                         None)
+        testusage = os.path.join(tests_path, 'testusage.pt')
+                         
+
+        xmlconfig(StringIO(template % (
+            """
+            <browser:menu id="test_menu" title="Test menu" usage="overridden"/>
+            <browser:page name="test"
+                          for="zope.component.tests.views.IC"
+                          permission="zope.Public"
+                          template="%s" 
+                          menu="test_menu"
+                          title="Test View"
+                          usage="objectview"
+                          />
+            """ % testusage
+            )))
+
+        menuItem = globalBrowserMenuService.getFirstMenuItem('test_menu', ob, TestRequest())
+        self.assertEqual(menuItem["title"], "Test View")
+        self.assertEqual(menuItem["action"], "@@test")
+        v = queryView(ob, 'test', request)
+        self.assertEqual(v(), "objectview\n")
+
+    def testPageInPagesWithTemplateWithMenu(self):
+        self.assertEqual(queryView(ob, 'test', request),
+                         None)
+        testusage = os.path.join(tests_path, 'testusage.pt')
+                         
+
+        xmlconfig(StringIO(template % (
+            """
+            <browser:menu id="test_menu" title="Test menu" usage="objectview"/>
+            <browser:pages for="zope.component.tests.views.IC"
+                          permission="zope.Public">
+                <browser:page name="test"
+                              template="%s" 
+                              menu="test_menu"
+                              title="Test View"
+                              />
+            </browser:pages>                  
+            """ % testusage
+            )))
+
+        menuItem = globalBrowserMenuService.getFirstMenuItem('test_menu', ob, TestRequest())
+        self.assertEqual(menuItem["title"], "Test View")
+        self.assertEqual(menuItem["action"], "@@test")
+        v = queryView(ob, 'test', request)
+        self.assertEqual(v(), "objectview\n")
+
+    def testPageInPagesWithClassWithMenu(self):
+        self.assertEqual(queryView(ob, 'test', request),
+                         None)
+        testusage = os.path.join(tests_path, 'testusage.pt')
+                         
+
+        xmlconfig(StringIO(template % (
+            """
+            <browser:menu id="test_menu" title="Test menu" usage="objectview"/>
+            <browser:pages for="zope.component.tests.views.IC"
+                           class="zope.component.tests.views.V1"
+                           permission="zope.Public">
+                <browser:page name="test"
+                              template="%s" 
+                              menu="test_menu"
+                              title="Test View"
+                              />
+            </browser:pages>                  
+            """ % testusage
+            )))
+
+        menuItem = globalBrowserMenuService.getFirstMenuItem('test_menu', ob, TestRequest())
+        self.assertEqual(menuItem["title"], "Test View")
+        self.assertEqual(menuItem["action"], "@@test")
+        v = queryView(ob, 'test', request)
+        self.assertEqual(v(), "objectview\n")
 
     def testDefaultView(self):
         self.assertEqual(queryView(ob, 'test', request,
