@@ -29,7 +29,7 @@ from zope.security.proxy import ProxyFactory, removeSecurityProxy
 
 from zope.app import zapi
 from zope.app.component.interface import provideInterface
-from zope.app.component.metaconfigure import subscriber, proxify
+from zope.app.component.metaconfigure import adapter, proxify
 from zope.app.pagetemplate.engine import Engine
 from zope.app.publication.browser import PublicationTraverser
 from zope.app.publisher.browser import BrowserView
@@ -286,7 +286,8 @@ def getMenu(menuItemType, object, request, max=999999):
     ...     newclass = type(title, (BrowserMenuItem,),
     ...                     {'title':title, 'action':action, 'order':order})
     ...     classImplements(newclass, menuItemType)
-    ...     ztapi.subscribe((for_, IBrowserRequest), menuItemType, newclass)
+    ...     ztapi.provideAdapter((for_, IBrowserRequest), menuItemType,
+    ...                          newclass, title)
 
     >>> class IFoo(Interface): pass
     >>> class IFooBar(IFoo): pass
@@ -317,20 +318,11 @@ def getMenu(menuItemType, object, request, max=999999):
     ['i4', 'i5']
     """
     result = []
-    seen = {}
-    for item in zapi.subscribers((object, request), menuItemType):
-        # Make sure we don't repeat a specification for a given title
-        if item.title in seen:
-            continue
-        seen[item.title] = 1
-
-        if not item.available():
-            continue
-
-        result.append(item)
-        
-        if len(result) >= max:
-            break
+    for name, item in zapi.getAdapters((object, request), menuItemType):
+        if item.available():
+            result.append(item)
+            if len(result) >= max:
+                break
         
     # Now order the result. This is not as easy as it seems.
     #
@@ -515,7 +507,7 @@ class menuItemsDirective(object):
     []
     >>> items.menuItem(context, u'view.html', 'View')
     >>> context.actions[0]['args'][:2]
-    ('Adapters', 'subscribe')
+    ('Adapters', 'register')
     >>> len(context.actions)
     4
     """
@@ -554,10 +546,11 @@ class menuItemsDirective(object):
                 item = proxify(item, checker)
 
             return item
+        MenuItemFactory.factory = BrowserMenuItem
 
-        subscriber(_context, MenuItemFactory,
-                   (self.for_, IBrowserRequest), self.menuItemType)
-
+        adapter(_context, (MenuItemFactory,), self.menuItemType,
+                (self.for_, IBrowserRequest), name=title)
+        
     def __call__(self, _context):
         # Nothing to do.
         pass
