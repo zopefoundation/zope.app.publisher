@@ -41,7 +41,7 @@
    'zope.ManageContent',
    {'factory': 'zope.app.browser.add.X.f1'})))
 
-$Id: test_addMenuItem.py,v 1.1 2003/12/03 05:40:28 jim Exp $
+$Id: test_addMenuItem.py,v 1.2 2004/01/09 00:40:25 garrett Exp $
 '''
 
 import unittest
@@ -51,7 +51,7 @@ import pprint
 import cStringIO
 from zope.app.publisher.browser.metaconfigure import addMenuItem, test_reset
 
-atre = re.compile(' at [0-9a-fx]+')
+atre = re.compile(' at [0-9a-fA-Fx]+')
 
 class X:
     pass
