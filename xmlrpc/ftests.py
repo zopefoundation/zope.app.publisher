@@ -15,33 +15,13 @@
 
 $Id$
 """
-import sys
 import zope.interface
 import zope.app.folder.folder
 import zope.publisher.interfaces.xmlrpc
-from zope.app.testing import ztapi, functional
-
-# Evil hack to make pickling work with classes defined in doc tests
-class NoCopyDict(dict):
-    def copy(self):
-        return self
-
-class FakeModule:
-    def __init__(self, dict):
-        self.__dict = dict
-    def __getattr__(self, name):
-        try:
-            return self.__dict[name]
-        except KeyError:
-            raise AttributeError, name
-
-globs = NoCopyDict()
-name = 'zope.app.publisher.xmlrpc.README'
-
+from zope.app.testing import ztapi, functional, setup
 
 def setUp(test):
-    globs['__name__'] = name    
-    sys.modules[name] = FakeModule(globs)
+    setup.setUpTestAsModule(test, 'zope.app.publisher.xmlrpc.README')
 
 def tearDown(test):
     # clean up the views we registered:
@@ -64,13 +44,11 @@ def tearDown(test):
                         None,
                         )
     
-    globs.clear()
-    del sys.modules[name]
+    setup.tearDownTestAsModule(test)
 
 def test_suite():
     return functional.FunctionalDocFileSuite(
-        'README.txt',
-        setUp=setUp, tearDown=tearDown, globs=globs)
+        'README.txt', setUp=setUp, tearDown=tearDown)
 
 if __name__ == '__main__':
     import unittest
