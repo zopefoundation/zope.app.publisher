@@ -4,18 +4,31 @@
 >
 
 
-<serviceType id="BrowserMenu"
-             interface="zope.app.interfaces.publisher.browser.IBrowserMenuService" />
-<service serviceType="BrowserMenu"
-         permission="zope.Public"
-         component="zope.app.publisher.browser.globalbrowsermenuservice.globalBrowserMenuService" />
+<serviceType
+   id="BrowserMenu"
+   interface="zope.app.interfaces.publisher.browser.IBrowserMenuService" 
+   />
+
+<service
+   serviceType="BrowserMenu"
+   permission="zope.Public"
+   component=".globalbrowsermenuservice.globalBrowserMenuService"
+   />
 
 
 <content class="zope.publisher.browser.BrowserRequest">
   <allow
-      interface="zope.publisher.interfaces.browser.IBrowserApplicationRequest" />
+    interface="zope.publisher.interfaces.browser.IBrowserApplicationRequest"
+    attributes="response"
+    />
   <allow
-      interface="zope.component.interfaces.IPresentationRequest" />
+    interface="zope.component.interfaces.IPresentationRequest" />
+</content>
+
+<content class="zope.publisher.browser.BrowserResponse">
+  <allow
+    interface="zope.publisher.interfaces.http.IHTTPResponse"
+    />
 </content>
 
 <content class="zope.app.publisher.browser.fileresource.FileResource">
