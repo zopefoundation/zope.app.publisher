@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.8 2003/01/31 10:46:16 alga Exp $
+$Id: viewmeta.py,v 1.9 2003/02/02 23:22:59 jack-e Exp $
 """
 
 import os
@@ -41,7 +41,8 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from zope.app.security.permission import checkPermission
 
-from zope.proxy.context import ContextMethod, ContextAware
+# from zope.proxy.context import ContextMethod, ContextAware
+from zope.proxy.context import ContextMethod
 
 from zope.app.publisher.browser.globalbrowsermenuservice \
      import menuItemDirective
@@ -455,8 +456,8 @@ def _handle_for(_context, for_, actions):
 
     return for_
 
-class simple(ContextAware, BrowserView):
-
+# class simple(ContextAware, BrowserView):
+class simple(BrowserView):
     __implements__ = IBrowserPublisher, BrowserView.__implements__
 
     def publishTraverse(self, request, name):
