@@ -115,6 +115,28 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         XMLConfig('meta.zcml', zope.app.publisher.browser)()
         ztapi.provideAdapter(None, ITraversable, DefaultTraversable)
 
+    def testLayer(self):
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
+                         None)
+        xmlconfig(StringIO(
+            template % '<browser:layer name="testlayer" />'
+            ))
+        testlayer = zapi.getUtility(ILayer, "testlayer")
+        import zope.app.layers
+        self.assert_(zope.app.layers.testlayer is testlayer)
+
+    def testSkin(self):
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
+                         None)
+        xmlconfig(StringIO(template % (
+            '''
+            <browser:layer name="default" />
+            <browser:skin name="testskin" layers="default" />
+            '''
+            )))
+        testskin = zapi.getUtility(ISkin, "testskin")
+        import zope.app.skins
+        self.assert_(zope.app.skins.testskin is testskin)
 
     def testPage(self):
         self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),

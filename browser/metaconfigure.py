@@ -39,11 +39,12 @@ from zope.app.component.interface import provideInterface
 # Create special modules that contain all layers and skins
 from types import ModuleType as module
 import sys
-layers = module('layers')
-sys.modules['zope.app.layers'] = layers
+import zope.app
+zope.app.layers = module('layers')
+sys.modules['zope.app.layers'] = zope.app.layers
 
-skins = module('skins')
-sys.modules['zope.app.skins'] = skins
+zope.app.skins = module('skins')
+sys.modules['zope.app.skins'] = zope.app.skins
 
 
 def layer(_context, name=None, interface=None, base=IBrowserRequest):
@@ -155,7 +156,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
         # Add the layer to the layers module.
         # Note: We have to do this immediately, so that directives using the
         # InterfaceField can find the layer.
-        setattr(layers, name, interface)
+        setattr(zope.app.layers, name, interface)
         path = 'zope.app.layers.'+name
     else:
         path = interface.__module__ + '.' + interface.getName()
@@ -169,7 +170,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
             # Make the interface available in the `zope.app.layers` module, so
             # that other directives can find the interface under the name
             # before the CA is setup.
-            setattr(layers, name, interface)
+            setattr(zope.app.layers, name, interface)
 
     # Register the layer interface as an interface
     _context.action(
@@ -263,7 +264,7 @@ def skin(_context, name=None, interface=None, layers=None):
         # Add the layer to the skins module.
         # Note: We have to do this immediately, so that directives using the
         # InterfaceField can find the layer.
-        setattr(skins, name, interface)
+        setattr(zope.app.skins, name, interface)
         path = 'zope.app.skins'+name
 
         # Register the layers
