@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.39 2004/03/03 10:38:49 philikon Exp $
+$Id: viewmeta.py,v 1.40 2004/03/05 15:55:51 eddala Exp $
 """
 import os
 
@@ -21,10 +21,15 @@ from zope.component.exceptions import ComponentLookupError
 from zope.configuration.exceptions import ConfigurationError
 from zope.exceptions import NotFoundError
 from zope.interface import implements, classImplements, Interface
-from zope.publisher.interfaces.browser import \
-     IBrowserPublisher, IBrowserRequest, IBrowserPublisher
-from zope.security.checker import CheckerPublic, Checker, defineChecker
-
+from zope.publisher.interfaces.browser import IBrowserPublisher
+from zope.exceptions import NotFoundError
+from zope.security.checker import CheckerPublic, Checker
+from zope.security.checker import defineChecker
+from zope.configuration.exceptions import ConfigurationError
+from zope.app.component.interface import provideInterface
+from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.publisher.interfaces.browser import IBrowserPublisher
+from zope.app.publisher.browser import BrowserView
 from zope.app import zapi
 from zope.app.component.metaconfigure import handler
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
@@ -33,7 +38,7 @@ from zope.app.publisher.browser import BrowserView
 from zope.app.publisher.browser.globalbrowsermenuservice import \
      menuItemDirective, globalBrowserMenuService
 from zope.app.security.permission import checkPermission
-from zope.app.services.servicenames import Interfaces
+
 
 
 # There are three cases we want to suport:
@@ -165,6 +170,7 @@ def page(_context, name, permission, for_,
                               required)
     _handle_allowed_attributes(_context, allowed_interface, permission,
                                required)
+
     _handle_for(_context, for_)
 
     defineChecker(new_class, Checker(required))
@@ -362,11 +368,12 @@ class view:
         if self.provides is not None:
             _context.action(
                 discriminator = None,
-                callable = handler,
-                args = (Interfaces, 'provideInterface',
-                        self.provides.__module__+'.'+self.provides.__name__,
+                callable = provideInterface,
+                args = (self.provides.__module__+'.'+self.provides.__name__,
                         self.provides)
                 )
+
+            
 
 
         _context.action(
@@ -404,10 +411,10 @@ def defaultView(_context, name, for_=None):
     if for_ is not None:
         _context.action(
             discriminator = None,
-            callable = handler,
-            args = (Interfaces, 'provideInterface',
-                    for_.__module__+'.'+for_.getName(), for_)
+            callable = provideInterface,
+            args = (for_.__module__+'.'+for_.getName(), for_)
             )
+        
 
 def _handle_menu(_context, menu, title, for_, name, permission):
     if menu or title:
@@ -442,9 +449,10 @@ def _handle_allowed_interface(_context, allowed_interface, permission,
         for i in allowed_interface:
             _context.action(
                 discriminator = None,
-                callable = handler,
-                args = (Interfaces, 'provideInterface', None, i)
+                callable = provideInterface,
+                args = (None, i)
                 )
+            
             for name in i:
                 required[name] = permission
 
@@ -463,9 +471,10 @@ def _handle_for(_context, for_):
     if for_ is not None:
         _context.action(
             discriminator = None,
-            callable = handler,
-            args = (Interfaces, 'provideInterface', None, for_)
+            callable = provideInterface,
+            args = (None, for_)
             )
+        
 
 class simple(BrowserView):
     implements(IBrowserPublisher)

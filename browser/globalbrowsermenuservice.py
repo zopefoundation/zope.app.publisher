@@ -13,7 +13,7 @@
 ##############################################################################
 """Global Browser Menu Service
 
-$Id: globalbrowsermenuservice.py,v 1.29 2004/03/02 17:40:51 philikon Exp $
+$Id: globalbrowsermenuservice.py,v 1.30 2004/03/05 15:55:51 eddala Exp $
 """
 __metaclass__ = type 
 
@@ -21,7 +21,6 @@ import sys
 from zope.exceptions import DuplicationError, Unauthorized, Forbidden
 from zope.interface.type import TypeRegistry
 from zope.interface import implements
-from zope.app.services.servicenames import Interfaces
 from zope.security.checker import CheckerPublic
 from zope.security.management import getSecurityManager
 from zope.app.security.permission import checkPermission
@@ -33,6 +32,7 @@ from zope.app.pagetemplate.engine import Engine
 from zope.app.publication.browser import PublicationTraverser
 from zope.security.proxy import ProxyFactory
 from zope.app import zapi
+from zope.app.component.interface import provideInterface
 
 class Menu:
     """Browser menu"""
@@ -267,11 +267,11 @@ class menuItemsDirective:
     def __call__(self, _context):
         _context.action(
             discriminator = None,
-            callable = handler,
-            args = (Interfaces, 'provideInterface',
-                    self.interface.__module__+'.'+self.interface.getName(),
+            callable = provideInterface,
+            args = (self.interface.__module__+'.'+self.interface.getName(),
                     self.interface)
             )
+        
 
 globalBrowserMenuService = GlobalBrowserMenuService()
 

@@ -13,15 +13,15 @@
 ##############################################################################
 """XMLRPC configuration code
 
-$Id: metaconfigure.py,v 1.16 2003/11/21 17:12:24 jim Exp $
+$Id: metaconfigure.py,v 1.17 2004/03/05 15:55:52 eddala Exp $
 """
 
 from zope.component.servicenames import Presentation
 from zope.app.component.metaconfigure import handler
-from zope.app.services.servicenames import Interfaces
 from zope.configuration.exceptions import ConfigurationError
 from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
 from zope.security.checker import CheckerPublic, Checker
+from zope.app.component.interface import provideInterface
 
 
 def view(_context, name, class_=None, for_=None, layer=None,
@@ -79,11 +79,10 @@ def view(_context, name, class_=None, for_=None, layer=None,
     if for_ is not None:
         _context.action(
             discriminator = None,
-            callable = handler,
-            args = (Interfaces, 'provideInterface',
-                    for_.__module__+'.'+for_.getName(), for_)
+            callable = provideInterface,
+            args = (for_.__module__+'.'+for_.getName(), for_)
             )
-
+        
 
 def defaultView(_context, name, for_=None):
     """Declare the view having the passed name as the default view."""

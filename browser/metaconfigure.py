@@ -13,13 +13,11 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: metaconfigure.py,v 1.17 2004/03/03 10:38:49 philikon Exp $
+$Id: metaconfigure.py,v 1.18 2004/03/05 15:55:51 eddala Exp $
 """
 
 from zope.app import zapi
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.app.services.servicenames import Interfaces
-
 from zope.app.component.metaconfigure import skin, layer, usage
 from zope.app.component.metaconfigure import handler
 from zope.app.container.interfaces import IAdding
@@ -31,8 +29,8 @@ from zope.app.component.contentdirective import ContentDirective
 from zope.app.publisher.browser.resourcemeta import resource, \
      resourceDirectory
 from zope.app.publisher.browser.i18nresourcemeta import I18nResource
-
 from zope.app.publisher.browser.viewmeta import view
+from zope.app.component.interface import provideInterface
 
 def defaultView(_context, name, for_=None, **__kw):
 
@@ -51,11 +49,11 @@ def defaultView(_context, name, for_=None, **__kw):
     if for_ is not None:
         _context.action(
             discriminator = None,
-            callable = handler,
-            args = (Interfaces, 'provideInterface',
-                    for_.__module__+'.'+for_.getName(),
+            callable = provideInterface,
+            args = (for_.__module__+'.'+for_.getName(),
                     for_)
             )
+
 
 _next_id = 0
 def addMenuItem(_context, title, class_=None, factory=None, description='',

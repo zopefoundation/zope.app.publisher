@@ -14,7 +14,7 @@
 """Icon support
 
 
-$Id: icon.py,v 1.12 2003/11/21 17:10:25 jim Exp $
+$Id: icon.py,v 1.13 2004/03/05 15:55:51 eddala Exp $
 """
 
 import os
@@ -26,7 +26,7 @@ from zope.app.publisher.browser import metaconfigure
 from zope.app.traversing.namespace import getResourceInContext
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.configuration.exceptions import ConfigurationError
-from zope.app.services.servicenames import Interfaces
+from zope.app.component.interface import provideInterface
 
 __metaclass__ = type
 
@@ -99,10 +99,12 @@ def IconDirective(_context, name, for_, file=None, resource=None,
                 for_, name, IBrowserRequest,
                 vfactory, layer)
         )
+
     _context.action(
         discriminator = None,
-        callable = handler,
-        args = (Interfaces, 'provideInterface',
-                for_.__module__+'.'+for_.getName(),
+        callable = provideInterface,
+        args = (for_.__module__+'.'+for_.getName(),
                 for_)
         )
+
+    
