@@ -12,7 +12,7 @@
 #
 ##############################################################################
 """
-$Id: test_directoryresource.py,v 1.2 2003/09/24 17:22:07 sidnei Exp $
+$Id: test_directoryresource.py,v 1.3 2003/09/24 17:31:30 sidnei Exp $
 """
 
 import os
@@ -28,6 +28,7 @@ from zope.app import zapi
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.app.publisher.browser.directoryresource import \
      DirectoryResourceFactory
+from zope.app.container.contained import Contained
 from zope.app.publisher.browser.fileresource import FileResource
 from zope.app.publisher.browser.pagetemplateresource import \
      PageTemplateResource
@@ -44,8 +45,10 @@ checker = NamesChecker(
 class Site:
     implements(ISite, IContainmentRoot)
 
-site = Site()
+class Ob(Contained): pass
 
+site = Site()
+ob = Ob()
 
 class Test(PlacelessSetup, TestCase):
 
@@ -80,6 +83,18 @@ class Test(PlacelessSetup, TestCase):
         path = os.path.join(test_directory, 'testfiles')
         files = DirectoryResourceFactory(path, checker)(request)
         files.__parent__ = site
+        files.__name__ = 'test_files'
+        file = files['test.gif']
+        self.assertEquals(file(), 'http://127.0.0.1/@@/test_files/test.gif')
+
+    def testURL2Level(self):
+        request = TestRequest()
+        request._vh_root = site
+        ob.__parent__ = site
+        ob.__name__ = 'ob'
+        path = os.path.join(test_directory, 'testfiles')
+        files = DirectoryResourceFactory(path, checker)(request)
+        files.__parent__ = ob
         files.__name__ = 'test_files'
         file = files['test.gif']
         self.assertEquals(file(), 'http://127.0.0.1/@@/test_files/test.gif')
