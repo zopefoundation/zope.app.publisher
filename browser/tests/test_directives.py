@@ -24,10 +24,12 @@ from zope.interface import Interface, implements, directlyProvides, providedBy
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.configuration.exceptions import ConfigurationError
 from zope.app.component.tests.views import IC, V1, VZMI, R1, IV
+from zope.app.tests import placelesssetup
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.security.proxy import ProxyFactory
 import zope.security.management
 from zope.security.proxy import removeSecurityProxy
+from zope.testing.doctestunit import DocTestSuite
 
 from zope.app.publisher.browser.globalbrowsermenuservice import \
     globalBrowserMenuService
@@ -1034,7 +1036,12 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assert_(isinstance(v, V1))
 
 def test_suite():
-    return unittest.makeSuite(Test)
+    return unittest.TestSuite((
+        unittest.makeSuite(Test),
+        DocTestSuite('zope.app.publisher.browser.metaconfigure',
+                     setUp=placelesssetup.setUp,
+                     tearDown=placelesssetup.tearDown)
+        ))
 
 if __name__=='__main__':
     unittest.main(defaultTest="test_suite")

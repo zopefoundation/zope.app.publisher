@@ -478,12 +478,25 @@ class IAddMenuItemDirective(IMenuItem):
 
 class ILayerDirective(Interface):
     """Defines a browser layer
+
+    You must either specify a `name` or an `interface`. If you specify the
+    name, then a layer interface will be created for you based on the name and
+    the `base` interface.
+
+    If you do not specify a `base`, then `IBrowserRequest` is used by default.
+
+    You cannot specify both, the `interface` and the `base` attribute.
     """
 
     name = TextLine(
         title=u"Name",
         description=u"The name of the layer.",
-        required=True
+        required=False
+        )
+
+    interface = GlobalObject(
+        title=u"The layer's interface.",
+        required=False
         )
 
     base = GlobalObject(
@@ -494,12 +507,22 @@ class ILayerDirective(Interface):
 
 class ISkinDirective(Interface):
     """Defines a browser skin
+
+    If you do not specify an `interface`, then one will be automatically
+    created for you based on the name using the layers as base interfaces.
+
+    You cannot specify both, the `interface` and the `layers` attribute.    
     """
 
     name = TextLine(
         title=u"Name",
         description=u"The name of the skin",
-        required=True
+        required=False
+        )
+
+    interface = GlobalObject(
+        title=u"The skin's interface.",
+        required=False
         )
 
     layers = Tokens(
@@ -509,6 +532,7 @@ class ISkinDirective(Interface):
         has the same name as the skin, and the last skin should be
         'default', unless you want to completely override all views.
         """,
+        required=False,
         value_type=LayerField()
         )
 
