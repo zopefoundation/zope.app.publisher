@@ -158,3 +158,13 @@ class IGlobalBrowserMenuService(IBrowserMenuService):
                  description='', filter_string=None, permission=None):
         """Add a menu item to a specific menu."""
 
+
+class IMenuAccessView(Interface):
+    """View that provides access to menus"""
+
+    def __getitem__(menu_id):
+        """Get menu information
+
+        Return a sequence of dictionaries with labels and
+        actions, where actions are relative URLs.
+        """

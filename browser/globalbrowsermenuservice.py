@@ -29,11 +29,26 @@ from zope.app.component.metaconfigure import handler
 from zope.app.publisher.interfaces.browser import IBrowserMenuService
 from zope.app.publisher.interfaces.browser import IGlobalBrowserMenuService
 from zope.app.publisher.interfaces.browser import IBrowserMenu
+from zope.app.publisher.interfaces.browser import IMenuAccessView
+from zope.app.publisher.browser import BrowserView
 from zope.app.pagetemplate.engine import Engine
 from zope.app.publication.browser import PublicationTraverser
 from zope.security.proxy import ProxyFactory
 from zope.app import zapi
 from zope.app.component.interface import provideInterface
+from zope.app.servicenames import BrowserMenu
+
+
+class MenuAccessView(BrowserView):
+
+    implements(IMenuAccessView)
+
+    def __getitem__(self, menu_id):
+        browser_menu_service = zapi.getService(self.context, BrowserMenu)
+        return browser_menu_service.getMenu(menu_id,
+                                            self.context,
+                                            self.request)
+
 
 class Menu:
     """Browser menu"""
