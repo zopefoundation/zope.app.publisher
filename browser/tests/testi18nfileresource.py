@@ -11,14 +11,11 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
+"""I18n File-Resource Tests
 
-Revision information:
-$Id: testi18nfileresource.py,v 1.7 2003/11/27 13:59:23 philikon Exp $
+$Id: testi18nfileresource.py,v 1.8 2004/03/02 17:49:39 srichter Exp $
 """
-
 from unittest import main, makeSuite
-
 import os
 
 from zope.exceptions import NotFoundError
@@ -26,21 +23,17 @@ from zope.exceptions import NotFoundError
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.app.tests import ztapi
 
-from zope.i18n.interfaces import IUserPreferredCharsets
-from zope.i18n.interfaces import IUserPreferredLanguages
+from zope.i18n.interfaces import IUserPreferredCharsets, IUserPreferredLanguages
 
-from zope.publisher.http import IHTTPRequest
-from zope.publisher.http import HTTPCharsets
-from zope.publisher.browser import BrowserLanguages
-from zope.publisher.browser import TestRequest
+from zope.publisher.http import IHTTPRequest, HTTPCharsets
+from zope.publisher.browser import BrowserLanguages, TestRequest
 
 from zope.app.publisher.browser.i18nfileresource import I18nFileResource
 from zope.app.publisher.browser.i18nfileresource import I18nFileResourceFactory
 from zope.app.publisher.fileresource import File
 import zope.app.publisher.browser.tests as p
 
-from zope.app.component.metaconfigure import \
-     provideService, managerHandler
+from zope.app.component.metaconfigure import managerHandler
 from zope.i18n.interfaces import INegotiator
 from zope.i18n.negotiator import negotiator
 
@@ -58,9 +51,8 @@ class Test(PlacelessSetup, TestII18nAware):
                              HTTPCharsets)
         ztapi.provideAdapter(IHTTPRequest, IUserPreferredLanguages,
                              BrowserLanguages)
-        # Setup the negotiator service registry entry
-        managerHandler('defineService', 'LanguageNegotiation', INegotiator)
-        provideService('LanguageNegotiation', negotiator, 'zope.Public')
+        # Setup the negotiator utility
+        ztapi.provideUtility(INegotiator, negotiator)
 
 
     def _createObject(self):
