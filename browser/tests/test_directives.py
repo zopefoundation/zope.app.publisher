@@ -37,6 +37,10 @@ from zope.component.service import serviceManager
 from zope.app.interfaces.security import IPermissionService
 from zope.app.security.registries.permissionregistry import permissionRegistry
 
+from zope.component.service import serviceManager
+from zope.app.security.registries.permissionregistry import permissionRegistry
+from zope.app.interfaces.security import IPermissionService
+
 tests_path = os.path.join(
     os.path.split(zope.app.publisher.browser.__file__)[0],
     'tests')
@@ -275,14 +279,16 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         xmlconfig(StringIO(template %
             """
-            <browser:view
-                  factory="zope.component.tests.views.V1"
-                  for="zope.component.tests.views.IC">
+            <browser:pages
+                  class="zope.component.tests.views.V1"
+                  for="zope.component.tests.views.IC"
+                  permission="zope.Public"
+                  >
 
                 <browser:page name="index.html" attribute="index" />
                 <browser:page name="action.html" attribute="action" />
                 <browser:page name="test.html" template="%s" />
-            </browser:view>
+            </browser:pages>
             """ % test3
             ))
 
@@ -300,8 +306,10 @@ class Test(PlacelessSetup, unittest.TestCase):
             """
             <browser:view
                   name="test"
-                  factory="zope.app.publisher.browser.tests.test_directives.VT"
-                  for="zope.component.tests.views.IC">
+                  class="zope.app.publisher.browser.tests.test_directives.V1"
+                  for="zope.component.tests.views.IC"
+                  permission="zope.Public"
+                  >
 
                 <browser:page name="index.html" attribute="index" />
                 <browser:page name="action.html" attribute="action" />
@@ -321,8 +329,6 @@ class Test(PlacelessSetup, unittest.TestCase):
         v = removeAllProxies(v)
         self.assertEqual(v(), 'done')
 
-        v = view.publishTraverse(request, '42')
-        self.assertEqual(v, 42)
 
     def testNamedViewPageViewsNoDefault(self):
         self.assertEqual(queryView(ob, 'test', request), None)
@@ -332,8 +338,10 @@ class Test(PlacelessSetup, unittest.TestCase):
             """
             <browser:view
                   name="test"
-                  factory="zope.component.tests.views.V1"
-                  for="zope.component.tests.views.IC">
+                  class="zope.component.tests.views.V1"
+                  for="zope.component.tests.views.IC"
+                  permission="zope.Public"
+                  >
 
                 <browser:page name="index.html" attribute="index" />
                 <browser:page name="action.html" attribute="action" />
@@ -365,8 +373,10 @@ class Test(PlacelessSetup, unittest.TestCase):
             """
             <browser:view
                   name="test"
-                  factory="zope.component.tests.views.V1"
-                  for="zope.component.tests.views.IC">
+                  class="zope.component.tests.views.V1"
+                  for="zope.component.tests.views.IC"
+                  permission="zope.Public"
+                  >
 
                 <browser:defaultPage name="test.html" />
                 <browser:page name="index.html" attribute="index" />
@@ -392,6 +402,12 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(str(v()), '<html><body><p>done</p></body></html>\n')
 
     def testProtectedPageViews(self):
+
+        serviceManager.defineService('Permissions', IPermissionService)
+        serviceManager.provideService('Permissions', permissionRegistry)
+        permissionRegistry.definePermission('p', 'P')
+
+
         self.assertEqual(queryView(ob, 'test', request),
                          None)
 
@@ -406,27 +422,24 @@ class Test(PlacelessSetup, unittest.TestCase):
 
             <permission id="XXX" title="xxx" />
 
-            <browser:view
-                  factory="zope.component.tests.views.V1"
+            <browser:pages
+                  class="zope.component.tests.views.V1"
                   for="zope.component.tests.views.IC"
-                  permission="XXX">
+                  permission="XXX"
+                  >
 
                 <browser:page name="index.html" attribute="index" />
-                <browser:page name="action.html" attribute="action"
-                              permission="zope.Public" />
-            </browser:view>
+                <browser:page name="action.html" attribute="action" />
+            </browser:pages>
             """
             ))
 
-        # XXX this seems to be no longer needed
-        # Need to "log someone in" to turn on checks
-        #from zope.security.management import newSecurityManager
-        #newSecurityManager('someuser')
-
         v = getView(ob, 'index.html', request)
+        v = ProxyFactory(v)
         self.assertRaises(Exception, v)
         v = getView(ob, 'action.html', request)
-        self.assertEqual(v(), 'done')
+        v = ProxyFactory(v)
+        self.assertRaises(Exception, v)
 
     def testProtectedNamedViewPageViews(self):
         self.assertEqual(queryView(ob, 'test', request),
@@ -445,13 +458,13 @@ class Test(PlacelessSetup, unittest.TestCase):
 
             <browser:view
                   name="test"
-                  factory="zope.component.tests.views.V1"
+                  class="zope.component.tests.views.V1"
                   for="zope.component.tests.views.IC"
-                  permission="zope.Public">
+                  permission="zope.Public"
+                  >
 
                 <browser:page name="index.html" attribute="index" />
-                <browser:page name="action.html" attribute="action"
-                              permission="XXX" />
+                <browser:page name="action.html" attribute="action" />
             </browser:view>
             """
             ))
@@ -466,8 +479,6 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         v = view.publishTraverse(request, 'index.html')
         self.assertEqual(v(), 'V1 here')
-        v = view.publishTraverse(request, 'action.html')
-        self.assertRaises(Exception, v)
 
     def testSkinnedPageView(self):
         self.assertEqual(queryView(ob, 'test', request), None)
@@ -475,13 +486,23 @@ class Test(PlacelessSetup, unittest.TestCase):
         xmlconfig(StringIO(template %
             """
             <browser:skin name="skinny" layers="layer default" />
-            <browser:view
-                  factory="zope.component.tests.views.V1">
+            <browser:pages
+                  for="*"
+                  class="zope.component.tests.views.V1"
+                  permission="zope.Public"
+                  >
 
                 <browser:page name="index.html" attribute="index" />
-                <browser:page name="index.html" attribute="action"
-                              layer="layer"/>
-            </browser:view>
+            </browser:pages>
+            <browser:pages
+                  for="*"
+                  class="zope.component.tests.views.V1"
+                  layer="layer"
+                  permission="zope.Public"
+                  >
+
+                <browser:page name="index.html" attribute="action" />
+            </browser:pages>
             """
             ))
 
@@ -609,7 +630,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         xmlconfig(StringIO(template %
             """
-            <browser:view
+            <browser:page
                   name="index.html"
                   template="%s"
                   permission="zope.Public"
@@ -656,6 +677,7 @@ class Test(PlacelessSetup, unittest.TestCase):
                   name="index.html"
                   template="%s"
                   for="zope.component.tests.views.IC"
+                  permission="zope.Public"
                   >
                <browser:page name="foo.html" attribute="index" />
             </browser:view>

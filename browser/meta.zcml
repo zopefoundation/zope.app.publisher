@@ -2,13 +2,20 @@
   
   <directives namespace="http://namespaces.zope.org/browser">
 
-    <directive name="page" 
-               handler="zope.app.publisher.browser.viewmeta.page" 
-               >
+    <directive name="page" handler=".viewmeta.page">
+
+      <description>
+        The page directive is used to create views that provide a
+        single url or page.
+
+        The page directive creates a new view class from a given
+        template and/or class and registers it.
+      </description>
+
 
       <attribute name="name" required="yes">
         <description>
-              The name of the view defined by the page. 
+              The name of the page (view).
  
               The name shows up in URLs/paths. For example 'foo' or 
               'foo.html'. This attribute is required unless you use the
@@ -18,7 +25,7 @@
               provide a view name, you shouldn't use
               extensions. 
           </description>
-         </attribute>
+       </attribute>
 
       <attribute name="for" required="yes">
         <description>
@@ -30,41 +37,34 @@
               "zope.interface.Interface".  To provide a page for all
               objects, use "*".
           </description>
-        </attribute>
+      </attribute>
 
       <attribute name="permission" required="yes">
         <description>
               The permission needed to use the view. 
-
-              This attribute is required. 
-          
           </description>
-        </attribute>
+      </attribute>
 
       <attribute name="template">
         <description>
-              The name of a page template.
+          The name of a page template.
 
-              Refers to a file containing a page template (must end in
-              extension '.pt'). You must specify either 'template' or
-              'factory'. If you supply a template, you must
-              also supply a name. You can also optionally supply a
-              'class' attribute which contains a view class that has
-              methods that can be used by the template.
-
-              You cannot have sub pages if you use
-              'template'. 
+          Refers to a file containing a page template (must end in
+          extension '.pt').
           </description>
-        </attribute>
+      </attribute>
 
       <attribute name="attribute" required="no">
         <description>
-           If a class is used, this is the name of the attribute to be used
+           The name of an attribute to publish.
+
+           This is used to publish an attribute provided by a class,
+           instead of a template.
 
            This is the attribute, usually a method, to be published as
-           the page (view).  The fault is "__call__".
+           the page (view).  The default is "__call__".
           </description>
-        </attribute>
+      </attribute>
 
       <attribute name="class">
         <description>
@@ -74,7 +74,7 @@
            It's common to provide a class with methods to be used by
            the template to prevent including Python code in the template.
           </description>
-        </attribute>
+      </attribute>
 
       <attribute name="layer" required="no">
         <description>
@@ -85,7 +85,7 @@
               is not supplied, it defaults to
               'default'. 
           </description>
-        </attribute>
+      </attribute>
 
       <attribute name="allowed_interface" required="no">
         <description>
@@ -95,8 +95,10 @@
               any possible sub views. By specifying this attribute, you can
               make the permission also apply to everything described in the 
               supplied interface. 
+
+              Multiple interfaces, separated by whitespace, can be provided.
           </description>
-        </attribute>
+      </attribute>
 
       <attribute name="allowed_attributes" required="no">
         <description>
@@ -107,7 +109,7 @@
               make the permission also apply to the extra attributes on the 
               view object. 
           </description>
-        </attribute>
+      </attribute>
 
       <attribute name="menu" required="no">
         <description>
@@ -117,7 +119,7 @@
           the menu in the page directive, rather than having to give a
           separate menuItem directive.          
           </description>
-        </attribute>
+      </attribute>
 
       <attribute name="title" required="no">
         <description>
@@ -126,91 +128,49 @@
           This attribute must be supplied if a menu attribute is
           supplied. 
           </description>
-        </attribute>
+      </attribute>
 
-      </directive>
+    </directive>
 
-    <directive name="view" 
-               handler="zope.app.publisher.browser.metaconfigure.view" 
-               >
-      <attribute name="name">
+    <directive name="pages" handler=".viewmeta.pages">
+
+      <description>
+        Define multiple pages without repeating all of the parameters.
+
+        The pages directive allows multiple page views to be defined
+        without repeating the 'for', 'permission', 'class', 'layer',
+        'allowed_attributes', and 'allowed_interface' attributes.
+      </description>
+
+      <attribute name="for" required="yes">
         <description>
-              The name of the view. 
- 
-              The name shows up in URLs/paths. For example 'foo' or 
-              'foo.html'. This attribute is required unless you use the
-              subdirective 'page' to create sub views. If you do not have
-              sub pages, it is common to use an extension for the view name 
-              such as '.html'. If you do have sub pages and you want to
-              provide a view name, you shouldn't use
-              extensions. 
-          </description>
-         </attribute>
-
-       <attribute name="for">
-        <description>
-              The interface this view applies to. 
+              The interface this page (view) applies to. 
 
               The view will be for all objects that implement this interface.
-              If 'for' is not supplied, the view applies to all objects 
-              (XXX this ought to change). 
+
+              To provide a page for all components, use
+              "zope.interface.Interface".  To provide a page for all
+              objects, use "*".
           </description>
-        </attribute>
+      </attribute>
 
-      <attribute name="factory">
-        <description>
-              A callable that realizes the view. 
-
-              The view factory interface is documented in IViewFactory. View
-              factories are passed two arguments, the context object
-              and the request object. You must specify either 'factory' or 
-              'template'. If it not allowed to use 'class' when you use
-              the 'factory' attribute. Attributes of the view can be exposed 
-              as pages with the 'page' subdirective.
-          </description>
-        </attribute>
-
-       <attribute name="template">
-        <description>
-              The name of a page template.
-
-              Refers to a file containing a page template (must end in
-              extension '.pt'). You must specify either 'template' or
-              'factory'. If you supply a template, you must
-              also supply a name. You can also optionally supply a
-              'class' attribute which contains a view class that has
-              methods that can be used by the template.
-
-              You cannot have sub pages if you use
-              'template'. 
-          </description>
-        </attribute>
-
-       <attribute name="class">
-        <description>
-              A class to use with the template.
-
-              If you use the 'template' attribute you can optionally use
-              the 'class' attribute. This should point to a class that
-              provides methods that can be used in the template. This class
-              will be mixed in with the page template. From the template
-              you can refer to the methods using 'view/method_name'.
-    
-              You cannot use the 'class' attribute in combination with the
-              'factory' attribute. 
-          </description>
-        </attribute>
-
-       <attribute name="permission" required="yes">
+      <attribute name="permission" required="yes">
         <description>
               The permission needed to use the view. 
-
-              This attribute is required. 
-          
           </description>
-        </attribute>
+      </attribute>
 
-       <attribute name="layer">
+      <attribute name="class">
+        <description>
+           A class to use with a template, or to provide an attribute
+           to publish.
+
+           It's common to provide a class with methods to be used by
+           the template to prevent including Python code in the template.
+          </description>
+      </attribute>
+
+      <attribute name="layer" required="no">
         <description>
               The layer the view is in. 
 
@@ -219,9 +179,9 @@
               is not supplied, it defaults to
               'default'. 
           </description>
-        </attribute>
+      </attribute>
 
-       <attribute name="allowed_interface">
+      <attribute name="allowed_interface" required="no">
         <description>
               Interface that is also allowed if user has permission.
 
@@ -230,9 +190,9 @@
               make the permission also apply to everything described in the 
               supplied interface. 
           </description>
-        </attribute>
+      </attribute>
 
-       <attribute name="allowed_attributes">
+      <attribute name="allowed_attributes" required="no">
         <description>
               View attributes that are also allowed if user has permission.
 
@@ -241,18 +201,171 @@
               make the permission also apply to the extra attributes on the 
               view object. 
           </description>
+      </attribute>
+
+      <subdirective name="page">
+
+        <attribute name="name" required="yes">
+          <description>
+                The name of the view defined by the page. 
+
+                The name shows up in URLs/paths. For example 'foo' or 
+                'foo.html'. This attribute is required unless you use the
+                subdirective 'page' to create sub views. If you do not have
+                sub pages, it is common to use an extension for the view name 
+                such as '.html'. If you do have sub pages and you want to
+                provide a view name, you shouldn't use
+                extensions. 
+            </description>
+         </attribute>
+
+        <attribute name="template">
+          <description>
+                The name of a page template.
+
+                Refers to a file containing a page template (must end in
+                extension '.pt').
+          </description>
         </attribute>
 
-       <subdirective name="page">
-         <attribute name="name" >
+        <attribute name="attribute" required="no">
+          <description>
+             If a class is used, this is the name of the attribute to be used
+
+             This is the attribute, usually a method, to be published as
+             the page (view).  The fault is "__call__".
+            </description>
+        </attribute>
+
+        <attribute name="menu" required="no">
+          <description>
+            The browser menu to include the page (view) in.
+
+            Many views are included in menus. It's convenient to name
+            the menu in the page directive, rather than having to give a
+            separate menuItem directive.          
+            </description>
+        </attribute>
+
+        <attribute name="title" required="no">
+          <description>
+            The browser menu label for the page (view)
+
+            This attribute must be supplied if a menu attribute is
+            supplied. 
+            </description>
+        </attribute>
+
+      </subdirective>
+
+    </directive>
+
+    <directive name="view" handler=".viewmeta.view">
+
+      <description>
+        The view directive defines a viewe that has subpages.
+
+        The pages provided by the defined view are accessed by first
+        traversing to the view name and then traversing to the page
+        name. 
+      </description>
+
+      <attribute name="name" required="yes">
+
+        <description>
+              The name of the view. 
+ 
+              The name shows up in URLs/paths. For example 'foo'. 
+          </description>
+       </attribute>
+
+       <attribute name="for" required="yes">
+        <description>
+              The interface this view applies to. 
+
+              The view will be for all objects that implement this interface.
+              If 'for' is not supplied, the view applies to all objects 
+              (XXX this ought to change). 
+          </description>
+      </attribute>
+
+      <attribute name="class" required="no">
+        <description>
+              A class that provides attributes used by the view. 
+          </description>
+      </attribute>
+
+       <attribute name="permission" required="yes">
+        <description>
+              The permission needed to use the view. 
+          </description>
+      </attribute>
+
+      <attribute name="layer" required="no">
+        <description>
+              The layer the view is in. 
+
+              A skin is composed of layers. It is common to put skin specific
+              views in a layer named after the skin. If the 'layer' attribute
+              is not supplied, it defaults to
+              'default'. 
+          </description>
+      </attribute>
+
+      <attribute name="allowed_interface" required="no">
+        <description>
+              Interface that is also allowed if user has permission.
+
+              By default, 'permission' only applies to viewing the view and 
+              any possible sub views. By specifying this attribute, you can
+              make the permission also apply to everything described in the 
+              supplied interface. 
+
+              Multiple interfaces can be provided, separated by whitespace.
+          </description>
+      </attribute>
+
+      <attribute name="allowed_attributes" required="no">
+        <description>
+              View attributes that are also allowed if user has permission.
+
+              By default, 'permission' only applies to viewing the view and any
+              possible sub views. By specifying 'allowed_attributes', you can
+              make the permission also apply to the extra attributes on the 
+              view object. 
+          </description>
+      </attribute>
+
+      <attribute name="menu" required="no">
+        <description>
+          The browser menu to include the page (view) in.
+
+          Many views are included in menus. It's convenient to name
+          the menu in the page directive, rather than having to give a
+          separate menuItem directive.          
+          </description>
+      </attribute>
+
+      <attribute name="title" required="no">
+        <description>
+          The browser menu label for the page (view)
+
+          This attribute must be supplied if a menu attribute is
+          supplied. 
+          </description>
+      </attribute>
+
+      <subdirective name="page">
+
+         <attribute name="name" required="yes">
            <description>
                  The name of a sub page of a view.
 
                  The name attribute is always required for the 'page'
                  directive. It is common to use an extension for the name, 
                  such as '.html'. 
-             </description>
-           </attribute>
+           </description>
+         </attribute>
 
          <attribute name="attribute">
            <description>
@@ -260,24 +373,20 @@
 
                  This refers to the attribute (method) on the view that is 
                  implementing a specific sub page. 
-             </description>
-           </attribute>
+           </description>
+         </attribute>
 
-         <attribute name="permission">
+         <attribute name="template">
            <description>
-                 The permission needed to use this page.
- 
-                 XXX Should we deprecate this? Could always be the same as
-                 the main view. 
-             </description>
-           </attribute>
+              The name of a template that implements the page.
+           </description>
+         </attribute>
 
-         <attribute
-             name="layer" 
-             description="XXX deprecated" />
        </subdirective>
+
        <subdirective name="defaultPage">
-         <attribute name="name">
+
+         <attribute name="name" required="yes">
            <description>
                  The name of the page that is the default.
 
@@ -286,14 +395,152 @@
                  directive is supplied, the default page will be the
                  first page listed. 
              </description>
-           </attribute>
+         </attribute>
 
-         <attribute
-             name="attribute"
-             description="XXX deprecated" />
-         <attribute
-             name="permission"
-             description="XXX deprecated" />
+       </subdirective>
+      </directive>
+
+    <directive name="addview" handler=".viewmeta.addview">
+
+      <description>
+        The addview directive defines an add view that has subpages.
+
+        An add view is a view for a specific adding interface,
+        IAdding. This directive is a convenience directive that allows
+        the for interface to be ommitted, since it is implied.
+
+        The pages provided by the defined view are accessed by first
+        traversing to the view name and then traversing to the page
+        name. 
+      </description>
+
+      <attribute name="name" required="yes">
+
+        <description>
+              The name of the view. 
+ 
+              The name shows up in URLs/paths. For example 'foo'. 
+          </description>
+       </attribute>
+
+       <attribute name="for" required="yes">
+        <description>
+              The interface this view applies to. 
+
+              The view will be for all objects that implement this interface.
+              If 'for' is not supplied, the view applies to all objects 
+              (XXX this ought to change). 
+          </description>
+      </attribute>
+
+      <attribute name="class" required="no">
+        <description>
+              A class that provides attributes used by the view. 
+          </description>
+      </attribute>
+
+       <attribute name="permission" required="yes">
+        <description>
+              The permission needed to use the view. 
+          </description>
+      </attribute>
+
+      <attribute name="layer" required="no">
+        <description>
+              The layer the view is in. 
+
+              A skin is composed of layers. It is common to put skin specific
+              views in a layer named after the skin. If the 'layer' attribute
+              is not supplied, it defaults to
+              'default'. 
+          </description>
+      </attribute>
+
+      <attribute name="allowed_interface" required="no">
+        <description>
+              Interface that is also allowed if user has permission.
+
+              By default, 'permission' only applies to viewing the view and 
+              any possible sub views. By specifying this attribute, you can
+              make the permission also apply to everything described in the 
+              supplied interface. 
+
+              Multiple interfaces can be provided, separated by whitespace.
+          </description>
+      </attribute>
+
+      <attribute name="allowed_attributes" required="no">
+        <description>
+              View attributes that are also allowed if user has permission.
+
+              By default, 'permission' only applies to viewing the view and any
+              possible sub views. By specifying 'allowed_attributes', you can
+              make the permission also apply to the extra attributes on the 
+              view object. 
+          </description>
+      </attribute>
+
+      <attribute name="menu" required="no">
+        <description>
+          The browser menu to include the page (view) in.
+
+          Many views are included in menus. It's convenient to name
+          the menu in the page directive, rather than having to give a
+          separate menuItem directive.          
+          </description>
+      </attribute>
+
+      <attribute name="title" required="no">
+        <description>
+          The browser menu label for the page (view)
+
+          This attribute must be supplied if a menu attribute is
+          supplied. 
+          </description>
+      </attribute>
+
+      <subdirective name="page">
+
+         <attribute name="name" required="yes">
+           <description>
+                 The name of a sub page of a view.
+
+                 The name attribute is always required for the 'page'
+                 directive. It is common to use an extension for the name, 
+                 such as '.html'. 
+           </description>
+         </attribute>
+
+         <attribute name="attribute">
+           <description>
+                 The name of the view attribute implementing the page.
+
+                 This refers to the attribute (method) on the view that is 
+                 implementing a specific sub page. 
+           </description>
+         </attribute>
+
+         <attribute name="template">
+           <description>
+              The name of a template that implements the page.
+           </description>
+         </attribute>
+
+       </subdirective>
+
+       <subdirective name="defaultPage">
+
+         <attribute name="name" required="yes">
+           <description>
+                 The name of the page that is the default.
+
+                 The named page will be used as the default if no name is
+                 specified explicitly in the path. If no defaultPage 
+                 directive is supplied, the default page will be the
+                 first page listed. 
+             </description>
+         </attribute>
+
        </subdirective>
       </directive>
 
@@ -304,46 +551,22 @@
         <description>
               The name of the view that should be the default.
               
-              This name refers to another view that should be the
+              This name refers to view that should be the
               view used by default (if no view name is supplied
               explicitly). 
           </description>
-        </attribute>
+      </attribute>
 
-       <attribute name="for">
+      <attribute name="for">
         <description>
               The interface this view is the default for.
 
               The view is the default view for the supplied
               interface. 
           </description>
-        </attribute>
+      </attribute>
 
-       <attribute name="layer">
-        <description>
-              The layer the named view is the default view.
-
-              The named view is only the default view in the supplied
-              layer 
-          </description>
-        </attribute>
-
-      <attribute
-          name="factory"
-          description="XXX deprecated" />
-       <attribute
-          name="template"
-          description="XXX deprecated" />
-       <attribute
-          name="permission"
-          description="XXX deprecated" />
-       <attribute
-          name="allowed_interface" 
-          description="XXX deprecated" />
-       <attribute
-          name="allowed_attributes"
-          description="XXX deprecated" />
-      </directive>
+    </directive>
 
     <directive name="resource"
         handler="zope.app.publisher.browser.metaconfigure.resource"
@@ -362,7 +585,7 @@
            content-relative) so as not to defeat caches.
          </description>
 
-         </attribute>
+       </attribute>
 
        <attribute name="layer" required="no">
 
@@ -375,7 +598,7 @@
            Defaults to "default".
          </description>
 
-         </attribute>
+       </attribute>
 
        <attribute name="file">
 
@@ -383,7 +606,7 @@
             The file containing the resource data.
          </description>
 
-         </attribute>
+       </attribute>
 
        <attribute name="image">
 
@@ -394,7 +617,7 @@
             rather than a file resource will be created.
          </description>
 
-         </attribute>
+       </attribute>
 
        <attribute name="permission" required="no">
 
@@ -405,7 +628,7 @@
            be accessible.
          </description>
 
-         </attribute>
+       </attribute>
 
        </directive>
 
@@ -443,7 +666,7 @@
               'default', unless you want to completely override all
               views.
           </description>
-        </attribute>
+      </attribute>
 
       </directive>
 
@@ -459,7 +682,7 @@
 
               This is, effectively, an id.     
       </description>
-     </attribute>
+   </attribute>
 
 
       <attribute
@@ -505,7 +728,7 @@
           The url is relative to the object the menu is being
           displayed for.
           </description>
-        </attribute>
+      </attribute>
 
         <attribute
             name="title" 
@@ -520,7 +743,7 @@
           A UI may display this with the item or display it when the
           user requests more assistance.
           </description>
-        </attribute>
+      </attribute>
 
         <attribute name="permission" required="no">
           <description>
@@ -532,7 +755,7 @@
             determine whether the url is accessable to the current
             user.  This can be avoided if the permission is given explicitly. 
           </description>
-        </attribute>
+      </attribute>
 
         <attribute name="filter" required="no"> 
           <description>
@@ -550,9 +773,9 @@
             The menu item will not be displayed if there is a filter
             and the filter evaluates to a false value.
           </description>
-        </attribute>
-       </subdirective> 
-      </directive>
+      </attribute>
+     </subdirective> 
+    </directive>
 
     <directive name="menuItem" 
         handler="
