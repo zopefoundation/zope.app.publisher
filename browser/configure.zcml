@@ -55,6 +55,11 @@
   <allow attributes="__call__" />
 </content>
 
+<content class=".directoryresource.DirectoryResource">
+  <allow interface="zope.publisher.interfaces.browser.IBrowserPublisher" />
+  <allow attributes="get __getitem__" />
+</content>
+
 <browser:page 
     name=""
     class="zope.app.publisher.browser.resources.Resources"
