@@ -13,7 +13,7 @@
 ##############################################################################
 """Resource URL acess
 
-$Id: resources.py,v 1.12 2004/03/02 14:24:31 srichter Exp $
+$Id: resources.py,v 1.13 2004/03/13 23:55:20 srichter Exp $
 """
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher
@@ -22,7 +22,7 @@ from zope.interface import implements
 
 from zope.app import zapi
 from zope.app.location import locate
-from zope.app.services.servicenames import Presentation
+from zope.app.servicenames import Presentation
 
 class Resources(BrowserView):
     """Provide a URL-accessible resource namespace

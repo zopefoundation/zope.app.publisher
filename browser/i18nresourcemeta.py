@@ -13,14 +13,14 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: i18nresourcemeta.py,v 1.15 2003/11/21 17:10:25 jim Exp $
+$Id: i18nresourcemeta.py,v 1.16 2004/03/13 23:55:20 srichter Exp $
 """
 
 from zope.security.proxy import Proxy
 from zope.security.checker import CheckerPublic, Checker
 
 from zope.configuration.exceptions import ConfigurationError
-from zope.app.services.servicenames import Presentation
+from zope.app.servicenames import Presentation
 from zope.app.component.metaconfigure import handler
 
 from zope.app.publisher.fileresource import File, Image
