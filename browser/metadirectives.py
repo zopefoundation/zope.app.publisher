@@ -15,12 +15,12 @@
 
 This module defines the schemas for browser directives.
 
-$Id: metadirectives.py,v 1.8 2003/11/21 17:10:27 jim Exp $
+$Id: metadirectives.py,v 1.9 2003/12/03 05:40:29 jim Exp $
 """
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, Tokens, Path, \
      PythonIdentifier, MessageID
-from zope.schema import TextLine, Id
+from zope.schema import TextLine, Text, Id
 
 from zope.app.component.metadirectives import IBasicViewInformation
 
@@ -546,4 +546,70 @@ class IIconDirective(Interface):
         For information on layers, see the documentation for the skin
         directive. Defaults to "default".""",
         required=False
+        )
+
+class IAddMenuItem(Interface):
+    """Define an add-menu item
+    """
+
+    class_ = GlobalObject(
+        __doc__ = """Class
+
+                 A class to be used as a factory for creating new objects
+                 """,
+        required = False,
+        )
+
+    factory = GlobalObject(
+        __doc__ = """Factory
+
+                 A factory for creating new objects
+                 """,
+        required = False,
+        )
+
+    title = TextLine(
+        __doc__ = """Title
+
+                  A one-line description of the objects to be added
+                  """,
+        required = True,
+        )
+
+    description = Text(
+        __doc__ = """Text
+
+                  A multi-line description of the objects to be added
+                  """,
+        required = False,
+        )
+
+    permission = Id(
+        title=u"The permission needed to add an object.",
+        required=False,
+        )
+
+    filter = TextLine(
+        title=u"A condition for displaying the menu item",
+        description=u"""
+        The condition is given as a TALES expression. The expression
+        has access to the variables:
+
+        context -- The object the menu is being displayed for
+
+        request -- The browser request
+
+        nothing -- None
+
+        The menu item will not be displayed if there is a filter and
+        the filter evaluates to a false value.""",
+        required=False
+        )
+
+    view = TextLine(
+        __doc__ = """Custom view name
+
+                  The name of a custom add view
+                  """,
+        required = False,
         )

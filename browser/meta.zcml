@@ -146,6 +146,12 @@
         handler=".icon.IconDirective"
         />
 
+    <meta:directive
+        name="addMenuItem"
+        schema=".metadirectives.IAddMenuItem"
+        handler=".metaconfigure.addMenuItem"
+        />
+
   </meta:directives>
 
 </configure>
