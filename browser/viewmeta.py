@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.35 2003/12/07 10:04:53 gotcha Exp $
+$Id: viewmeta.py,v 1.36 2003/12/07 11:26:11 philikon Exp $
 """
 
 import os
@@ -205,21 +205,22 @@ class pages:
     def __init__(self, _context, for_, permission,
                  layer='default', class_=None,
                  allowed_interface=None, allowed_attributes=None,
+                 usage=u''
                  ):
         self.opts = opts(for_=for_, permission=permission,
                          layer=layer, class_=class_,
                          allowed_interface=allowed_interface,
                          allowed_attributes=allowed_attributes,
+                         usage=usage
                          )
 
     def page(self, _context, name, attribute='__call__', template=None,
-             menu=None, title=None, usage=u''):
+             menu=None, title=None):
         return page(_context,
                     name=name,
                     attribute=attribute,
                     template=template,
                     menu=menu, title=title,
-                    usage=usage,
                     **(self.opts))
 
     def __call__(self):

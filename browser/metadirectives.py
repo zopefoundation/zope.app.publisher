@@ -15,7 +15,7 @@
 
 This module defines the schemas for browser directives.
 
-$Id: metadirectives.py,v 1.10 2003/12/07 10:04:53 gotcha Exp $
+$Id: metadirectives.py,v 1.11 2003/12/07 11:26:11 philikon Exp $
 """
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, Tokens, Path, \
@@ -138,7 +138,7 @@ class IDefaultViewDirective(Interface):
 # browser pages
 #
 
-class IPagesDirective(IBasicViewInformation):
+class IPagesDirective(IBasicViewInformation, IUsage):
     """
     Define multiple pages without repeating all of the parameters.
 
