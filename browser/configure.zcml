@@ -60,7 +60,7 @@
 <browser:page 
     name=""
     class="zope.app.publisher.browser.resources.Resources"
-    for="zope.app.interfaces.services.service.IServiceManagerContainer"
+    for="zope.app.interfaces.services.service.ISite"
     permission="zope.Public"
     allowed_interface="zope.publisher.interfaces.browser.IBrowserPublisher"
     />
