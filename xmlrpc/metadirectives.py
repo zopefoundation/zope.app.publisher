@@ -48,9 +48,9 @@ class IDefaultViewDirective(Interface):
 
     for_ = GlobalObject(
         title=u"The interface this view is the default for.",
-        description=u"""
-        The view is the default view for the supplied interface. If
-        this is not supplied, the view applies to all objects (XXX
-        this ought to change).""",
+        description=u"""Specifies the interface for which the view is
+        registered. All objects implementing this interface can make use of
+        this view. If this attribute is not specified, the view is available
+        for all objects.""",
         required=False
         )
