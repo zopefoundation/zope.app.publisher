@@ -13,14 +13,11 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: resourcemeta.py,v 1.3 2002/12/28 14:16:15 jim Exp $
+$Id: resourcemeta.py,v 1.4 2002/12/28 16:14:00 jim Exp $
 """
 
-from zope.security.proxy import Proxy
-from zope.security.checker import CheckerPublic, NamesChecker, Checker
+from zope.security.checker import CheckerPublic, NamesChecker
 
-from zope.interfaces.configuration import INonEmptyDirective
-from zope.interfaces.configuration import ISubdirectiveHandler
 from zope.configuration.action import Action
 from zope.configuration.exceptions import ConfigurationError
 
@@ -28,160 +25,36 @@ from zope.publisher.interfaces.browser import IBrowserPresentation
 
 from zope.app.component.metaconfigure import handler
 
-from zope.app.publisher.browser.fileresource \
-     import FileResourceFactory, ImageResourceFactory
+from zope.app.publisher.browser.fileresource import FileResourceFactory
+from zope.app.publisher.browser.fileresource import ImageResourceFactory
 
-class resource(object):
+allowed_names = ('GET', 'HEAD', 'publishTraverse', 'browserDefault',
+                 'request', '__call__')
 
-    __class_implements__ = INonEmptyDirective
-    __implements__ = ISubdirectiveHandler
+def resource(_context, name, layer='default', permission='zope.Public',
+             file=None, image=None):
 
-    def __init__(self, _context, factory=None, name=None, layer='default',
-                 permission=None,
-                 allowed_interface=None, allowed_attributes=None,
-                 file=None, image=None):
+    if permission == 'zope.Public':
+        permission = CheckerPublic
 
-        if ((allowed_attributes or allowed_interface)
-            and ((name is None) or not permission)):
-            raise ConfigurationError(
-                "Must use name attribute with allowed_interface or "
-                "allowed_attributes"
-                )
+    checker = NamesChecker(allowed_names, permission)
 
-        if allowed_interface is not None:
-            allowed_interface = _context.resolve(allowed_interface)
-
-        self.__file = file
-        self.__image = image
-
-        self.factory = self._factory(_context, factory)
-        self.layer = layer
-        self.name = name
-        self.permission = permission
-        self.allowed_attributes = allowed_attributes
-        self.allowed_interface = allowed_interface
-        self.pages = 0
-
-    def _factory(self, _context, factory):
-        if ((factory is not None)
-            + (self.__file is not None)
-            + (self.__image is not None)
-            ) > 1:
-            raise ConfigurationError(
-                "Can't use more than one of factory, file, and image "
-                "attributes for resource directives"
-                )
-
-        if factory is not None:
-            return _context.resolve(factory)
-
-        if self.__file is not None:
-            return FileResourceFactory(_context.path(self.__file))
-
-        if self.__image is not None:
-            return ImageResourceFactory(_context.path(self.__image))
-
+    if file and image or not (file or image):
         raise ConfigurationError(
-            "At least one of the factory, file, and image "
-            "attributes for resource directives must be specified"
+            "Must use exactly one of file or image "
+            "attributes for resource directives"
             )
 
+    if file:
+        factory = FileResourceFactory(_context.path(file), checker)
+    else:
+        factory = ImageResourceFactory(_context.path(image), checker)
 
-    def page(self, _context, name, attribute, permission=None,
-             layer=None, factory=None):
-
-        permission = permission or self.permission
-
-        factory = self._pageFactory(factory or self.factory,
-                                    attribute, permission)
-
-        self.pages += 1
-
-        if layer is None:
-            layer = self.layer
-
-        return [
-            Action(
-                discriminator = ('resource', name, IBrowserPresentation,
-                                 layer),
-                callable = handler,
-                args = ('Resources', 'provideResource',
-                        name, IBrowserPresentation, factory, layer),
-                )
-            ]
-
-    def _pageFactory(self, factory, attribute, permission):
-        if permission:
-            if permission == 'zope.Public':
-                permission = CheckerPublic
-
-            def pageView(request,
-                         factory=factory, attribute=attribute,
-                         permission=permission):
-                return Proxy(getattr(factory(request), attribute),
-                             NamesChecker(__call__ = permission))
-
-        else:
-
-            def pageView(request,
-                         factory=factory, attribute=attribute):
-                return getattr(factory(request), attribute)
-
-        return pageView
-
-    def __call__(self, require=None):
-        if self.name is None:
-            return ()
-
-        permission = self.permission
-        allowed_interface = self.allowed_interface
-        allowed_attributes = self.allowed_attributes
-        factory = self.factory
-
-        if permission:
-            if require is None:
-                require = {}
-
-            if permission == 'zope.Public':
-                permission = CheckerPublic
-
-            if ((not allowed_attributes) and (allowed_interface is None)
-                and (not self.pages)):
-                allowed_attributes = '__call__'
-
-            for name in (allowed_attributes or '').split():
-                require[name] = permission
-
-            if allowed_interface:
-                for name in allowed_interface.names(1):
-                    require[name] = permission
-
-        if require:
-            checker = Checker(require.get)
-
-            factory = self._proxyFactory(factory, checker)
-
-
-        return [
-            Action(
-                discriminator = ('resource', self.name, IBrowserPresentation,
-                                 self.layer),
-                callable = handler,
-                args = ('Resources', 'provideResource',
-                        self.name, IBrowserPresentation, factory, self.layer),
-                )
-            ]
-
-    def _proxyFactory(self, factory, checker):
-
-        def proxyResource(request,
-                          factory=factory, checker=checker):
-            resource = factory(request)
-
-            # We need this in case the resource gets unwrapped and
-            # needs to be rewrapped
-            resource.__Security_checker__ = checker
-
-            return Proxy(resource, checker)
-
-        return proxyResource
+    return [
+        Action(
+            discriminator = ('resource', name, IBrowserPresentation, layer),
+            callable = handler,
+            args = ('Resources', 'provideResource',
+                    name, IBrowserPresentation, factory, layer),
+            )
+        ]

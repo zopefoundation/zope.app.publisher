@@ -2,9 +2,9 @@
   
   <directives namespace="http://namespaces.zope.org/browser">
 
-    <directive 
-        name="view" 
-        handler="zope.app.publisher.browser.metaconfigure.view" >
+    <directive name="view" 
+               handler="zope.app.publisher.browser.metaconfigure.view" 
+               >
       <attribute name="name">
         <description>
               The name of the view. 
@@ -167,11 +167,11 @@
              name="permission"
              description="XXX deprecated" />
        </subdirective>
-    </directive>
+      </directive>
 
-    <directive 
-       name="defaultView" 
-       handler="zope.app.publisher.browser.metaconfigure.defaultView">
+    <directive name="defaultView" 
+               handler="zope.app.publisher.browser.metaconfigure.defaultView"
+               >
       <attribute name="name" >
         <description>
               The name of the view that should be the default.
@@ -215,38 +215,71 @@
        <attribute
           name="allowed_attributes"
           description="XXX deprecated" />
-    </directive>
+      </directive>
 
-    <directive
-        name="resource"
-        handler="zope.app.publisher.browser.metaconfigure.resource">
-      <attribute
-          name="name" />
-      <attribute
-          name="factory" />
-       <attribute
-          name="layer" />
-       <attribute
-          name="file" />
-       <attribute
-          name="image" />
-       <attribute
-          name="permission" />
-       <attribute
-          name="allowed_interface" />
-       <attribute
-          name="allowed_attributes" />
-       <subdirective name="page"> 
-         <attribute
-             name="name" />
-         <attribute
-             name="attribute" />
-         <attribute
-             name="permission" />
-         <attribute
-             name="layer" />
-       </subdirective>
-    </directive>
+    <directive name="resource"
+        handler="zope.app.publisher.browser.metaconfigure.resource"
+        >
+
+      <attribute name="name" required="yes">
+
+         <description>
+           The name of the resource
+
+           This is the name used in resource urls.  Resource urls are
+           of the form site/@@/resourcename, where site is the url of
+           "site", a folder with a service manager.
+
+           We make resource urls site-relative (as opposed to
+           content-relative) so as not to defeat caches.
+         </description>
+
+         </attribute>
+
+       <attribute name="layer" required="no">
+
+         <description>
+           The layer the resource should be found in
+
+           For information on layers, see the documentation for the
+           skin directive.
+
+           Defaults to "default".
+         </description>
+
+         </attribute>
+
+       <attribute name="file">
+
+         <description>
+            The file containing the resource data.
+         </description>
+
+         </attribute>
+
+       <attribute name="image">
+
+         <description>
+            The file containing the resource data.
+
+            If the image attribute is used, then an image resource,
+            rather than a file resource will be created.
+         </description>
+
+         </attribute>
+
+       <attribute name="permission" required="no">
+
+         <description>
+           The id of the permission needed to access the resource.
+
+           If a permission isn't specified, the resource will always
+           be accessible.
+         </description>
+
+         </attribute>
+
+       </directive>
 
     <directive
         name="i18n-resource"
@@ -264,11 +297,12 @@
         <attribute
             name="image" />
       </subdirective>
-    </directive>
+      </directive>
 
-    <directive
-        name="skin"
-        handler="zope.app.publisher.browser.metaconfigure.skin">
+    <directive name="skin"
+        handler="zope.app.publisher.browser.metaconfigure.skin"
+        >
+
       <attribute
           name="name"
           description="The name of the skin." />
@@ -283,10 +317,9 @@
           </description>
         </attribute>
 
-    </directive>
+      </directive>
 
-    <directive
-        name="menu"
+    <directive name="menu"
         handler="
             zope.app.publisher.browser.globalbrowsermenuservice.menuDirective"
         description="Define a new browser menu"
@@ -305,7 +338,7 @@
           name="title"
           description="A descriptive title for documentation purposes"
           />
-    </directive>
+      </directive>
 
     <directive
         name="menuItems"
@@ -391,13 +424,13 @@
           </description>
         </attribute>
        </subdirective> 
-    </directive>
+      </directive>
 
-    <directive 
-        name="menuItem" 
+    <directive name="menuItem" 
         handler="
         zope.app.publisher.browser.globalbrowsermenuservice.menuItemDirective"
-    >
+        >
+
       <attribute
           name="menu" />
       <attribute
@@ -410,12 +443,10 @@
           name="description" />
       <attribute
           name="filter" />
-    </directive>
+      </directive>
 
-    <directive
-        name="icon"
-        handler="zope.app.interfaces.publisher.browser.IconDirective"
-    >
+    <directive name="icon" handler=".icon.IconDirective">
+
       <attribute
           name="name" />
       <attribute

@@ -14,12 +14,14 @@
 """
 
 Revision information:
-$Id: test_fileresource.py,v 1.2 2002/12/25 14:13:10 jim Exp $
+$Id: test_fileresource.py,v 1.3 2002/12/28 16:14:01 jim Exp $
 """
+
+import os
 
 from unittest import TestCase, TestSuite, main, makeSuite
 
-import os
+from zope.security.checker import CheckerPublic, NamesChecker
 
 from zope.exceptions import NotFoundError
 
@@ -38,6 +40,10 @@ from zope.app.publisher.browser.fileresource import FileResourceFactory
 from zope.app.publisher.browser.fileresource import ImageResourceFactory
 import zope.app.publisher.browser.tests as p
 
+checker = NamesChecker(
+    ('__call__', 'HEAD', 'request', 'publishTraverse', 'GET')
+    )
+
 test_directory = os.path.split(p.__file__)[0]
 
 class Test(PlacelessSetup, TestCase):
@@ -49,8 +55,7 @@ class Test(PlacelessSetup, TestCase):
     def testNoTraversal(self):
 
         path = os.path.join(test_directory, 'test.txt')
-        resource = FileResourceFactory(path)(TestRequest())
-        resource = removeAllProxies(resource)
+        resource = FileResourceFactory(path, checker)(TestRequest())
         self.assertRaises(NotFoundError,
                           resource.publishTraverse,
                           resource.request,
@@ -60,45 +65,41 @@ class Test(PlacelessSetup, TestCase):
 
         path = os.path.join(test_directory, 'test.txt')
 
-        resource = FileResourceFactory(path)(TestRequest())
-        resource = removeAllProxies(resource)
+        resource = FileResourceFactory(path, checker)(TestRequest())
         self.assertEqual(resource.GET(), open(path, 'rb').read())
 
-        response = resource.request.response
+        response = removeAllProxies(resource.request).response
         self.assertEqual(response.getHeader('Content-Type'), 'text/plain')
 
     def testFileHEAD(self):
 
         path = os.path.join(test_directory, 'test.txt')
-        resource = FileResourceFactory(path)(TestRequest())
-        resource = removeAllProxies(resource)
+        resource = FileResourceFactory(path, checker)(TestRequest())
 
         self.assertEqual(resource.HEAD(), '')
 
-        response = resource.request.response
+        response = removeAllProxies(resource.request).response
         self.assertEqual(response.getHeader('Content-Type'), 'text/plain')
 
     def testImageGET(self):
 
         path = os.path.join(test_directory, 'test.gif')
 
-        resource = ImageResourceFactory(path)(TestRequest())
-        resource = removeAllProxies(resource)
+        resource = ImageResourceFactory(path, checker)(TestRequest())
 
         self.assertEqual(resource.GET(), open(path, 'rb').read())
 
-        response = resource.request.response
+        response = removeAllProxies(resource.request).response
         self.assertEqual(response.getHeader('Content-Type'), 'image/gif')
 
     def testImageHEAD(self):
 
         path = os.path.join(test_directory, 'test.gif')
-        resource = ImageResourceFactory(path)(TestRequest())
-        resource = removeAllProxies(resource)
+        resource = ImageResourceFactory(path, checker)(TestRequest())
 
         self.assertEqual(resource.HEAD(), '')
 
-        response = resource.request.response
+        response = removeAllProxies(resource.request).response
         self.assertEqual(response.getHeader('Content-Type'), 'image/gif')
 
 

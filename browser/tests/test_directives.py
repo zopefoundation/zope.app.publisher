@@ -132,22 +132,6 @@ class Test(PlacelessSetup, unittest.TestCase):
                       Request(IBrowserPresentation, 'zmi')).__class__,
             VZMI)
 
-    def testResource(self):
-        self.assertEqual(queryResource(ob, 'test', request,
-                                       None),
-                         None)
-
-        xmlconfig(StringIO(template % (
-            """
-            <browser:resource name="test"
-                  factory="zope.component.tests.views.R1" />
-            """
-            )))
-
-        self.assertEqual(
-            queryResource(ob, 'test', request).__class__,
-            R1)
-
     def testI18nResource(self):
         self.assertEqual(queryResource(ob, 'test', request,
                                        None),
@@ -193,32 +177,6 @@ class Test(PlacelessSetup, unittest.TestCase):
             """ % (path1, path2)
             ))
         self.assertRaises(ConfigurationError, xmlconfig, config)
-
-
-    def testSkinResource(self):
-        self.assertEqual(
-            queryResource(ob, 'test', request, None),
-            None)
-
-        xmlconfig(StringIO(template % (
-            """
-            <browser:skin name="zmi" layers="zmi default" />
-            <browser:resource name="test"
-                  factory="zope.component.tests.views.RZMI"
-                  layer="zmi" />
-            <browser:resource name="test"
-                  factory="zope.component.tests.views.R1" />
-            """
-            )))
-
-        self.assertEqual(
-            queryResource(ob, 'test', request).__class__,
-            R1)
-        self.assertEqual(
-            queryResource(ob, 'test',
-                          Request(IBrowserPresentation, 'zmi')).__class__,
-            RZMI)
-
 
     def testInterfaceProtectedView(self):
         xmlconfig(StringIO(template %
@@ -525,26 +483,6 @@ class Test(PlacelessSetup, unittest.TestCase):
                     Request(IBrowserPresentation, "skinny"))
         self.assertEqual(v(), 'done')
 
-    def testPageResource(self):
-        self.assertEqual(queryResource(ob, 'test', request), None)
-
-        xmlconfig(StringIO(template %
-            """
-            <browser:resource
-                  factory="zope.component.tests.views.R1">
-
-                <browser:page name="index.html" attribute="index" />
-                <browser:page name="action.html" attribute="action" />
-            </browser:resource>
-            """
-            ))
-
-        v = getResource(ob, 'index.html', request)
-        self.assertEqual(v(), 'R1 here')
-        v = getResource(ob, 'action.html', request)
-        self.assertEqual(v(), 'R done')
-
-
     def testFile(self):
         path = os.path.join(tests_path, 'test.pt')
 
@@ -560,10 +498,38 @@ class Test(PlacelessSetup, unittest.TestCase):
             """ % path
             ))
 
-        v = getResource(ob, 'index.html', request)
-        v = removeAllProxies(v)
-        self.assertEqual(v._testData(), open(path, 'rb').read())
+        r = getResource(ob, 'index.html', request)
 
+        # Make sure we can access available attrs and not others
+        for n in ('GET', 'HEAD', 'publishTraverse', 'request', '__call__'):
+            getattr(r, n)
+
+        self.assertRaises(Exception, getattr, r, '_testData')
+
+        r = removeAllProxies(r)
+        self.assertEqual(r._testData(), open(path, 'rb').read())
+
+
+    def testSkinResource(self):
+        self.assertEqual(
+            queryResource(ob, 'test', request, None),
+            None)
+
+        path = os.path.join(tests_path, 'test.pt')
+
+        xmlconfig(StringIO(template % (
+            """
+            <browser:skin name="zmi" layers="zmi default" />
+            <browser:resource name="test" file="%s" 
+                  layer="zmi" />
+            """ % path
+            )))
+
+        self.assertEqual(queryResource(ob, 'test', request), None)
+
+        r = getResource(ob, 'test', Request(IBrowserPresentation, 'zmi'))
+        r = removeAllProxies(r)
+        self.assertEqual(r._testData(), open(path, 'rb').read())
 
     def testtemplate(self):
         path = os.path.join(tests_path, 'test.pt')
