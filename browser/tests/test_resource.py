@@ -16,9 +16,13 @@
 $Id$
 """
 import unittest
-from zope.app.publisher.browser.resource import Resource
+
+from zope.component.service import serviceManager
 from zope.interface import implements
 from zope.publisher.browser import TestRequest
+
+from zope.app.component.hooks import setSite
+from zope.app.publisher.browser.resource import Resource
 from zope.app.site.interfaces import ISite
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.app.traversing.interfaces import IContainmentRoot
@@ -26,9 +30,20 @@ from zope.app.traversing.interfaces import IContainmentRoot
 class Site(object):
     implements(ISite, IContainmentRoot)
 
+    def getSiteManager(self):
+        return serviceManager
+
 site = Site()
 
 class TestResource(PlacelessSetup, unittest.TestCase):
+
+    def setUp(self):
+        super(TestResource, self).setUp()
+        setSite(site)
+
+    def tearDown(self):
+        setSite()
+        super(TestResource, self).tearDown()
 
     def testGlobal(self):
         req = TestRequest()

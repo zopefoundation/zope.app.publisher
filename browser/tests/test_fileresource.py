@@ -50,7 +50,8 @@ class Test(PlacelessSetup, TestCase):
     def testNoTraversal(self):
 
         path = os.path.join(test_directory, 'testfiles', 'test.txt')
-        resource = FileResourceFactory(path, checker)(TestRequest())
+        factory = FileResourceFactory(path, checker, 'test.txt')
+        resource = factory(TestRequest())
         self.assertRaises(NotFoundError,
                           resource.publishTraverse,
                           resource.request,
@@ -60,7 +61,8 @@ class Test(PlacelessSetup, TestCase):
 
         path = os.path.join(test_directory, 'testfiles', 'test.txt')
 
-        resource = FileResourceFactory(path, checker)(TestRequest())
+        factory = FileResourceFactory(path, checker, 'test.txt')
+        resource = factory(TestRequest())
         self.assertEqual(resource.GET(), open(path, 'rb').read())
 
         response = removeAllProxies(resource.request).response
@@ -69,7 +71,8 @@ class Test(PlacelessSetup, TestCase):
     def testFileHEAD(self):
 
         path = os.path.join(test_directory, 'testfiles', 'test.txt')
-        resource = FileResourceFactory(path, checker)(TestRequest())
+        factory = FileResourceFactory(path, checker, 'test.txt')
+        resource = factory(TestRequest())
 
         self.assertEqual(resource.HEAD(), '')
 
@@ -80,7 +83,8 @@ class Test(PlacelessSetup, TestCase):
 
         path = os.path.join(test_directory, 'testfiles', 'test.gif')
 
-        resource = ImageResourceFactory(path, checker)(TestRequest())
+        factory = ImageResourceFactory(path, checker, 'test.gif')
+        resource = factory(TestRequest())
 
         self.assertEqual(resource.GET(), open(path, 'rb').read())
 
@@ -90,7 +94,8 @@ class Test(PlacelessSetup, TestCase):
     def testImageHEAD(self):
 
         path = os.path.join(test_directory, 'testfiles', 'test.gif')
-        resource = ImageResourceFactory(path, checker)(TestRequest())
+        factory = ImageResourceFactory(path, checker, 'test.gif')
+        resource = factory(TestRequest())
 
         self.assertEqual(resource.HEAD(), '')
 

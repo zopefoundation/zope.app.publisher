@@ -13,9 +13,18 @@
 ##############################################################################
 """Resource Directory
 
+A 'resource directory' is an on-disk directory which is registered as
+a resource using the <resourceDirectory> ZCML directive.  The
+directory is treated as a source for individual resources; it can be
+traversed to retrieve resources represented by contained files, which
+can in turn be treated as resources.  The contained files have
+__name__ values which include a '/' separating the __name__ of the
+resource directory from the name of the file within the directory.
+
 $Id$
 """
 import os
+import posixpath
 
 from zope.interface import implements
 from zope.exceptions import NotFoundError
@@ -34,9 +43,10 @@ _marker = object()
 # we only need this class as a context for DirectoryResource
 class Directory(object):
 
-    def __init__(self, path, checker):
+    def __init__(self, path, checker, name):
         self.path = path
         self.checker = checker
+        self.__name__ = name
 
 class DirectoryResource(BrowserView, Resource):
 
@@ -76,18 +86,20 @@ class DirectoryResource(BrowserView, Resource):
             return default
         ext = os.path.splitext(os.path.normcase(name))[1]
         factory = self.resource_factories.get(ext, self.default_factory)
-        resource = factory(filename, self.context.checker)(self.request)
+        rname = posixpath.join(self.]__name__, name)
+        resource = factory(filename, self.context.checker, rname)(self.request)
         resource.__parent__ = self
-        resource.__name__ = name
         return resource
 
 class DirectoryResourceFactory(object):
 
-    def __init__(self, path, checker):
-        self.__dir = Directory(path, checker)
+    def __init__(self, path, checker, name):
+        self.__dir = Directory(path, checker, name)
         self.__checker = checker
+        self.__name = name
 
     def __call__(self, request):
         resource = DirectoryResource(self.__dir, request)
         resource.__Security_checker__ = self.__checker
+        resource.__name__ = self.__name
         return resource

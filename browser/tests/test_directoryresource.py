@@ -33,8 +33,7 @@ from zope.app.publisher.browser.fileresource import FileResource
 from zope.app.publisher.browser.pagetemplateresource import \
      PageTemplateResource
 import zope.app.publisher.browser.tests as p
-from zope.app.traversing.interfaces import IContainmentRoot
-from zope.app.site.interfaces import ISite
+from zope.app.publisher.browser.tests import support
 
 test_directory = os.path.dirname(p.__file__)
 
@@ -42,23 +41,17 @@ checker = NamesChecker(
     ('get', '__getitem__', 'request', 'publishTraverse')
     )
 
-class Site(object):
-    implements(ISite, IContainmentRoot)
-
 class Ob(Contained): pass
 
-site = Site()
 ob = Ob()
 
-class Test(PlacelessSetup, TestCase):
-
-    def setUp(self):
-        super(Test, self).setUp()
+class Test(support.SiteHandler, PlacelessSetup, TestCase):
 
     def testNotFound(self):
         path = os.path.join(test_directory, 'testfiles')
         request = TestRequest()
-        resource = DirectoryResourceFactory(path, checker)(request)
+        factory = DirectoryResourceFactory(path, checker, 'testfiles')
+        resource = factory(request)
         self.assertRaises(NotFoundError, resource.publishTraverse,
                           resource.request, 'doesnotexist')
         self.assertRaises(NotFoundError, resource.get, 'doesnotexist')
@@ -66,43 +59,43 @@ class Test(PlacelessSetup, TestCase):
     def testGetitem(self):
         path = os.path.join(test_directory, 'testfiles')
         request = TestRequest()
-        resource = DirectoryResourceFactory(path, checker)(request)
+        factory = DirectoryResourceFactory(path, checker, 'testfiles')
+        resource = factory(request)
         self.assertRaises(KeyError, resource.__getitem__, 'doesnotexist')
         file = resource['test.txt']
 
     def testProxy(self):
         path = os.path.join(test_directory, 'testfiles')
         request = TestRequest()
-        resource = DirectoryResourceFactory(path, checker)(request)
+        factory = DirectoryResourceFactory(path, checker, 'testfiles')
+        resource = factory(request)
         file = ProxyFactory(resource['test.txt'])
         self.assert_(isProxy(file))
 
     def testURL(self):
         request = TestRequest()
-        request._vh_root = site
+        request._vh_root = support.site
         path = os.path.join(test_directory, 'testfiles')
-        files = DirectoryResourceFactory(path, checker)(request)
-        files.__parent__ = site
-        files.__name__ = 'test_files'
+        files = DirectoryResourceFactory(path, checker, 'test_files')(request)
+        files.__parent__ = support.site
         file = files['test.gif']
         self.assertEquals(file(), 'http://127.0.0.1/@@/test_files/test.gif')
 
     def testURL2Level(self):
         request = TestRequest()
-        request._vh_root = site
-        ob.__parent__ = site
+        request._vh_root = support.site
+        ob.__parent__ = support.site
         ob.__name__ = 'ob'
         path = os.path.join(test_directory, 'testfiles')
-        files = DirectoryResourceFactory(path, checker)(request)
+        files = DirectoryResourceFactory(path, checker, 'test_files')(request)
         files.__parent__ = ob
-        files.__name__ = 'test_files'
         file = files['test.gif']
         self.assertEquals(file(), 'http://127.0.0.1/@@/test_files/test.gif')
 
     def testCorrectFactories(self):
         path = os.path.join(test_directory, 'testfiles')
         request = TestRequest()
-        resource = DirectoryResourceFactory(path, checker)(request)
+        resource = DirectoryResourceFactory(path, checker, 'files')(request)
 
         image = resource['test.gif']
         self.assert_(isinstance(removeAllProxies(image), FileResource))

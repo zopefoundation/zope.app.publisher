@@ -19,20 +19,23 @@ import os
 from StringIO import StringIO
 from unittest import TestCase, main, makeSuite
 
-from zope.security.interfaces import Forbidden
-from zope.proxy import removeAllProxies
-from zope.app.tests.placelesssetup import PlacelessSetup
-from zope.configuration.xmlconfig import xmlconfig, XMLConfig
-from zope.publisher.browser import TestRequest
-from zope.app.component.tests.views import IC
 from zope.component import queryView, getView, getResource
 from zope.configuration.exceptions import ConfigurationError
+from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.interface import implements
-from zope.app.site.interfaces import ISite
-from zope.app.traversing.interfaces import IContainmentRoot
-from zope.security.checker import ProxyFactory
+from zope.proxy import removeAllProxies
+from zope.publisher.browser import TestRequest
+from zope.security.checker import ProxyFactory, CheckerPublic
+from zope.security.interfaces import Forbidden
 
 import zope.app.publisher.browser
+
+from zope.app.component.tests.views import IC
+from zope.app.site.interfaces import ISite
+from zope.app.publisher.browser.tests import support
+from zope.app.tests.placelesssetup import PlacelessSetup
+from zope.app.traversing.interfaces import IContainmentRoot
+
 
 template = """<configure
    xmlns='http://namespaces.zope.org/zope'
@@ -46,10 +49,10 @@ template = """<configure
 request = TestRequest()
 
 class Ob(object):
-    implements(IC, ISite, IContainmentRoot)
+    implements(IC)
 
 ob = Ob()
-request._vh_root = ob
+request._vh_root = support.site
 
 def defineCheckers():
     # define the appropriate checker for a FileResource for these tests
@@ -58,7 +61,7 @@ def defineCheckers():
     protectName(FileResource, '__call__', 'zope.Public')
 
 
-class Test(PlacelessSetup, TestCase):
+class Test(support.SiteHandler, PlacelessSetup, TestCase):
 
     def setUp(self):
         super(Test, self).setUp()

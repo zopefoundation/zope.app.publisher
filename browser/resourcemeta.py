@@ -46,11 +46,11 @@ def resource(_context, name, layer='default', permission='zope.Public',
             )
 
     if file:
-        factory = FileResourceFactory(file, checker)
+        factory = FileResourceFactory(file, checker, name)
     elif image:
-        factory = ImageResourceFactory(image, checker)
+        factory = ImageResourceFactory(image, checker, name)
     else:
-        factory = PageTemplateResourceFactory(template, checker)
+        factory = PageTemplateResourceFactory(template, checker, name)
 
     _context.action(
         discriminator = ('resource', name, IBrowserRequest, layer),
@@ -72,7 +72,7 @@ def resourceDirectory(_context, name, directory, layer='default',
             "Directory %s does not exist" % directory
             )
 
-    factory = DirectoryResourceFactory(directory, checker)
+    factory = DirectoryResourceFactory(directory, checker, name)
     _context.action(
         discriminator = ('resource', name, IBrowserRequest, layer),
         callable = handler,

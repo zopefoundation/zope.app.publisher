@@ -110,22 +110,26 @@ class FileResource(BrowserView, Resource):
 
 class FileResourceFactory(object):
 
-    def __init__(self, path, checker):
-        self.__file = File(path)
+    def __init__(self, path, checker, name):
+        self.__file = File(path, name)
         self.__checker = checker
+        self.__name = name
 
     def __call__(self, request):
         resource = FileResource(self.__file, request)
         resource.__Security_checker__ = self.__checker
+        resource.__name__ = self.__name
         return resource
 
 class ImageResourceFactory(object):
 
-    def __init__(self, path, checker):
-        self.__file = Image(path)
+    def __init__(self, path, checker, name):
+        self.__file = Image(path, name)
         self.__checker = checker
+        self.__name = name
 
     def __call__(self, request):
         resource = FileResource(self.__file, request)
         resource.__Security_checker__ = self.__checker
+        resource.__name__ = self.__name
         return resource

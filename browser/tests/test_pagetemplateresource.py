@@ -45,7 +45,8 @@ class Test(PlacelessSetup, TestCase):
     def testNoTraversal(self):
         path = os.path.join(test_directory, 'testfiles', 'test.pt')
         request = TestRequest()
-        resource = PageTemplateResourceFactory(path, checker)(request)
+        factory = PageTemplateResourceFactory(path, checker, 'test.pt')
+        resource = factory(request)
         self.assertRaises(NotFoundError, resource.publishTraverse,
                           resource.request, ())
 
@@ -53,7 +54,8 @@ class Test(PlacelessSetup, TestCase):
         path = os.path.join(test_directory, 'testfiles', 'testresource.pt')
         test_data = "Foobar"
         request = TestRequest(test_data=test_data)
-        resource = PageTemplateResourceFactory(path, checker)(request)
+        factory = PageTemplateResourceFactory(path, checker, 'testresource.pt')
+        resource = factory(request)
         self.assert_(resource(), test_data)        
 
 def test_suite():

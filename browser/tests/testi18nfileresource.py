@@ -64,8 +64,8 @@ class Test(PlacelessSetup, TestII18nAware):
     def _createDict(self, filename1='test.pt', filename2='test2.pt'):
         path1 = os.path.join(test_directory, 'testfiles', filename1)
         path2 = os.path.join(test_directory, 'testfiles', filename2)
-        return { 'en': File(path1),
-                 'fr': File(path2) }
+        return { 'en': File(path1, filename1),
+                 'fr': File(path2, filename2) }
 
 
     def testNoTraversal(self):

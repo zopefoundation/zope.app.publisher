@@ -43,11 +43,13 @@ class PageTemplateResource(BrowserView, Resource):
 
 class PageTemplateResourceFactory(object):
 
-    def __init__(self, path, checker):
+    def __init__(self, path, checker, name):
         self.__pt = PageTemplate(path)
         self.__checker = checker
+        self.__name = name
 
     def __call__(self, request):
         resource = PageTemplateResource(self.__pt, request)
         resource.__Security_checker__ = self.__checker
+        resource.__name__ = self.__name
         return resource

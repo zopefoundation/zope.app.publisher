@@ -56,7 +56,7 @@ class I18nResource(object):
                     "Can't use both files and images in the same "
                     "i18n-resource directive"
                     )
-            self.__data[language] = File(_context.path(file))
+            self.__data[language] = File(_context.path(file), self.name)
             self.__format = File
         elif image is not None:
             if self.__format is not None and self.__format != Image:
@@ -64,7 +64,7 @@ class I18nResource(object):
                     "Can't use both files and images in the same "
                     "i18n-resource directive"
                     )
-            self.__data[language] = Image(_context.path(image))
+            self.__data[language] = Image(_context.path(image), self.name)
             self.__format = Image
         else:
             raise ConfigurationError(

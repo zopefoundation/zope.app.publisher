@@ -15,13 +15,14 @@
 
 $Id$
 """
-from zope.app import zapi
-from zope.app.location import Location
-from zope.app.site.interfaces import ISite
-from zope.app.traversing.interfaces import IContainmentRoot
-from zope.app.traversing.browser.interfaces import IAbsoluteURL
 from zope.component.interfaces import IResource
 from zope.interface import implements
+
+from zope.app import zapi
+from zope.app.component.hooks import getSite
+from zope.app.location import Location
+from zope.app.traversing.browser.interfaces import IAbsoluteURL
+
 
 class Resource(Location):
     implements(IResource)
@@ -30,24 +31,10 @@ class Resource(Location):
         self.request = request
 
     def __call__(self):
-        names = []
         name = self.__name__
         if name.startswith('++resource++'):
             name = name[12:]
-        names.append(name)
 
-        site = self.__parent__
-        while True:
-            if ISite.providedBy(site):
-                break
-            if IContainmentRoot.providedBy(site):
-                site = None
-                break
-            if IResource.providedBy(site) and site.__name__:
-                names.append(site.__name__)
-            site = site.__parent__
-
-        names.reverse()
-        name = '/'.join(filter(None, names))
+        site = getSite()
         url = str(zapi.getViewProviding(site, IAbsoluteURL, self.request))
         return "%s/@@/%s" % (url, name)
