@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.6 2002/12/31 18:26:58 jim Exp $
+$Id: viewmeta.py,v 1.7 2002/12/31 20:15:52 jim Exp $
 """
 
 import os
@@ -55,7 +55,7 @@ from zope.app.publisher.browser.globalbrowsermenuservice \
 #         name="info.html" 
 #         template="info.pt"
 #         class=".ContactInfoView."
-#         permission="Zope.View"
+#         permission="zope.View"
 #         />
 #
 # Unamed view with pages (multi-page view)
@@ -288,13 +288,20 @@ class view:
             pages[pname] = attribute
             
         if hasattr(class_, 'publishTraverse'):
+
+            # XXX This context trickery is a hack around a problem, I
+            # can't fix till after the alpha. :(
+
             def publishTraverse(self, request, name,
                                 pages=pages, getattr=getattr):
                 
                 if name in pages:
                     return getattr(self, pages[name])
-                
-                return class_.publishTraverse(self, request, name)
+
+                m = class_.publishTraverse.__get__(self)
+                return m(request, name)
+
+            publishTraverse = ContextMethod(publishTraverse)
 
         else:
             def publishTraverse(self, request, name,
@@ -351,15 +358,15 @@ class view:
 
 def addview(_context, name, permission,
             layer='default', class_=None,
-            allowed_interface=None, allowed_attributes=None,
+            allowed_interface='', allowed_attributes='',
             menu=None, title=None,
             ):
     return view(_context, name,
                 'zope.app.interfaces.container.IAdding',
                 permission,
-                layer='default', class_=None,
-                allowed_interface=None, allowed_attributes=None,
-                menu=None, title=None,
+                layer, class_,
+                allowed_interface, allowed_attributes,
+                menu, title,
                 )
 
 addview.__implements__ = INonEmptyDirective
