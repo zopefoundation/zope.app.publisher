@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_icondirective.py,v 1.10 2003/08/17 06:07:35 philikon Exp $
+$Id: test_icondirective.py,v 1.11 2003/09/21 17:32:42 jim Exp $
 """
 import os
 from StringIO import StringIO
@@ -30,6 +30,8 @@ from zope.publisher.interfaces.browser import IBrowserPresentation
 from zope.component import queryView, getView, getResource
 from zope.configuration.exceptions import ConfigurationError
 from zope.interface import implements
+from zope.app.interfaces.services.service import ISite
+from zope.app.interfaces.traversing import IContainmentRoot
 
 import zope.app.publisher.browser
 
@@ -45,9 +47,10 @@ template = """<configure
 request = TestRequest(IBrowserPresentation)
 
 class Ob:
-    implements(IC)
+    implements(IC, ISite, IContainmentRoot)
 
 ob = Ob()
+request._vh_root = ob
 
 def defineCheckers():
     # define the appropriate checker for a FileResource for these tests
@@ -82,13 +85,11 @@ class Test(PlacelessSetup, TestCase):
         rname = 'zope-component-tests-views-IC-zmi_icon.gif'
         self.assertEqual(
             view(),
-            '<img src="/@@/%s" alt="IC" width="16" height="16" border="0" />'
+            '<img src="http://127.0.0.1/@@/%s" alt="IC" '
+            'width="16" height="16" border="0" />'
             % rname)
 
         resource = getResource(ob, rname, request)
-
-        # Resources come ready-wrapped from the factory
-        #resource = ProxyFactory(resource)
 
         self.assertRaises(Forbidden, getattr, resource, '_testData')
         resource = removeAllProxies(resource)
@@ -115,7 +116,8 @@ class Test(PlacelessSetup, TestCase):
         rname = "zmi_icon_res"
         self.assertEqual(
             view(),
-            '<img src="/@@/%s" alt="IC" width="16" height="16" border="0" />'
+            '<img src="http://127.0.0.1/@@/%s" alt="IC" width="16" '
+            'height="16" border="0" />'
             % rname)
 
         resource = getResource(ob, rname, request)

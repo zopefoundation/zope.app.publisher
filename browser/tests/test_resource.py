@@ -13,38 +13,41 @@
 ##############################################################################
 """Unit tests for Resource
 
-$Id: test_resource.py,v 1.5 2003/08/16 00:43:51 srichter Exp $
+$Id: test_resource.py,v 1.6 2003/09/21 17:32:42 jim Exp $
 """
 import unittest
-from zope.app.context import ContextWrapper
 from zope.app.publisher.browser.resource import Resource
-from zope.component.interfaces import IResourceService
 from zope.interface import implements
 from zope.publisher.browser import TestRequest
+from zope.app.interfaces.services.service import ISite 
+from zope.app.tests.placelesssetup import PlacelessSetup
+from zope.app.interfaces.traversing import IContainmentRoot
 
-class Service:
-    implements(IResourceService)
+class Site:
+    implements(ISite, IContainmentRoot)
 
-class TestResource(unittest.TestCase):
+site = Site()
+        
+class TestResource(PlacelessSetup, unittest.TestCase):
 
     def testGlobal(self):
         req = TestRequest()
-        r = ContextWrapper(Resource(req), Service(), name="foo")
-        self.assertEquals(r(), '/@@/foo')
-        r = ContextWrapper(Resource(req), Service(), name="++resource++foo")
-        self.assertEquals(r(), '/@@/foo')
-
-    def testGlobalWithSkin(self):
-        req = TestRequest()
-        req._presentation_skin = 'bar'
-        r = ContextWrapper(Resource(req), Service(), name="foo")
-        self.assertEquals(r(), '/++skin++bar/@@/foo')
+        r = Resource(req)
+        req._vh_root = site
+        r.__parent__ = site
+        r.__name__ = 'foo'
+        self.assertEquals(r(), 'http://127.0.0.1/@@/foo')
+        r.__name__ = '++resource++foo'
+        self.assertEquals(r(), 'http://127.0.0.1/@@/foo')
 
     def testGlobalInVirtualHost(self):
         req = TestRequest()
         req.setVirtualHostRoot(['x', 'y'])
-        r = ContextWrapper(Resource(req), Service(), name="foo")
-        self.assertEquals(r(), '/x/y/@@/foo')
+        r = Resource(req)
+        req._vh_root = site
+        r.__parent__ = site
+        r.__name__ = 'foo'
+        self.assertEquals(r(), 'http://127.0.0.1/x/y/@@/foo')
 
 
 def test_suite():
