@@ -99,6 +99,20 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
     >>> hasattr(sys.modules['zope.app.layers'], 'layer1')
     False
 
+    Possibility 4: Use an Interface and a Name
+    ------------------------------------------
+
+    >>> context = Context()
+    >>> layer(context, name='layer1', interface=layer1)
+    >>> context.actions[0]['args'][1] is layer1
+    True
+    >>> hasattr(sys.modules['zope.app.layers'], 'layer1')
+    True
+    >>> import pprint
+    >>> pprint.pprint([action['discriminator'] for action in context.actions])
+    [('interface', 'zope.app.publisher.browser.metaconfigure.layer1'),
+     ('layer', 'layer1')]
+
     Here are some disallowed configurations.
 
     >>> context = Context()
@@ -139,8 +153,18 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
         setattr(layers, name, interface)
         path = 'zope.app.layers.'+name
     else:
-        path = name = interface.__module__ + '.' + interface.getName()
+        path = interface.__module__ + '.' + interface.getName()
 
+        # If a name was specified, make this layer available under this name.
+        # Note that the layer will be still available under its path, since it
+        # is an adapter, and the `LayerField` can resolve paths as well.
+        if name is None:
+            name = path
+        else:
+            # Make the interface available in the `zope.app.layers` module, so
+            # that other directives can find the interface under the name
+            # before the CA is setup.
+            setattr(layers, name, interface)
 
     # Register the layer interface as an interface
     _context.action(
@@ -196,6 +220,19 @@ def skin(_context, name=None, interface=None, layers=None):
     >>> context.actions[0]['args'][1] is skin1
     True
 
+    Possibility 3: Specify an interface and a Name
+    ----------------------------------------------
+
+    >>> context = Context()
+    >>> skin(context, name='skin1', interface=skin1)
+    >>> context.actions[0]['args'][1] is skin1
+    True
+    >>> import pprint
+    >>> pprint.pprint([action['discriminator'] for action in context.actions])
+    [('skin', 'skin1'),
+     ('interface', 'zope.app.publisher.browser.metaconfigure.skin1'),
+     ('skin', 'zope.app.publisher.browser.metaconfigure.skin1')]
+
     Here are some disallowed configurations.
 
     >>> context = Context()
@@ -207,21 +244,12 @@ def skin(_context, name=None, interface=None, layers=None):
     Traceback (most recent call last):
     ...
     ConfigurationError: You must specify the 'name' or 'interface' attribute.
-
-    >>> skin(context, name=u'skin1')
-    Traceback (most recent call last):
-    ...
-    ConfigurationError: You must specify the 'name' and 'layers' attribute.
     """
     if name is None and interface is None: 
         raise ConfigurationError(
             "You must specify the 'name' or 'interface' attribute.")
-    if (name is not None and layers is None) or \
-       (name is None and layers is not None): 
-        raise ConfigurationError(
-            "You must specify the 'name' and 'layers' attribute.")
 
-    if name is not None:
+    if name is not None and layers is not None:
         interface = InterfaceClass(name, layers,
                                    __doc__='Skin: %s' %name,
                                    __module__='zope.app.skins')
@@ -231,9 +259,19 @@ def skin(_context, name=None, interface=None, layers=None):
         setattr(skins, name, interface)
         path = 'zope.app.skins'+name
     else:
-        path = name = interface.__module__ + '.' + interface.getName()
+        path = interface.__module__ + '.' + interface.getName()
 
-    # Register the layer interface as an interface
+        # Register the skin interface as a skin using the passed name.
+        if name is not None:
+            _context.action(
+                discriminator = ('skin', name),
+                callable = provideInterface,
+                args = (name, interface, ISkin, _context.info)
+                )
+        
+        name = path
+
+    # Register the skin interface as an interface
     _context.action(
         discriminator = ('interface', path),
         callable = provideInterface,
@@ -241,7 +279,7 @@ def skin(_context, name=None, interface=None, layers=None):
         kw = {'info': _context.info}
         )
 
-    # Register the layer interface as a layer
+    # Register the skin interface as a skin
     _context.action(
         discriminator = ('skin', name),
         callable = provideInterface,

@@ -483,6 +483,10 @@ class ILayerDirective(Interface):
     name, then a layer interface will be created for you based on the name and
     the `base` interface.
 
+    If you specify the `name` and the `interface`, then the layer will be
+    registered twice for the name. This way we can be backward compatible. 
+    The layer is still available via its dotted name.
+
     If you do not specify a `base`, then `IBrowserRequest` is used by default.
 
     You cannot specify both, the `interface` and the `base` attribute.
@@ -510,6 +514,9 @@ class ISkinDirective(Interface):
 
     If you do not specify an `interface`, then one will be automatically
     created for you based on the name using the layers as base interfaces.
+
+    In case you specify an `interface` and a `name`, the skin will be
+    available via its dotted name of the interface and the name you specified.
 
     You cannot specify both, the `interface` and the `layers` attribute.    
     """
