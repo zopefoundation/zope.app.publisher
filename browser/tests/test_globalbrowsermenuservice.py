@@ -16,7 +16,8 @@
 $Id$
 """
 import unittest
-from zope.exceptions import Forbidden, Unauthorized, DuplicationError
+from zope.exceptions import DuplicationError
+from zope.security.interfaces import Forbidden, Unauthorized
 from zope.interface import Interface, implements
 from zope.publisher.browser import TestRequest
 from zope.publisher.interfaces.browser import IBrowserPublisher
