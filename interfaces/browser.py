@@ -13,8 +13,9 @@
 ##############################################################################
 """Browser-Specific Publisher interfaces
 
-$Id: browser.py,v 1.1 2004/03/02 17:40:52 philikon Exp $
+$Id: browser.py,v 1.2 2004/03/19 20:26:48 srichter Exp $
 """
+from zope.component.interfaces import IView
 from zope.app.component.interfacefield import InterfaceField
 from zope.app.i18n import ZopeMessageIDFactory as _
 from zope.app.security.permission import PermissionField
@@ -22,6 +23,8 @@ from zope.interface import Interface
 from zope.schema import TextLine, Text
 
 
+class IBrowserView(IView):
+    """Browser View"""
 
 class IUsage(Interface):
 

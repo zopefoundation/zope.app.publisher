@@ -13,9 +13,19 @@
 ##############################################################################
 """Zope's HTTP-specific Publisher interfaces.
 
-$Id: http.py,v 1.1 2004/03/02 17:40:52 philikon Exp $
+$Id: http.py,v 1.2 2004/03/19 20:26:48 srichter Exp $
 """
-from zope.publisher.interfaces.http import IHTTPView
+from zope.component.interfaces import IPresentation
+from zope.component.interfaces import IView
+
+
+class IHTTPPresentation(IPresentation):
+    """HTTP presentations are for interaction with users using Web HTTPs
+    """
+
+class IHTTPView(IHTTPPresentation, IView):
+    "HTTP View"
+
 
 class ILogin(IHTTPView):
     """A simple login interface."""
