@@ -11,12 +11,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
+"""Test Browser Resources
 
-Revision information:
 $Id$
 """
-
 from unittest import TestCase, main, makeSuite
 from zope.app.tests import ztapi
 from zope.app.tests.placelesssetup import PlacelessSetup

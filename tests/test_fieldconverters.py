@@ -11,12 +11,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
+"""Test of field converters.
 
-Revision information:
 $Id$
 """
-
 from unittest import TestCase, TestSuite, main, makeSuite
 from datetime import datetime
 
