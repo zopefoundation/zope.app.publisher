@@ -16,6 +16,8 @@ import os
 import unittest
 from cStringIO import StringIO
 
+from zope.interface import Interface
+
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.configuration.exceptions import ConfigurationError
 from zope.component.tests.views import IC, V1, VZMI, R1, RZMI
@@ -41,6 +43,8 @@ from zope.app.security.registries.permissionregistry import permissionRegistry
 from zope.component.service import serviceManager
 from zope.app.security.registries.permissionregistry import permissionRegistry
 from zope.app.interfaces.security import IPermissionService
+
+from zope.publisher.interfaces.browser import IBrowserPublisher
 
 tests_path = os.path.join(
     os.path.split(zope.app.publisher.browser.__file__)[0],
@@ -76,6 +80,14 @@ class CV(NCV):
     "callable view"
     def __call__(self):
         pass
+
+
+class C_w_implements(NCV):
+
+    __implements__ = Interface
+
+    def index(self):
+        return self
 
 class Test(PlacelessSetup, unittest.TestCase):
 
@@ -268,6 +280,24 @@ class Test(PlacelessSetup, unittest.TestCase):
         v = getView(ob, 'test', request)
         self.assertEqual(v.index(), 'V1 here')
         self.assertEqual(v.action(), 'done')
+
+    def test_class_w_implements(self):
+        xmlconfig(StringIO(template %
+            """
+            <browser:page
+                  name="test"
+                  class="
+             zope.app.publisher.browser.tests.test_directives.C_w_implements"
+                  for="zope.component.tests.views.IC"
+                  attribute="index"
+                  permission="zope.Public"
+                  />
+            """
+            ))
+
+        v = getView(ob, 'test', request)
+        self.assertEqual(v.index(), v)
+        self.assert_(IBrowserPublisher.isImplementedBy(v))
 
     def testIncompleteProtectedPageNoPermission(self):
         self.assertRaises(

@@ -13,10 +13,14 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.14 2003/02/12 02:17:27 seanb Exp $
+$Id: viewmeta.py,v 1.15 2003/02/20 18:24:58 jim Exp $
 """
 
 import os
+
+from zope.interface.implements import implements
+from zope.publisher.interfaces.browser import IBrowserPublisher
+from zope.publisher.interfaces.browser import IBrowserView
 
 from zope.exceptions import NotFoundError
 
@@ -131,20 +135,20 @@ def page(_context, name, permission, for_,
 
     if class_:
 
-        class_ = _context.resolve(class_)
+        original_class = _context.resolve(class_)
 
         if attribute != '__call__':
-            if not hasattr(class_, attribute):
+            if not hasattr(original_class, attribute):
                 raise ConfigurationError(
                     "The provided class doesn't have the specified attribute "
                     )
         if template:
             template = str(_context.path(template))
 
-            class_ = SimpleViewClass(template, bases=(class_, ))
+            new_class = SimpleViewClass(template, bases=(original_class, ))
 
         else:
-            if not hasattr(class_, 'browserDefault'):
+            if not hasattr(original_class, 'browserDefault'):
                 cdict = {
                     'browserDefault':
                     lambda self, request:
@@ -154,10 +158,19 @@ def page(_context, name, permission, for_,
                 cdict = {}
 
             cdict['__page_attribute__'] = attribute
-            class_ = type(class_.__name__, (class_, simple,), cdict)
+            new_class = type(original_class.__name__,
+                          (original_class, simple,),
+                          cdict)
+
+        if hasattr(original_class, '__implements__'):
+            implements(new_class, IBrowserPublisher)
+            implements(new_class, IBrowserPresentation, check=False)
 
     else:
-        class_ = SimpleViewClass(template)
+        new_class = SimpleViewClass(template)
+
+
+
 
     for n in (attribute, 'browserDefault', '__call__', 'publishTraverse'):
         required[n] = permission
@@ -168,14 +181,14 @@ def page(_context, name, permission, for_,
                                required)
     for_ = _handle_for(_context, for_, actions)
 
-    defineChecker(class_, Checker(required))
+    defineChecker(new_class, Checker(required))
 
     actions.append(
         Action(
           discriminator = ('view', for_, name, IBrowserPresentation, layer),
           callable = handler,
           args = ('Views', 'provideView',
-                  for_, name, IBrowserPresentation, [class_], layer),
+                  for_, name, IBrowserPresentation, [new_class], layer),
           )
         )
 
