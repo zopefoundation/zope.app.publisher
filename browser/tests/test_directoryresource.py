@@ -11,10 +11,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
+"""Directory-based resources test
+
 $Id$
 """
-
 import os
 from unittest import TestCase, main, makeSuite
 

@@ -72,7 +72,7 @@ class VT(V1, object):
         except:
             return super(VT, self).publishTraverse(request, name)
 
-class Ob:
+class Ob(object):
     implements(IC)
 
 ob = Ob()

@@ -15,8 +15,6 @@
 
 $Id$
 """
-__metaclass__ = type 
-
 import sys
 from zope.exceptions import DuplicationError
 from zope.security.interfaces import Unauthorized, Forbidden
@@ -43,7 +41,7 @@ from zope.app.servicenames import BrowserMenu
 from zope.interface.interfaces import IInterface
 from zope.interface import providedBy
 import types
-class TypeRegistry:
+class TypeRegistry(object):
 
     def __init__(self):
         self._reg = {}
@@ -81,7 +79,7 @@ class MenuAccessView(BrowserView):
         return browser_menu_service.getMenu(menu_id, self.context, self.request)
 
 
-class Menu:
+class Menu(object):
     """Browser menu"""
 
     implements(IBrowserMenu)
@@ -103,7 +101,7 @@ class Menu:
         return results
 
 
-class MenuItem:
+class MenuItem(object):
     """Browser menu item"""
 
     def __init__(self, action, title, description, filter, permission,
@@ -123,7 +121,7 @@ class MenuItem:
         yield self.filter
         yield self.permission
 
-class BaseBrowserMenuService:
+class BaseBrowserMenuService(object):
     """Global Browser Menu Service"""
 
     implements(IBrowserMenuService)
@@ -289,7 +287,7 @@ def menuItemDirective(_context, menu, for_,
         _context, action, title, description, filter, permission, extra)
 
 
-class menuItemsDirective:
+class menuItemsDirective(object):
 
     def __init__(self, _context, menu, for_):
         self.interface = for_

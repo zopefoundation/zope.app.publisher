@@ -211,7 +211,7 @@ class pages:
 # This is a different case. We actually build a class with attributes
 # for all of the given pages.
 
-class view:
+class view(object):
 
     default = None
 

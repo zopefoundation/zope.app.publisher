@@ -26,11 +26,9 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.configuration.exceptions import ConfigurationError
 from zope.app.component.interface import provideInterface
 
-__metaclass__ = type
-
 IName = re.compile('I[A-Z][a-z]')
 
-class IconView:
+class IconView(object):
 
     def __init__(self, context, request, rname, alt):
         self.context = context
@@ -52,7 +50,7 @@ class IconView:
         src = resource()
         return src
 
-class IconViewFactory:
+class IconViewFactory(object):
 
     def __init__(self, rname, alt):
         self.rname = rname

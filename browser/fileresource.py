@@ -11,12 +11,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
+"""File-based browser resources.
 
 $Id$
 """
-__metaclass__ = type # All classes are new style when run with Python 2.2+
-
 from zope.exceptions import NotFoundError
 
 from zope.app.publisher.browser import BrowserView
@@ -110,7 +108,7 @@ class FileResource(BrowserView, Resource):
         return ''
 
 
-class FileResourceFactory:
+class FileResourceFactory(object):
 
     def __init__(self, path, checker, name):
         self.__file = File(path, name)
@@ -123,7 +121,7 @@ class FileResourceFactory:
         resource.__name__ = self.__name
         return resource
 
-class ImageResourceFactory:
+class ImageResourceFactory(object):
 
     def __init__(self, path, checker, name):
         self.__file = Image(path, name)

@@ -49,7 +49,7 @@ template = """<configure
 
 request = TestRequest()
 
-class Ob:
+class Ob(object):
     implements(IC)
 
 ob = Ob()

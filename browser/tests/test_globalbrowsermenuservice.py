@@ -39,7 +39,7 @@ class I111(I11): pass
 class C1(object):
     implements(I1)
             
-class TestObject:
+class TestObject(object):
     implements(IBrowserPublisher, I111)
 
     def f(self):
@@ -65,7 +65,7 @@ def d(n):
             }
 
 
-class ParticipationStub:
+class ParticipationStub(object):
 
     def __init__(self, principal):
         self.principal = principal
