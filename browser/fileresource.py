@@ -100,7 +100,6 @@ class FileResource(BrowserView, Resource):
     def HEAD(self):
         file = self.chooseContext()
         response = self.request.response
-        response = self.request.response
         response.setHeader('Content-Type', file.content_type)
         response.setHeader('Last-Modified', file.lmh)
         # Cache for one day
