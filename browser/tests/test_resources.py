@@ -16,9 +16,8 @@
 $Id$
 """
 from unittest import TestCase, main, makeSuite
-from zope.app.tests import ztapi
-from zope.app.tests.placelesssetup import PlacelessSetup
-from zope.app.tests import ztapi
+from zope.app.testing import ztapi
+from zope.app.testing.placelesssetup import PlacelessSetup
 
 from zope.i18n.interfaces import IUserPreferredCharsets
 

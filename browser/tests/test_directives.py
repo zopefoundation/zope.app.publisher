@@ -22,7 +22,6 @@ from cStringIO import StringIO
 from zope.interface import Interface, implements, directlyProvides, providedBy
 
 import zope.security.management
-from zope.component.service import serviceManager
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.configuration.exceptions import ConfigurationError
 from zope.publisher.browser import TestRequest
@@ -42,9 +41,7 @@ from zope.app.publisher.browser.menu import getFirstMenuItem
 from zope.app.publisher.interfaces.browser import IMenuItemType
 from zope.app.security.permission import Permission 
 from zope.app.security.interfaces import IPermission 
-from zope.app.tests import placelesssetup
-from zope.app.tests import ztapi
-from zope.app.tests.placelesssetup import PlacelessSetup
+from zope.app.testing import placelesssetup, ztapi
 from zope.app.traversing.adapters import DefaultTraversable
 from zope.app.traversing.interfaces import ITraversable
 
@@ -93,7 +90,6 @@ class C_w_implements(NCV):
     def index(self):
         return self
 
-
 class ITestMenu(Interface):
     """Test menu."""
 
@@ -104,7 +100,7 @@ class ITestLayer(ILayer):
 
 
 
-class Test(PlacelessSetup, unittest.TestCase):
+class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
 
     def setUp(self):
         super(Test, self).setUp()
@@ -113,7 +109,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
 
     def testPage(self):
-        self.assertEqual(zapi.queryView(ob, 'test', request),
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
                          None)
 
         xmlconfig(StringIO(template % (
@@ -128,11 +124,11 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             )))
 
-        v = zapi.queryView(ob, 'test', request)
+        v = zapi.queryMultiAdapter((ob, request), name='test')
         self.assert_(issubclass(v.__class__, V1))
 
     def testPageWithClassWithMenu(self):
-        self.assertEqual(zapi.queryView(ob, 'test', request),
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
                          None)
         testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
                          
@@ -156,12 +152,12 @@ class Test(PlacelessSetup, unittest.TestCase):
         menuItem = getFirstMenuItem(test_menu, ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
-        v = zapi.queryView(ob, 'test', request)
+        v = zapi.queryMultiAdapter((ob, request), name='test')
         self.assertEqual(v(), "<html><body><p>test</p></body></html>\n")
 
 
     def testPageWithTemplateWithMenu(self):
-        self.assertEqual(zapi.queryView(ob, 'test', request),
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
                          None)
         testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
                          
@@ -184,12 +180,12 @@ class Test(PlacelessSetup, unittest.TestCase):
         menuItem = getFirstMenuItem(test_menu, ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
-        v = zapi.queryView(ob, 'test', request)
+        v = zapi.queryMultiAdapter((ob, request), name='test')
         self.assertEqual(v(), "<html><body><p>test</p></body></html>\n")
 
 
     def testPageInPagesWithTemplateWithMenu(self):
-        self.assertEqual(zapi.queryView(ob, 'test', request),
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
                          None)
         testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
 
@@ -214,12 +210,12 @@ class Test(PlacelessSetup, unittest.TestCase):
         menuItem = getFirstMenuItem(test_menu, ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
-        v = zapi.queryView(ob, 'test', request)
+        v = zapi.queryMultiAdapter((ob, request), name='test')
         self.assertEqual(v(), "<html><body><p>test</p></body></html>\n")
 
 
     def testPageInPagesWithClassWithMenu(self):
-        self.assertEqual(zapi.queryView(ob, 'test', request),
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
                          None)
         testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
                          
@@ -246,12 +242,12 @@ class Test(PlacelessSetup, unittest.TestCase):
         menuItem = getFirstMenuItem(test_menu, ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
-        v = zapi.queryView(ob, 'test', request)
+        v = zapi.queryMultiAdapter((ob, request), name='test')
         self.assertEqual(v(), "<html><body><p>test</p></body></html>\n")
 
     def testDefaultView(self):
-        self.assertEqual(zapi.queryView(ob, 'test', request,
-                                   None), None)
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
+                         None)
 
         xmlconfig(StringIO(template % (
             '''
@@ -261,12 +257,11 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             )))
 
-        self.assertEqual(zapi.getDefaultViewName(ob, request
-                                 ), 'test')
+        self.assertEqual(zapi.getDefaultViewName(ob, request), 'test')
 
     def testSkinResource(self):
         self.assertEqual(
-            zapi.queryResource('test', Request(IV), None), None)
+            zapi.queryAdapter(Request(IV), name='test'), None)
 
         xmlconfig(StringIO(template % (
             '''
@@ -283,16 +278,17 @@ class Test(PlacelessSetup, unittest.TestCase):
             )))
 
         self.assertEqual(
-            zapi.queryResource('test', request, None).__class__, R1)
+            zapi.queryAdapter(request, name='test').__class__, R1)
         zmi = zapi.getUtility(ISkin, 'zmi')
         self.assertEqual(
-            zapi.queryResource('test', TestRequest(skin=zmi), None).__class__,
+            zapi.queryAdapter(TestRequest(skin=zmi), name='test').__class__,
             RZMI)
 
     def testDefaultSkin(self):
         request = TestRequest()
 
-        self.assertEqual(zapi.queryView(ob, 'test', request, None), None)
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
+                         None)
         xmlconfig(StringIO(template % (
             '''
             <browser:layer name="zmi" />
@@ -315,15 +311,16 @@ class Test(PlacelessSetup, unittest.TestCase):
             )))
 
         # Simulate Zope Publication behavior in beforeTraversal()
-        adapters = zapi.getService(zapi.servicenames.Adapters)
+        adapters = zapi.getSiteManager().adapters
         skin = adapters.lookup((providedBy(request),), IDefaultSkin, '')
         directlyProvides(request, skin)
 
-        v = zapi.queryView(ob, 'test', request)
+        v = zapi.queryMultiAdapter((ob, request), name='test')
         self.assert_(issubclass(v.__class__, VZMI))
 
     def testSkinPage(self):
-        self.assertEqual(zapi.queryView(ob, 'test', request, None), None)
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
+                         None)
 
         xmlconfig(StringIO(template % (
             '''
@@ -345,14 +342,14 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             )))
 
-        v = zapi.queryView(ob, 'test', request)
+        v = zapi.queryMultiAdapter((ob, request), name='test')
         self.assert_(issubclass(v.__class__, V1))
         zmi = zapi.getUtility(ISkin, 'zmi')
-        v = zapi.queryView(ob, 'test', TestRequest(skin=zmi))
+        v = zapi.queryMultiAdapter((ob, TestRequest(skin=zmi)), name='test')
         self.assert_(issubclass(v.__class__, VZMI))
 
     def testI18nResource(self):
-        self.assertEqual(zapi.queryResource('test', request, None), None)
+        self.assertEqual(zapi.queryAdapter(request, name='test'), None)
 
         path1 = os.path.join(tests_path, 'testfiles', 'test.pt')
         path2 = os.path.join(tests_path, 'testfiles', 'test2.pt')
@@ -366,9 +363,9 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % (path1, path2)
             )))
 
-        v = zapi.getResource('test', request)
+        v = zapi.getAdapter(request, name='test')
         self.assertEqual(
-            zapi.queryResource('test', request).__class__,
+            zapi.queryAdapter(request, name='test').__class__,
             I18nFileResource)
         self.assertEqual(v._testData('en'), open(path1, 'rb').read())
         self.assertEqual(v._testData('fr'), open(path2, 'rb').read())
@@ -408,7 +405,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = zapi.getView(ob, 'test', request)
+        v = zapi.getMultiAdapter((ob, request), name='test')
         v = ProxyFactory(v)
         self.assertEqual(v.index(), 'V1 here')
         self.assertRaises(Exception, getattr, v, 'action')
@@ -426,7 +423,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = zapi.getView(ob, 'test', request)
+        v = zapi.getMultiAdapter((ob, request), name='test')
         v = ProxyFactory(v)
         self.assertEqual(v.action(), 'done')
         self.assertRaises(Exception, getattr, v, 'index')
@@ -445,7 +442,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = zapi.getView(ob, 'test', request)
+        v = zapi.getMultiAdapter((ob, request), name='test')
         self.assertEqual(v.index(), 'V1 here')
         self.assertEqual(v.action(), 'done')
 
@@ -463,7 +460,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = zapi.getView(ob, 'test', request)
+        v = zapi.getMultiAdapter((ob, request), name='test')
         self.assertEqual(v.index(), 'V1 here')
         self.assertEqual(v.action(), 'done')
 
@@ -481,7 +478,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = zapi.getView(ob, 'test', request)
+        v = zapi.getMultiAdapter((ob, request), name='test')
         self.assertEqual(v.index(), v)
         self.assert_(IBrowserPublisher.providedBy(v))
 
@@ -502,7 +499,8 @@ class Test(PlacelessSetup, unittest.TestCase):
 
 
     def testPageViews(self):
-        self.assertEqual(zapi.queryView(ob, 'test', request), None)
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
+                         None)
         test3 = os.path.join(tests_path, 'testfiles', 'test3.pt')
 
         xmlconfig(StringIO(template %
@@ -520,15 +518,16 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % test3
             ))
 
-        v = zapi.getView(ob, 'index.html', request)
+        v = zapi.getMultiAdapter((ob, request), name='index.html')
         self.assertEqual(v(), 'V1 here')
-        v = zapi.getView(ob, 'action.html', request)
+        v = zapi.getMultiAdapter((ob, request), name='action.html')
         self.assertEqual(v(), 'done')
-        v = zapi.getView(ob, 'test.html', request)
+        v = zapi.getMultiAdapter((ob, request), name='test.html')
         self.assertEqual(str(v()), '<html><body><p>done</p></body></html>\n')
 
     def testNamedViewPageViewsCustomTraversr(self):
-        self.assertEqual(zapi.queryView(ob, 'test', request), None)
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
+                         None)
 
         xmlconfig(StringIO(template %
             '''
@@ -545,7 +544,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        view = zapi.getView(ob, 'test', request)
+        view = zapi.getMultiAdapter((ob, request), name='test')
         view = removeSecurityProxy(view)
         self.assertEqual(view.browserDefault(request)[1], (u'index.html', ))
 
@@ -559,7 +558,8 @@ class Test(PlacelessSetup, unittest.TestCase):
 
 
     def testNamedViewNoPagesForCallable(self):
-        self.assertEqual(zapi.queryView(ob, 'test', request), None)
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
+                         None)
 
         xmlconfig(StringIO(template %
             '''
@@ -572,12 +572,13 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        view = zapi.getView(ob, 'test', request)
+        view = zapi.getMultiAdapter((ob, request), name='test')
         view = removeSecurityProxy(view)
         self.assertEqual(view.browserDefault(request), (view, ()))
 
     def testNamedViewNoPagesForNonCallable(self):
-        self.assertEqual(zapi.queryView(ob, 'test', request), None)
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
+                         None)
 
         xmlconfig(StringIO(template %
             '''
@@ -590,12 +591,13 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        view = zapi.getView(ob, 'test', request)
+        view = zapi.getMultiAdapter((ob, request), name='test')
         view = removeSecurityProxy(view)
         self.assertEqual(getattr(view, 'browserDefault', None), None)
 
     def testNamedViewPageViewsNoDefault(self):
-        self.assertEqual(zapi.queryView(ob, 'test', request), None)
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
+                         None)
         test3 = os.path.join(tests_path, 'testfiles', 'test3.pt')
 
         xmlconfig(StringIO(template %
@@ -614,7 +616,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % test3
             ))
 
-        view = zapi.getView(ob, 'test', request)
+        view = zapi.getMultiAdapter((ob, request), name='test')
         view = removeSecurityProxy(view)
         self.assertEqual(view.browserDefault(request)[1], (u'index.html', ))
 
@@ -630,7 +632,8 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(str(v()), '<html><body><p>done</p></body></html>\n')
 
     def testNamedViewPageViewsWithDefault(self):
-        self.assertEqual(zapi.queryView(ob, 'test', request), None)
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
+                         None)
         test3 = os.path.join(tests_path, 'testfiles', 'test3.pt')
 
         xmlconfig(StringIO(template %
@@ -650,7 +653,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % test3
             ))
 
-        view = zapi.getView(ob, 'test', request)
+        view = zapi.getMultiAdapter((ob, request), name='test')
         view = removeSecurityProxy(view)
         self.assertEqual(view.browserDefault(request)[1], (u'test.html', ))
 
@@ -683,7 +686,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        view = zapi.getView(ob, 'test', request)
+        view = zapi.getMultiAdapter((ob, request), name='test')
         view = removeSecurityProxy(view)
         view.publishTraverse(request, 'index.html')
         
@@ -710,7 +713,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        view = zapi.getView(ob, 'test', request)
+        view = zapi.getMultiAdapter((ob, request), name='test')
         view = removeSecurityProxy(view)
         view.publishTraverse(request, 'index.html')
 
@@ -718,7 +721,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         ztapi.provideUtility(IPermission, Permission('p', 'P'), 'p')
 
         request = TestRequest()
-        self.assertEqual(zapi.queryView(ob, 'test', request),
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
                          None)
 
         xmlconfig(StringIO(template %
@@ -739,16 +742,16 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = zapi.getView(ob, 'index.html', request)
+        v = zapi.getMultiAdapter((ob, request), name='index.html')
         v = ProxyFactory(v)
         zope.security.management.getInteraction().add(request)
         self.assertRaises(Exception, v)
-        v = zapi.getView(ob, 'action.html', request)
+        v = zapi.getMultiAdapter((ob, request), name='action.html')
         v = ProxyFactory(v)
         self.assertRaises(Exception, v)
 
     def testProtectedNamedViewPageViews(self):
-        self.assertEqual(zapi.queryView(ob, 'test', request),
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
                          None)
 
         xmlconfig(StringIO(template %
@@ -770,14 +773,15 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        view = zapi.getView(ob, 'test', request)
+        view = zapi.getMultiAdapter((ob, request), name='test')
         self.assertEqual(view.browserDefault(request)[1], (u'index.html', ))
 
         v = view.publishTraverse(request, 'index.html')
         self.assertEqual(v(), 'V1 here')
 
     def testSkinnedPageView(self):
-        self.assertEqual(zapi.queryView(ob, 'test', request), None)
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
+                         None)
 
         xmlconfig(StringIO(template %
             '''
@@ -803,16 +807,17 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = zapi.getView(ob, 'index.html', request)
+        v = zapi.getMultiAdapter((ob, request), name='index.html')
         self.assertEqual(v(), 'V1 here')
         skinny = zapi.getUtility(ISkin, 'skinny')
-        v = zapi.getView(ob, 'index.html', TestRequest(skin=skinny))
+        v = zapi.getMultiAdapter((ob, TestRequest(skin=skinny)),
+                                 name='index.html')
         self.assertEqual(v(), 'done')
 
     def testFile(self):
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
 
-        self.assertEqual(zapi.queryResource('test', request), None)
+        self.assertEqual(zapi.queryAdapter(request, name='test'), None)
 
         xmlconfig(StringIO(template %
             '''
@@ -823,7 +828,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % path
             ))
 
-        r = zapi.getResource('index.html', request)
+        r = zapi.getAdapter(request, name='index.html')
         self.assertEquals(r.__class__, FileResource)
         r = ProxyFactory(r)
         self.assertEqual(r.__name__, "index.html")
@@ -841,9 +846,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
 
     def testSkinResource(self):
-        self.assertEqual(
-            zapi.queryResource('test', request, None),
-            None)
+        self.assertEqual(zapi.queryAdapter(request, name='test'), None)
 
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
 
@@ -856,18 +859,18 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % path
             )))
 
-        self.assertEqual(zapi.queryResource('test', request), None)
+        self.assertEqual(zapi.queryAdapter(request, name='test'), None)
 
         zmi = zapi.getUtility(ISkin, 'zmi')
-        r = zapi.getResource('test', TestRequest(skin=zmi))
+        r = zapi.getAdapter(TestRequest(skin=zmi), name='test')
         r = removeSecurityProxy(r)
         self.assertEqual(r._testData(), open(path, 'rb').read())
 
     def test_template_page(self):
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
 
-        self.assertEqual(zapi.queryView(ob, 'index.html', request),
-                         None)
+        self.assertEqual(
+            zapi.queryMultiAdapter((ob, request), name='index.html'), None)
 
         xmlconfig(StringIO(template %
             '''
@@ -879,13 +882,14 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % path
             ))
 
-        v = zapi.getView(ob, 'index.html', request)
+        v = zapi.getMultiAdapter((ob, request), name='index.html')
         self.assertEqual(v().strip(), '<html><body><p>test</p></body></html>')
 
     def test_page_menu_within_different_layers(self):
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
-        self.assertEqual(zapi.queryView(ob, 'index.html', request),
-                         None)
+        self.assertEqual(
+            zapi.queryMultiAdapter((ob, request), name='index.html'),
+            None)
 
         xmlconfig(StringIO(template %
             '''
@@ -916,14 +920,14 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % (path, path)
             ))
 
-        v = zapi.getView(ob, 'index.html', request)
+        v = zapi.getMultiAdapter((ob, request), name='index.html')
         self.assertEqual(v().strip(), '<html><body><p>test</p></body></html>')
 
     def testtemplateWClass(self):
         path = os.path.join(tests_path, 'testfiles', 'test2.pt')
 
-        self.assertEqual(zapi.queryView(ob, 'index.html', request),
-                         None)
+        self.assertEqual(
+            zapi.queryMultiAdapter((ob, request), name='index.html'), None)
 
         xmlconfig(StringIO(template %
             '''
@@ -936,7 +940,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % path
             ))
 
-        v = zapi.getView(ob, 'index.html', request)
+        v = zapi.getMultiAdapter((ob, request), name='index.html')
         self.assertEqual(v().strip(), '<html><body><p>42</p></body></html>')
 
     def testProtectedtemplate(self):
@@ -944,7 +948,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
 
         request = TestRequest()
-        self.assertEqual(zapi.queryView(ob, 'test', request),
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
                          None)
 
         xmlconfig(StringIO(template %
@@ -971,12 +975,12 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % path
             ))
 
-        v = zapi.getView(ob, 'xxx.html', request)
+        v = zapi.getMultiAdapter((ob, request), name='xxx.html')
         v = ProxyFactory(v)
         zope.security.management.getInteraction().add(request)
         self.assertRaises(Exception, v)
 
-        v = zapi.getView(ob, 'index.html', request)
+        v = zapi.getMultiAdapter((ob, request), name='index.html')
         v = ProxyFactory(v)
         self.assertEqual(v().strip(), '<html><body><p>test</p></body></html>')
 
@@ -1015,7 +1019,8 @@ class Test(PlacelessSetup, unittest.TestCase):
 
     def testViewThatProvidesAnInterface(self):
         request = TestRequest()
-        self.assertEqual(zapi.queryView(ob, 'test', request, None), None)
+        self.assertEqual(
+            zapi.queryMultiAdapter((ob, request), IV, name='test'), None)
 
         xmlconfig(StringIO(template %
             '''
@@ -1028,7 +1033,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = zapi.queryView(ob, 'test', request, providing=IV)
+        v = zapi.queryMultiAdapter((ob, request), IV, name='test')
         self.assertEqual(v, None)
 
         xmlconfig(StringIO(template %
@@ -1043,12 +1048,12 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = zapi.queryView(ob, 'test', request, providing=IV)
+        v = zapi.queryMultiAdapter((ob, request), IV, name='test')
         self.assert_(isinstance(v, V1))
 
     def testUnnamedViewThatProvidesAnInterface(self):
         request = TestRequest()
-        self.assertEqual(zapi.queryView(ob, '', request, None, providing=IV),
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), IV),
                          None)
 
         xmlconfig(StringIO(template %
@@ -1061,7 +1066,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = zapi.queryView(ob, '', request, None, providing=IV)
+        v = zapi.queryMultiAdapter((ob, request), IV)
         self.assertEqual(v, None)
 
         xmlconfig(StringIO(template %
@@ -1075,7 +1080,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             '''
             ))
 
-        v = zapi.queryView(ob, '', request, None, providing=IV)
+        v = zapi.queryMultiAdapter((ob, request), IV)
 
         self.assert_(isinstance(v, V1))
 

@@ -21,7 +21,7 @@ from zope.publisher.browser import TestRequest
 
 from zope.app.publisher.browser.resource import Resource
 from zope.app.publisher.browser.tests import support
-from zope.app.tests.placelesssetup import PlacelessSetup
+from zope.app.testing.placelesssetup import PlacelessSetup
 
 
 class TestResource(support.SiteHandler, PlacelessSetup, unittest.TestCase):

@@ -288,14 +288,14 @@ def setDefaultSkin(name, info=''):
     """Set the default skin.
 
     >>> from zope.interface import directlyProvides
-    >>> from zope.app.tests import ztapi
+    >>> from zope.app.testing import ztapi
 
     >>> class Skin1: pass
     >>> directlyProvides(Skin1, ISkin)
 
     >>> ztapi.provideUtility(ISkin, Skin1, 'Skin1')
     >>> setDefaultSkin('Skin1')
-    >>> adapters = zapi.getService(zapi.servicenames.Adapters)
+    >>> adapters = zapi.getSiteManager().adapters
 
 	Lookup the default skin for a request that has the 
 
@@ -303,7 +303,7 @@ def setDefaultSkin(name, info=''):
     True
     """
     skin = zapi.getUtility(ISkin, name)
-    handler('Adapters', 'register',
+    handler('provideAdapter',
             (IBrowserRequest,), IDefaultSkin, '', skin, info),
 
 def defaultSkin(_context, name):
@@ -321,7 +321,7 @@ def defaultView(_context, name, for_=None):
     _context.action(
         discriminator = ('defaultViewName', for_, type, name),
         callable = handler,
-        args = (zapi.servicenames.Adapters, 'register',
+        args = ('provideAdapter',
                 (for_, type), IDefaultViewName, '', name, _context.info)
         )
 

@@ -12,10 +12,6 @@ little bit simpler.
 Let's write a view that returns a folder listing:
 
   >>> class FolderListing:
-  ...     def __init__(self, context, request):
-  ...         self.context = context
-  ...         self.request = request
-  ...
   ...     def contents(self):
   ...         return list(self.context.keys())
 

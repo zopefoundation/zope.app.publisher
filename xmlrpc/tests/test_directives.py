@@ -20,14 +20,14 @@ import unittest
 from zope.configuration import xmlconfig
 from zope.configuration.exceptions import ConfigurationError
 from zope.app.component.tests.views import IC, V1
-from zope.component import getView, queryView, getDefaultViewName
-from zope.app.tests.placelesssetup import PlacelessSetup
+from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.security.proxy import ProxyFactory
 
 from zope.component.tests.request import Request
 
 from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
 
+from zope.app import zapi
 from zope.app.publisher import xmlrpc
 from zope.interface import implements
 
@@ -42,33 +42,36 @@ ob = Ob()
 class DirectivesTest(PlacelessSetup, unittest.TestCase):
 
     def testView(self):
-        self.assertEqual(queryView(ob, 'test', request), None)
+        self.assertEqual(
+            zapi.queryMultiAdapter((ob, request), name='test'), None)
         xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
-        self.assertEqual(queryView(ob, 'test', request).__class__, V1)
+        view = zapi.queryMultiAdapter((ob, request), name='test')
+        self.assert_(V1 in view.__class__.__bases__)
+        self.assert_(xmlrpc.MethodPublisher in view.__class__.__bases__)
 
     def testInterfaceProtectedView(self):
         xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
-        v = getView(ob, 'test2', request)
+        v = zapi.getMultiAdapter((ob, request), name='test2')
         v = ProxyFactory(v)
         self.assertEqual(v.index(), 'V1 here')
         self.assertRaises(Exception, getattr, v, 'action')
 
     def testAttributeProtectedView(self):
         xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
-        v = getView(ob, 'test3', request)
+        v = zapi.getMultiAdapter((ob, request), name='test3')
         v = ProxyFactory(v)
         self.assertEqual(v.action(), 'done')
         self.assertRaises(Exception, getattr, v, 'index')
 
     def testInterfaceAndAttributeProtectedView(self):
         xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
-        v = getView(ob, 'test4', request)
+        v = zapi.getMultiAdapter((ob, request), name='test4')
         self.assertEqual(v.index(), 'V1 here')
         self.assertEqual(v.action(), 'done')
 
     def testDuplicatedInterfaceAndAttributeProtectedView(self):
         xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
-        v = getView(ob, 'test5', request)
+        v = zapi.getMultiAdapter((ob, request), name='test5')
         self.assertEqual(v.index(), 'V1 here')
         self.assertEqual(v.action(), 'done')
 
@@ -78,9 +81,9 @@ class DirectivesTest(PlacelessSetup, unittest.TestCase):
 
     def test_no_name(self):
         xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
-        v = getView(ob, 'index', request)
+        v = zapi.getMultiAdapter((ob, request), name='index')
         self.assertEqual(v(), 'V1 here')
-        v = getView(ob, 'action', request)
+        v = zapi.getMultiAdapter((ob, request), name='action')
         self.assertEqual(v(), 'done')
 
         

@@ -23,8 +23,8 @@ from zope.i18n.interfaces import IUserPreferredCharsets
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import NamesChecker
 
-from zope.app.tests.placelesssetup import PlacelessSetup
-from zope.app.tests import ztapi
+from zope.app.testing.placelesssetup import PlacelessSetup
+from zope.app.testing import ztapi
 
 from zope.publisher.http import IHTTPRequest
 from zope.publisher.http import HTTPCharsets

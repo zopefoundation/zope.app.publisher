@@ -246,7 +246,7 @@ class IResourceDirective(IBasicResourceInformation):
         description=u"""
         This is the name used in resource urls. Resource urls are of
         the form site/@@/resourcename, where site is the url of
-        "site", a folder with a service manager.
+        "site", a folder with a site manager.
 
         We make resource urls site-relative (as opposed to
         content-relative) so as not to defeat caches.""",
@@ -285,7 +285,7 @@ class II18nResourceDirective(IBasicResourceInformation):
         description=u"""
         This is the name used in resource urls. Resource urls are of
         the form site/@@/resourcename, where site is the url of
-        "site", a folder with a service manager.
+        "site", a folder with a site manager.
 
         We make resource urls site-relative (as opposed to
         content-relative) so as not to defeat caches.""",
@@ -333,7 +333,7 @@ class IResourceDirectoryDirective(IBasicResourceInformation):
         description=u"""
         This is the name used in resource urls. Resource urls are of
         the form site/@@/resourcename, where site is the url of
-        "site", a folder with a service manager.
+        "site", a folder with a site manager.
 
         We make resource urls site-relative (as opposed to
         content-relative) so as not to defeat caches.""",

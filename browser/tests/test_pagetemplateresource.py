@@ -19,11 +19,11 @@ import os
 from unittest import TestCase, main, makeSuite
 
 from zope.publisher.interfaces import NotFound
-from zope.app.tests import ztapi
+from zope.app.testing import ztapi
 from zope.security.checker import NamesChecker
 from zope.publisher.browser import TestRequest
 
-from zope.app.tests.placelesssetup import PlacelessSetup
+from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.publisher.browser.pagetemplateresource import \
      PageTemplateResourceFactory
 from zope.app.traversing.interfaces import ITraversable

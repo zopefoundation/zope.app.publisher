@@ -32,12 +32,12 @@ class Resources(BrowserView):
     def publishTraverse(self, request, name):
         '''See interface IBrowserPublisher'''
 
-        resource = zapi.queryResource(name, request)
+        resource = zapi.queryAdapter(request, name=name)
         if resource is None:
             raise NotFound(self, name)
 
-        adapters = zapi.getService(zapi.servicenames.Adapters)
-        locate(resource, adapters, name)
+        sm = zapi.getSiteManager()
+        locate(resource, sm, name)
         return resource
 
     def browserDefault(self, request):

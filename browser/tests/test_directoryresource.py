@@ -26,7 +26,7 @@ from zope.security.checker import NamesChecker, ProxyFactory
 from zope.interface import implements
 
 from zope.app import zapi
-from zope.app.tests.placelesssetup import PlacelessSetup
+from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.publisher.browser.directoryresource import \
      DirectoryResourceFactory
 from zope.app.container.contained import Contained

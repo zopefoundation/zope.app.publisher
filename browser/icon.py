@@ -95,7 +95,7 @@ def IconDirective(_context, name, for_, file=None, resource=None,
     _context.action(
         discriminator = ('view', name, vfactory, layer),
         callable = handler,
-        args = (zapi.servicenames.Adapters, 'register',
+        args = ('provideAdapter',
                 (for_, layer), Interface, name, vfactory, _context.info)
         )
 

@@ -17,10 +17,9 @@ $Id$
 """
 from zope.interface import implements
 
-from zope.component.service import serviceManager
-
+from zope.app import zapi
 from zope.app.component.hooks import setSite
-from zope.app.site.interfaces import ISite
+from zope.app.component.interfaces import ISite
 from zope.app.traversing.interfaces import IContainmentRoot
 
 
@@ -28,7 +27,7 @@ class Site:
     implements(ISite, IContainmentRoot)
 
     def getSiteManager(self):
-        return serviceManager
+        return zapi.getGlobalSiteManager()
 
 site = Site()
 

@@ -23,7 +23,7 @@ from zope.publisher.browser import TestRequest
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.security.interfaces import Unauthorized, Forbidden
 
-from zope.app.tests.placelesssetup import PlacelessSetup
+from zope.app.testing.placelesssetup import PlacelessSetup
 
 import zope.app.publisher.browser
 

@@ -114,7 +114,7 @@ class BrowserMenuItem(BrowserView):
     item itself, or (2) the filter returns `False`, in which case the menu
     item should also not be shown. 
 
-    >>> from zope.app.tests import ztapi
+    >>> from zope.app.testing import ztapi
     >>> from zope.app.security.interfaces import IPermission
     >>> from zope.app.security.permission import Permission
     >>> perm = Permission('perm', 'Permission')
@@ -281,7 +281,7 @@ def getMenu(menuItemType, object, request, max=999999):
 
     >>> from zope.publisher.browser import TestRequest
 
-    >>> from zope.app.tests import ztapi
+    >>> from zope.app.testing import ztapi
     >>> def defineMenuItem(menuItemType, for_, title, action=u'', order=0):
     ...     newclass = type(title, (BrowserMenuItem,),
     ...                     {'title':title, 'action':action, 'order':order})
@@ -613,8 +613,8 @@ class menuItemsDirective(object):
     >>> context.actions
     []
     >>> items.menuItem(context, u'view.html', 'View')
-    >>> context.actions[0]['args'][:2]
-    ('Adapters', 'register')
+    >>> context.actions[0]['args'][0]
+    'provideAdapter'
     >>> len(context.actions)
     4
     """

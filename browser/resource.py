@@ -36,5 +36,5 @@ class Resource(Location):
             name = name[12:]
 
         site = getSite()
-        url = str(zapi.getViewProviding(site, IAbsoluteURL, self.request))
+        url = str(zapi.getMultiAdapter((site, self.request), IAbsoluteURL))
         return "%s/@@/%s" % (url, name)

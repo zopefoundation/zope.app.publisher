@@ -104,7 +104,7 @@ class I18nResource(object):
         self._context.action(
             discriminator = ('i18n-resource', self.name, self.type, self.layer),
             callable = handler,
-            args = (zapi.servicenames.Adapters, 'register',
+            args = ('provideAdapter',
                     (self.layer,), Interface, self.name, factory,
                     self._context.info)
             )

@@ -30,9 +30,9 @@ from zope.security.proxy import removeSecurityProxy
 import zope.app.publisher.browser
 from zope.app import zapi
 from zope.app.component.tests.views import IC
-from zope.app.site.interfaces import ISite
+from zope.app.component.interfaces import ISite
 from zope.app.publisher.browser.tests import support
-from zope.app.tests.placelesssetup import PlacelessSetup
+from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.traversing.interfaces import IContainmentRoot
 
 
@@ -68,7 +68,8 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
         defineCheckers()
         
     def test(self):
-        self.assertEqual(zapi.queryView(ob, 'zmi_icon', request), None)
+        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='zmi_icon'),
+                         None)
 
         import zope.app.publisher.browser.tests as p
         path = os.path.dirname(p.__file__)
@@ -82,7 +83,7 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
             ''' % path
             )))
 
-        view = zapi.getView(ob, 'zmi_icon', request)
+        view = zapi.getMultiAdapter((ob, request), name='zmi_icon')
         rname = 'zope-app-component-tests-views-IC-zmi_icon.gif'
         self.assertEqual(
             view(),
@@ -90,13 +91,14 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
             'width="16" height="16" border="0" />'
             % rname)
 
-        resource = ProxyFactory(zapi.getResource(rname, request))
+        resource = ProxyFactory(zapi.getAdapter(request, name=rname))
         self.assertRaises(Forbidden, getattr, resource, '_testData')
         resource = removeSecurityProxy(resource)
         self.assertEqual(resource._testData(), open(path, 'rb').read())
 
     def testResource(self):
-        self.assertEqual(zapi.queryView(ob, 'zmi_icon', request), None)
+        self.assertEqual(
+            zapi.queryMultiAdapter((ob, request), name='zmi_icon'), None)
 
         import zope.app.publisher.browser.tests as p
         path = os.path.dirname(p.__file__)
@@ -112,7 +114,7 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
             ''' % path
             )))
 
-        view = zapi.getView(ob, 'zmi_icon', request)
+        view = zapi.getMultiAdapter((ob, request), name='zmi_icon')
         rname = "zmi_icon_res"
         self.assertEqual(
             view(),
@@ -120,14 +122,15 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
             'height="16" border="0" />'
             % rname)
 
-        resource = ProxyFactory(zapi.getResource(rname, request))
+        resource = ProxyFactory(zapi.getAdapter(request, name=rname))
 
         self.assertRaises(Forbidden, getattr, resource, '_testData')
         resource = removeSecurityProxy(resource)
         self.assertEqual(resource._testData(), open(path, 'rb').read())
 
     def testResourceErrors(self):
-        self.assertEqual(zapi.queryView(ob, 'zmi_icon', request), None)
+        self.assertEqual(
+            zapi.queryMultiAdapter((ob, request), name='zmi_icon'), None)
 
         import zope.app.publisher.browser.tests as p
         path = os.path.dirname(p.__file__)

@@ -19,7 +19,7 @@ import sys
 import zope.interface
 import zope.app.folder.folder
 import zope.publisher.interfaces.xmlrpc
-from zope.app.tests import ztapi
+from zope.app.testing import ztapi, functional
 
 # Evil hack to make pickling work with classes defined in doc tests
 class NoCopyDict(dict):
@@ -68,8 +68,7 @@ def tearDown(test):
     del sys.modules[name]
 
 def test_suite():
-    from zope.app.tests.functional import FunctionalDocFileSuite
-    return FunctionalDocFileSuite(
+    return functional.FunctionalDocFileSuite(
         'README.txt',
         setUp=setUp, tearDown=tearDown, globs=globs)
 

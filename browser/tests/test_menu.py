@@ -18,7 +18,7 @@ $Id$
 import unittest
 from zope.testing.doctestunit import DocTestSuite
 
-from zope.app.tests import placelesssetup
+from zope.app.testing import placelesssetup
 
 
 def test_suite():

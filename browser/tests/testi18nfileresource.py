@@ -20,8 +20,8 @@ import os
 
 from zope.publisher.interfaces import NotFound
 
-from zope.app.tests.placelesssetup import PlacelessSetup
-from zope.app.tests import ztapi
+from zope.app.testing.placelesssetup import PlacelessSetup
+from zope.app.testing import ztapi
 
 from zope.i18n.interfaces import IUserPreferredCharsets, IUserPreferredLanguages
 
@@ -33,7 +33,6 @@ from zope.app.publisher.browser.i18nfileresource import I18nFileResourceFactory
 from zope.app.publisher.fileresource import File
 import zope.app.publisher.browser.tests as p
 
-from zope.app.component.metaconfigure import managerHandler
 from zope.i18n.interfaces import INegotiator
 from zope.i18n.negotiator import negotiator
 

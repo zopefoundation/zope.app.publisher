@@ -22,9 +22,9 @@ from zope.configuration.exceptions import ConfigurationError
 from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
 
 from zope.app import zapi
-from zope.app.location import Location
 from zope.app.component.interface import provideInterface
 from zope.app.component.metaconfigure import handler
+from zope.app.publisher.xmlrpc import MethodPublisher
 
 def view(_context, for_=None, interface=None, methods=None,
          class_=None,  permission=None, name=None):
@@ -50,6 +50,13 @@ def view(_context, for_=None, interface=None, methods=None,
                 args = ('', for_)
                 )
 
+    # Make sure that the class inherits MethodPublisher, so that the views
+    # have a location
+    if class_ is None:
+        class_ = MethodPublisher
+    else:
+        class_ = type(class_.__name__, (class_, MethodPublisher), {})
+
     if name:
         # Register a single view
         
@@ -69,7 +76,7 @@ def view(_context, for_=None, interface=None, methods=None,
         _context.action(
             discriminator = ('view', for_, name, IXMLRPCRequest),
             callable = handler,
-            args = (zapi.servicenames.Adapters, 'register',
+            args = ('provideAdapter',
                     (for_, IXMLRPCRequest), Interface, name, class_,
                     _context.info)
             )
@@ -80,21 +87,19 @@ def view(_context, for_=None, interface=None, methods=None,
             checker = None
 
         for name in require:
-            # create a new callable class with a security checker; mix
-            # in zope.app.location.Location so that the view inherits
-            # a security context
+            # create a new callable class with a security checker;
             cdict = {'__Security_checker__': checker,
                      '__call__': getattr(class_, name)}
-            new_class = type(class_.__name__, (class_, Location), cdict)
+            new_class = type(class_.__name__, (class_,), cdict)
             _context.action(
                 discriminator = ('view', for_, name, IXMLRPCRequest),
                 callable = handler,
-                args = (zapi.servicenames.Adapters, 'register',
+                args = ('provideAdapter',
                         (for_, IXMLRPCRequest), Interface, name, new_class,
                         _context.info)
                 )
 
-    # Register the used interfaces with the interface service
+    # Register the used interfaces with the site manager
     if for_ is not None:
         _context.action(
             discriminator = None,
