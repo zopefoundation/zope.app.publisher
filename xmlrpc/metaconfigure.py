@@ -13,7 +13,7 @@
 ##############################################################################
 """XMLRPC configuration code
 
-$Id: metaconfigure.py,v 1.7 2003/02/12 02:17:30 seanb Exp $
+$Id: metaconfigure.py,v 1.8 2003/04/09 20:51:33 philikon Exp $
 """
 
 from zope.security.proxy import Proxy
@@ -30,7 +30,7 @@ from zope.app.services.servicenames import Interfaces
 from zope.publisher.interfaces.xmlrpc import IXMLRPCPresentation
 
 from zope.app.component.metaconfigure \
-     import defaultView as _defaultView, handler
+     import defaultView as _defaultView, handler, resolveInterface
 from zope.interface import Interface
 
 
@@ -48,7 +48,7 @@ class view(object):
 
         # Resolve and save the component these views are for
         if for_ is not None:
-            for_ = _context.resolve(for_)
+            for_ = resolveInterface(_context, for_)
         self.for_ = for_
 
         if ((allowed_methods or allowed_interface)
@@ -59,7 +59,7 @@ class view(object):
                 )
 
         if allowed_interface is not None:
-            allowed_interface = _context.resolve(allowed_interface)
+            allowed_interface = resolveInterface(_context, allowed_interface)
 
         self.factory = map(_context.resolve, factory.strip().split())
         self.name = name

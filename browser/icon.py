@@ -14,13 +14,13 @@
 """Icon support
 
 
-$Id: icon.py,v 1.6 2003/02/12 02:17:27 seanb Exp $
+$Id: icon.py,v 1.7 2003/04/09 20:51:32 philikon Exp $
 """
 
 import os
 import re
 
-from zope.app.component.metaconfigure import handler
+from zope.app.component.metaconfigure import handler, resolveInterface
 from zope.configuration.action import Action
 from zope.app.publisher.browser import metaconfigure
 from zope.app.traversing.namespace import getResourceInContext
@@ -64,7 +64,7 @@ class IconViewFactory:
 def IconDirective(_context, name, for_, file=None, resource=None,
                   layer='default', alt=None):
 
-    for_ = _context.resolve(for_)
+    for_ = resolveInterface(_context, for_)
     iname = for_.__name__
 
     if alt is None:

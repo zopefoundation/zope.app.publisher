@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.18 2003/04/08 12:21:37 stevea Exp $
+$Id: viewmeta.py,v 1.19 2003/04/09 20:51:32 philikon Exp $
 """
 
 import os
@@ -40,7 +40,7 @@ from zope.publisher.interfaces.browser import IBrowserPublisher
 
 from zope.publisher.browser import BrowserView
 
-from zope.app.component.metaconfigure import handler
+from zope.app.component.metaconfigure import handler, resolveInterface
 
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
@@ -398,7 +398,7 @@ addview.__implements__ = INonEmptyDirective
 def defaultView(_context, name, for_=None):
 
     if for_ is not None:
-        for_ = _context.resolve(for_)
+        for_ = resolveInterface(_context, for_)
 
     actions = [
         Action(
@@ -449,7 +449,7 @@ def _handle_allowed_interface(_context, allowed_interface, permission,
     # Allow access for all names defined by named interfaces
     if allowed_interface.strip():
         for i in allowed_interface.strip().split():
-            i = _context.resolve(i)
+            i = resolveInterface(_context, i)
             actions .append(
                 Action(discriminator = None, callable = handler,
                        args = (Interfaces, 'provideInterface', None, i)
@@ -469,7 +469,7 @@ def _handle_for(_context, for_, actions):
         for_ = None
 
     if for_ is not None:
-        for_ = _context.resolve(for_)
+        for_ = resolveInterface(_context, for_)
 
         actions .append(
             Action(discriminator = None, callable = handler,

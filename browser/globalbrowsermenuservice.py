@@ -28,7 +28,7 @@ from zope.security.management import getSecurityManager
 
 from zope.app.security.permission import checkPermission
 
-from zope.app.component.metaconfigure import handler
+from zope.app.component.metaconfigure import handler, resolveInterface
 from zope.app.interfaces.publisher.browser import IBrowserMenuService
 from zope.app.pagetemplate.engine import Engine
 from zope.app.publication.browser import PublicationTraverser
@@ -168,7 +168,7 @@ class menuItemsDirective:
         if for_ == '*':
             self.interface = None
         else:
-            self.interface = _context.resolve(for_)
+            self.interface = resolveInterface(_context, for_)
         self.menu = menu
 
     def menuItem(self, _context, action, title, description='',
@@ -207,5 +207,5 @@ del addCleanUp
 
 __doc__ = GlobalBrowserMenuService.__doc__ + """
 
-$Id: globalbrowsermenuservice.py,v 1.11 2003/02/12 02:17:27 seanb Exp $
+$Id: globalbrowsermenuservice.py,v 1.12 2003/04/09 20:51:32 philikon Exp $
 """
