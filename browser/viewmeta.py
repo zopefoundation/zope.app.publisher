@@ -280,12 +280,8 @@ class view:
 
             pages[pname] = attribute
 
+        # This should go away, but noone seems to remember what to do. :-(
         if hasattr(class_, 'publishTraverse'):
-
-            # XXX This context trickery is a hack around a problem, I
-            # can't fix till after the alpha. :(
-
-            # XXX I now wish I could remember what the problem was. :(
 
             def publishTraverse(self, request, name,
                                 pages=pages, getattr=getattr):
