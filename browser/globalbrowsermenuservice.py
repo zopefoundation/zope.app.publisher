@@ -12,6 +12,7 @@
 #
 ##############################################################################
 
+from zope.interface import classProvides
 from zope.exceptions import DuplicationError, Unauthorized, Forbidden
 
 from zope.configuration.action import Action
@@ -176,7 +177,7 @@ def menuItemDirective(_context, menu, for_,
 
 class menuItemsDirective:
 
-    __class_implements__ = INonEmptyDirective
+    classProvides(INonEmptyDirective)
     __implements__ = ISubdirectiveHandler
 
     def __init__(self, _context, menu, for_):
@@ -222,5 +223,5 @@ del addCleanUp
 
 __doc__ = GlobalBrowserMenuService.__doc__ + """
 
-$Id: globalbrowsermenuservice.py,v 1.13 2003/04/11 22:15:47 gotcha Exp $
+$Id: globalbrowsermenuservice.py,v 1.14 2003/04/18 22:12:27 jim Exp $
 """

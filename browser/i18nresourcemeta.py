@@ -13,9 +13,10 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: i18nresourcemeta.py,v 1.6 2003/02/12 02:17:27 seanb Exp $
+$Id: i18nresourcemeta.py,v 1.7 2003/04/18 22:12:27 jim Exp $
 """
 
+from zope.interface import classProvides
 from zope.security.proxy import Proxy
 from zope.security.checker \
      import CheckerPublic, NamesChecker, Checker
@@ -37,7 +38,7 @@ from zope.app.publisher.browser.i18nfileresource \
 
 class I18nResource(object):
 
-    __class_implements__ = INonEmptyDirective
+    classProvides(INonEmptyDirective)
     __implements__ = ISubdirectiveHandler
 
     type = IBrowserPresentation
