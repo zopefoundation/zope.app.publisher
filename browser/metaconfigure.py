@@ -146,8 +146,8 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
             "You cannot specify the 'interface' and 'base' together.")
 
     if interface is None:
-        interface = InterfaceClass(name, (base, ),
-                                   __doc__='Layer: %s' %name,
+        interface = InterfaceClass(str(name), (base, ),
+                                   __doc__='Layer: %s' %str(name),
                                    __module__='zope.app.layers')
         # Add the layer to the layers module.
         # Note: We have to do this immediately, so that directives using the
@@ -254,9 +254,10 @@ def skin(_context, name=None, interface=None, layers=None):
             "You must specify the 'name' or 'interface' attribute.")
 
     if name is not None and layers is not None:
-        interface = InterfaceClass(name, layers,
-                                   __doc__='Skin: %s' %name,
+        interface = InterfaceClass(str(name), layers,
+                                   __doc__='Skin: %s' %str(name),
                                    __module__='zope.app.skins')
+
         # Add the layer to the skins module.
         # Note: We have to do this immediately, so that directives using the
         # InterfaceField can find the layer.
