@@ -13,7 +13,7 @@
 ##############################################################################
 """'browser' namespace directive tests
 
-$Id: test_directives.py,v 1.35 2004/04/09 14:18:37 garrett Exp $
+$Id: test_directives.py,v 1.36 2004/05/05 12:14:42 philikon Exp $
 """
 
 import os
@@ -919,7 +919,6 @@ class Test(PlacelessSetup, unittest.TestCase):
             ))
 
     def testViewThatProvidesAnInterface(self):
-
         request = TestRequest()
         self.assertEqual(queryView(ob, 'test', request, None), None)
 
