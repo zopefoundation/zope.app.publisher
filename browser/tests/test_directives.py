@@ -26,6 +26,7 @@ from zope.component.service import serviceManager
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.configuration.exceptions import ConfigurationError
 from zope.publisher.browser import TestRequest
+from zope.publisher.interfaces import ILayer
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import ISkin, IDefaultSkin
@@ -91,6 +92,17 @@ class C_w_implements(NCV):
 
     def index(self):
         return self
+
+
+class ITestMenu(Interface):
+    """Test menu."""
+
+directlyProvides(ITestMenu, IMenuItemType)
+
+class ITestLayer(ILayer):
+    """Test Layer."""
+
+
 
 class Test(PlacelessSetup, unittest.TestCase):
 
@@ -865,6 +877,43 @@ class Test(PlacelessSetup, unittest.TestCase):
                 permission="zope.Public"
                 for="zope.app.component.tests.views.IC" />
             ''' % path
+            ))
+
+        v = zapi.getView(ob, 'index.html', request)
+        self.assertEqual(v().strip(), '<html><body><p>test</p></body></html>')
+
+    def test_page_menu_within_different_layers(self):
+        path = os.path.join(tests_path, 'testfiles', 'test.pt')
+        self.assertEqual(zapi.queryView(ob, 'index.html', request),
+                         None)
+
+        xmlconfig(StringIO(template %
+            '''
+            <browser:menu
+                id="test_menu"
+                title="Test menu"
+                interface="zope.app.publisher.browser.tests.test_directives.ITestMenu"/>
+
+            <browser:layer 
+                name="test_layer"
+                interface="zope.app.publisher.browser.tests.test_directives.ITestLayer"
+                />
+
+            <browser:page
+                name="index.html"
+                permission="zope.Public"
+                for="zope.app.component.tests.views.IC"
+                template="%s"
+                menu="test_menu" title="Index"/>
+
+            <browser:page
+                name="index.html"
+                permission="zope.Public"
+                for="zope.app.component.tests.views.IC"
+                menu="test_menu" title="Index"
+                template="%s"
+                layer="zope.app.publisher.browser.tests.test_directives.ITestLayer"/>
+            ''' % (path, path)
             ))
 
         v = zapi.getView(ob, 'index.html', request)

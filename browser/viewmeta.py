@@ -94,7 +94,7 @@ def page(_context, name, permission, for_,
          attribute='__call__', menu=None, title=None, 
          ):
 
-    _handle_menu(_context, menu, title, [for_], name, permission)
+    _handle_menu(_context, menu, title, [for_], name, permission, layer)
     required = {}
 
     permission = _handle_permission(_context, permission)
@@ -212,7 +212,7 @@ class view(object):
                  menu=None, title=None, provides=Interface,
                  ):
 
-        _handle_menu(_context, menu, title, [for_], name, permission)
+        _handle_menu(_context, menu, title, [for_], name, permission, layer)
 
         permission = _handle_permission(_context, permission)
 
@@ -373,9 +373,12 @@ def defaultView(_context, name, for_=None):
             callable = provideInterface,
             args = ('', for_)
             )
-        
 
-def _handle_menu(_context, menu, title, for_, name, permission):
+# transient _handle_menu registry
+_registeredMenus = {}
+
+def _handle_menu(_context, menu, title, for_, name, permission, layer=IDefaultBrowserLayer):
+
     if menu or title:
         if not (menu and title):
             raise ConfigurationError(
@@ -385,12 +388,20 @@ def _handle_menu(_context, menu, title, for_, name, permission):
                 raise ConfigurationError(
                     "Menus can be specified only for single-view, not for "
                     "multi-views.")
-        return menuItemDirective(
-            _context, menu, for_[0], '@@' + name, title,
-            permission=permission)
+
+        # TODO: menuItemDirective does not handle layers.
+        # IMO this fix is just a work around and menu should 
+        # support layers too.
+        registeredTitles = _registeredMenus.setdefault(menu, {})
+        registered = registeredTitles.setdefault(title, [])
+
+        if for_[0] not in registered:
+            registered.append(for_[0])
+            return menuItemDirective(
+                _context, menu, for_[0], '@@' + name, title,
+                permission=permission)
 
     return []
-
 
 def _handle_permission(_context, permission):
     if permission == 'zope.Public':
