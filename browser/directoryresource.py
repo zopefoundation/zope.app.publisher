@@ -86,7 +86,7 @@ class DirectoryResource(BrowserView, Resource):
             return default
         ext = os.path.splitext(os.path.normcase(name))[1]
         factory = self.resource_factories.get(ext, self.default_factory)
-        rname = posixpath.join(self.]__name__, name)
+        rname = posixpath.join(self.__name__, name)
         resource = factory(filename, self.context.checker, rname)(self.request)
         resource.__parent__ = self
         return resource
