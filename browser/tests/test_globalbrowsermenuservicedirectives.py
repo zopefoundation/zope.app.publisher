@@ -15,7 +15,7 @@
 
 XXX longer description goes here.
 
-$Id: test_globalbrowsermenuservicedirectives.py,v 1.7 2003/08/16 00:43:51 srichter Exp $
+$Id: test_globalbrowsermenuservicedirectives.py,v 1.8 2003/08/17 06:07:35 philikon Exp $
 """
 
 from StringIO import StringIO
@@ -26,7 +26,6 @@ from zope.publisher.browser import TestRequest
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.app.publisher.browser.globalbrowsermenuservice \
     import globalBrowserMenuService
-import zope.configuration
 
 import zope.app.publisher.browser
 

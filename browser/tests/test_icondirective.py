@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_icondirective.py,v 1.9 2003/08/11 14:58:13 philikon Exp $
+$Id: test_icondirective.py,v 1.10 2003/08/17 06:07:35 philikon Exp $
 """
 import os
 from StringIO import StringIO
@@ -29,7 +29,6 @@ from zope.component.tests.views import IC
 from zope.publisher.interfaces.browser import IBrowserPresentation
 from zope.component import queryView, getView, getResource
 from zope.configuration.exceptions import ConfigurationError
-import zope.configuration
 from zope.interface import implements
 
 import zope.app.publisher.browser

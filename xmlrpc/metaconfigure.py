@@ -13,14 +13,13 @@
 ##############################################################################
 """XMLRPC configuration code
 
-$Id: metaconfigure.py,v 1.14 2003/08/16 00:43:54 srichter Exp $
+$Id: metaconfigure.py,v 1.15 2003/08/17 06:07:39 philikon Exp $
 """
 from zope.app.component.metaconfigure import handler
 from zope.app.services.servicenames import Interfaces
 from zope.configuration.exceptions import ConfigurationError
 from zope.publisher.interfaces.xmlrpc import IXMLRPCPresentation
-from zope.security.proxy import Proxy
-from zope.security.checker import CheckerPublic, NamesChecker, Checker
+from zope.security.checker import CheckerPublic, Checker
 
 
 def view(_context, name, class_=None, for_=None, layer=None,

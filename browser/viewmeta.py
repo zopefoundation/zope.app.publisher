@@ -13,10 +13,9 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.31 2003/08/16 00:43:46 srichter Exp $
+$Id: viewmeta.py,v 1.32 2003/08/17 06:07:32 philikon Exp $
 """
 
-from zope.interface import classProvides, directlyProvides
 import os
 
 from zope.interface import implements, classImplements

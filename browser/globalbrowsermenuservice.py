@@ -13,11 +13,10 @@
 ##############################################################################
 """Global Browser Menu Service
 
-$Id: globalbrowsermenuservice.py,v 1.23 2003/08/16 15:32:37 srichter Exp $
+$Id: globalbrowsermenuservice.py,v 1.24 2003/08/17 06:07:32 philikon Exp $
 """
 __metaclass__ = type 
 
-from zope.interface import classProvides
 from zope.exceptions import DuplicationError, Unauthorized, Forbidden
 
 from zope.interface.type import TypeRegistry

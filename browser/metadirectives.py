@@ -15,13 +15,12 @@
 
 This module defines the schemas for browser directives.
 
-$Id: metadirectives.py,v 1.5 2003/08/11 14:58:07 philikon Exp $
+$Id: metadirectives.py,v 1.6 2003/08/17 06:07:32 philikon Exp $
 """
-
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, Tokens, Path, \
      PythonIdentifier, MessageID
-from zope.schema import Text, TextLine, Id
+from zope.schema import TextLine, Id
 
 from zope.app.component.metadirectives import IBasicViewInformation
 

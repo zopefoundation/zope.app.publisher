@@ -13,10 +13,9 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: i18nresourcemeta.py,v 1.13 2003/08/03 02:13:17 philikon Exp $
+$Id: i18nresourcemeta.py,v 1.14 2003/08/17 06:07:32 philikon Exp $
 """
 
-from zope.interface import classProvides, implements
 from zope.security.proxy import Proxy
 from zope.security.checker import CheckerPublic, Checker
 
