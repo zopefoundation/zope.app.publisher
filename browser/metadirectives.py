@@ -21,9 +21,10 @@ from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, Tokens, Path, \
      PythonIdentifier, MessageID
 from zope.schema import TextLine, Text, Id
-from zope.app.security.fields import Permission
 
 from zope.app.component.metadirectives import IBasicViewInformation
+from zope.app.component.fields import LayerField
+from zope.app.security.fields import Permission
 
 #
 # browser views
@@ -217,7 +218,7 @@ class IBasicResourceInformation(Interface):
     This is the basic information for all browser resources.
     """
 
-    layer = TextLine(
+    layer = LayerField(
         title=u"The layer the resource should be found in",
         description=u"""
         For information on layers, see the documentation for the skin
@@ -485,6 +486,12 @@ class ILayerDirective(Interface):
         required=True
         )
 
+    base = GlobalObject(
+        title=u"Name",
+        description=u"The name of the skin",
+        required=False
+        )
+
 class ISkinDirective(Interface):
     """Defines a browser skin
     """
@@ -496,13 +503,13 @@ class ISkinDirective(Interface):
         )
 
     layers = Tokens(
-        title=u"A list of layer names",
+        title=u"A list of layers",
         description=u"""
         This should be in order of lookup. Usually one of the layers
         has the same name as the skin, and the last skin should be
         'default', unless you want to completely override all views.
         """,
-        value_type=TextLine()
+        value_type=LayerField()
         )
 
 class IDefaultSkinDirective(Interface):
@@ -553,7 +560,7 @@ class IIconDirective(Interface):
         required=False
         )
 
-    layer = TextLine(
+    layer = LayerField(
         title=u"The layer the icon should be found in",
         description=u"""
         For information on layers, see the documentation for the skin
