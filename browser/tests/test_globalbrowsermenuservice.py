@@ -15,7 +15,7 @@
 
 XXX longer description goes here.
 
-$Id: test_globalbrowsermenuservice.py,v 1.2 2002/12/25 14:13:10 jim Exp $
+$Id: test_globalbrowsermenuservice.py,v 1.3 2002/12/30 23:31:21 jim Exp $
 """
 
 from unittest import TestCase, TestSuite, main, makeSuite
@@ -24,6 +24,12 @@ from zope.exceptions import Forbidden, Unauthorized, DuplicationError
 from zope.interface import Interface
 from zope.publisher.browser import TestRequest
 from zope.app.tests.placelesssetup import PlacelessSetup
+
+from zope.component.service import serviceManager
+from zope.app.security.registries.permissionregistry import permissionRegistry
+from zope.app.interfaces.security import IPermissionService
+from zope.security.securitymanagement import newSecurityManager
+from zope.security.securitymanagement import noSecurityManager, system_user
 
 class I1(Interface): pass
 class I11(I1): pass
@@ -81,6 +87,43 @@ class Test(PlacelessSetup, TestCase):
                     }
 
         self.assertEqual(list(menu), [d(5), d(6), d(3), d(2), d(1)])
+
+    def test_w_permission(self):
+        serviceManager.defineService('Permissions', IPermissionService)
+        serviceManager.provideService('Permissions', permissionRegistry)
+        permissionRegistry.definePermission('p', 'P')
+        
+        r = self.__reg()
+        r.menu('test_id', 'test menu')
+        r.menuItem('test_id', Interface, 'a1', 't1', 'd1')
+        r.menuItem('test_id', I1, 'a2', 't2', 'd2')
+        r.menuItem('test_id', I11, 'a3', 't3', 'd3', 'context')
+        r.menuItem('test_id', I11, 'a4', 't4', 'd4', 'not:context')
+        r.menuItem('test_id', I111, 'a5', 't5', 'd5', permission='p')
+        r.menuItem('test_id', I111, 'a6', 't6', 'd6')
+        r.menuItem('test_id', I111, 'f7', 't7', 'd7')
+        r.menuItem('test_id', I111, 'u8', 't8', 'd8')
+        r.menuItem('test_id', I12, 'a9', 't9', 'd9')
+
+        def d(n):
+            return {'action': "a%s" % n,
+                    'title':  "t%s" % n,
+                    'description':  "d%s" % n,
+                    'selected': ''
+                    }
+
+        newSecurityManager('test')
+
+        menu = r.getMenu('test_id', X(), TestRequest())
+
+        self.assertEqual(list(menu), [d(6), d(3), d(2), d(1)])
+
+        newSecurityManager(system_user)
+
+        menu = r.getMenu('test_id', X(), TestRequest())
+
+        self.assertEqual(list(menu), [d(5), d(6), d(3), d(2), d(1)])
+        
 
     def test_no_dups(self):
         r = self.__reg()

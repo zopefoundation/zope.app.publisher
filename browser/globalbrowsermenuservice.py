@@ -12,16 +12,24 @@
 #
 ##############################################################################
 
-from zope.app.interfaces.publisher.browser import IBrowserMenuService
+from zope.exceptions import DuplicationError, Unauthorized, Forbidden
+
+from zope.configuration.action import Action
+
+from zope.interface.type import TypeRegistry
+
 from zope.interfaces.configuration import INonEmptyDirective
 from zope.interfaces.configuration import ISubdirectiveHandler
-from zope.configuration.action import Action
-from zope.interface.type import TypeRegistry
-from zope.exceptions import DuplicationError, Unauthorized, Forbidden
-from zope.app.pagetemplate.engine import Engine
-from zope.app.publication.browser \
-     import PublicationTraverser
+
+from zope.security.checker import CheckerPublic
+from zope.security.securitymanagement import getSecurityManager
+
+from zope.app.security.permission import checkPermission
+
 from zope.app.component.metaconfigure import handler
+from zope.app.interfaces.publisher.browser import IBrowserMenuService
+from zope.app.pagetemplate.engine import Engine
+from zope.app.publication.browser import PublicationTraverser
 
 class GlobalBrowserMenuService:
     """Global Browser Menu Service
@@ -42,8 +50,9 @@ class GlobalBrowserMenuService:
 
         self._registry[menu_id] = TypeRegistry()
 
-    def menuItem(self, menu_id, interface,
-                 action, title, description='', filter_string=None):
+    def menuItem(self, menu_id, interface, action, title,
+                 description='', filter_string=None, permission=None,
+                 ):
 
         registry = self._registry[menu_id]
 
@@ -52,8 +61,14 @@ class GlobalBrowserMenuService:
         else:
             filter = None
 
+        if permission:
+            if permission == 'zope.Public':
+                permission = CheckerPublic
+            else:
+                checkPermission(None, permission)
+
         data = registry.get(interface) or []
-        data.append((action, title, description, filter))
+        data.append((action, title, description, filter, permission))
         registry.register(interface, data)
 
     def getMenu(self, menu_id, object, request, max=999999):
@@ -62,9 +77,10 @@ class GlobalBrowserMenuService:
 
         result = []
         seen = {}
+        sm = getSecurityManager()
 
         for items in registry.getAllForObject(object):
-            for action, title, description, filter in items:
+            for action, title, description, filter, permission in items:
 
                 # Make sure we don't repeat a specification for a given title
                 if title in seen:
@@ -85,7 +101,14 @@ class GlobalBrowserMenuService:
                     if not include:
                         continue
 
-                if action:
+                if permission:
+                    # If we have an explicit permission, check that we
+                    # can access it.
+                    if not sm.checkPermission(permission, object):
+                        continue
+
+                elif action:
+                    # Otherwise, test access by attempting access
                     try:
                         v = traverser.traverseRelativeURL(
                             request, object, action)
@@ -128,9 +151,10 @@ def menuDirective(_context, id, title, description=''):
         )]
 
 def menuItemDirective(_context, menu, for_,
-                      action, title, description='', filter=None):
+                      action, title, description='', filter=None,
+                      permission=None):
     return menuItemsDirective(_context, menu, for_).menuItem(
-        _context, action, title, description, filter)
+        _context, action, title, description, filter, permission)
 
 
 class menuItemsDirective:
@@ -142,14 +166,16 @@ class menuItemsDirective:
         self.menu = menu
         self.interface = _context.resolve(for_)
 
-    def menuItem(self, _context, action, title, description='', filter=None):
+    def menuItem(self, _context, action, title, description='',
+                 filter=None, permission=None):
+        
         return [
             Action(
               discriminator = ('browser:menuItem',
                                self.menu, self.interface, title),
               callable = globalBrowserMenuService.menuItem,
               args = (self.menu, self.interface,
-                      action, title, description, filter),
+                      action, title, description, filter, permission),
               ),
                 ]
 
@@ -176,5 +202,5 @@ del addCleanUp
 
 __doc__ = GlobalBrowserMenuService.__doc__ + """
 
-$Id: globalbrowsermenuservice.py,v 1.3 2002/12/27 23:32:16 jim Exp $
+$Id: globalbrowsermenuservice.py,v 1.4 2002/12/30 23:31:20 jim Exp $
 """
