@@ -15,9 +15,10 @@
 
 $Id$
 """
-from zope.interface import implements
+from zope.interface import implements, directlyProvidedBy, directlyProvides
 from zope.app.location import Location
 from zope.app.publisher.interfaces.browser import IBrowserView
+from zope.publisher.interfaces.browser import ISkin
 
 class BrowserView(Location):
     implements(IBrowserView)
@@ -26,3 +27,38 @@ class BrowserView(Location):
         self.context = context
         self.request = request
         self.__parent__ = context
+
+
+def applySkin(request, skin):
+    """Change the presentation skin for this request.
+
+    >>> import pprint
+    >>> from zope.interface import Interface, providedBy
+    >>> class SkinA(Interface): pass
+    >>> directlyProvides(SkinA, ISkin)
+    >>> class SkinB(Interface): pass
+    >>> directlyProvides(SkinB, ISkin)
+    >>> class IRequest(Interface): pass
+    
+    >>> class Request(object):
+    ...     implements(IRequest)
+    
+    >>> req = Request()
+
+    >>> applySkin(req, SkinA)
+    >>> pprint.pprint(list(providedBy(req).interfaces()))
+    [<InterfaceClass zope.app.publisher.browser.SkinA>,
+     <InterfaceClass zope.app.publisher.browser.IRequest>]
+
+    >>> applySkin(req, SkinB)
+    >>> pprint.pprint(list(providedBy(req).interfaces()))
+    [<InterfaceClass zope.app.publisher.browser.SkinB>,
+     <InterfaceClass zope.app.publisher.browser.IRequest>]
+    """
+    old_skins = [iface for iface in directlyProvidedBy(request)
+                 if ISkin.providedBy(iface)]
+
+    for old_skin in old_skins:
+        directlyProvides(request, directlyProvidedBy(request) - old_skin)
+
+    directlyProvides(request, skin)
