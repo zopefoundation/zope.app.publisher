@@ -117,6 +117,7 @@ def page(_context, name, permission, for_,
             raise ConfigurationError("No such file", template)
         required['__getitem__'] = permission
 
+    # XXX: new __name__ attribute must be tested
     if class_:
         if attribute != '__call__':
             if not hasattr(class_, attribute):
@@ -125,8 +126,7 @@ def page(_context, name, permission, for_,
                     )
         if template:
             # class and template
-            new_class = SimpleViewClass(
-                template, bases=(class_, ))
+            new_class = SimpleViewClass(template, bases=(class_, ), name=name)
         else:
             if not hasattr(class_, 'browserDefault'):
                 cdict = {
@@ -136,17 +136,16 @@ def page(_context, name, permission, for_,
             else:
                 cdict = {}
 
+            cdict['__name__'] = name
             cdict['__page_attribute__'] = attribute
-            new_class = type(class_.__name__,
-                             (class_, simple,),
-                             cdict)
+            new_class = type(class_.__name__, (class_, simple,), cdict)
 
         if hasattr(class_, '__implements__'):
             classImplements(new_class, IBrowserPublisher)
 
     else:
         # template
-        new_class = SimpleViewClass(template)
+        new_class = SimpleViewClass(template, name=name)
 
     for n in (attribute, 'browserDefault', '__call__', 'publishTraverse'):
         required[n] = permission
@@ -316,6 +315,7 @@ class view(object):
         except:
             cname = "GeneratedClass"
 
+        cdict['__name__'] = name
         newclass = type(cname, bases, cdict)
 
         for n in ('publishTraverse', 'browserDefault', '__call__'):
