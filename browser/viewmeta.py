@@ -18,10 +18,7 @@ $Id$
 import os
 
 from zope.component.exceptions import ComponentLookupError
-from zope.configuration.exceptions import ConfigurationError
-from zope.exceptions import NotFoundError
 from zope.interface import implements, classImplements, Interface
-from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.exceptions import NotFoundError
 from zope.security.checker import CheckerPublic, Checker
 from zope.security.checker import defineChecker
@@ -29,15 +26,13 @@ from zope.configuration.exceptions import ConfigurationError
 from zope.app.component.interface import provideInterface
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IBrowserPublisher
-from zope.app.publisher.browser import BrowserView
 from zope.app import zapi
 from zope.app.component.metaconfigure import handler
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.publisher.browser import BrowserView
 from zope.app.publisher.browser.globalbrowsermenuservice import \
-     menuItemDirective, globalBrowserMenuService
-from zope.app.security.permission import checkPermission
+     menuItemDirective
 
 
 
