@@ -13,7 +13,7 @@
 ##############################################################################
 """Unit tests for Resource
 
-$Id: test_resource.py,v 1.3 2003/06/01 15:59:35 jim Exp $
+$Id: test_resource.py,v 1.4 2003/08/08 18:07:27 jim Exp $
 """
 
 import unittest
@@ -40,7 +40,7 @@ class TestResource(unittest.TestCase):
     def testGlobalInVirtualHost(self):
         from zope.app.publisher.browser.resource import Resource
         req = TestRequest()
-        req.setApplicationNames(['x', 'y'])
+        req.setVirtualHostRoot(['x', 'y'])
         r = ContextWrapper(Resource(req), None, name="foo")
         self.assertEquals(r(), '/x/y/@@/foo')
 
