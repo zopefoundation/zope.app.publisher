@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.17 2003/03/25 15:19:59 stevea Exp $
+$Id: viewmeta.py,v 1.18 2003/04/08 12:21:37 stevea Exp $
 """
 
 import os
@@ -47,7 +47,7 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from zope.app.security.permission import checkPermission
 
-from zope.proxy.context import ContextMethod, ContextAware
+from zope.proxy.context import ContextMethod
 
 from zope.app.publisher.browser.globalbrowsermenuservice \
      import menuItemDirective
@@ -151,8 +151,9 @@ def page(_context, name, permission, for_,
             if not hasattr(original_class, 'browserDefault'):
                 cdict = {
                     'browserDefault':
-                    lambda self, request:
-                    (getattr(self, attribute), ())
+                    ContextMethod(lambda self, request:
+                                  (getattr(self, attribute), ())
+                                  )
                     }
             else:
                 cdict = {}
@@ -320,8 +321,6 @@ class view:
                 m = class_.publishTraverse.__get__(self)
                 return m(request, name)
 
-            publishTraverse = ContextMethod(publishTraverse)
-
         else:
             def publishTraverse(self, request, name,
                                 pages=pages, getattr=getattr):
@@ -331,17 +330,17 @@ class view:
 
                 raise NotFoundError(self, name, request)
 
-        cdict['publishTraverse'] = publishTraverse
+        cdict['publishTraverse'] = ContextMethod(publishTraverse)
 
         if not hasattr(class_, 'browserDefault'):
             if self.default or self.pages:
                 default = self.default or self.pages[0][0]
-                cdict['browserDefault'] = (
+                cdict['browserDefault'] = ContextMethod(
                     lambda self, request, default=default:
                     (self, (default, ))
                     )
             elif providesCallable(class_):
-                cdict['browserDefault'] = (
+                cdict['browserDefault'] = ContextMethod(
                     lambda self, request: (self, ())
                     )
 
@@ -479,11 +478,12 @@ def _handle_for(_context, for_, actions):
 
     return for_
 
-class simple(BrowserView, ContextAware):
+class simple(BrowserView):
     __implements__ = IBrowserPublisher, BrowserView.__implements__
 
     def publishTraverse(self, request, name):
         raise NotFoundError(self, name, request)
+    publishTraverse = ContextMethod(publishTraverse)
 
     def __call__(self, *a, **k):
         # If a class doesn't provide it's own call, then get the attribute
@@ -495,6 +495,7 @@ class simple(BrowserView, ContextAware):
 
         meth = getattr(self, attr)
         return meth(*a, **k)
+    __call__ = ContextMethod(__call__)
 
 def providesCallable(class_):
     if hasattr(class_, '__call__'):
