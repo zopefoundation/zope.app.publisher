@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.16 2003/03/25 11:23:09 gotcha Exp $
+$Id: viewmeta.py,v 1.17 2003/03/25 15:19:59 stevea Exp $
 """
 
 import os
@@ -107,7 +107,7 @@ def page(_context, name, permission, for_,
          layer='default', template=None, class_=None,
          allowed_interface='', allowed_attributes='',
          attribute='__call__', menu=None, title=None, 
-         usage=u'',
+         usage=u''
          ):
 
     actions = _handle_menu(_context, menu, title, for_, name, permission)
@@ -135,7 +135,6 @@ def page(_context, name, permission, for_,
         required['__getitem__'] = permission
 
     if class_:
-
         original_class = _context.resolve(class_)
 
         if attribute != '__call__':
@@ -145,9 +144,9 @@ def page(_context, name, permission, for_,
                     )
         if template:
             template = str(_context.path(template))
-
-            new_class = SimpleViewClass(template, bases=(original_class, ), usage=usage)
-
+            new_class = SimpleViewClass(
+                template, bases=(original_class, ), usage=usage
+                )
         else:
             if not hasattr(original_class, 'browserDefault'):
                 cdict = {
@@ -169,9 +168,6 @@ def page(_context, name, permission, for_,
 
     else:
         new_class = SimpleViewClass(template, usage=usage)
-
-
-
 
     for n in (attribute, 'browserDefault', '__call__', 'publishTraverse'):
         required[n] = permission
@@ -210,7 +206,7 @@ class pages:
     __implements__ = ISubdirectiveHandler
 
     def __init__(self, _context, for_, permission,
-                 layer='default', class_ = None,
+                 layer='default', class_=None,
                  allowed_interface='', allowed_attributes='',
                  ):
         self.opts = opts(for_=for_, permission=permission,
@@ -247,7 +243,7 @@ class view:
     def __init__(self, _context, name, for_, permission,
                  layer='default', class_=None,
                  allowed_interface='', allowed_attributes='',
-                 menu=None, title=None, 
+                 menu=None, title=None, usage=u''
                  ):
 
         actions = _handle_menu(_context, menu, title, for_, name, permission)
@@ -261,8 +257,10 @@ class view:
                      allowed_interface, allowed_attributes, actions)
 
         self.pages = []
+        # default usage is u''
+        self.usage = usage
 
-    def page(self, _context, name, attribute=None, template=None, usage=u''):
+    def page(self, _context, name, attribute=None, template=None, usage=None):
         if template:
             template = _context.path(template)
             if not os.path.isfile(template):
@@ -290,6 +288,10 @@ class view:
         pages = {}
 
         for pname, attribute, template, usage in self.pages:
+            if usage is None:
+                # If no usage is declared explicitly for this page, use the
+                # usage given for the whole view.
+                usage = self.usage
             if template:
                 cdict[pname] = ViewPageTemplateFile(template, usage=usage)
                 if attribute and attribute != name:
@@ -342,7 +344,6 @@ class view:
                 cdict['browserDefault'] = (
                     lambda self, request: (self, ())
                     )
-                
 
         if class_ is not None:
             bases = (class_, simple)
