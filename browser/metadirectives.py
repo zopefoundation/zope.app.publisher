@@ -253,6 +253,14 @@ class IResourceDirective(IBasicResourceInformation):
         required=True
         )
 
+    factory = GlobalObject(
+        title=u"Resource Factory",
+        description=u"The factory used to create the resource. The factory "
+                    u"should only expect to get the request passed when "
+                    u"called.",
+        required=False
+        )
+
     file = Path(
         title=u"File",
         description=u"The file containing the resource data.",

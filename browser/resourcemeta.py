@@ -33,22 +33,41 @@ from directoryresource import DirectoryResourceFactory
 allowed_names = ('GET', 'HEAD', 'publishTraverse', 'browserDefault',
                  'request', '__call__')
 
+class ResourceFactoryWrapper(object):
+
+    def __init__(self, factory, checker, name):
+        self.__factory = factory
+        self.__checker = checker
+        self.__name = name
+
+    def __call__(self, request):
+        resource = self.__factory(request)
+        resource.__Security_checker__ = self.__checker
+        resource.__name__ = self.__name
+        return resource
+    
+
 def resource(_context, name, layer=IDefaultBrowserLayer,
-             permission='zope.Public', file=None, image=None, template=None):
+             permission='zope.Public', factory=None,
+             file=None, image=None, template=None):
 
     if permission == 'zope.Public':
         permission = CheckerPublic
 
     checker = NamesChecker(allowed_names, permission)
 
-    if ((file and image) or (file and template) or
-        (image and template) or not (file or image or template)):
+    if (factory and (file or image or template)) or \
+       (file and (factory or image or template)) or \
+       (image and (factory or file or template)) or \
+       (template and (factory or file or image)):
         raise ConfigurationError(
-            "Must use exactly one of file or image or template"
+            "Must use exactly one of factory or file or image or template"
             " attributes for resource directives"
             )
 
-    if file:
+    if factory is not None:
+        factory = ResourceFactoryWrapper(factory, checker, name)
+    elif file:
         factory = FileResourceFactory(file, checker, name)
     elif image:
         factory = ImageResourceFactory(image, checker, name)

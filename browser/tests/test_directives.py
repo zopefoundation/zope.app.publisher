@@ -101,6 +101,12 @@ class ITestLayer(IBrowserRequest):
 directlyProvides(ITestLayer, ILayer)
 
 
+class MyResource(object):
+
+    def __init__(self, request):
+        self.request = request
+
+
 class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
 
     def setUp(self):
@@ -814,6 +820,24 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         v = zapi.getMultiAdapter((ob, TestRequest(skin=skinny)),
                                  name='index.html')
         self.assertEqual(v(), 'done')
+
+    def testFactory(self):
+        self.assertEqual(zapi.queryAdapter(request, name='index.html'), None)
+
+        xmlconfig(StringIO(template %
+            '''
+            <browser:resource
+                name="index.html"
+                factory="
+                  zope.app.publisher.browser.tests.test_directives.MyResource"
+                />
+            '''
+            ))
+
+        r = zapi.getAdapter(request, name='index.html')
+        self.assertEquals(r.__class__, MyResource)
+        r = ProxyFactory(r)
+        self.assertEqual(r.__name__, "index.html")
 
     def testFile(self):
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
