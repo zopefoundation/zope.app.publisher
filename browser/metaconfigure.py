@@ -45,7 +45,7 @@ skins = module('skins')
 sys.modules['zope.app.skins'] = skins
 
 
-def layer(_context, name=None, interface=None, base=IBrowserRequest):
+def layer(_context, name=None, interface=None, base=ILayer):
     """Provides a new layer.
 
     >>> class Context(object):
@@ -62,7 +62,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
     >>> iface.getName()
     u'layer1'
     >>> iface.__bases__
-    (<InterfaceClass zope.publisher.interfaces.browser.IBrowserRequest>,)
+    (<InterfaceClass zope.publisher.interfaces.browser.ILayer>,)
     >>> hasattr(sys.modules['zope.app.layers'], 'layer1')
     True
 
@@ -71,7 +71,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
     Possibility 2: Providing a custom base interface
     ------------------------------------------------
     
-    >>> class BaseLayer(IBrowserRequest):
+    >>> class BaseLayer(ILayer):
     ...     pass
     >>> context = Context()
     >>> layer(context, u'layer1', base=BaseLayer)
@@ -88,7 +88,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
     Possibility 3: Define a Layer just through an Interface
     -------------------------------------------------------
 
-    >>> class layer1(IBrowserRequest):
+    >>> class layer1(ILayer):
     ...     pass
     >>> context = Context()
     >>> layer(context, interface=layer1)
@@ -137,7 +137,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
     if name is None and interface is None: 
         raise ConfigurationError(
             "You must specify the 'name' or 'interface' attribute.")
-    if interface is not None and base is not IBrowserRequest:
+    if interface is not None and base is not ILayer:
         raise ConfigurationError(
             "You cannot specify the 'interface' and 'base' together.")
 
@@ -188,8 +188,8 @@ def skin(_context, name=None, interface=None, layers=None):
     ...     def __init__(self): self.actions = []
     ...     def action(self, **kw): self.actions.append(kw)
 
-    >>> class Layer1(IBrowserRequest): pass
-    >>> class Layer2(IBrowserRequest): pass
+    >>> class Layer1(ILayer): pass
+    >>> class Layer2(ILayer): pass
 
     Possibility 1: The Old Way
     --------------------------
@@ -290,12 +290,15 @@ def setDefaultSkin(name, info=''):
     >>> from zope.interface import directlyProvides
     >>> from zope.app.tests import ztapi
 
-    >>> class Skin1(IBrowserRequest): pass
+    >>> class Skin1: pass
     >>> directlyProvides(Skin1, ISkin)
 
     >>> ztapi.provideUtility(ISkin, Skin1, 'Skin1')
     >>> setDefaultSkin('Skin1')
     >>> adapters = zapi.getService(zapi.servicenames.Adapters)
+
+	Lookup the default skin for a request that has the 
+
     >>> adapters.lookup((IBrowserRequest,), IDefaultSkin, '') is Skin1
     True
     """

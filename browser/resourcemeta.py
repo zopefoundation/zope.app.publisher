@@ -20,6 +20,7 @@ import os
 from zope.configuration.exceptions import ConfigurationError
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.publisher.interfaces.browser import IDefaultLayer
 from zope.security.checker import CheckerPublic, NamesChecker
 
 from zope.app import zapi
@@ -32,7 +33,7 @@ from directoryresource import DirectoryResourceFactory
 allowed_names = ('GET', 'HEAD', 'publishTraverse', 'browserDefault',
                  'request', '__call__')
 
-def resource(_context, name, layer=IBrowserRequest, permission='zope.Public',
+def resource(_context, name, layer=IDefaultLayer, permission='zope.Public',
              file=None, image=None, template=None):
 
     if permission == 'zope.Public':
@@ -61,7 +62,7 @@ def resource(_context, name, layer=IBrowserRequest, permission='zope.Public',
                 (layer,), Interface, name, factory, _context.info),
         )
 
-def resourceDirectory(_context, name, directory, layer=IBrowserRequest,
+def resourceDirectory(_context, name, directory, layer=IDefaultLayer,
                       permission='zope.Public'):
     if permission == 'zope.Public':
         permission = CheckerPublic

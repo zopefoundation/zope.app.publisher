@@ -19,7 +19,7 @@ import os
 import re
 
 from zope.interface import Interface
-from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.publisher.interfaces.browser import IDefaultLayer
 from zope.configuration.exceptions import ConfigurationError
 
 from zope.app import zapi
@@ -62,7 +62,7 @@ class IconViewFactory(object):
         return IconView(context, request, self.rname, self.alt)
 
 def IconDirective(_context, name, for_, file=None, resource=None,
-                  layer=IBrowserRequest, alt=None):
+                  layer=IDefaultLayer, alt=None):
 
     iname = for_.getName()
 

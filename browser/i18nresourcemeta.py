@@ -17,7 +17,7 @@ $Id$
 """
 from zope.configuration.exceptions import ConfigurationError
 from zope.interface import Interface
-from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.publisher.interfaces.browser import IBrowserRequest, IDefaultLayer
 from zope.security.proxy import Proxy
 from zope.security.checker import CheckerPublic, Checker
 
@@ -34,7 +34,7 @@ class I18nResource(object):
     default_allowed_attributes = '__call__'
 
     def __init__(self, _context, name=None, defaultLanguage='en',
-                 layer=None, permission=None):
+                 layer=IDefaultLayer, permission=None):
         self._context = _context
         self.name = name
         self.defaultLanguage = defaultLanguage
@@ -104,7 +104,7 @@ class I18nResource(object):
             discriminator = ('i18n-resource', self.name, self.type, self.layer),
             callable = handler,
             args = (zapi.servicenames.Adapters, 'register',
-                    (self.layer or self.type,), Interface, self.name, factory,
+                    (self.layer,), Interface, self.name, factory,
                     self._context.info)
             )
 

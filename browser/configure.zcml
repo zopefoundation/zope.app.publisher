@@ -2,10 +2,8 @@
    xmlns="http://namespaces.zope.org/zope"
    xmlns:browser="http://namespaces.zope.org/browser">
 
-<!-- BBB: We need this layer, so that the old skin declarations don't -->
-<!-- break. It will nto do anything however, since no views are defined for -->
-<!-- this layer. Date: 09/15/2004 -->
-<browser:layer name="default" />
+<browser:layer name="default"
+  interface="zope.publisher.interfaces.browser.IDefaultLayer" />
 
 <content class="zope.publisher.browser.BrowserRequest">
   <allow
