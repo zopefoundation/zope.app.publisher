@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_icondirective.py,v 1.15 2003/11/27 13:59:23 philikon Exp $
+$Id: test_icondirective.py,v 1.16 2003/12/17 10:06:42 jim Exp $
 """
 import os
 from StringIO import StringIO
@@ -25,7 +25,7 @@ from zope.proxy import removeAllProxies
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.publisher.browser import TestRequest
-from zope.component.tests.views import IC
+from zope.app.component.tests.views import IC
 from zope.component import queryView, getView, getResource
 from zope.configuration.exceptions import ConfigurationError
 from zope.interface import implements
@@ -76,13 +76,13 @@ class Test(PlacelessSetup, TestCase):
         xmlconfig(StringIO(template % (
             """
             <browser:icon name="zmi_icon"
-                      for="zope.component.tests.views.IC"
+                      for="zope.app.component.tests.views.IC"
                       file="%s" />
             """ % path
             )))
 
         view = getView(ob, 'zmi_icon', request)
-        rname = 'zope-component-tests-views-IC-zmi_icon.gif'
+        rname = 'zope-app-component-tests-views-IC-zmi_icon.gif'
         self.assertEqual(
             view(),
             '<img src="http://127.0.0.1/@@/%s" alt="IC" '
@@ -106,7 +106,7 @@ class Test(PlacelessSetup, TestCase):
             <browser:resource name="zmi_icon_res"
                       image="%s" />
             <browser:icon name="zmi_icon"
-                      for="zope.component.tests.views.IC"
+                      for="zope.app.component.tests.views.IC"
                       resource="zmi_icon_res" />
             """ % path
             )))
@@ -137,7 +137,7 @@ class Test(PlacelessSetup, TestCase):
             <browser:resource name="zmi_icon_res"
                       image="%s" />
             <browser:icon name="zmi_icon"
-                      for="zope.component.tests.views.IC"
+                      for="zope.app.component.tests.views.IC"
                       file="%s"
                       resource="zmi_icon_res" />
             """ % (path, path)
@@ -147,7 +147,7 @@ class Test(PlacelessSetup, TestCase):
         config = StringIO(template % (
             """
             <browser:icon name="zmi_icon"
-                      for="zope.component.tests.views.IC"
+                      for="zope.app.component.tests.views.IC"
                       />
             """
             ))

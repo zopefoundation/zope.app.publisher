@@ -13,13 +13,13 @@
 ##############################################################################
 """Test 'xmlrpc' ZCML Namespace directives.
 
-$Id: test_directives.py,v 1.9 2003/11/21 17:12:25 jim Exp $
+$Id: test_directives.py,v 1.10 2003/12/17 10:06:42 jim Exp $
 """
 import unittest
 
 from zope.configuration import xmlconfig
 from zope.configuration.exceptions import ConfigurationError
-from zope.component.tests.views import IC, V1
+from zope.app.component.tests.views import IC, V1
 from zope.component import getView, queryView, getDefaultViewName
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.security.proxy import ProxyFactory

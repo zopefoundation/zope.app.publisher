@@ -7,41 +7,41 @@
  
   <xmlrpc:view 
       name="test"
-      class="zope.component.tests.views.V1"
-      for="zope.component.tests.views.IC" />
+      class="zope.app.component.tests.views.V1"
+      for="zope.app.component.tests.views.IC" />
 
   <xmlrpc:view 
       name="test2"
-      class="zope.component.tests.views.V1"
-      for="zope.component.tests.views.IC"
+      class="zope.app.component.tests.views.V1"
+      for="zope.app.component.tests.views.IC"
       permission="zope.Public"
-      allowed_interface="zope.component.tests.views.IV" />
+      allowed_interface="zope.app.component.tests.views.IV" />
 
   <xmlrpc:view 
       name="test3"
-      class="zope.component.tests.views.V1"
-      for="zope.component.tests.views.IC"
+      class="zope.app.component.tests.views.V1"
+      for="zope.app.component.tests.views.IC"
       permission="zope.Public"
       allowed_attributes="action" />
 
   <xmlrpc:view 
       name="test4"
-      class="zope.component.tests.views.V1"
-      for="zope.component.tests.views.IC"
+      class="zope.app.component.tests.views.V1"
+      for="zope.app.component.tests.views.IC"
       permission="zope.Public"
       allowed_attributes="action"
-      allowed_interface="zope.component.tests.views.IV" />
+      allowed_interface="zope.app.component.tests.views.IV" />
 
   <xmlrpc:view 
       name="test5"
-      class="zope.component.tests.views.V1"
-      for="zope.component.tests.views.IC"
+      class="zope.app.component.tests.views.V1"
+      for="zope.app.component.tests.views.IC"
       permission="zope.Public"
       allowed_attributes="action index"
-      allowed_interface="zope.component.tests.views.IV" />
+      allowed_interface="zope.app.component.tests.views.IV" />
 
   <xmlrpc:defaultView 
       name="test"
-      for="zope.component.tests.views.IC" />
+      for="zope.app.component.tests.views.IC" />
 
 </configure>
