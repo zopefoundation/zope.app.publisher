@@ -17,9 +17,9 @@ $Id$
 """
 
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
-from zope.app.pagetemplate.engine import AppPT
+from zope.app.pagetemplate.engine import TrustedAppPT
 
-class PageTemplate(AppPT, PageTemplateFile):
+class PageTemplate(TrustedAppPT, PageTemplateFile):
     """
     Resource that is a page template
     """
