@@ -13,38 +13,28 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.37 2003/12/17 15:37:27 jim Exp $
+$Id: viewmeta.py,v 1.38 2004/03/02 14:24:31 srichter Exp $
 """
-
 import os
 
-from zope.app import zapi
-from zope.interface import implements, classImplements, Interface
-from zope.publisher.interfaces.browser import IBrowserPublisher
-
-from zope.exceptions import NotFoundError
-
-from zope.security.checker import CheckerPublic, Checker
-from zope.security.checker import defineChecker
-
+from zope.component.exceptions import ComponentLookupError
 from zope.configuration.exceptions import ConfigurationError
+from zope.exceptions import NotFoundError
+from zope.interface import implements, classImplements, Interface
+from zope.publisher.interfaces.browser import \
+     IBrowserPublisher, IBrowserRequest, IBrowserPublisher
+from zope.security.checker import CheckerPublic, Checker, defineChecker
 
-from zope.app.services.servicenames import Interfaces
-
-from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.publisher.interfaces.browser import IBrowserPublisher
-
-from zope.app.publisher.browser import BrowserView
-
+from zope.app import zapi
 from zope.app.component.metaconfigure import handler
-
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
-
+from zope.app.publisher.browser import BrowserView
+from zope.app.publisher.browser.globalbrowsermenuservice import \
+     menuItemDirective, globalBrowserMenuService
 from zope.app.security.permission import checkPermission
+from zope.app.services.servicenames import Interfaces
 
-from zope.app.publisher.browser.globalbrowsermenuservice \
-     import menuItemDirective, globalBrowserMenuService
 
 # There are three cases we want to suport:
 #
@@ -104,9 +94,11 @@ def page(_context, name, permission, for_,
          usage=u''
          ):
 
-    s = zapi.queryService(None, zapi.servicenames.Presentation)
-    if s is not None:
-        # on startup the service is not immediately there...
+    try:
+        s = zapi.getService(None, zapi.servicenames.Presentation)
+    except ComponentLookupError, err:
+        pass
+    else:
         s.useUsage(usage)
 
     _handle_menu(_context, menu, title, for_, name, permission)
@@ -285,9 +277,11 @@ class view:
                 # If no usage is declared explicitly for this page, use the
                 # usage given for the whole view.
                 usage = self.usage
-            s = zapi.queryService(None, zapi.servicenames.Presentation)
-            if s is not None:
-                # on startup the service is not immediately there...
+            try:
+                s = zapi.getService(None, zapi.servicenames.Presentation)
+            except ComponentLookupError, err:
+                pass
+            else:
                 s.useUsage(usage)
             if template:
                 cdict[pname] = ViewPageTemplateFile(template, usage=usage)

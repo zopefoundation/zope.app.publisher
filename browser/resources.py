@@ -13,17 +13,16 @@
 ##############################################################################
 """Resource URL acess
 
-$Id: resources.py,v 1.11 2003/11/21 17:10:31 jim Exp $
+$Id: resources.py,v 1.12 2004/03/02 14:24:31 srichter Exp $
 """
-__metaclass__ = type # All classes are new style when run with Python 2.2+
-
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher
-from zope.component import getService
-from zope.app.services.servicenames import Presentation
 from zope.exceptions import NotFoundError
 from zope.interface import implements
+
+from zope.app import zapi
 from zope.app.location import locate
+from zope.app.services.servicenames import Presentation
 
 class Resources(BrowserView):
     """Provide a URL-accessible resource namespace
@@ -34,7 +33,7 @@ class Resources(BrowserView):
     def publishTraverse(self, request, name):
         '''See interface IBrowserPublisher'''
 
-        resource_service = getService(self, Presentation)
+        resource_service = zapi.getService(self, Presentation)
         resource = resource_service.queryResource(name, request)
         if resource is None:
             raise NotFoundError(self, name)
@@ -43,7 +42,7 @@ class Resources(BrowserView):
         return resource
 
     def browserDefault(self, request):
-        '''See interface IBrowserPublisher'''
+        '''See IBrowserPublisher'''
         return empty, ()
 
     def __getitem__(self, name):
