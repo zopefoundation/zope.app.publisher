@@ -13,14 +13,12 @@
 ##############################################################################
 """Browser-Specific Publisher interfaces
 
-$Id: browser.py,v 1.3 2004/03/23 22:08:06 srichter Exp $
+$Id: browser.py,v 1.4 2004/04/24 23:17:58 srichter Exp $
 """
 from zope.component.interfaces import IView
-from zope.app.component.interfacefield import InterfaceField
 from zope.app.i18n import ZopeMessageIDFactory as _
-from zope.app.security.permission import PermissionField
 from zope.interface import Interface
-from zope.schema import TextLine, Text
+from zope.schema import TextLine, Text, Choice
 
 
 class IBrowserView(IView):
@@ -30,9 +28,10 @@ class IBrowserMenuItem(Interface):
     """A menu item represents one view. These views might be conditioned
     (using a filter) or being selected to be the default view of the menu."""
 
-    interface = InterfaceField(
+    interface = Choice(
         title=_('interface-component', "Interface"),
         description=_("Specifies the interface this menu item is for."),
+        vocabulary="Interfaces",
         required=True)
 
     action = TextLine(
@@ -52,7 +51,7 @@ class IBrowserMenuItem(Interface):
                       "when the user requests more assistance."),
         required=False)
 
-    permission = PermissionField(
+    permission = Choice(
         title=_("The permission needed access the item"),
         description=_("This can usually be inferred by the system, however, "
                       "doing so may be expensive. When displaying a menu, "
@@ -60,6 +59,7 @@ class IBrowserMenuItem(Interface):
                       "each action to determine whether the url is "
                       "accessible to the current user. This can be avoided "
                       "if the permission is given explicitly."),
+        vocabulary="Permissions",
         required=False)
 
     filter_string = TextLine(
