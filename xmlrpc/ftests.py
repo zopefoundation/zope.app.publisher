@@ -16,6 +16,10 @@
 $Id$
 """
 import sys
+import zope.interface
+import zope.app.folder.folder
+import zope.publisher.interfaces.xmlrpc
+from zope.app.tests import ztapi
 
 # Evil hack to make pickling work with classes defined in doc tests
 class NoCopyDict(dict):
@@ -40,6 +44,26 @@ def setUp():
     sys.modules[name] = FakeModule(globs)
 
 def tearDown():
+    # clean up the views we registered:
+    
+    # we use the fact that registering None unregisters whatever is
+    # registered. We can't use an unregistration call because that
+    # requires the object that was registered and we don't have that handy.
+    # (OK, we could get it if we want. Maybe later.)
+
+    ztapi.provideView(zope.app.folder.folder.IFolder,
+                        zope.publisher.interfaces.xmlrpc.IXMLRPCRequest,
+                        zope.interface,
+                        'contents',
+                        None,
+                        )
+    ztapi.provideView(zope.app.folder.folder.IFolder,
+                        zope.publisher.interfaces.xmlrpc.IXMLRPCRequest,
+                        zope.interface,
+                        'contents',
+                        None,
+                        )
+    
     globs.clear()
     del sys.modules[name]
 
