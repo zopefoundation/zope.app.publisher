@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.13 2003/02/11 15:59:53 sidnei Exp $
+$Id: viewmeta.py,v 1.14 2003/02/12 02:17:27 seanb Exp $
 """
 
 import os
@@ -29,7 +29,7 @@ from zope.configuration.interfaces import ISubdirectiveHandler
 from zope.configuration.action import Action
 from zope.configuration.exceptions import ConfigurationError
 
-from zope.component.servicenames import Interfaces
+from zope.app.services.servicenames import Interfaces
 
 from zope.publisher.interfaces.browser import IBrowserPresentation
 from zope.publisher.interfaces.browser import IBrowserPublisher

@@ -21,7 +21,7 @@ from zope.configuration.exceptions import ConfigurationError
 from zope.component.tests.views import IC, V1, VZMI, R1, RZMI
 from zope.component import getView, queryView, queryResource
 from zope.component import getDefaultViewName, getResource
-from zope.component.servicenames import Permissions
+from zope.app.services.servicenames import Permissions
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.security.proxy import ProxyFactory
 from zope.proxy.introspection import removeAllProxies

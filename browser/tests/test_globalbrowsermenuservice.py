@@ -15,7 +15,7 @@
 
 XXX longer description goes here.
 
-$Id: test_globalbrowsermenuservice.py,v 1.6 2003/02/11 15:59:54 sidnei Exp $
+$Id: test_globalbrowsermenuservice.py,v 1.7 2003/02/12 02:17:28 seanb Exp $
 """
 
 from unittest import TestCase, TestSuite, main, makeSuite
@@ -26,7 +26,7 @@ from zope.publisher.browser import TestRequest
 from zope.app.tests.placelesssetup import PlacelessSetup
 
 from zope.component.service import serviceManager
-from zope.component.servicenames import Permissions
+from zope.app.services.servicenames import Permissions
 from zope.app.security.registries.permissionregistry import permissionRegistry
 from zope.app.interfaces.security import IPermissionService
 from zope.security.management import newSecurityManager

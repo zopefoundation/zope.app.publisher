@@ -14,7 +14,7 @@
 """Icon support
 
 
-$Id: icon.py,v 1.5 2003/02/11 15:59:53 sidnei Exp $
+$Id: icon.py,v 1.6 2003/02/12 02:17:27 seanb Exp $
 """
 
 import os
@@ -26,7 +26,7 @@ from zope.app.publisher.browser import metaconfigure
 from zope.app.traversing.namespace import getResourceInContext
 from zope.publisher.interfaces.browser import IBrowserPresentation
 from zope.configuration.exceptions import ConfigurationError
-from zope.component.servicenames import Interfaces
+from zope.app.services.servicenames import Interfaces
 
 __metaclass__ = type
 

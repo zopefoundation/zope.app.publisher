@@ -13,13 +13,13 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: metaconfigure.py,v 1.4 2003/02/11 15:59:53 sidnei Exp $
+$Id: metaconfigure.py,v 1.5 2003/02/12 02:17:27 seanb Exp $
 """
 
 from zope.configuration.action import Action
 
 from zope.publisher.interfaces.browser import IBrowserPresentation
-from zope.component.servicenames import Interfaces
+from zope.app.services.servicenames import Interfaces
 
 from zope.app.component.metaconfigure \
      import defaultView as _defaultView, skin as _skin, handler

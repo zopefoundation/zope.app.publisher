@@ -13,7 +13,7 @@
 ##############################################################################
 """XMLRPC configuration code
 
-$Id: metaconfigure.py,v 1.6 2003/02/11 15:59:54 sidnei Exp $
+$Id: metaconfigure.py,v 1.7 2003/02/12 02:17:30 seanb Exp $
 """
 
 from zope.security.proxy import Proxy
@@ -25,7 +25,7 @@ from zope.configuration.interfaces import ISubdirectiveHandler
 from zope.configuration.action import Action
 from zope.configuration.exceptions import ConfigurationError
 
-from zope.component.servicenames import Interfaces
+from zope.app.services.servicenames import Interfaces
 
 from zope.publisher.interfaces.xmlrpc import IXMLRPCPresentation
 

@@ -21,7 +21,7 @@ from zope.interface.type import TypeRegistry
 from zope.configuration.interfaces import INonEmptyDirective
 from zope.configuration.interfaces import ISubdirectiveHandler
 
-from zope.component.servicenames import Interfaces
+from zope.app.services.servicenames import Interfaces
 
 from zope.security.checker import CheckerPublic
 from zope.security.management import getSecurityManager
@@ -207,5 +207,5 @@ del addCleanUp
 
 __doc__ = GlobalBrowserMenuService.__doc__ + """
 
-$Id: globalbrowsermenuservice.py,v 1.10 2003/02/11 15:59:53 sidnei Exp $
+$Id: globalbrowsermenuservice.py,v 1.11 2003/02/12 02:17:27 seanb Exp $
 """
