@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_resources.py,v 1.3 2002/12/31 02:52:03 jim Exp $
+$Id: test_resources.py,v 1.4 2003/01/25 13:19:27 jim Exp $
 """
 
 from unittest import TestCase, TestSuite, main, makeSuite
@@ -36,8 +36,7 @@ class Test(PlacelessSetup, TestCase):
         PlacelessSetup.setUp(self)
         provideAdapter(IHTTPRequest, IUserPreferredCharsets, HTTPCharsets)
 
-
-    def test(self):
+    def test_publishTraverse(self):
         from zope.app.publisher.browser.resources import Resources
         request = TestRequest()
 
@@ -48,6 +47,19 @@ class Test(PlacelessSetup, TestCase):
         provideResource('test', IBrowserView, Resource)
         view = Resources(None, request)
         resource = view.publishTraverse(request, 'test')
+        self.assertEqual(resource(), 42)
+
+    def test_getitem(self):
+        from zope.app.publisher.browser.resources import Resources
+        request = TestRequest()
+
+        class Resource:
+            def __init__(self, request): pass
+            def __call__(self): return 42
+
+        provideResource('test', IBrowserView, Resource)
+        view = Resources(None, request)
+        resource = view['test']
         self.assertEqual(resource(), 42)
 
     def testNotFound(self):
