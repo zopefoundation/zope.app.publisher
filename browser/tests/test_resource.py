@@ -13,12 +13,12 @@
 ##############################################################################
 """Unit tests for Resource
 
-$Id: test_resource.py,v 1.2 2003/05/27 14:18:23 jim Exp $
+$Id: test_resource.py,v 1.3 2003/06/01 15:59:35 jim Exp $
 """
 
 import unittest
 from zope.publisher.browser import TestRequest
-from zope.context import ContextWrapper
+from zope.app.context import ContextWrapper
 
 class TestResource(unittest.TestCase):
 
