@@ -13,7 +13,7 @@
 ##############################################################################
 """Global Browser Menu Tests
 
-$Id: test_globalbrowsermenuservice.py,v 1.13 2003/09/24 01:52:33 garrett Exp $
+$Id: test_globalbrowsermenuservice.py,v 1.14 2003/12/03 05:41:34 jim Exp $
 """
 import unittest
 from zope.app.tests.placelesssetup import PlacelessSetup
@@ -55,7 +55,8 @@ def d(n):
     return {'action': "a%s" % n,
             'title':  "t%s" % n,
             'description':  "d%s" % n,
-            'selected': ''
+            'selected': '',
+            'extra': None
             }
 
 
@@ -144,7 +145,8 @@ class GlobalBrowserMenuServiceTest(PlacelessSetup, unittest.TestCase):
             return {'action': "a%s" % n,
                     'title':  "t%s" % n,
                     'description':  "d%s" % n,
-                    'selected': selected}
+                    'selected': selected,
+                    'extra': None}
 
         menu = r.getMenu('test_id', TestObject(),
             TestRequest(SERVER_URL='http://127.0.0.1/a1', PATH_INFO='/a1'))
@@ -179,7 +181,8 @@ class GlobalBrowserMenuServiceTest(PlacelessSetup, unittest.TestCase):
             return {'action': "a%s" % s,
                     'title':  "t%s" % s,
                     'description':  "d%s" % s,
-                    'selected': selected}
+                    'selected': selected,
+                    'extra': None}
 
         menu = r.getMenu('test_id', TestObject(),
             TestRequest(SERVER_URL='http://127.0.0.1/aA', PATH_INFO='/aA'))
@@ -215,11 +218,13 @@ class GlobalBrowserMenuServiceTest(PlacelessSetup, unittest.TestCase):
         r.menuItem('test_id', I12, 'a9', 't9', 'd9')
 
         def d(n):
-            return ('a%s' %n, 't%s' %n, 'd%s' %n, None, None) 
+            return ('a%s' %n, 't%s' %n, 'd%s' %n, None, None, None) 
 
-        menu = r.getAllMenuItems('test_id', TestObject())
-        self.assertEqual(list(menu), [d(5), d(6), d(7), d(8), d(3),
-                                      d(2), d(1)])
+        menu = [(item.action, item.title, item.description,
+                 item.filter, item.permission, item.extra)
+                for item in r.getAllMenuItems('test_id', TestObject())
+                ]
+        self.assertEqual(menu, [d(5), d(6), d(7), d(8), d(3), d(2), d(1)])
 
 
 

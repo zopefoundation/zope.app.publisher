@@ -13,7 +13,7 @@
 ##############################################################################
 """Global Browser Menu Service
 
-$Id: globalbrowsermenuservice.py,v 1.26 2003/09/24 01:52:33 garrett Exp $
+$Id: globalbrowsermenuservice.py,v 1.27 2003/12/03 05:41:34 jim Exp $
 """
 __metaclass__ = type 
 
@@ -26,8 +26,9 @@ from zope.security.checker import CheckerPublic
 from zope.security.management import getSecurityManager
 from zope.app.security.permission import checkPermission
 from zope.app.component.metaconfigure import handler
-from zope.app.interfaces.publisher.browser import \
-     IBrowserMenuService, IGlobalBrowserMenuService, IBrowserMenu
+from zope.app.interfaces.publisher.browser import IBrowserMenuService
+from zope.app.interfaces.publisher.browser import IGlobalBrowserMenuService
+from zope.app.interfaces.publisher.browser import IBrowserMenu
 from zope.app.pagetemplate.engine import Engine
 from zope.app.publication.browser import PublicationTraverser
 from zope.security.proxy import ProxyFactory
@@ -55,6 +56,26 @@ class Menu:
         return results
 
 
+class MenuItem:
+    """Browser menu item"""
+
+    def __init__(self, action, title, description, filter, permission,
+                 extra = None):
+        self.action = action
+        self.title = title
+        self.description = description
+        self.filter = filter
+        self.permission = permission
+        self.extra = extra
+
+    def __iter__(self):
+        # for backward compatability with code that thinks items are tuples
+        yield self.action
+        yield self.title
+        yield self.description
+        yield self.filter
+        yield self.permission
+
 class BaseBrowserMenuService:
     """Global Browser Menu Service"""
 
@@ -76,18 +97,18 @@ class BaseBrowserMenuService:
         # stuff for figuring out the selected view
         request_url = request.getURL()
 
-        for items in self.getAllMenuItems(menu_id, object):
-            action, title, description, filter, permission = items
+        for item in self.getAllMenuItems(menu_id, object):
 
             # Make sure we don't repeat a specification for a given title
+            title = item.title
             if title in seen:
                 continue
             seen[title] = 1
 
-            if filter is not None:
+            if item.filter is not None:
 
                 try:
-                    include = filter(Engine.getContext(
+                    include = item.filter(Engine.getContext(
                         context = object,
                         nothing = None,
                         request = request,
@@ -99,6 +120,9 @@ class BaseBrowserMenuService:
                 if not include:
                     continue
 
+            permission = item.permission
+            action = item.action
+            
             if permission:
                 # If we have an explicit permission, check that we
                 # can access it.
@@ -138,9 +162,10 @@ class BaseBrowserMenuService:
 
             result.append({
                 'title': title,
-                'description': description,
+                'description': item.description,
                 'action': "%s" % action,
-                'selected': selected
+                'selected': selected,
+                'extra': item.extra,
                 })
 
             if len(result) >= max:
@@ -180,6 +205,7 @@ class GlobalBrowserMenuService(BaseBrowserMenuService):
 
     def menuItem(self, menu_id, interface, action, title,
                  description='', filter_string=None, permission=None,
+                 extra=None,
                  ):
 
         registry = self._registry[menu_id].registry
@@ -196,7 +222,9 @@ class GlobalBrowserMenuService(BaseBrowserMenuService):
                 checkPermission(None, permission)
 
         data = registry.get(interface) or []
-        data.append((action, title, description, filter, permission))
+        data.append(
+            MenuItem(action, title, description, filter, permission, extra)
+            )
         registry.register(interface, data)
 
 
@@ -209,9 +237,9 @@ def menuDirective(_context, id, title, description='', usage=u''):
 
 def menuItemDirective(_context, menu, for_,
                       action, title, description='', filter=None,
-                      permission=None):
+                      permission=None, extra=None):
     return menuItemsDirective(_context, menu, for_).menuItem(
-        _context, action, title, description, filter, permission)
+        _context, action, title, description, filter, permission, extra)
 
 
 class menuItemsDirective:
@@ -221,13 +249,13 @@ class menuItemsDirective:
         self.menu = menu
 
     def menuItem(self, _context, action, title, description='',
-                 filter=None, permission=None):
+                 filter=None, permission=None, extra=None):
         _context.action(
             discriminator = ('browser:menuItem',
                              self.menu, self.interface, title),
             callable = globalBrowserMenuService.menuItem,
             args = (self.menu, self.interface,
-                    action, title, description, filter, permission),
+                    action, title, description, filter, permission, extra),
             ),
 
     def __call__(self, _context):
