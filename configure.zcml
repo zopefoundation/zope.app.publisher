@@ -2,4 +2,10 @@
   <include package=".browser" />
   <!-- XXX Decoy: include package='.xmlrpc' / -->
   <include file="http.zcml" />
+
+  <interface interface="zope.publisher.interfaces.vfs.IVFSPresentation" />
+  <interface 
+     interface="zope.publisher.interfaces.xmlrpc.IXMLRPCPresentation" 
+     />
+
 </zopeConfigure>
