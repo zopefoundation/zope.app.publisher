@@ -1,4 +1,4 @@
-<zopeConfigure xmlns='http://namespaces.zope.org/zope' >
+<configure xmlns='http://namespaces.zope.org/zope' >
   <include package=".browser" />
   <include file="http.zcml" />
 
@@ -6,4 +6,4 @@
      interface="zope.publisher.interfaces.xmlrpc.IXMLRPCPresentation"
      />
 
-</zopeConfigure>
+</configure>

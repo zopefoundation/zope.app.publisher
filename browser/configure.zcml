@@ -1,4 +1,4 @@
-<zopeConfigure
+<configure
    xmlns="http://namespaces.zope.org/zope"
    xmlns:browser="http://namespaces.zope.org/browser">
 
@@ -65,4 +65,4 @@
     allowed_interface="zope.publisher.interfaces.browser.IBrowserPublisher"
     />
 
-</zopeConfigure>
+</configure>
