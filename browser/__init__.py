@@ -13,7 +13,7 @@
 ##############################################################################
 """Provide zope app-server customizatioin of publisher browser facilities
 
-$Id: __init__.py,v 1.3 2003/09/21 17:32:39 jim Exp $
+$Id: __init__.py,v 1.4 2003/10/29 20:25:27 sidnei Exp $
 """
 
 import zope.publisher.browser
@@ -28,4 +28,4 @@ class BrowserView(zope.publisher.browser.BrowserView,
         self.request = request
         self.__parent__ = context
 
-        
+
