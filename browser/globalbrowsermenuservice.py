@@ -19,7 +19,6 @@ __metaclass__ = type
 
 import sys
 from zope.exceptions import DuplicationError, Unauthorized, Forbidden
-from zope.interface.type import TypeRegistry
 from zope.interface import implements
 from zope.security.checker import CheckerPublic
 from zope.security import checkPermission
@@ -37,6 +36,48 @@ from zope.security.proxy import ProxyFactory
 from zope.app import zapi
 from zope.app.component.interface import provideInterface
 from zope.app.servicenames import BrowserMenu
+
+
+# XXX This was copied and trimmed down from zope.interface.
+# Eventually, this will be eliminated when the browser menu
+# service is changed to use adapters.
+from zope.interface.interfaces import IInterface
+from zope.interface import providedBy
+import types
+class TypeRegistry:
+
+    def __init__(self):
+        self._reg = {}
+
+    def register(self, interface, object):
+        if not (interface is None or IInterface.providedBy(interface)):
+            if isinstance(interface, (type, types.ClassType)):
+                interface = zope.interface.implementedBy(interface)
+            else:
+                raise TypeError(
+                    "The interface argument must be an interface (or None)")
+        
+        self._reg[interface] = object
+
+    def get(self, interface, default=None):
+        return self._reg.get(interface, default)
+
+    def getAll(self, interface_spec):
+        result = []
+        for interface in interface_spec.flattened():
+            object = self._reg.get(interface)
+            if object is not None:
+                result.append(object)
+
+        if interface_spec is not None:
+            object = self._reg.get(None)
+            if object is not None:
+                result.append(object)
+
+        return result
+
+    def getAllForObject(self, object):
+        return self.getAll(providedBy(object))
 
 
 class MenuAccessView(BrowserView):
