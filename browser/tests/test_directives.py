@@ -15,6 +15,7 @@
 
 $Id$
 """
+
 import os
 import unittest
 from cStringIO import StringIO
@@ -110,15 +111,14 @@ class Test(PlacelessSetup, unittest.TestCase):
                          None)
 
         xmlconfig(StringIO(template % (
-            '''
-            <browser:page
-                name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public"
-                attribute="index"
-                />
-            '''
+            """
+            <browser:page name="test"
+                          class="zope.app.component.tests.views.V1"
+                          for="zope.app.component.tests.views.IC"
+                          permission="zope.Public"
+                          attribute="index"
+                          />
+            """
             )))
 
         v = queryView(ob, 'test', request)
@@ -131,19 +131,17 @@ class Test(PlacelessSetup, unittest.TestCase):
                          
 
         xmlconfig(StringIO(template % (
-            '''
-            <browser:menu
-                id="test_menu" title="Test menu" />
-            <browser:page
-                name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public"
-                template="%s" 
-                menu="test_menu"
-                title="Test View"
-                />
-            ''' % testtemplate
+            """
+            <browser:menu id="test_menu" title="Test menu" />
+            <browser:page name="test"
+                          class="zope.app.component.tests.views.V1"
+                          for="zope.app.component.tests.views.IC"
+                          permission="zope.Public"
+                          template="%s" 
+                          menu="test_menu"
+                          title="Test View"
+                          />
+            """ % testtemplate
             )))
 
         menuItem = globalBrowserMenuService.getFirstMenuItem(
@@ -160,18 +158,16 @@ class Test(PlacelessSetup, unittest.TestCase):
         testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
                          
         xmlconfig(StringIO(template % (
-            '''
-            <browser:menu
-                id="test_menu" title="Test menu"/>
-            <browser:page
-                name="test"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public"
-                template="%s" 
-                menu="test_menu"
-                title="Test View"
-                />
-            ''' % testtemplate
+            """
+            <browser:menu id="test_menu" title="Test menu"/>
+            <browser:page name="test"
+                          for="zope.app.component.tests.views.IC"
+                          permission="zope.Public"
+                          template="%s" 
+                          menu="test_menu"
+                          title="Test View"
+                          />
+            """ % testtemplate
             )))
 
         menuItem = globalBrowserMenuService.getFirstMenuItem(
@@ -188,20 +184,17 @@ class Test(PlacelessSetup, unittest.TestCase):
         testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
 
         xmlconfig(StringIO(template % (
-            '''
-            <browser:menu
-                id="test_menu" title="Test menu" />
-            <browser:pages
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public">
-              <browser:page
-                  name="test"
-                  template="%s" 
-                  menu="test_menu"
-                  title="Test View"
-                  />
+            """
+            <browser:menu id="test_menu" title="Test menu" />
+            <browser:pages for="zope.app.component.tests.views.IC"
+                          permission="zope.Public">
+                <browser:page name="test"
+                              template="%s" 
+                              menu="test_menu"
+                              title="Test View"
+                              />
             </browser:pages>                  
-            ''' % testtemplate
+            """ % testtemplate
             )))
 
         menuItem = globalBrowserMenuService.getFirstMenuItem(
@@ -219,21 +212,18 @@ class Test(PlacelessSetup, unittest.TestCase):
                          
 
         xmlconfig(StringIO(template % (
-            '''
-            <browser:menu
-                id="test_menu" title="Test menu" />
-            <browser:pages
-                for="zope.app.component.tests.views.IC"
-                class="zope.app.component.tests.views.V1"
-                permission="zope.Public">
-              <browser:page
-                  name="test"
-                  template="%s" 
-                  menu="test_menu"
-                  title="Test View"
-                  />
+            """
+            <browser:menu id="test_menu" title="Test menu" />
+            <browser:pages for="zope.app.component.tests.views.IC"
+                           class="zope.app.component.tests.views.V1"
+                           permission="zope.Public">
+                <browser:page name="test"
+                              template="%s" 
+                              menu="test_menu"
+                              title="Test View"
+                              />
             </browser:pages>                  
-            ''' % testtemplate
+            """ % testtemplate
             )))
 
         menuItem = globalBrowserMenuService.getFirstMenuItem(
@@ -248,11 +238,10 @@ class Test(PlacelessSetup, unittest.TestCase):
                                    None), None)
 
         xmlconfig(StringIO(template % (
-            '''
-            <browser:defaultView
-                name="test"
-                for="zope.app.component.tests.views.IC" />
-            '''
+            """
+            <browser:defaultView name="test"
+                                 for="zope.app.component.tests.views.IC" />
+            """
             )))
 
         self.assertEqual(getDefaultViewName(ob, request
@@ -267,12 +256,12 @@ class Test(PlacelessSetup, unittest.TestCase):
             <browser:layer name="zmi" />
             <browser:skin name="zmi" layers="zmi default" />
             <browser:resource
-                name="test"
-                factory="zope.app.component.tests.views.RZMI"
-                layer="zmi" />
+                  name="test"
+                  factory="zope.app.component.tests.views.RZMI"
+                  layer="zmi" />
             <browser:resource
-                name="test"
-                factory="zope.app.component.tests.views.R1" />
+                  name="test"
+                  factory="zope.app.component.tests.views.R1" />
             '''
             )))
 
@@ -290,18 +279,18 @@ class Test(PlacelessSetup, unittest.TestCase):
             <browser:skin name="zmi" layers="zmi default" />
             <browser:defaultSkin name="zmi" />
             <browser:page name="test"
-                class="zope.app.component.tests.views.VZMI"
-                layer="zmi"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public"
-                attribute="index"
-                />
+                  class="zope.app.component.tests.views.VZMI"
+                  layer="zmi"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public"
+                  attribute="index"
+                  />
             <browser:page name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public"
-                attribute="index"
-                />
+                  class="zope.app.component.tests.views.V1"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public"
+                  attribute="index"
+                  />
             '''
             )))
         v = queryView(ob, 'test', TestRequest(skin=''))
@@ -311,23 +300,23 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(queryView(ob, 'test', request, None), None)
 
         xmlconfig(StringIO(template % (
-            '''
+            """
             <browser:layer name="zmi" />
             <browser:skin name="zmi" layers="zmi default" />
             <browser:page name="test"
-                class="zope.app.component.tests.views.VZMI"
-                layer="zmi"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public"
-                attribute="index"
-                />
+                  class="zope.app.component.tests.views.VZMI"
+                  layer="zmi"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public"
+                  attribute="index"
+                  />
             <browser:page name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public"
-                attribute="index"
-                />
-            '''
+                  class="zope.app.component.tests.views.V1"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public"
+                  attribute="index"
+                  />
+            """
             )))
 
         v = queryView(ob, 'test', request)
@@ -342,12 +331,12 @@ class Test(PlacelessSetup, unittest.TestCase):
         path2 = os.path.join(tests_path, 'testfiles', 'test2.pt')
 
         xmlconfig(StringIO(template % (
-            '''
+            """
             <browser:i18n-resource name="test" defaultLanguage="fr">
               <browser:translation language="en" file="%s" />
               <browser:translation language="fr" file="%s" />
             </browser:i18n-resource>
-            ''' % (path1, path2)
+            """ % (path1, path2)
             )))
 
         v = getResource('test', request)
@@ -359,37 +348,37 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         # translation must be provided for the default language
         config = StringIO(template % (
-            '''
+            """
             <browser:i18n-resource name="test" defaultLanguage="fr">
               <browser:translation language="en" file="%s" />
               <browser:translation language="lt" file="%s" />
             </browser:i18n-resource>
-            ''' % (path1, path2)
+            """ % (path1, path2)
             ))
         self.assertRaises(ConfigurationError, xmlconfig, config)
 
         # files and images can't be mixed
         config = StringIO(template % (
-            '''
+            """
             <browser:i18n-resource name="test" defaultLanguage="fr">
               <browser:translation language="en" file="%s" />
               <browser:translation language="fr" image="%s" />
             </browser:i18n-resource>
-            ''' % (path1, path2)
+            """ % (path1, path2)
             ))
         self.assertRaises(ConfigurationError, xmlconfig, config)
 
     def testInterfaceProtectedPage(self):
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:page name="test"
-                class="zope.app.component.tests.views.V1"
-                attribute="index"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public"
-                allowed_interface="zope.app.component.tests.views.IV"
-                />
-            '''
+                  class="zope.app.component.tests.views.V1"
+                  attribute="index"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public"
+              allowed_interface="zope.app.component.tests.views.IV"
+                  />
+            """
             ))
 
         v = getView(ob, 'test', request)
@@ -399,15 +388,15 @@ class Test(PlacelessSetup, unittest.TestCase):
 
     def testAttributeProtectedPage(self):
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:page name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
-                attribute="action"
-                permission="zope.Public"
-                allowed_attributes="action"
-                />
-            '''
+                  class="zope.app.component.tests.views.V1"
+                  for="zope.app.component.tests.views.IC"
+                  attribute="action"
+                  permission="zope.Public"
+                  allowed_attributes="action"
+                  />
+            """
             ))
 
         v = getView(ob, 'test', request)
@@ -417,16 +406,16 @@ class Test(PlacelessSetup, unittest.TestCase):
 
     def testInterfaceAndAttributeProtectedPage(self):
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:page name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public"
-                attribute="index"
-                allowed_attributes="action"
-                allowed_interface="zope.app.component.tests.views.IV"
-                />
-            '''
+                  class="zope.app.component.tests.views.V1"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public"
+                  attribute="index"
+                  allowed_attributes="action"
+                  allowed_interface="zope.app.component.tests.views.IV"
+                  />
+            """
             ))
 
         v = getView(ob, 'test', request)
@@ -435,16 +424,16 @@ class Test(PlacelessSetup, unittest.TestCase):
 
     def testDuplicatedInterfaceAndAttributeProtectedPage(self):
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:page name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
-                attribute="index"
-                permission="zope.Public"
-                allowed_attributes="action index"
-                allowed_interface="zope.app.component.tests.views.IV"
-                />
-            '''
+                  class="zope.app.component.tests.views.V1"
+                  for="zope.app.component.tests.views.IC"
+                  attribute="index"
+                  permission="zope.Public"
+                  allowed_attributes="action index"
+                  allowed_interface="zope.app.component.tests.views.IV"
+                  />
+            """
             ))
 
         v = getView(ob, 'test', request)
@@ -453,16 +442,16 @@ class Test(PlacelessSetup, unittest.TestCase):
 
     def test_class_w_implements(self):
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:page
-                name="test"
-                class="
+                  name="test"
+                  class="
              zope.app.publisher.browser.tests.test_directives.C_w_implements"
-                for="zope.app.component.tests.views.IC"
-                attribute="index"
-                permission="zope.Public"
-                />
-            '''
+                  for="zope.app.component.tests.views.IC"
+                  attribute="index"
+                  permission="zope.Public"
+                  />
+            """
             ))
 
         v = getView(ob, 'test', request)
@@ -474,14 +463,14 @@ class Test(PlacelessSetup, unittest.TestCase):
             ConfigurationError,
             xmlconfig,
             StringIO(template %
-            '''
+            """
             <browser:page name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
-                attribute="index"
-                allowed_attributes="action index"
-                />
-            '''
+                  class="zope.app.component.tests.views.V1"
+                  for="zope.app.component.tests.views.IC"
+                  attribute="index"
+                  allowed_attributes="action index"
+                  />
+            """
             ))
 
 
@@ -490,18 +479,18 @@ class Test(PlacelessSetup, unittest.TestCase):
         test3 = os.path.join(tests_path, 'testfiles', 'test3.pt')
 
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:pages
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public"
-                >
+                  class="zope.app.component.tests.views.V1"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public"
+                  >
 
-              <browser:page name="index.html" attribute="index" />
-              <browser:page name="action.html" attribute="action" />
-              <browser:page name="test.html" template="%s" />
+                <browser:page name="index.html" attribute="index" />
+                <browser:page name="action.html" attribute="action" />
+                <browser:page name="test.html" template="%s" />
             </browser:pages>
-            ''' % test3
+            """ % test3
             ))
 
         v = getView(ob, 'index.html', request)
@@ -515,18 +504,18 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(queryView(ob, 'test', request), None)
 
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:view
-                name="test"
-                class="zope.app.publisher.browser.tests.test_directives.V1"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public"
-                >
+                  name="test"
+                  class="zope.app.publisher.browser.tests.test_directives.V1"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public"
+                  >
 
-              <browser:page name="index.html" attribute="index" />
-              <browser:page name="action.html" attribute="action" />
+                <browser:page name="index.html" attribute="index" />
+                <browser:page name="action.html" attribute="action" />
             </browser:view>
-            '''
+            """
             ))
 
         view = getView(ob, 'test', request)
@@ -546,14 +535,14 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(queryView(ob, 'test', request), None)
 
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:view
-                name="test"
-                class="zope.app.publisher.browser.tests.test_directives.CV"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public"
-                />
-            '''
+                  name="test"
+                  class="zope.app.publisher.browser.tests.test_directives.CV"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public"
+                  />
+            """
             ))
 
         view = getView(ob, 'test', request)
@@ -564,14 +553,14 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(queryView(ob, 'test', request), None)
 
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:view
-                name="test"
-                class="zope.app.publisher.browser.tests.test_directives.NCV"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public"
-                />
-            '''
+                  name="test"
+                  class="zope.app.publisher.browser.tests.test_directives.NCV"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public"
+                  />
+            """
             ))
 
         view = getView(ob, 'test', request)
@@ -583,19 +572,19 @@ class Test(PlacelessSetup, unittest.TestCase):
         test3 = os.path.join(tests_path, 'testfiles', 'test3.pt')
 
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:view
-                name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public"
-                >
+                  name="test"
+                  class="zope.app.component.tests.views.V1"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public"
+                  >
 
-              <browser:page name="index.html" attribute="index" />
-              <browser:page name="action.html" attribute="action" />
-              <browser:page name="test.html" template="%s" />
+                <browser:page name="index.html" attribute="index" />
+                <browser:page name="action.html" attribute="action" />
+                <browser:page name="test.html" template="%s" />
             </browser:view>
-            ''' % test3
+            """ % test3
             ))
 
         view = getView(ob, 'test', request)
@@ -618,20 +607,20 @@ class Test(PlacelessSetup, unittest.TestCase):
         test3 = os.path.join(tests_path, 'testfiles', 'test3.pt')
 
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:view
-                name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public"
-                >
-            
-              <browser:defaultPage name="test.html" />
-              <browser:page name="index.html" attribute="index" />
-              <browser:page name="action.html" attribute="action" />
-              <browser:page name="test.html" template="%s" />
+                  name="test"
+                  class="zope.app.component.tests.views.V1"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public"
+                  >
+
+                <browser:defaultPage name="test.html" />
+                <browser:page name="index.html" attribute="index" />
+                <browser:page name="action.html" attribute="action" />
+                <browser:page name="test.html" template="%s" />
             </browser:view>
-            ''' % test3
+            """ % test3
             ))
 
         view = getView(ob, 'test', request)
@@ -653,18 +642,18 @@ class Test(PlacelessSetup, unittest.TestCase):
         """Tests proper traversal of a page defined for a view."""
         
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:view
-                name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public" />
+                  name="test"
+                  class="zope.app.component.tests.views.V1"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public" />
 
             <browser:page name="index.html"
                 for="zope.app.component.tests.views.IV" 
                 class="zope.app.publisher.browser.tests.test_directives.CV"
                 permission="zope.Public" />
-            '''
+            """
             ))
 
         view = getView(ob, 'test', request)
@@ -680,18 +669,18 @@ class Test(PlacelessSetup, unittest.TestCase):
         case.
         """
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:view
-                name="test"
-                class="zope.app.publisher.browser.tests.test_directives.VT"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public" />
+                  name="test"
+                  class="zope.app.publisher.browser.tests.test_directives.VT"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public" />
 
             <browser:page name="index.html"
                 for="zope.app.component.tests.views.IV" 
                 class="zope.app.publisher.browser.tests.test_directives.CV"
                 permission="zope.Public" />
-            '''
+            """
             ))
 
         view = getView(ob, 'test', request)
@@ -706,21 +695,26 @@ class Test(PlacelessSetup, unittest.TestCase):
                          None)
 
         xmlconfig(StringIO(template %
-            '''
-            <include package="zope.app.security" file="meta.zcml" />
-            
+            """
+            <directives namespace="http://namespaces.zope.org/zope">
+              <directive name="permission"
+                 attributes="id title description"
+                 handler="
+             zope.app.security.metaconfigure.definePermission" />
+            </directives>
+
             <permission id="zope.TestPermission" title="Test permission" />
 
             <browser:pages
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.TestPermission"
-                >
-             
-              <browser:page name="index.html" attribute="index" />
-              <browser:page name="action.html" attribute="action" />
+                  class="zope.app.component.tests.views.V1"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.TestPermission"
+                  >
+
+                <browser:page name="index.html" attribute="index" />
+                <browser:page name="action.html" attribute="action" />
             </browser:pages>
-            '''
+            """
             ))
 
         v = getView(ob, 'index.html', request)
@@ -736,22 +730,27 @@ class Test(PlacelessSetup, unittest.TestCase):
                          None)
 
         xmlconfig(StringIO(template %
-            '''
-            <include package="zope.app.security" file="meta.zcml" />
+            """
+            <directives namespace="http://namespaces.zope.org/zope">
+              <directive name="permission"
+                 attributes="id title description"
+                 handler="
+             zope.app.security.metaconfigure.definePermission" />
+            </directives>
 
             <permission id="zope.TestPermission" title="Test permission" />
 
             <browser:view
-                name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public"
-                >
-             
-              <browser:page name="index.html" attribute="index" />
-              <browser:page name="action.html" attribute="action" />
+                  name="test"
+                  class="zope.app.component.tests.views.V1"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public"
+                  >
+
+                <browser:page name="index.html" attribute="index" />
+                <browser:page name="action.html" attribute="action" />
             </browser:view>
-            '''
+            """
             ))
 
         view = getView(ob, 'test', request)
@@ -764,27 +763,27 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(queryView(ob, 'test', request), None)
 
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:layer name="layer" />
             <browser:skin name="skinny" layers="layer default" />
             <browser:pages
-                for="*"
-                class="zope.app.component.tests.views.V1"
-                permission="zope.Public"
-                >
-             
-              <browser:page name="index.html" attribute="index" />
+                  for="*"
+                  class="zope.app.component.tests.views.V1"
+                  permission="zope.Public"
+                  >
+
+                <browser:page name="index.html" attribute="index" />
             </browser:pages>
             <browser:pages
-                for="*"
-                class="zope.app.component.tests.views.V1"
-                layer="layer"
-                permission="zope.Public"
-                >
-            
-              <browser:page name="index.html" attribute="action" />
+                  for="*"
+                  class="zope.app.component.tests.views.V1"
+                  layer="layer"
+                  permission="zope.Public"
+                  >
+
+                <browser:page name="index.html" attribute="action" />
             </browser:pages>
-            '''
+            """
             ))
 
         v = getView(ob, 'index.html', request)
@@ -798,12 +797,12 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(queryResource('test', request), None)
 
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:resource
-                name="index.html"
-                file="%s"
-                />
-            ''' % path
+                  name="index.html"
+                  file="%s"
+                  />
+            """ % path
             ))
 
         r = ProxyFactory(getResource('index.html', request))
@@ -828,12 +827,12 @@ class Test(PlacelessSetup, unittest.TestCase):
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
 
         xmlconfig(StringIO(template % (
-            '''
+            """
             <browser:layer name="zmi" />
             <browser:skin name="zmi" layers="zmi default" />
             <browser:resource name="test" file="%s" 
                   layer="zmi" />
-            ''' % path
+            """ % path
             )))
 
         self.assertEqual(queryResource('test', request), None)
@@ -849,13 +848,13 @@ class Test(PlacelessSetup, unittest.TestCase):
                          None)
 
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:page
-                name="index.html"
-                template="%s"
-                permission="zope.Public"
-                for="zope.app.component.tests.views.IC" />
-            ''' % path
+                  name="index.html"
+                  template="%s"
+                  permission="zope.Public"
+                  for="zope.app.component.tests.views.IC" />
+            """ % path
             ))
 
         v = getView(ob, 'index.html', request)
@@ -868,14 +867,14 @@ class Test(PlacelessSetup, unittest.TestCase):
                          None)
 
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:page
-                name="index.html"
-                template="%s"
-                permission="zope.Public"
+                  name="index.html"
+                  template="%s"
+                  permission="zope.Public"
           class="zope.app.publisher.browser.tests.templateclass.templateclass"
-                for="zope.app.component.tests.views.IC" />
-            ''' % path
+                  for="zope.app.component.tests.views.IC" />
+            """ % path
             ))
 
         v = getView(ob, 'index.html', request)
@@ -890,27 +889,32 @@ class Test(PlacelessSetup, unittest.TestCase):
                          None)
 
         xmlconfig(StringIO(template %
-            '''
-            <include package="zope.app.security" file="meta.zcml" />
+            """
+            <directives namespace="http://namespaces.zope.org/zope">
+              <directive name="permission"
+                 attributes="id title description"
+                 handler="
+               zope.app.security.metaconfigure.definePermission" />
+            </directives>
 
             <permission id="zope.TestPermission" title="Test permission" />
 
             <browser:page
-                name="xxx.html"
-                template="%s"
-                permission="zope.TestPermission"
-                for="zope.app.component.tests.views.IC" />
-            ''' % path
+                  name="xxx.html"
+                  template="%s"
+                  permission="zope.TestPermission"
+                  for="zope.app.component.tests.views.IC" />
+            """ % path
             ))
 
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:page
-                name="index.html"
-                template="%s"
-                permission="zope.Public"
-                for="zope.app.component.tests.views.IC" />
-            ''' % path
+                  name="index.html"
+                  template="%s"
+                  permission="zope.Public"
+                  for="zope.app.component.tests.views.IC" />
+            """ % path
             ))
 
         v = getView(ob, 'xxx.html', request)
@@ -929,12 +933,12 @@ class Test(PlacelessSetup, unittest.TestCase):
             ConfigurationError,
             xmlconfig,
             StringIO(template %
-            '''
+            """
             <browser:page
-                template="%s"
-                for="zope.app.component.tests.views.IC"
-                />
-            ''' % path
+                  template="%s"
+                  for="zope.app.component.tests.views.IC"
+                  />
+            """ % path
             ))
 
     def testtemplateAndPage(self):
@@ -943,16 +947,16 @@ class Test(PlacelessSetup, unittest.TestCase):
             ConfigurationError,
             xmlconfig,
             StringIO(template %
-            '''
+            """
             <browser:view
-                name="index.html"
-                template="%s"
-                for="zope.app.component.tests.views.IC"
-                permission="zope.Public"
-                >
-              <browser:page name="foo.html" attribute="index" />
+                  name="index.html"
+                  template="%s"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public"
+                  >
+               <browser:page name="foo.html" attribute="index" />
             </browser:view>
-            ''' % path
+            """ % path
             ))
 
     def testViewThatProvidesAnInterface(self):
@@ -960,21 +964,21 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(queryView(ob, 'test', request, None), None)
 
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:view
                 name="test"
                 class="zope.app.component.tests.views.V1"
                 for="zope.app.component.tests.views.IC"
                 permission="zope.Public"
                 />
-            '''
+            """
             ))
 
         v = queryView(ob, 'test', request, None, providing=IV)
         self.assertEqual(v, None)
 
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:view
                 name="test"
                 class="zope.app.component.tests.views.V1"
@@ -982,7 +986,7 @@ class Test(PlacelessSetup, unittest.TestCase):
                 provides="zope.app.component.tests.views.IV"
                 permission="zope.Public"
                 />
-            '''
+            """
             ))
 
         v = queryView(ob, 'test', request, None, providing=IV)
@@ -994,27 +998,27 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(queryView(ob, '', request, None, providing=IV), None)
 
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:view
                 class="zope.app.component.tests.views.V1"
                 for="zope.app.component.tests.views.IC"
                 permission="zope.Public"
                 />
-            '''
+            """
             ))
 
         v = queryView(ob, '', request, None, providing=IV)
         self.assertEqual(v, None)
 
         xmlconfig(StringIO(template %
-            '''
+            """
             <browser:view
                 class="zope.app.component.tests.views.V1"
                 for="zope.app.component.tests.views.IC"
                 provides="zope.app.component.tests.views.IV"
                 permission="zope.Public"
                 />
-            '''
+            """
             ))
 
         v = queryView(ob, '', request, None, providing=IV)
