@@ -13,7 +13,7 @@
 ##############################################################################
 """'browser' namespace directive tests
 
-$Id: test_directives.py,v 1.31 2004/03/08 12:05:59 srichter Exp $
+$Id: test_directives.py,v 1.32 2004/03/13 21:03:18 srichter Exp $
 """
 
 import os
@@ -44,7 +44,7 @@ from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.app import zapi
 from zope.app.tests import ztapi
 from zope.app.traversing.adapters import DefaultTraversable
-from zope.app.interfaces.traversing import ITraversable
+from zope.app.traversing.interfaces import ITraversable
 
 from zope.app.security.permission import Permission 
 from zope.app.security.interfaces import IPermission 

@@ -12,7 +12,7 @@
 #
 ##############################################################################
 """
-$Id: test_pagetemplateresource.py,v 1.3 2003/11/27 13:59:23 philikon Exp $
+$Id: test_pagetemplateresource.py,v 1.4 2004/03/13 21:03:18 srichter Exp $
 """
 
 import os
@@ -26,7 +26,7 @@ from zope.publisher.browser import TestRequest
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.app.publisher.browser.pagetemplateresource import \
      PageTemplateResourceFactory
-from zope.app.interfaces.traversing import ITraversable
+from zope.app.traversing.interfaces import ITraversable
 from zope.app.traversing.adapters import DefaultTraversable
 import zope.app.publisher.browser.tests as p
 

@@ -13,14 +13,14 @@
 ##############################################################################
 """
 
-$Id: resource.py,v 1.12 2004/03/13 15:21:30 srichter Exp $
+$Id: resource.py,v 1.13 2004/03/13 21:03:18 srichter Exp $
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 
 from zope.app import zapi
 from zope.app.location import Location
 from zope.app.site.interfaces import ISite
-from zope.app.interfaces.traversing import IContainmentRoot
+from zope.app.traversing.interfaces import IContainmentRoot
 from zope.component.interfaces import IResource
 from zope.interface import implements
 
