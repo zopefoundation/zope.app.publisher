@@ -13,7 +13,7 @@
 ##############################################################################
 """'browser' namespace directive tests
 
-$Id: test_directives.py,v 1.33 2004/03/23 22:08:10 srichter Exp $
+$Id: test_directives.py,v 1.34 2004/04/08 15:34:03 garrett Exp $
 """
 
 import os
@@ -591,6 +591,28 @@ class Test(PlacelessSetup, unittest.TestCase):
         v = view.publishTraverse(request, 'test.html')
         v = removeAllProxies(v)
         self.assertEqual(str(v()), '<html><body><p>done</p></body></html>\n')
+
+    def testTraversalOfPageForView(self):
+        """Tests proper traversal of a page defined for a view."""
+        
+        xmlconfig(StringIO(template %
+            """
+            <browser:view
+                  name="test"
+                  class="zope.app.component.tests.views.V1"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public" />
+
+            <browser:page name="index.html"
+                for="zope.app.component.tests.views.IV" 
+                class="zope.app.publisher.browser.tests.test_directives.CV"
+                permission="zope.Public" />
+            """
+            ))
+
+        view = getView(ob, 'test', request)
+        view = removeAllProxies(view)
+        view.publishTraverse(request, 'index.html')
 
     def testProtectedPageViews(self):
         ztapi.provideUtility(IPermission, Permission('p', 'P'), 'p')
