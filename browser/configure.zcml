@@ -2,6 +2,12 @@
    xmlns="http://namespaces.zope.org/zope"
    xmlns:browser="http://namespaces.zope.org/browser">
 
+<interface
+  interface="zope.publisher.interfaces.browser.ILayer" />
+
+<interface
+  interface="zope.publisher.interfaces.browser.ISkin" />
+
 <defaultLayer
   type="zope.publisher.interfaces.browser.IBrowserRequest"
   layer="zope.publisher.interfaces.browser.IDefaultBrowserLayer" />

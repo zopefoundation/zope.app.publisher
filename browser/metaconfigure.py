@@ -17,6 +17,7 @@ $Id$
 """
 from zope.component.interfaces import IDefaultViewName
 from zope.configuration.exceptions import ConfigurationError
+from zope.interface import Interface, directlyProvides
 from zope.interface.interface import InterfaceClass
 from zope.publisher.interfaces.browser import ILayer, ISkin, IDefaultSkin
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -45,7 +46,7 @@ skins = module('skins')
 sys.modules['zope.app.skins'] = skins
 
 
-def layer(_context, name=None, interface=None, base=ILayer):
+def layer(_context, name=None, interface=None, base=Interface):
     """Provides a new layer.
 
     >>> class Context(object):
@@ -61,8 +62,8 @@ def layer(_context, name=None, interface=None, base=ILayer):
     >>> iface = context.actions[0]['args'][1]
     >>> iface.getName()
     u'layer1'
-    >>> iface.__bases__
-    (<InterfaceClass zope.publisher.interfaces.ILayer>,)
+    >>> ILayer.providedBy(iface)
+    True
     >>> hasattr(sys.modules['zope.app.layers'], 'layer1')
     True
 
@@ -137,7 +138,7 @@ def layer(_context, name=None, interface=None, base=ILayer):
     if name is None and interface is None: 
         raise ConfigurationError(
             "You must specify the 'name' or 'interface' attribute.")
-    if interface is not None and base is not ILayer:
+    if interface is not None and base is not Interface:
         raise ConfigurationError(
             "You cannot specify the 'interface' and 'base' together.")
 
@@ -172,6 +173,8 @@ def layer(_context, name=None, interface=None, base=ILayer):
         kw = {'info': _context.info}
         )
 
+    directlyProvides(interface, ILayer)
+
     # Register the layer interface as a layer
     _context.action(
         discriminator = ('layer', name),
@@ -196,7 +199,7 @@ def skin(_context, name=None, interface=None, layers=None):
     
     >>> context = Context()
     >>> skin(context, u'skin1', layers=[Layer1, Layer2])
-    >>> iface = context.actions[0]['args'][1]
+    >>> iface = context.actions[3]['args'][1]
     >>> iface.getName()
     u'skin1'
     >>> pprint.pprint(iface.__bases__)
@@ -256,6 +259,15 @@ def skin(_context, name=None, interface=None, layers=None):
         # InterfaceField can find the layer.
         setattr(skins, name, interface)
         path = 'zope.app.skins'+name
+
+        # Register the layers
+        for layer in layers:
+            _context.action(
+                discriminator = None,
+                callable = provideInterface,
+                args = (layer.getName(), layer, ILayer, _context.info)
+            )    
+
     else:
         path = interface.__module__ + '.' + interface.getName()
 
