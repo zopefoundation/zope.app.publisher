@@ -95,6 +95,8 @@ class Test(PlacefulSetup, unittest.TestCase):
                                       abad='waaa'))
 
     def test(self):
+        from zope.security.management import endInteraction
+        endInteraction()
         newInteraction(ParticipationStub('who'))
         v = MenuAccessView(ProxyFactory(ob), TestRequest())
         self.assertEqual(v['zmi_views'],

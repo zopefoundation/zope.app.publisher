@@ -28,6 +28,7 @@ from zope.component import getView, queryView, queryResource
 from zope.component import getDefaultViewName, getResource
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.security.proxy import ProxyFactory
+import zope.security.management
 from zope.proxy import removeAllProxies
 
 from zope.app.publisher.browser.globalbrowsermenuservice import \
@@ -699,6 +700,7 @@ class Test(PlacelessSetup, unittest.TestCase):
     def testProtectedPageViews(self):
         ztapi.provideUtility(IPermission, Permission('p', 'P'), 'p')
 
+        request = TestRequest()
         self.assertEqual(queryView(ob, 'test', request),
                          None)
 
@@ -722,6 +724,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         v = getView(ob, 'index.html', request)
         v = ProxyFactory(v)
+        zope.security.management.getInteraction().add(request)
         self.assertRaises(Exception, v)
         v = getView(ob, 'action.html', request)
         v = ProxyFactory(v)
@@ -879,6 +882,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
 
+        request = TestRequest()
         self.assertEqual(queryView(ob, 'test', request),
                          None)
 
@@ -908,6 +912,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         v = getView(ob, 'xxx.html', request)
         v = ProxyFactory(v)
+        zope.security.management.getInteraction().add(request)
         self.assertRaises(Exception, v)
 
         v = getView(ob, 'index.html', request)
