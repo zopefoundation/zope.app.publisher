@@ -15,7 +15,7 @@
 
 This module defines the schemas for browser directives.
 
-$Id: metadirectives.py,v 1.12 2003/12/17 15:37:27 jim Exp $
+$Id: metadirectives.py,v 1.13 2004/02/13 22:35:39 srichter Exp $
 """
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, Tokens, Path, \
@@ -558,10 +558,10 @@ class IAddMenuItem(Interface):
         required = False,
         )
 
-    factory = GlobalObject(
+    factory = Id(
         __doc__ = """Factory
 
-                 A factory for creating new objects
+                 A factory id for creating new objects
                  """,
         required = False,
         )
