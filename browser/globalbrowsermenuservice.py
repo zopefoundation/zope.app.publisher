@@ -16,23 +16,24 @@
 $Id$
 """
 import sys
+from zope.interface import implements, implementedBy
 from zope.exceptions import DuplicationError
 from zope.security.interfaces import Unauthorized, Forbidden
-from zope.interface import implements, implementedBy
+from zope.security.proxy import ProxyFactory
 from zope.security.checker import CheckerPublic
 from zope.security import checkPermission
+
+from zope.app import zapi
 from zope.app.component.metaconfigure import handler
+from zope.app.pagetemplate.engine import Engine
+from zope.app.publication.browser import PublicationTraverser
+from zope.app.component.interface import provideInterface
+from zope.app.servicenames import BrowserMenu
 from zope.app.publisher.interfaces.browser import IBrowserMenuService
 from zope.app.publisher.interfaces.browser import IGlobalBrowserMenuService
 from zope.app.publisher.interfaces.browser import IBrowserMenu
 from zope.app.publisher.interfaces.browser import IMenuAccessView
 from zope.app.publisher.browser import BrowserView
-from zope.app.pagetemplate.engine import Engine
-from zope.app.publication.browser import PublicationTraverser
-from zope.security.proxy import ProxyFactory
-from zope.app import zapi
-from zope.app.component.interface import provideInterface
-from zope.app.servicenames import BrowserMenu
 
 
 # TODO: This was copied and trimmed down from zope.interface.
