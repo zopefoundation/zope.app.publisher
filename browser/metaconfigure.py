@@ -24,17 +24,15 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.app import zapi
 from zope.app.component.metaconfigure import handler
 from zope.app.container.interfaces import IAdding
-from zope.app.publisher.browser.globalbrowsermenuservice \
-     import menuItemDirective
+from zope.app.publisher.browser.menu import menuItemDirective
 from zope.app.component.contentdirective import ContentDirective
+from zope.app.publisher.interfaces.browser import AddMenu
 
 # referred to through ZCML
 from zope.app.publisher.browser.resourcemeta import resource
 from zope.app.publisher.browser.resourcemeta import resourceDirectory
 from zope.app.publisher.browser.i18nresourcemeta import I18nResource
 from zope.app.publisher.browser.viewmeta import view
-from zope.app.component.interface import provideInterface
-
 from zope.app.component.interface import provideInterface
 
 # Create special modules that contain all layers and skins
@@ -147,7 +145,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
         interface = InterfaceClass(name, (base, ),
                                    __doc__='Layer: %s' %name,
                                    __module__='zope.app.layers')
-        # Add the layer to the skins module.
+        # Add the layer to the layers module.
         # Note: We have to do this immediately, so that directives using the
         # InterfaceField can find the layer.
         setattr(layers, name, interface)
@@ -182,7 +180,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
         )
 
 def skin(_context, name=None, interface=None, layers=None):
-    """Provides a new layer.
+    """Provides a new skin.
 
     >>> import pprint
     >>> class Context(object):
@@ -351,7 +349,7 @@ def addMenuItem(_context, title, class_=None, factory=None, description='',
         if permission is None:
             raise ValueError(
                 "A permission must be specified when a class is used")
-        factory = "zope.app.browser.add.%s.%s" % (
+        factory = "BrowserAdd__%s.%s" % (
             class_.__module__, class_.__name__) 
         ContentDirective(_context, class_).factory(
             _context,
@@ -364,6 +362,6 @@ def addMenuItem(_context, title, class_=None, factory=None, description='',
     else:
         action = factory
 
-    menuItemDirective(_context, 'zope.app.container.add', IAdding,
-                      action, title, description, filter,
+    menuItemDirective(_context, AddMenu, IAdding,
+                      action, title, description, None, filter,
                       permission, extra)

@@ -104,13 +104,13 @@
     <meta:directive
         name="menu"
         schema=".metadirectives.IMenuDirective"
-        handler=".globalbrowsermenuservice.menuDirective"
+        handler=".menu.menuDirective"
         />
 
     <meta:complexDirective
         name="menuItems"
         schema=".metadirectives.IMenuItemsDirective"
-        handler=".globalbrowsermenuservice.menuItemsDirective"
+        handler=".menu.menuItemsDirective"
         >
 
       <meta:subdirective
@@ -123,7 +123,7 @@
     <meta:directive
         name="menuItem"
         schema=".metadirectives.IMenuItemDirective"
-        handler=".globalbrowsermenuservice.menuItemDirective"
+        handler=".menu.menuItemDirective"
         />
 
     <!-- misc. directives -->

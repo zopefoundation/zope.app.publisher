@@ -20,10 +20,11 @@ $Id$
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, Tokens, Path, \
      PythonIdentifier, MessageID
-from zope.schema import TextLine, Text, Id
+from zope.schema import TextLine, Text, Id, Int
 
 from zope.app.component.metadirectives import IBasicViewInformation
 from zope.app.component.fields import LayerField
+from zope.app.publisher.browser.fields import MenuField
 from zope.app.security.fields import Permission
 
 #
@@ -70,7 +71,7 @@ class IViewDirective(IPagesDirective):
         default=u'',
         )
 
-    menu = TextLine(
+    menu = MenuField(
         title=u"The browser menu to include the page (view) in.",
         description=u"""
           Many views are included in menus. It's convenient to name
@@ -182,7 +183,7 @@ class IPagesPageSubdirective(IViewPageSubdirective):
     Subdirective to IPagesDirective
     """
 
-    menu = TextLine(
+    menu = MenuField(
         title=u"The browser menu to include the page (view) in.",
         description=u"""
         Many views are included in menus. It's convenient to name the
@@ -349,21 +350,31 @@ class IResourceDirectoryDirective(IBasicResourceInformation):
 #
 
 class IMenuDirective(Interface):
-    """
-    Define a browser menu
-    """
+    """Define a browser menu"""
 
     id = TextLine(
         title=u"The name of the menu.",
         description=u"This is, effectively, an id.",
-        required=True
+        required=False
         )
 
     title = MessageID(
         title=u"Title",
         description=u"A descriptive title for documentation purposes",
-        required=True
+        required=False
         )
+    
+    description = MessageID(
+        title=u"Description",
+        description=u"A description title of the menu.",
+        required=False
+        )
+
+    interface = GlobalObject(
+        title=u"The menu's interface.",
+        required=False
+        )
+    
 
 class IMenuItemsDirective(Interface):
     """
@@ -373,7 +384,7 @@ class IMenuItemsDirective(Interface):
     same interface and menu.
     """
 
-    menu = TextLine(
+    menu = MenuField(
         title=u"Menu name",
         description=u"The (name of the) menu the items are defined for",
         required=True,
@@ -430,6 +441,14 @@ class IMenuItem(Interface):
         the filter evaluates to a false value.""",
         required=False
         )
+
+    order = Int(
+        title=u"Order",
+        description=u"A relative position of the menu item in the menu.",
+        required=False,
+        default=0
+        )
+
 
 class IMenuItemSubdirective(IMenuItem):
     """

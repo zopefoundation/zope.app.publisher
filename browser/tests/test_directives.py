@@ -21,36 +21,32 @@ from cStringIO import StringIO
 
 from zope.interface import Interface, implements, directlyProvides, providedBy
 
+import zope.security.management
+from zope.component.service import serviceManager
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.configuration.exceptions import ConfigurationError
-from zope.app.component.tests.views import IC, V1, VZMI, R1, IV
-from zope.app.tests import placelesssetup
-from zope.app.tests.placelesssetup import PlacelessSetup
-from zope.security.proxy import ProxyFactory
-import zope.security.management
-from zope.security.proxy import removeSecurityProxy
-from zope.testing.doctestunit import DocTestSuite
-
-from zope.app.publisher.browser.globalbrowsermenuservice import \
-    globalBrowserMenuService
 from zope.publisher.browser import TestRequest
-
-from zope.app.publisher.browser.fileresource import FileResource
-from zope.app.publisher.browser.i18nfileresource import I18nFileResource
-
-import zope.app.publisher.browser
-from zope.component.service import serviceManager
-
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import ISkin, IDefaultSkin
+from zope.security.proxy import removeSecurityProxy, ProxyFactory
+from zope.testing.doctestunit import DocTestSuite
+
+import zope.app.publisher.browser
 from zope.app import zapi
+from zope.app.component.tests.views import IC, V1, VZMI, R1, IV
+from zope.app.publisher.browser.fileresource import FileResource
+from zope.app.publisher.browser.i18nfileresource import I18nFileResource
+from zope.app.publisher.browser.menu import getFirstMenuItem
+from zope.app.publisher.interfaces.browser import IMenuItemType
+from zope.app.security.permission import Permission 
+from zope.app.security.interfaces import IPermission 
+from zope.app.tests import placelesssetup
 from zope.app.tests import ztapi
+from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.app.traversing.adapters import DefaultTraversable
 from zope.app.traversing.interfaces import ITraversable
 
-from zope.app.security.permission import Permission 
-from zope.app.security.interfaces import IPermission 
 
 tests_path = os.path.join(
     os.path.dirname(zope.app.publisher.browser.__file__),
@@ -144,9 +140,8 @@ class Test(PlacelessSetup, unittest.TestCase):
                 />
             ''' % testtemplate
             )))
-
-        menuItem = globalBrowserMenuService.getFirstMenuItem(
-            'test_menu', ob, TestRequest())
+        test_menu = zapi.getUtility(IMenuItemType, 'test_menu')
+        menuItem = getFirstMenuItem(test_menu, ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = zapi.queryView(ob, 'test', request)
@@ -173,8 +168,8 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % testtemplate
             )))
 
-        menuItem = globalBrowserMenuService.getFirstMenuItem(
-            'test_menu', ob, TestRequest())
+        test_menu = zapi.getUtility(IMenuItemType, 'test_menu')
+        menuItem = getFirstMenuItem(test_menu, ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = zapi.queryView(ob, 'test', request)
@@ -203,8 +198,8 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % testtemplate
             )))
 
-        menuItem = globalBrowserMenuService.getFirstMenuItem(
-            'test_menu', ob, TestRequest())
+        test_menu = zapi.getUtility(IMenuItemType, 'test_menu')
+        menuItem = getFirstMenuItem(test_menu, ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = zapi.queryView(ob, 'test', request)
@@ -235,8 +230,8 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % testtemplate
             )))
 
-        menuItem = globalBrowserMenuService.getFirstMenuItem(
-            'test_menu', ob, TestRequest())
+        test_menu = zapi.getUtility(IMenuItemType, 'test_menu')
+        menuItem = getFirstMenuItem(test_menu, ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = zapi.queryView(ob, 'test', request)
