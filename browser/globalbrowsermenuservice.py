@@ -22,8 +22,9 @@ from zope.exceptions import DuplicationError, Unauthorized, Forbidden
 from zope.interface.type import TypeRegistry
 from zope.interface import implements
 from zope.security.checker import CheckerPublic
-from zope.security.management import getSecurityManager
-from zope.app.security.permission import checkPermission
+from zope.security import checkPermission
+from zope.app.security.permission import checkPermission \
+                                            as checkPermissionDefined
 from zope.app.component.metaconfigure import handler
 from zope.app.publisher.interfaces.browser import IBrowserMenuService
 from zope.app.publisher.interfaces.browser import IGlobalBrowserMenuService
@@ -92,7 +93,6 @@ class BaseBrowserMenuService:
 
         result = []
         seen = {}
-        sm = getSecurityManager()
 
         # stuff for figuring out the selected view
         request_url = request.getURL()
@@ -126,8 +126,7 @@ class BaseBrowserMenuService:
             if permission:
                 # If we have an explicit permission, check that we
                 # can access it.
-                if not sm.checkPermission(permission, object) and \
-                       permission is not CheckerPublic:
+                if not checkPermission(permission, object):
                     continue
 
             elif action:
@@ -216,7 +215,7 @@ class GlobalBrowserMenuService(BaseBrowserMenuService):
             if permission == 'zope.Public':
                 permission = CheckerPublic
             else:
-                checkPermission(None, permission)
+                checkPermissionDefined(None, permission)
 
         data = registry.get(interface) or []
         data.append(

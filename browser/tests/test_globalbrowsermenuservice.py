@@ -20,7 +20,8 @@ from zope.exceptions import Forbidden, Unauthorized, DuplicationError
 from zope.interface import Interface, implements
 from zope.publisher.browser import TestRequest
 from zope.publisher.interfaces.browser import IBrowserPublisher
-from zope.security.management import newSecurityManager, system_user
+from zope.security.management import newInteraction, endInteraction
+from zope.security.management import system_user
 
 from zope.app import zapi
 from zope.app.tests import ztapi
@@ -61,6 +62,13 @@ def d(n):
             }
 
 
+class ParticipationStub:
+
+    def __init__(self, principal):
+        self.principal = principal
+        self.interaction = None
+
+
 class GlobalBrowserMenuServiceTest(PlacelessSetup, unittest.TestCase):
 
     def __reg(self):
@@ -89,7 +97,7 @@ class GlobalBrowserMenuServiceTest(PlacelessSetup, unittest.TestCase):
 
     def test_w_permission(self):
         ztapi.provideUtility(IPermission, Permission('p', 'P'), 'p')
-        
+
         r = self.__reg()
         r.menu('test_id', 'test menu')
         r.menuItem('test_id', Interface, 'a1', 't1', 'd1')
@@ -102,17 +110,18 @@ class GlobalBrowserMenuServiceTest(PlacelessSetup, unittest.TestCase):
         r.menuItem('test_id', I111, 'u8', 't8', 'd8')
         r.menuItem('test_id', I12, 'a9', 't9', 'd9')
 
-        newSecurityManager('test')
+        newInteraction(ParticipationStub('test'))
 
         menu = r.getMenu('test_id', TestObject(), TestRequest())
 
         self.assertEqual(list(menu), [d(6), d(3), d(2), d(1)])
 
-        newSecurityManager(system_user)
+        endInteraction()
+
+        newInteraction(ParticipationStub(system_user))
 
         menu = r.getMenu('test_id', TestObject(), TestRequest())
         self.assertEqual(list(menu), [d(5), d(6), d(3), d(2), d(1)])
-        
 
     def test_no_dups(self):
         r = self.__reg()

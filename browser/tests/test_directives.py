@@ -706,8 +706,8 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         # XXX this seems to be no longer needed
         # Need to "log someone in" to turn on checks
-        #from zope.security.management import newSecurityManager
-        #newSecurityManager('someuser')
+        #from zope.security.management import newInteraction
+        #newInteraction(ParticipationStub('someuser'))
 
         view = getView(ob, 'test', request)
         self.assertEqual(view.browserDefault(request)[1], (u'index.html', ))
@@ -873,8 +873,8 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         # XXX This seems to be no longer needed
         # Need to "log someone in" to turn on checks
-        #from zope.security.management import newSecurityManager
-        #newSecurityManager('someuser')
+        #from zope.security.management import newInteraction
+        #newInteraction(ParticipationStub('someuser'))
 
         v = getView(ob, 'xxx.html', request)
         v = ProxyFactory(v)
