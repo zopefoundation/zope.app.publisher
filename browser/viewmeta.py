@@ -363,7 +363,7 @@ def defaultView(_context, name, for_=None):
     _context.action(
         discriminator = ('defaultViewName', for_, IBrowserRequest, name),
         callable = handler,
-        args = (zapi.servicenames.Presentation.Adapters, 'register',
+        args = (zapi.servicenames.Adapters, 'register',
                 (for_, IBrowserRequest), IDefaultViewName, '', name,
                 _context.info)
         )
