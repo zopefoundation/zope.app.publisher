@@ -126,9 +126,8 @@ class IViewPageSubdirective(Interface):
     template = Path(
         title=u"The name of a template that implements the page.",
         description=u"""
-        Refers to a file containing a page template (must end in
-        extension '.pt').""",
-        required=False
+        Refers to a file containing a page template (should end in
+        extension '.pt' or '.html').""",
         )
 
 class IViewDefaultPageSubdirective(Interface):
