@@ -6,21 +6,38 @@ Browser menus are used to categorize browser actions, such as the views of a
 content component or the addable components of a container. In essence they
 provide the same functionality as menu bars in desktop application.
 
-  >>> from zope.app.publisher.browser import menu
+  >>> from zope.app.publisher.browser import menu, menumeta
 
-The concept of a menu is more of a pattern than concrete
-implementation. Interfaces are used to denote a menu. So let's define a simple
-edit menu:
+Menus are simple components that have an id, title and description. They also
+must provide a method called ``getMenuItems(object, request)`` that returns a
+TAL-friendly list of information dictionaries. We will see this in detail
+later. The default menu implementation, however, makes the menu be very
+transparent by identifying the menu through an interface. So let's define and
+register a simple edit menu:
 
   >>> import zope.interface
   >>> class EditMenu(zope.interface.Interface):
   ...     """This is an edit menu."""
 
-An item in a menu is simply an adapter that provides. In the following section
-we will have a closer look at the browser menu item:
+  >>> from zope.app.publisher.interfaces.browser import IMenuItemType
+  >>> zope.interface.directlyProvides(EditMenu, IMenuItemType)
 
-`BrowserMenuItem` class
------------------------
+  >>> from zope.app.testing import ztapi
+  >>> ztapi.provideUtility(IMenuItemType, EditMenu, 'edit')
+
+Now we have to create and register the menu itself:
+
+  >>> from zope.app.publisher.interfaces.browser import IBrowserMenu
+  >>> ztapi.provideUtility(
+  ...     IBrowserMenu, menu.BrowserMenu('edit', u'Edit', u'Edit Menu'), 'edit')
+
+Note that these steps seem like a lot of boilerplate, but all this work is
+commonly done for you via ZCML. An item in a menu is simply an adapter that
+provides. In the following section we will have a closer look at the browser
+menu item:
+
+``BrowserMenuItem`` class
+-------------------------
 
 The browser menu item represents an entry in the menu. Essentially, the menu
 item is a browser view of a content component. Thus we have to create a
@@ -48,10 +65,10 @@ content component first:
   ...             raise Unauthorized, name
   ...         return self.foo
 
-We also implemented the `IBrowserPublisher` interface, because we want to make
-the object traversable, so that we can make availability checks later.
+We also implemented the ``IBrowserPublisher`` interface, because we want to
+make the object traversable, so that we can make availability checks later.
 
-Since the `BrowserMenuItem` is just a view, we can initiate it with an
+Since the ``BrowserMenuItem`` is just a view, we can initiate it with an
 object and a request.
 
   >>> from zope.publisher.browser import TestRequest
@@ -95,7 +112,7 @@ be available and not selected.
 
 There are two ways to deny availability of a menu item: (1) the current
 user does not have the correct permission to access the action or the menu
-item itself, or (2) the filter returns `False`, in which case the menu
+item itself, or (2) the filter returns ``False``, in which case the menu
 item should also not be shown. 
 
   >>> from zope.app.testing import ztapi
@@ -184,8 +201,8 @@ Finally, make sure that the menu item can be selected.
   False
 
 
-`BrowserSubMenuItem` class
---------------------------
+``BrowserSubMenuItem`` class
+----------------------------
 
 The menu framework also allows for submenus. Submenus can be inserted by
 creating a special menu item that simply points to another menu to be
@@ -193,20 +210,26 @@ inserted:
 
   >>> item = menu.BrowserSubMenuItem(Content(), TestRequest())
 
-The framework will always set the sub-menu type automatically (we do it
+The framework will always set the sub-menu automatically (we do it
 manually here):
 
   >>> class SaveOptions(zope.interface.Interface):
   ...     "A sub-menu that describes available save options for the content."
 
-  >>> item.submenuType = SaveOptions
+  >>> zope.interface.directlyProvides(SaveOptions, IMenuItemType)
 
-  >>> item.submenuType
-  <InterfaceClass __builtin__.SaveOptions>
+  >>> ztapi.provideUtility(IMenuItemType, SaveOptions, 'save')
+  >>> ztapi.provideUtility(IBrowserMenu,
+  ...                      menu.BrowserMenu('save', u'Save', u'Save Menu'),
+  ...                      'save')
 
-Also, the `action` attribute for the browser sub-menu item is optional,
+Now we can assign the sub-menu id to the menu item: 
+
+  >>> item.submenuId = 'save'
+
+Also, the ``action`` attribute for the browser sub-menu item is optional,
 because you often do not want the item itself to represent something. The rest
-of the class is identical to the `BrowserMenuItem` class.
+of the class is identical to the ``BrowserMenuItem`` class.
 
 
 Getting a Menu
@@ -222,38 +245,39 @@ the items:
   >>> from zope.app.testing import ztapi
   >>> from zope.publisher.interfaces.browser import IBrowserRequest
 
-  >>> undo = menu.MenuItemFactory(menu.BrowserMenuItem, title="Undo", 
-  ...                             action="undo.html")
+  >>> undo = menumeta.MenuItemFactory(menu.BrowserMenuItem, title="Undo", 
+  ...                                 action="undo.html")
   >>> ztapi.provideAdapter((IContent, IBrowserRequest), EditMenu, undo, 'undo')
 
-  >>> redo = menu.MenuItemFactory(menu.BrowserMenuItem, title="Redo",
-  ...                             action="redo.html", icon="/@@/redo.png")
+  >>> redo = menumeta.MenuItemFactory(menu.BrowserMenuItem, title="Redo",
+  ...                                 action="redo.html", icon="/@@/redo.png")
   >>> ztapi.provideAdapter((IContent, IBrowserRequest), EditMenu, redo, 'redo')
 
-  >>> save = menu.MenuItemFactory(menu.BrowserSubMenuItem, title="Save", 
-  ...                             submenuType=SaveOptions, order=2)
+  >>> save = menumeta.MenuItemFactory(menu.BrowserSubMenuItem, title="Save", 
+  ...                                 submenuId='save', order=2)
   >>> ztapi.provideAdapter((IContent, IBrowserRequest), EditMenu, save, 'save')
 
 And now the save options:
 
-  >>> saveas = menu.MenuItemFactory(menu.BrowserMenuItem, title="Save as", 
-  ...                               action="saveas.html")
+  >>> saveas = menumeta.MenuItemFactory(menu.BrowserMenuItem, title="Save as", 
+  ...                                   action="saveas.html")
   >>> ztapi.provideAdapter((IContent, IBrowserRequest), 
   ...                      SaveOptions, saveas, 'saveas')
 
-  >>> saveall = menu.MenuItemFactory(menu.BrowserMenuItem, title="Save all",
-  ...                                action="saveall.html")
+  >>> saveall = menumeta.MenuItemFactory(menu.BrowserMenuItem, title="Save all",
+  ...                                    action="saveall.html")
   >>> ztapi.provideAdapter((IContent, IBrowserRequest), 
   ...                      SaveOptions, saveall, 'saveall')
 
 The utility that is used to generate the menu into a TAL-friendly
-data-structure is `getMenu()`::
+data-structure is ``getMenu()``::
 
-  getMenu(menuItemType, object, request)
+  getMenu(menuId, object, request)
 
-where `menuItemType` is the menu interface. Let's look up the menu now:
+where ``menuId`` is the id originally specified for the menu. Let's look up the
+menu now:
 
-  >>> pprint(menu.getMenu(EditMenu, Content(), TestRequest()))
+  >>> pprint(menu.getMenu('edit', Content(), TestRequest()))
   [{'action': 'redo.html',
     'description': u'',
     'extra': None,
@@ -290,33 +314,99 @@ where `menuItemType` is the menu interface. Let's look up the menu now:
     'title': 'Save'}]
 
 
-`MenuItemFactory` class
------------------------
+Custom ``IBrowserMenu`` Implementations
+---------------------------------------
+
+Until now we have only seen how to use the default menu implementation. Much
+of the above boilerplate was necessary just to support custom menus. But what
+could custom menus do? Sometimes menu items are dynamically generated based on
+a certain state of the object the menu is for. For example, you might want to
+show all items in a folder-like component. So first let's create this
+folder-like component:
+
+  >>> class Folderish(Content):
+  ...     names = ['README.txt', 'logo.png', 'script.py']
+
+Now we create a menu using the names to create a menu:
+
+  >>> from zope.app.publisher.interfaces.browser import IBrowserMenu
+
+  >>> class Items(object):
+  ...     zope.interface.implements(IBrowserMenu)
+  ...  
+  ...     def __init__(self, id, title=u'', description=u''):
+  ...         self.id = id
+  ...         self.title = title
+  ...         self.description = description
+  ...     
+  ...     def getMenuItems(self, object, request):
+  ...         return [{'title': name,
+  ...                  'description': None,
+  ...                  'action': name + '/manage',
+  ...                  'selected': u'',
+  ...                  'icon': None,
+  ...                  'extra': {},
+  ...                  'submenu': None}
+  ...                 for name in object.names]
+
+and register it:
+
+  >>> ztapi.provideUtility(IBrowserMenu,
+  ...                      Items('items', u'Items', u'Items Menu'),
+  ...                      'items')
+
+We can now get the menu items using the previously introduced API:
+
+  >>> pprint(menu.getMenu('items', Folderish(), TestRequest()))
+  [{'action': 'README.txt/manage',
+    'description': None,
+    'extra': {},
+    'icon': None,
+    'selected': u'',
+    'submenu': None,
+    'title': 'README.txt'},
+   {'action': 'logo.png/manage',
+    'description': None,
+    'extra': {},
+    'icon': None,
+    'selected': u'',
+    'submenu': None,
+    'title': 'logo.png'},
+   {'action': 'script.py/manage',
+    'description': None,
+    'extra': {},
+    'icon': None,
+    'selected': u'',
+    'submenu': None,
+    'title': 'script.py'}]
+
+
+``MenuItemFactory`` class
+-------------------------
 
 As you have seen above already, we have used the menu item factory to generate
 adapter factories for menu items. The factory needs a particular
-`IBrowserMenuItem` class to instantiate. Here is an example using a dummy menu
-item class:
+``IBrowserMenuItem`` class to instantiate. Here is an example using a dummy
+menu item class:
   
   >>> class DummyBrowserMenuItem(object):
   ...     "a dummy factory for menu items"
   ...     def __init__(self, context, request):
   ...         self.context = context
   ...         self.request = request
-  ... 
   
 To instantiate this class, pass the factory and the other arguments as keyword
 arguments (every key in the arguments should map to an attribute of the menu
 item class). We use dummy values for this example.
   
-  >>> factory = menu.MenuItemFactory(
+  >>> factory = menumeta.MenuItemFactory(
   ...     DummyBrowserMenuItem, title='Title', description='Description', 
   ...     icon='Icon', action='Action', filter='Filter', 
   ...     permission='zope.Public', extra='Extra', order='Order', _for='For')
   >>> factory.factory is DummyBrowserMenuItem
   True
   
-The "zope.Public" permission needs to be translated to `CheckerPublic.`
+The "zope.Public" permission needs to be translated to ``CheckerPublic``.
   
   >>> from zope.security.checker import CheckerPublic
   >>> factory.kwargs['permission'] is CheckerPublic
@@ -327,8 +417,8 @@ to use dummy values.
   
   >>> item = factory('Context', 'Request')
   
-The returned value should be an instance of the `DummyBrowserMenuItem`, and have
-all of the values we initially set on the factory.
+The returned value should be an instance of the ``DummyBrowserMenuItem``, and
+have all of the values we initially set on the factory.
   
   >>> isinstance(item, DummyBrowserMenuItem)
   True
@@ -355,10 +445,10 @@ all of the values we initially set on the factory.
   >>> item._for
   'For'
   
-If you pass a permission other than `zope.Public` to the `MenuItemFactory`,
-it should pass through unmodified.
+If you pass a permission other than ``zope.Public`` to the
+``MenuItemFactory``, it should pass through unmodified.
   
-  >>> factory = menu.MenuItemFactory(
+  >>> factory = menumeta.MenuItemFactory(
   ...     DummyBrowserMenuItem, title='Title', description='Description', 
   ...     icon='Icon', action='Action', filter='Filter', 
   ...     permission='another.Permission', extra='Extra', order='Order', 
@@ -370,8 +460,8 @@ it should pass through unmodified.
 Directive Handlers
 ------------------
 
-`menu` Directive Handler
-~~~~~~~~~~~~~~~~~~~~~~~~
+``menu`` Directive Handler
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Provides a new menu (item type).
 
@@ -387,14 +477,10 @@ Possibility 1: The Old Way
 ++++++++++++++++++++++++++
   
   >>> context = Context()
-  >>> menu.menuDirective(context, u'menu1', title=u'Menu 1')
+  >>> menumeta.menuDirective(context, u'menu1', title=u'Menu 1')
   >>> iface = context.actions[0]['args'][1]
   >>> iface.getName()
   u'menu1'
-  >>> iface.getTaggedValue('title')
-  u'Menu 1'
-  >>> iface.getTaggedValue('description')
-  u''
 
   >>> import sys
   >>> hasattr(sys.modules['zope.app.menus'], 'menu1')
@@ -409,7 +495,7 @@ Possibility 2: Just specify an interface
   ...     pass
 
   >>> context = Context()
-  >>> menu.menuDirective(context, interface=menu1)
+  >>> menumeta.menuDirective(context, interface=menu1)
   >>> context.actions[0]['args'][1] is menu1
   True
 
@@ -417,29 +503,33 @@ Possibility 3: Specify an interface and an id
 +++++++++++++++++++++++++++++++++++++++++++++
 
   >>> context = Context()
-  >>> menu.menuDirective(context, id='menu1', interface=menu1)
+  >>> menumeta.menuDirective(context, id='menu1', interface=menu1)
 
   >>> pprint([action['discriminator'] for action in context.actions])
   [('browser', 'MenuItemType', '__builtin__.menu1'),
    ('interface', '__builtin__.menu1'),
-   ('browser', 'MenuItemType', 'menu1')]
+   ('browser', 'MenuItemType', 'menu1'),
+   ('utility',
+    <InterfaceClass zope.app.publisher.interfaces.browser.IBrowserMenu>,
+    'menu1'),
+   None]
    
 Here are some disallowed configurations.
 
   >>> context = Context()
-  >>> menu.menuDirective(context)
+  >>> menumeta.menuDirective(context)
   Traceback (most recent call last):
   ...
   ConfigurationError: You must specify the 'id' or 'interface' attribute.
 
-  >>> menu.menuDirective(context, title='Menu 1')
+  >>> menumeta.menuDirective(context, title='Menu 1')
   Traceback (most recent call last):
   ...
   ConfigurationError: You must specify the 'id' or 'interface' attribute.
 
 
-`menuItems` Directive Handler
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+``menuItems`` Directive Handler
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Register several menu items for a particular menu.
 
@@ -450,7 +540,7 @@ Register several menu items for a particular menu.
   ...     pass
 
   >>> context = Context()
-  >>> items = menu.menuItemsDirective(context, TestMenuItemType, ITest)
+  >>> items = menumeta.menuItemsDirective(context, TestMenuItemType, ITest)
   >>> context.actions
   []
   >>> items.menuItem(context, u'view.html', 'View')
@@ -461,11 +551,11 @@ Register several menu items for a particular menu.
   >>> pprint(disc[-2:])
   [('adapter',
     (<InterfaceClass __builtin__.ITest>,
-     <InterfaceClass zope.publisher.interfaces.browser.IBrowserRequest>),
+     <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>),
     <InterfaceClass __builtin__.TestMenuItemType>,
     'Save'),
    ('adapter',
     (<InterfaceClass __builtin__.ITest>,
-     <InterfaceClass zope.publisher.interfaces.browser.IBrowserRequest>),
+     <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>),
     <InterfaceClass __builtin__.TestMenuItemType>,
     'View')]

@@ -39,6 +39,41 @@ class AddMenu(Interface):
 directlyProvides(AddMenu, IMenuItemType)
 
 
+class IBrowserMenu(Interface):
+    """Menu
+
+    Menus are objects that can return a list of menu items they contain. How
+    they generate this list is up to them. Commonly, however, they will look
+    up adapters that provide the ``IBrowserMenuItem`` interface.
+    """
+
+    id = TextLine(
+        title=_("Menu Id"),
+        description=_("The id uniquly identifies this menu."),
+        required=True
+        )
+
+    title = TextLine(
+        title=_("Menu title"),
+        description=_("The title provides the basic label for the menu."),
+        required=False
+        )
+
+    description = Text(
+        title=_("Menu description"),
+        description=_("A description of the menu. This might be shown "
+                      "on menu pages or in pop-up help for menus."),
+        required=False
+        )
+
+    def getMenuItems(object, request):
+        """Return a TAL-friendly list of menu items.
+
+        The object (acts like the context) and request can be used to select
+        the items that are available.
+        """
+
+
 class IBrowserMenuItem(Interface):
     """Menu type
 
@@ -104,9 +139,9 @@ class IBrowserMenuItem(Interface):
 class IBrowserSubMenuItem(IBrowserMenuItem):
     """A menu item that points to a sub-menu."""
 
-    submenuType = InterfaceField(
-        title=_("Sub-Menu Type"),
-        description=_("The menu interface of the menu that describes the "
+    submenuId = TextLine(
+        title=_("Sub-Menu Id"),
+        description=_("The menu id of the menu that describes the "
                       "sub-menu below this item."),
         required=True)
         

@@ -33,7 +33,7 @@ from zope.app.component.metaconfigure import handler
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.publisher.browser import BrowserView
-from zope.app.publisher.browser.menu import menuItemDirective
+from zope.app.publisher.browser.menumeta import menuItemDirective
 
 
 

@@ -104,13 +104,13 @@
     <meta:directive
         name="menu"
         schema=".metadirectives.IMenuDirective"
-        handler=".menu.menuDirective"
+        handler=".menumeta.menuDirective"
         />
 
     <meta:complexDirective
         name="menuItems"
         schema=".metadirectives.IMenuItemsDirective"
-        handler=".menu.menuItemsDirective"
+        handler=".menumeta.menuItemsDirective"
         >
 
       <meta:subdirective
@@ -128,13 +128,13 @@
     <meta:directive
         name="menuItem"
         schema=".metadirectives.IMenuItemDirective"
-        handler=".menu.menuItemDirective"
+        handler=".menumeta.menuItemDirective"
         />
 
     <meta:directive
         name="subMenuItem"
         schema=".metadirectives.ISubMenuItemDirective"
-        handler=".menu.subMenuItemDirective"
+        handler=".menumeta.subMenuItemDirective"
         />
 
     <!-- misc. directives -->

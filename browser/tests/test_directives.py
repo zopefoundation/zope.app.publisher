@@ -178,8 +178,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 />
             ''' % testtemplate
             )))
-        test_menu = zapi.getUtility(IMenuItemType, 'test_menu')
-        menuItem = getFirstMenuItem(test_menu, ob, TestRequest())
+        menuItem = getFirstMenuItem('test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = zapi.queryMultiAdapter((ob, request), name='test')
@@ -206,8 +205,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             ''' % testtemplate
             )))
 
-        test_menu = zapi.getUtility(IMenuItemType, 'test_menu')
-        menuItem = getFirstMenuItem(test_menu, ob, TestRequest())
+        menuItem = getFirstMenuItem('test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = zapi.queryMultiAdapter((ob, request), name='test')
@@ -236,8 +234,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             ''' % testtemplate
             )))
 
-        test_menu = zapi.getUtility(IMenuItemType, 'test_menu')
-        menuItem = getFirstMenuItem(test_menu, ob, TestRequest())
+        menuItem = getFirstMenuItem('test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = zapi.queryMultiAdapter((ob, request), name='test')
@@ -268,8 +265,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             ''' % testtemplate
             )))
 
-        test_menu = zapi.getUtility(IMenuItemType, 'test_menu')
-        menuItem = getFirstMenuItem(test_menu, ob, TestRequest())
+        menuItem = getFirstMenuItem('test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = zapi.queryMultiAdapter((ob, request), name='test')

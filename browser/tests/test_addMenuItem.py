@@ -31,16 +31,16 @@
    <InterfaceClass zope.component.interfaces.IFactory>)),
  (('adapter',
    (<InterfaceClass zope.app.container.interfaces.IAdding>,
-    <InterfaceClass zope.publisher.interfaces.browser.IBrowserRequest>),
+    <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>),
    <InterfaceClass zope.app.publisher.interfaces.browser.AddMenu>,
    'Add an X'),
   <function handler>,
   ('provideAdapter',
    (<InterfaceClass zope.app.container.interfaces.IAdding>,
-    <InterfaceClass zope.publisher.interfaces.browser.IBrowserRequest>),
+    <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>),
    <InterfaceClass zope.app.publisher.interfaces.browser.AddMenu>,
    'Add an X',
-   <zope.app.publisher.browser.menu.MenuItemFactory object>,
+   <zope.app.publisher.browser.menumeta.MenuItemFactory object>,
    '')),
  (None,
   <function provideInterface>,
@@ -53,7 +53,7 @@
  (None,
   <function provideInterface>,
   ('',
-   <InterfaceClass zope.publisher.interfaces.browser.IBrowserRequest>)))
+   <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)))
 
 $Id$
 """
@@ -94,16 +94,16 @@ def test_w_factory():
     >>> context
     ((('adapter',
        (<InterfaceClass zope.app.container.interfaces.IAdding>,
-        <InterfaceClass zope.publisher.interfaces.browser.IBrowserRequest>),
+        <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>),
        <InterfaceClass zope.app.publisher.interfaces.browser.AddMenu>,
        'Add an X'),
       <function handler>,
       ('provideAdapter',
        (<InterfaceClass zope.app.container.interfaces.IAdding>,
-        <InterfaceClass zope.publisher.interfaces.browser.IBrowserRequest>),
+        <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>),
        <InterfaceClass zope.app.publisher.interfaces.browser.AddMenu>,
        'Add an X',
-       <zope.app.publisher.browser.menu.MenuItemFactory object>,
+       <zope.app.publisher.browser.menumeta.MenuItemFactory object>,
        '')),
      (None,
       <function provideInterface>,
@@ -116,7 +116,7 @@ def test_w_factory():
      (None,
       <function provideInterface>,
       ('',
-       <InterfaceClass zope.publisher.interfaces.browser.IBrowserRequest>)))
+       <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)))
     """
 
 def test_w_factory_and_view():
@@ -128,16 +128,16 @@ def test_w_factory_and_view():
     >>> context
     ((('adapter',
        (<InterfaceClass zope.app.container.interfaces.IAdding>,
-        <InterfaceClass zope.publisher.interfaces.browser.IBrowserRequest>),
+        <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>),
        <InterfaceClass zope.app.publisher.interfaces.browser.AddMenu>,
        'Add an X'),
       <function handler>,
       ('provideAdapter',
        (<InterfaceClass zope.app.container.interfaces.IAdding>,
-        <InterfaceClass zope.publisher.interfaces.browser.IBrowserRequest>),
+        <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>),
        <InterfaceClass zope.app.publisher.interfaces.browser.AddMenu>,
        'Add an X',
-       <zope.app.publisher.browser.menu.MenuItemFactory object>,
+       <zope.app.publisher.browser.menumeta.MenuItemFactory object>,
        '')),
      (None,
       <function provideInterface>,
@@ -150,7 +150,7 @@ def test_w_factory_and_view():
      (None,
       <function provideInterface>,
       ('',
-       <InterfaceClass zope.publisher.interfaces.browser.IBrowserRequest>)))
+       <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)))
     """
 
 def test_w_factory_class_view():
@@ -175,16 +175,16 @@ def test_w_factory_class_view():
        <InterfaceClass zope.component.interfaces.IFactory>)),
      (('adapter',
        (<InterfaceClass zope.app.container.interfaces.IAdding>,
-        <InterfaceClass zope.publisher.interfaces.browser.IBrowserRequest>),
+        <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>),
        <InterfaceClass zope.app.publisher.interfaces.browser.AddMenu>,
        'Add an X'),
       <function handler>,
       ('provideAdapter',
        (<InterfaceClass zope.app.container.interfaces.IAdding>,
-        <InterfaceClass zope.publisher.interfaces.browser.IBrowserRequest>),
+        <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>),
        <InterfaceClass zope.app.publisher.interfaces.browser.AddMenu>,
        'Add an X',
-       <zope.app.publisher.browser.menu.MenuItemFactory object>,
+       <zope.app.publisher.browser.menumeta.MenuItemFactory object>,
        '')),
      (None,
       <function provideInterface>,
@@ -197,7 +197,7 @@ def test_w_factory_class_view():
      (None,
       <function provideInterface>,
       ('',
-       <InterfaceClass zope.publisher.interfaces.browser.IBrowserRequest>)))
+       <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)))
     """
 
 

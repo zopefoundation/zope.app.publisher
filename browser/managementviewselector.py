@@ -21,7 +21,6 @@ from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.app import zapi
 from zope.app.publisher.browser import BrowserView
 from zope.app.publisher.browser.menu import getFirstMenuItem
-from zope.app.publisher.interfaces.browser import IMenuItemType
 
 class ManagementViewSelector(BrowserView):
     """View that selects the first available management view."""
@@ -31,8 +30,7 @@ class ManagementViewSelector(BrowserView):
         return self, ()
 
     def __call__(self):
-        zmi_views = zapi.getUtility(IMenuItemType, 'zmi_views')
-        item = getFirstMenuItem(zmi_views, self.context, self.request)
+        item = getFirstMenuItem('zmi_views', self.context, self.request)
 
         if item:
             self.request.response.redirect(item['action'])

@@ -386,6 +386,12 @@ class IMenuDirective(Interface):
         required=False
         )
 
+    class_ = GlobalObject(
+        title=u"Menu Class",
+        description=u"The menu class used to generate the menu.",
+        required=False
+        )
+
     interface = GlobalInterface(
         title=u"The menu's interface.",
         required=False
@@ -506,8 +512,8 @@ class ISubMenuItemSubdirective(IMenuItem):
         required=False
         )
 
-    submenu = MenuField(
-        title=u"Sub-Menu name",
+    submenu = TextLine(
+        title=u"Sub-Menu Id",
         description=u"The menu that will be used to provide the sub-entries.",
         required=True,
         )

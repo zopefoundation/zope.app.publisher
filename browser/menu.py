@@ -16,37 +16,69 @@
 $Id$
 """
 __docformat__ = "reStructuredText"
-from zope.component.interfaces import IFactory
-from zope.configuration.exceptions import ConfigurationError
+import sys
 
 from zope.interface import Interface, implements, classImplements
-from zope.interface import directlyProvides, providedBy
-from zope.interface.interface import InterfaceClass
-from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.interface import providedBy
 from zope.security import checkPermission, canAccess
-from zope.security.checker import InterfaceChecker, CheckerPublic
 from zope.security.interfaces import Unauthorized, Forbidden
 from zope.security.proxy import ProxyFactory, removeSecurityProxy
 
 from zope.app import zapi
-from zope.app.component.interface import provideInterface
-from zope.app.component.metaconfigure import adapter, proxify
 from zope.app.pagetemplate.engine import Engine
 from zope.app.publication.browser import PublicationTraverser
 from zope.app.publisher.browser import BrowserView
 from zope.app.publisher.interfaces.browser import IMenuAccessView
+from zope.app.publisher.interfaces.browser import IBrowserMenu
 from zope.app.publisher.interfaces.browser import IBrowserMenuItem
 from zope.app.publisher.interfaces.browser import IBrowserSubMenuItem
 from zope.app.publisher.interfaces.browser import IMenuItemType
 
-# Create special modules that contain all menu item types
-from types import ModuleType as module
-import sys
-menus = module('menus')
-sys.modules['zope.app.menus'] = menus
 
+class BrowserMenu(object):
+    """Browser Menu"""
+    implements(IBrowserMenu)
+    
+    def __init__(self, id, title=u'', description=u''):
+        self.id = id
+        self.title = title
+        self.description = description
 
-_order_counter = {}
+    def getMenuItemType(self):
+        return zapi.getUtility(IMenuItemType, self.id)
+
+    def getMenuItems(self, object, request):
+        """Return menu item entries in a TAL-friendly form."""
+        result = []
+        for name, item in zapi.getAdapters((object, request),
+                                           self.getMenuItemType()):
+            if item.available():
+                result.append(item)
+            
+        # Now order the result. This is not as easy as it seems.
+        #
+        # (1) Look at the interfaces and put the more specific menu entries
+        #     to the front.
+        # (2) Sort unabigious entries by order and then by title.
+        ifaces = list(providedBy(removeSecurityProxy(object)).__iro__)
+        result = [
+            (ifaces.index(item._for or Interface), item.order, item.title, item)
+            for item in result]
+        result.sort()
+        
+        result = [
+            {'title': item.title,
+             'description': item.description,
+             'action': item.action,
+             'selected': (item.selected() and u'selected') or u'',
+             'icon': item.icon,
+             'extra': item.extra,
+             'submenu': (IBrowserSubMenuItem.providedBy(item) and
+                         getMenu(item.submenuId, object, request)) or None}
+            for index, order, title, item in result]
+    
+        return result
+
 
 class BrowserMenuItem(BrowserView):
     """Browser Menu Item Class"""
@@ -133,7 +165,7 @@ class BrowserSubMenuItem(BrowserMenuItem):
     implements(IBrowserSubMenuItem)
 
     # See zope.app.publisher.interfaces.browser.IBrowserSubMenuItem
-    submenuType = None
+    submenuId = None
 
     def selected(self):
         """See zope.app.publisher.interfaces.browser.IBrowserMenuItem"""
@@ -142,41 +174,15 @@ class BrowserSubMenuItem(BrowserMenuItem):
         return super(BrowserSubMenuItem, self).selected()
 
 
-def getMenu(menuItemType, object, request):
+def getMenu(id, object, request):
     """Return menu item entries in a TAL-friendly form."""
-    result = []
-    for name, item in zapi.getAdapters((object, request), menuItemType):
-        if item.available():
-            result.append(item)
-        
-    # Now order the result. This is not as easy as it seems.
-    #
-    # (1) Look at the interfaces and put the more specific menu entries to the
-    #     front.
-    # (2) Sort unabigious entries by order and then by title.
-    ifaces = list(providedBy(removeSecurityProxy(object)).__iro__)
-    result = [
-        (ifaces.index(item._for or Interface), item.order, item.title, item)
-        for item in result]
-    result.sort()
-    
-    result = [
-        {'title': item.title,
-         'description': item.description,
-         'action': item.action,
-         'selected': (item.selected() and u'selected') or u'',
-         'icon': item.icon,
-         'extra': item.extra,
-         'submenu': (IBrowserSubMenuItem.providedBy(item) and
-                     getMenu(item.submenuType, object, request)) or None}
-        for index, order, title, item in result]
-
-    return result
+    menu = zapi.getUtility(IBrowserMenu, id)
+    return menu.getMenuItems(object, request)
 
 
-def getFirstMenuItem(menuItemType, object, request):
+def getFirstMenuItem(id, object, request):
     """Get the first item of a menu."""
-    items = getMenu(menuItemType, object, request)
+    items = getMenu(id, object, request)
     if items:
         return items[0]
     return None
@@ -186,154 +192,5 @@ class MenuAccessView(BrowserView):
     """A view allowing easy access to menus."""
     implements(IMenuAccessView)
 
-    def __getitem__(self, typeString):
-        # Convert the menu item type identifyer string to the type interface
-        menuItemType = zapi.getUtility(IMenuItemType, typeString)
-        return getMenu(menuItemType, self.context, self.request)
-
-
-def menuDirective(_context, id=None, interface=None,
-                  title=u'', description=u''):
-    """Provides a new menu (item type)."""
-    if id is None and interface is None: 
-        raise ConfigurationError(
-            "You must specify the 'id' or 'interface' attribute.")
-
-    if interface is None:
-        interface = InterfaceClass(id, (),
-                                   __doc__='Menu Item Type: %s' %id,
-                                   __module__='zope.app.menus')
-        # Add the menu item type to the `menus` module.
-        # Note: We have to do this immediately, so that directives using the
-        # MenuField can find the menu item type.
-        setattr(menus, id, interface)
-        path = 'zope.app.menus.' + id
-    else:
-        path = interface.__module__ + '.' + interface.getName()
-
-        # If an id was specified, make this menu available under this id.
-        # Note that the menu will be still available under its path, since it
-        # is an adapter, and the `MenuField` can resolve paths as well.
-        if id is None:
-            id = path
-        else:
-            # Make the interface available in the `zope.app.menus` module, so
-            # that other directives can find the interface under the name
-            # before the CA is setup.
-            _context.action(
-                discriminator = ('browser', 'MenuItemType', path),
-                callable = provideInterface,
-                args = (path, interface, IMenuItemType, _context.info)
-                )
-            setattr(menus, id, interface)
-
-    # Set the title and description of the menu item type
-    interface.setTaggedValue('title', title)
-    interface.setTaggedValue('description', description)
-
-    # Register the layer interface as an interface
-    _context.action(
-        discriminator = ('interface', path),
-        callable = provideInterface,
-        args = (path, interface),
-        kw = {'info': _context.info}
-        )
-
-    # Register the menu item type interface as an IMenuItemType
-    _context.action(
-        discriminator = ('browser', 'MenuItemType', id),
-        callable = provideInterface,
-        args = (id, interface, IMenuItemType, _context.info)
-        )
-
-
-def menuItemDirective(_context, menu, for_,
-                      action, title, description=u'', icon=None, filter=None,
-                      permission=None, layer=IBrowserRequest, extra=None,
-                      order=0):
-    """Register a single menu item."""
-    return menuItemsDirective(_context, menu, for_).menuItem(
-        _context, action, title, description, icon, filter,
-        permission, extra, order)
-
-
-def subMenuItemDirective(_context, menu, for_, title, submenu,
-                         action=u'', description=u'', icon=None, filter=None,
-                         permission=None, layer=IBrowserRequest, extra=None,
-                         order=0):
-    """Register a single sub-menu menu item."""
-    return menuItemsDirective(_context, menu, for_).subMenuItem(
-        _context, submenu, title, description, action, icon, filter,
-        permission, extra, order)
-
-
-class MenuItemFactory(object):
-    """generic factory for menu items."""
-
-    def __init__(self, factory, **kwargs):
-        self.factory = factory
-        if 'permission' in kwargs and kwargs['permission'] == 'zope.Public':
-            kwargs['permission'] = CheckerPublic
-        self.kwargs = kwargs
-    
-    def __call__(self, context, request):
-        item = self.factory(context, request)
-
-        for key, value in self.kwargs.items():
-            setattr(item, key, value)
-
-        if item.permission is not None:
-            checker = InterfaceChecker(IBrowserMenuItem, item.permission)
-            item = proxify(item, checker)
-
-        return item
-
-
-class menuItemsDirective(object):
-    """Register several menu items for a particular menu."""
-
-    def __init__(self, _context, menu, for_, layer=IBrowserRequest):
-        self.for_ = for_
-        self.menuItemType = menu
-        self.layer = layer
-
-    def menuItem(self, _context, action, title, description=u'',
-                 icon=None, filter=None, permission=None, extra=None, order=0):
-
-        if filter is not None:
-            filter = Engine.compile(filter)
-
-        if order == 0:
-            order = _order_counter.get(self.for_, 1)
-            _order_counter[self.for_] = order + 1
-
-        factory = MenuItemFactory(
-            BrowserMenuItem,
-            title=title, description=description, icon=icon, action=action,
-            filter=filter, permission=permission, extra=extra, order=order,
-            _for=self.for_)
-        adapter(_context, (factory,), self.menuItemType,
-                (self.for_, self.layer), name=title)
-
-    def subMenuItem(self, _context, submenu, title, description=u'',
-                    action=u'', icon=None, filter=None, permission=None,
-                    extra=None, order=0):
-
-        if filter is not None:
-            filter = Engine.compile(filter)
-
-        if order == 0:
-            order = _order_counter.get(self.for_, 1)
-            _order_counter[self.for_] = order + 1
-
-        factory = MenuItemFactory(
-            BrowserSubMenuItem,
-            title=title, description=description, icon=icon, action=action,
-            filter=filter, permission=permission, extra=extra, order=order,
-            _for=self.for_, submenuType=submenu)
-        adapter(_context, (factory,), self.menuItemType,
-                (self.for_, self.layer), name=title)
-        
-    def __call__(self, _context):
-        # Nothing to do.
-        pass
+    def __getitem__(self, menuId):
+        return getMenu(menuId, self.context, self.request)

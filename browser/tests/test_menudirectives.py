@@ -21,6 +21,7 @@ from zope.configuration.xmlconfig import XMLConfig
 from zope.interface import Interface, implements
 from zope.publisher.browser import TestRequest
 from zope.publisher.interfaces.browser import IBrowserPublisher
+from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.security.interfaces import Unauthorized, Forbidden
 
 from zope.app.testing.placelesssetup import PlacelessSetup
@@ -61,6 +62,9 @@ class TestObject(object):
 class IMyLayer(Interface):
     pass
 
+class IMySkin(IMyLayer, IDefaultBrowserLayer):
+    pass
+
 class Test(PlacelessSetup, unittest.TestCase):
 
     def setUp(self):
@@ -70,10 +74,8 @@ class Test(PlacelessSetup, unittest.TestCase):
     def testMenusAndMenuItems(self):
         XMLConfig('tests/menus.zcml', zope.app.publisher.browser)()
 
-        from zope.app.menus import test_id
-        
         menu = zope.app.publisher.browser.menu.getMenu(
-            test_id, TestObject(), TestRequest())
+            'test_id', TestObject(), TestRequest())
 
         def d(n):
             return {'action': "a%s" % n,
@@ -102,20 +104,23 @@ class Test(PlacelessSetup, unittest.TestCase):
              'icon': None})
 
         first = zope.app.publisher.browser.menu.getFirstMenuItem(
-            test_id, TestObject(), TestRequest())
+            'test_id', TestObject(), TestRequest())
 
         self.assertEqual(first, d(5))
 
     def testMenuItemWithLayer(self):
         XMLConfig('tests/menus.zcml', zope.app.publisher.browser)()
-        from zope.app.menus import test_id
         
         menu = zope.app.publisher.browser.menu.getMenu(
-            test_id, TestObject(), TestRequest())
+            'test_id', TestObject(), TestRequest())
         self.assertEqual(len(menu), 6)
 
         menu = zope.app.publisher.browser.menu.getMenu(
-            test_id, TestObject(), TestRequest(skin=IMyLayer))
+            'test_id', TestObject(), TestRequest(skin=IMyLayer))
+        self.assertEqual(len(menu), 2)
+
+        menu = zope.app.publisher.browser.menu.getMenu(
+            'test_id', TestObject(), TestRequest(skin=IMySkin))
         self.assertEqual(len(menu), 8)
 
 

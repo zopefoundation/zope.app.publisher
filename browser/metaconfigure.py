@@ -25,7 +25,7 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.app import zapi
 from zope.app.component.metaconfigure import handler
 from zope.app.container.interfaces import IAdding
-from zope.app.publisher.browser.menu import menuItemDirective
+from zope.app.publisher.browser.menumeta import menuItemDirective
 from zope.app.component.contentdirective import ContentDirective
 from zope.app.publisher.interfaces.browser import AddMenu
 
