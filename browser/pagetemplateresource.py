@@ -13,7 +13,7 @@
 ##############################################################################
 """Page Template Resource
 
-$Id: pagetemplateresource.py,v 1.1 2003/08/11 14:58:07 philikon Exp $
+$Id: pagetemplateresource.py,v 1.2 2003/09/22 21:05:13 sidnei Exp $
 """
 
 from zope.interface import implements
@@ -49,4 +49,6 @@ class PageTemplateResourceFactory:
         self.__checker = checker
 
     def __call__(self, request):
-        return Proxy(PageTemplateResource(self.__pt, request), self.__checker)
+        resource = PageTemplateResource(self.__pt, request)
+        resource.__Security_checker__ = self.__checker
+        return resource

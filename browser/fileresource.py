@@ -13,7 +13,7 @@
 ##############################################################################
 """
 
-$Id: fileresource.py,v 1.6 2003/06/07 05:46:02 stevea Exp $
+$Id: fileresource.py,v 1.7 2003/09/22 21:05:13 sidnei Exp $
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 
@@ -119,7 +119,9 @@ class FileResourceFactory:
         self.__checker = checker
 
     def __call__(self, request):
-        return Proxy(FileResource(self.__file, request), self.__checker)
+        resource = FileResource(self.__file, request)
+        resource.__Security_checker__ = self.__checker
+        return resource
 
 class ImageResourceFactory:
 
@@ -128,4 +130,6 @@ class ImageResourceFactory:
         self.__checker = checker
 
     def __call__(self, request):
-        return Proxy(FileResource(self.__file, request), self.__checker)
+        resource = FileResource(self.__file, request)
+        resource.__Security_checker__ = self.__checker
+        return resource

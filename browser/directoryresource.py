@@ -12,7 +12,7 @@
 #
 ##############################################################################
 """
-$Id: directoryresource.py,v 1.1 2003/08/11 14:58:07 philikon Exp $
+$Id: directoryresource.py,v 1.2 2003/09/22 21:05:13 sidnei Exp $
 """
 
 import os
@@ -68,6 +68,7 @@ class DirectoryResource(BrowserView, Resource):
             raise KeyError, name
         return res
 
+
     def get(self, name, default=_marker):
         path = self.context.path
         filename = os.path.join(path, name)
@@ -77,7 +78,10 @@ class DirectoryResource(BrowserView, Resource):
             return default
         ext = name.split('.')[-1]
         factory = self.resource_factories.get(ext, self.default_factory)
-        return factory(filename, self.context.checker)(self.request)
+        resource = factory(filename, self.context.checker)(self.request)
+        resource.__parent__ = self
+        resource.__name__ = name
+        return resource
 
 class DirectoryResourceFactory:
 
