@@ -53,11 +53,11 @@ tests_path = os.path.join(
     os.path.split(zope.app.publisher.browser.__file__)[0],
     'tests')
 
-template = """<zopeConfigure
+template = """<configure
    xmlns='http://namespaces.zope.org/zope'
    xmlns:browser='http://namespaces.zope.org/browser'>
    %s
-   </zopeConfigure>"""
+   </configure>"""
 
 request = Request(IBrowserPresentation)
 

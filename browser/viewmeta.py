@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.27 2003/07/28 22:21:02 jim Exp $
+$Id: viewmeta.py,v 1.28 2003/08/02 07:04:09 philikon Exp $
 """
 
 from zope.interface import classProvides, directlyProvides
@@ -27,7 +27,6 @@ from zope.exceptions import NotFoundError
 from zope.security.checker import CheckerPublic, Checker
 from zope.security.checker import defineChecker
 
-from zope.configuration.action import Action
 from zope.configuration.exceptions import ConfigurationError
 
 from zope.app.services.servicenames import Interfaces, Views
@@ -37,7 +36,7 @@ from zope.publisher.interfaces.browser import IBrowserPublisher
 
 from zope.publisher.browser import BrowserView
 
-from zope.app.component.metaconfigure import handler, resolveInterface
+from zope.app.component.metaconfigure import handler
 
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
@@ -102,16 +101,16 @@ from zope.app.publisher.browser.globalbrowsermenuservice \
 
 def page(_context, name, permission, for_,
          layer='default', template=None, class_=None,
-         allowed_interface='', allowed_attributes='',
+         allowed_interface=None, allowed_attributes=None,
          attribute='__call__', menu=None, title=None, 
          usage=u''
          ):
 
-    actions = _handle_menu(_context, menu, title, for_, name, permission)
+    _handle_menu(_context, menu, title, for_, name, permission)
 
     required = {}
 
-    permission = _handle_permission(_context, permission, actions)
+    permission = _handle_permission(_context, permission)
 
     if not (class_ or template):
         raise ConfigurationError("Must specify a class or template")
@@ -132,20 +131,18 @@ def page(_context, name, permission, for_,
         required['__getitem__'] = permission
 
     if class_:
-        original_class = _context.resolve(class_)
-
         if attribute != '__call__':
-            if not hasattr(original_class, attribute):
+            if not hasattr(class_, attribute):
                 raise ConfigurationError(
                     "The provided class doesn't have the specified attribute "
                     )
         if template:
             # class and template
             new_class = SimpleViewClass(
-                template, bases=(original_class, ), usage=usage
+                template, bases=(class_, ), usage=usage
                 )
         else:
-            if not hasattr(original_class, 'browserDefault'):
+            if not hasattr(class_, 'browserDefault'):
                 cdict = {
                     'browserDefault':
                     ContextMethod(lambda self, request:
@@ -156,12 +153,12 @@ def page(_context, name, permission, for_,
                 cdict = {}
 
             cdict['__page_attribute__'] = attribute
-            new_class = type(original_class.__name__,
-                          (original_class, simple,),
-                          cdict)
+            new_class = type(class_.__name__,
+                             (class_, simple,),
+                             cdict)
             new_class.usage = usage
 
-        if hasattr(original_class, '__implements__'):
+        if hasattr(class_, '__implements__'):
             classImplements(new_class, IBrowserPublisher)
             classImplements(new_class, IBrowserPresentation)
 
@@ -173,31 +170,26 @@ def page(_context, name, permission, for_,
         required[n] = permission
 
     _handle_allowed_interface(_context, allowed_interface, permission,
-                              required, actions)
+                              required)
     _handle_allowed_attributes(_context, allowed_interface, permission,
                                required)
-    for_ = _handle_for(_context, for_, actions)
+    for_ = _handle_for(_context, for_)
 
     defineChecker(new_class, Checker(required))
 
-    actions.append(
-        Action(
-          discriminator = ('view', for_, name, IBrowserPresentation, layer),
-          callable = handler,
-          args = (Views, 'provideView',
-                  for_, name, IBrowserPresentation, [new_class], layer),
-          )
+    _context.action(
+        discriminator = ('view', for_, name, IBrowserPresentation, layer),
+        callable = handler,
+        args = (Views, 'provideView',
+                for_, name, IBrowserPresentation, [new_class], layer),
         )
 
     if not usage and menu:
-        actions.append(
-            Action(discriminator = None,
+        _context.action(
+            discriminator = None,
             callable = _handle_usage_from_menu,
             args = (new_class, menu, ),
             )
-        )
-
-    return actions
 
 
 # pages, which are just a short-hand for multiple page directives.
@@ -212,7 +204,7 @@ class pages:
 
     def __init__(self, _context, for_, permission,
                  layer='default', class_=None,
-                 allowed_interface='', allowed_attributes='',
+                 allowed_interface=None, allowed_attributes=None,
                  ):
         self.opts = opts(for_=for_, permission=permission,
                          layer=layer, class_=class_,
@@ -244,19 +236,16 @@ class view:
 
     def __init__(self, _context, name, for_, permission,
                  layer='default', class_=None,
-                 allowed_interface='', allowed_attributes='',
+                 allowed_interface=None, allowed_attributes=None,
                  menu=None, title=None, usage=u''
                  ):
 
-        actions = _handle_menu(_context, menu, title, for_, name, permission)
+        _handle_menu(_context, menu, title, for_, name, permission)
 
-        if class_:
-            class_ = _context.resolve(class_)
-
-        permission = _handle_permission(_context, permission, actions)
+        permission = _handle_permission(_context, permission)
 
         self.args = (_context, name, for_, permission, layer, class_,
-                     allowed_interface, allowed_attributes, actions)
+                     allowed_interface, allowed_attributes)
 
         self.pages = []
         # default usage is u''
@@ -281,9 +270,8 @@ class view:
         return ()
 
     def __call__(self):
-
         (_context, name, for_, permission, layer, class_,
-         allowed_interface, allowed_attributes, actions) = self.args
+         allowed_interface, allowed_attributes) = self.args
 
         required = {}
 
@@ -362,28 +350,23 @@ class view:
             required[n] = permission
 
         _handle_allowed_interface(_context, allowed_interface, permission,
-                                  required, actions)
+                                  required)
         _handle_allowed_attributes(_context, allowed_interface, permission,
                                    required)
-        for_ = _handle_for(_context, for_, actions)
+        for_ = _handle_for(_context, for_)
 
         defineChecker(newclass, Checker(required))
 
-        actions.append(
-            Action(
-              discriminator = ('view',
-                               for_, name, IBrowserPresentation, layer),
-              callable = handler,
-              args = (Views, 'provideView',
-                      for_, name, IBrowserPresentation, [newclass], layer),
-              )
+        _context.action(
+            discriminator = ('view', for_, name, IBrowserPresentation, layer),
+            callable = handler,
+            args = (Views, 'provideView',
+                    for_, name, IBrowserPresentation, [newclass], layer),
             )
-
-        return actions
 
 def addview(_context, name, permission,
             layer='default', class_=None,
-            allowed_interface='', allowed_attributes='',
+            allowed_interface=None, allowed_attributes=None,
             menu=None, title=None, usage=u'',
             ):
     return view(_context, name,
@@ -396,29 +379,20 @@ def addview(_context, name, permission,
 
 def defaultView(_context, name, for_=None):
 
-    if for_ is not None:
-        for_ = resolveInterface(_context, for_)
-
-    actions = [
-        Action(
+    _context.action(
         discriminator = ('defaultViewName', for_, IBrowserPresentation, name),
         callable = handler,
         args = (Views,'setDefaultViewName', for_, IBrowserPresentation,
                 name),
-        )]
+        )
 
     if for_ is not None:
-        actions .append(
-            Action(
+        _context.action(
             discriminator = None,
             callable = handler,
             args = (Interfaces, 'provideInterface',
-                    for_.__module__+'.'+for_.__name__,
-                    for_)
+                    for_.__module__+'.'+for_.__name__, for_)
             )
-        )
-
-    return actions
 
 def _handle_menu(_context, menu, title, for_, name, permission):
     if menu or title:
@@ -434,50 +408,52 @@ def _handle_menu(_context, menu, title, for_, name, permission):
     return []
 
 
-def _handle_permission(_context, permission, actions):
+def _handle_permission(_context, permission):
     if permission == 'zope.Public':
         permission = CheckerPublic
     else:
-        actions.append(Action(discriminator = None, callable = checkPermission,
-                              args = (None, permission)))
+        _context.action(
+            discriminator = None,
+            callable = checkPermission,
+            args = (None, permission)
+            )
 
     return permission
 
 def _handle_allowed_interface(_context, allowed_interface, permission,
-                              required, actions):
+                              required):
     # Allow access for all names defined by named interfaces
-    if allowed_interface.strip():
-        for i in allowed_interface.strip().split():
-            i = resolveInterface(_context, i)
-            actions .append(
-                Action(discriminator = None, callable = handler,
-                       args = (Interfaces, 'provideInterface', None, i)
-                       ))
+    if allowed_interface:
+        for i in allowed_interface:
+            _context.action(
+                discriminator = None,
+                callable = handler,
+                args = (Interfaces, 'provideInterface', None, i)
+                )
             for name in i:
                 required[name] = permission
 
 def _handle_allowed_attributes(_context, allowed_attributes, permission,
                                required):
     # Allow access for all named attributes
-    if allowed_attributes.strip():
-        for name in allowed_attributes.strip().split():
+    if allowed_attributes:
+        for name in allowed_attributes:
             required[name] = permission
 
 def _handle_usage_from_menu(view, menu_id):
     usage = globalBrowserMenuService.getMenuUsage(menu_id)
     view.usage = usage
 
-def _handle_for(_context, for_, actions):
+def _handle_for(_context, for_):
     if for_ == '*':
         for_ = None
 
     if for_ is not None:
-        for_ = resolveInterface(_context, for_)
-
-        actions .append(
-            Action(discriminator = None, callable = handler,
-                   args = (Interfaces, 'provideInterface', None, for_)
-            ))
+        _context.action(
+            discriminator = None,
+            callable = handler,
+            args = (Interfaces, 'provideInterface', None, for_)
+            )
 
     return for_
 

@@ -13,22 +13,16 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: resourcemeta.py,v 1.7 2003/02/12 02:17:27 seanb Exp $
+$Id: resourcemeta.py,v 1.8 2003/08/02 07:04:09 philikon Exp $
 """
 
 from zope.security.checker import CheckerPublic, NamesChecker
-
-from zope.configuration.action import Action
 from zope.configuration.exceptions import ConfigurationError
-
 from zope.app.services.servicenames import Resources
-
 from zope.publisher.interfaces.browser import IBrowserPresentation
-
 from zope.app.component.metaconfigure import handler
 
-from zope.app.publisher.browser.fileresource import FileResourceFactory
-from zope.app.publisher.browser.fileresource import ImageResourceFactory
+from fileresource import FileResourceFactory, ImageResourceFactory
 
 allowed_names = ('GET', 'HEAD', 'publishTraverse', 'browserDefault',
                  'request', '__call__')
@@ -52,11 +46,9 @@ def resource(_context, name, layer='default', permission='zope.Public',
     else:
         factory = ImageResourceFactory(_context.path(image), checker)
 
-    return [
-        Action(
-            discriminator = ('resource', name, IBrowserPresentation, layer),
-            callable = handler,
-            args = (Resources, 'provideResource',
-                    name, IBrowserPresentation, factory, layer),
-            )
-        ]
+    _context.action(
+        discriminator = ('resource', name, IBrowserPresentation, layer),
+        callable = handler,
+        args = (Resources, 'provideResource',
+                name, IBrowserPresentation, factory, layer),
+        )
