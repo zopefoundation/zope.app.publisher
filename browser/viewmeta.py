@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.24 2003/05/14 13:33:02 gotcha Exp $
+$Id: viewmeta.py,v 1.25 2003/05/27 14:18:22 jim Exp $
 """
 
 from zope.interface import classProvides, directlyProvides
@@ -46,7 +46,7 @@ from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
 from zope.app.security.permission import checkPermission
 
-from zope.proxy.context import ContextMethod
+from zope.context import ContextMethod
 
 from zope.app.publisher.browser.globalbrowsermenuservice \
      import menuItemDirective, globalBrowserMenuService
