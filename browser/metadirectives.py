@@ -15,7 +15,7 @@
 
 This module defines the schemas for browser directives.
 
-$Id: metadirectives.py,v 1.6 2003/08/17 06:07:32 philikon Exp $
+$Id: metadirectives.py,v 1.7 2003/10/06 22:08:53 sidnei Exp $
 """
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, Tokens, Path, \
@@ -47,7 +47,7 @@ class IViewDirective(IBasicViewInformation):
         description=u"""
           Many views are included in menus. It's convenient to name
           the menu in the page directive, rather than having to give a
-          separate menuItem directive.          
+          separate menuItem directive.
           </description>
           """,
         required=False
@@ -110,7 +110,7 @@ class IViewDefaultPageSubdirective(Interface):
 class IDefaultViewDirective(Interface):
     """
     The name of the view that should be the default.
-              
+
     This name refers to view that should be the
     view used by default (if no view name is supplied
     explicitly).
@@ -211,7 +211,7 @@ class IPageDirective(IPagesDirective, IPagesPageSubdirective):
     usage = TextLine(
         title=u"The template usage top-level variable",
         description=u"""
-          See the usage documentation in the README.txt in the 
+          See the usage documentation in the README.txt in the
           zope/app/browser/skins directory.
           If this view is associated with a menu item, this attribute should
           not be supplied as the view will get its usage from the menu the
@@ -230,7 +230,7 @@ class IBasicResourceInformation(Interface):
     """
     This is the basic information for all browser resources.
     """
-    
+
     layer = TextLine(
         title=u"The layer the resource should be found in",
         description=u"""
