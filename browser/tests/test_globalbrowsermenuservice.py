@@ -36,6 +36,9 @@ class I11(I1): pass
 class I12(I1): pass
 class I111(I11): pass
 
+class C1(object):
+    implements(I1)
+            
 class TestObject:
     implements(IBrowserPublisher, I111)
 
@@ -227,7 +230,17 @@ class GlobalBrowserMenuServiceTest(PlacelessSetup, unittest.TestCase):
                 ]
         self.assertEqual(menu, [d(5), d(6), d(7), d(8), d(3), d(2), d(1)])
 
+    def test_addWrong(self):
+        r = self.__reg()
+        
+        x = []
+        r.menu('test_id', 'test menu')
+        self.assertRaises(TypeError, r.menuItem, 'test_id', x, 'a1', 'a2',' a3')
 
+    def test_addClass(self):
+        r = self.__reg()
+        r.menu('test_id', 'test menu')
+        r.menuItem('test_id', C1, 'a1', 'a2', 'a3')
 
 def test_suite():
     return unittest.TestSuite((
