@@ -420,7 +420,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         # XXX this seems to be no longer needed
         # Need to "log someone in" to turn on checks
-        #from zope.security.securitymanagement import newSecurityManager
+        #from zope.security.management import newSecurityManager
         #newSecurityManager('someuser')
 
         v = getView(ob, 'index.html', request)
@@ -458,7 +458,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         # XXX this seems to be no longer needed
         # Need to "log someone in" to turn on checks
-        #from zope.security.securitymanagement import newSecurityManager
+        #from zope.security.management import newSecurityManager
         #newSecurityManager('someuser')
 
         view = getView(ob, 'test', request)
@@ -619,7 +619,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         # XXX This seems to be no longer needed
         # Need to "log someone in" to turn on checks
-        #from zope.security.securitymanagement import newSecurityManager
+        #from zope.security.management import newSecurityManager
         #newSecurityManager('someuser')
 
         v = getView(ob, 'xxx.html', request)

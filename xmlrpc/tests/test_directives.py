@@ -13,7 +13,7 @@
 ##############################################################################
 """
 
-$Id: test_directives.py,v 1.2 2002/12/25 14:13:11 jim Exp $
+$Id: test_directives.py,v 1.3 2002/12/31 03:35:10 jim Exp $
 """
 
 import unittest
@@ -231,7 +231,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             ))
 
         # Need to "log someone in" to turn on checks
-        from zope.security.securitymanagement import newSecurityManager
+        from zope.security.management import newSecurityManager
         newSecurityManager('someuser')
 
         v = getView(ob, 'index.html', request)
