@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.45 2004/04/09 14:18:36 garrett Exp $
+$Id: viewmeta.py,v 1.46 2004/04/15 13:25:40 srichter Exp $
 """
 import os
 
@@ -174,7 +174,8 @@ def page(_context, name, permission, for_,
         discriminator = ('view', for_, name, IBrowserRequest, layer),
         callable = handler,
         args = (zapi.servicenames.Presentation, 'provideAdapter',
-                IBrowserRequest, new_class, name, [for_], Interface, layer),
+                IBrowserRequest, new_class, name, [for_], Interface, layer,
+                _context.info),
         )
 
 
@@ -363,7 +364,7 @@ class view:
             callable = handler,
             args = (zapi.servicenames.Presentation, 'provideAdapter',
                     IBrowserRequest, newclass, name, [for_],  self.provides,
-                    layer),
+                    layer, _context.info),
             )
 
 def addview(_context, name, permission,
