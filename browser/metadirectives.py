@@ -23,10 +23,9 @@ from zope.configuration.fields import GlobalObject, Tokens, Path, \
 from zope.schema import TextLine, Text, Id, Int
 
 from zope.app.component.metadirectives import IBasicViewInformation
-from zope.app.publisher.browser.fields import MenuField, LayerField
+from zope.app.component.fields import LayerField
+from zope.app.publisher.browser.fields import MenuField
 from zope.app.security.fields import Permission
-
-from zope.app.i18n import ZopeMessageIDFactory as _
 
 #
 # browser views
@@ -46,15 +45,6 @@ class IPagesDirective(IBasicViewInformation):
         required=False
         )
 
-    layer = LayerField(
-        title=_("The layer the view is in."),
-        description=_("""
-        A skin is composed of layers. It is common to put skin
-        specific views in a layer named after the skin. If the 'layer'
-        attribute is not supplied, it defaults to 'default'."""),
-        required=False,
-        )
-
     permission = Permission(
         title=u"Permission",
         description=u"The permission needed to use the view.",
@@ -69,11 +59,9 @@ class IViewDirective(IPagesDirective):
     traversing to the view name and then traversing to the page name.
     """
 
-    for_ = Tokens(
-        title=_("Specifications of the objects to be viewed"),
-        description=_("This should be a list of interfaces or classes"),
-        required=False,
-        value_type=GlobalObject(missing_value=object(),),
+    for_ = GlobalObject(
+        title=u"The interface this view is for.",
+        required=False
         )
 
     name = TextLine(

@@ -26,7 +26,7 @@ from zope.security.checker import defineChecker
 from zope.configuration.exceptions import ConfigurationError
 from zope.app.component.interface import provideInterface
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.publisher.interfaces.browser import IDefaultLayer
+from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.app import zapi
 from zope.app.component.metaconfigure import handler
@@ -89,13 +89,12 @@ from zope.app.publisher.browser.menu import menuItemDirective
 # page
 
 def page(_context, name, permission, for_,
-         layer=IDefaultLayer, template=None, class_=None,
+         layer=IDefaultBrowserLayer, template=None, class_=None,
          allowed_interface=None, allowed_attributes=None,
          attribute='__call__', menu=None, title=None, 
          ):
 
-    _handle_menu(_context, menu, title, for_, name, permission)
-
+    _handle_menu(_context, menu, title, [for_], name, permission)
     required = {}
 
     permission = _handle_permission(_context, permission)
@@ -177,7 +176,7 @@ def page(_context, name, permission, for_,
 class pages(object):
 
     def __init__(self, _context, for_, permission,
-                 layer=IDefaultLayer, class_=None,
+                 layer=IDefaultBrowserLayer, class_=None,
                  allowed_interface=None, allowed_attributes=None,
                  ):
         self.opts = dict(for_=for_, permission=permission,
@@ -208,23 +207,12 @@ class view(object):
     default = None
 
     def __init__(self, _context, for_, permission,
-                 name='', layer=IDefaultLayer, class_=None,
+                 name='', layer=IDefaultBrowserLayer, class_=None,
                  allowed_interface=None, allowed_attributes=None,
                  menu=None, title=None, provides=Interface,
                  ):
-        if not isinstance(for_, (list, tuple)):
-            import warnings
-            # BBB This can go away in 3.3
-            import pdb;pdb.set_trace()
-            warnings.warn(
-                "The for_ argument to "
-                "zope.app.publisher.browser.metaconfigure.view should be a "
-                "sequence of interfaces.",
-                DeprecationWarning)
-            for_ = (for_,)
-        for_ = tuple(for_)
 
-        _handle_menu(_context, menu, title, for_[0], name, permission)
+        _handle_menu(_context, menu, title, [for_], name, permission)
 
         permission = _handle_permission(_context, permission)
 
@@ -337,8 +325,7 @@ class view(object):
                                   required)
         _handle_allowed_attributes(_context, allowed_interface, permission,
                                    required)
-        for iface in for_:
-            _handle_for(_context, iface)
+        _handle_for(_context, for_)
 
         defineChecker(newclass, Checker(required))
 
@@ -349,16 +336,16 @@ class view(object):
                 args = ('', self.provides)
                 )
 
-        required = for_ + (layer,)
         _context.action(
-            discriminator = ('view', required, name, self.provides),
+            discriminator = ('view', (for_, layer), name, self.provides),
             callable = handler,
-            args = (zapi.servicenames.Adapters, 'register', required,
-                    self.provides, name, newclass, _context.info),
+            args = (zapi.servicenames.Adapters, 'register',
+                    (for_, layer), self.provides, name, newclass,
+                    _context.info),
             )
 
 def addview(_context, name, permission,
-            layer=IDefaultLayer, class_=None,
+            layer=IDefaultBrowserLayer, class_=None,
             allowed_interface=None, allowed_attributes=None,
             menu=None, title=None
             ):
@@ -393,10 +380,13 @@ def _handle_menu(_context, menu, title, for_, name, permission):
         if not (menu and title):
             raise ConfigurationError(
                 "If either menu or title are specified, they must "
-                "both be specified.")
-            
+                "both be specified.")   
+            if len(for_) != 1:
+                raise ConfigurationError(
+                    "Menus can be specified only for single-view, not for "
+                    "multi-views.")
         return menuItemDirective(
-            _context, menu, for_, '@@' + name, title,
+            _context, menu, for_[0], '@@' + name, title,
             permission=permission)
 
     return []

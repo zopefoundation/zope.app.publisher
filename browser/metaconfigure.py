@@ -62,7 +62,7 @@ def layer(_context, name=None, interface=None, base=ILayer):
     >>> iface.getName()
     u'layer1'
     >>> iface.__bases__
-    (<InterfaceClass zope.publisher.interfaces.browser.ILayer>,)
+    (<InterfaceClass zope.publisher.interfaces.ILayer>,)
     >>> hasattr(sys.modules['zope.app.layers'], 'layer1')
     True
 

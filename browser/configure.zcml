@@ -2,9 +2,13 @@
    xmlns="http://namespaces.zope.org/zope"
    xmlns:browser="http://namespaces.zope.org/browser">
 
-<browser:layer name="default"
-  interface="zope.publisher.interfaces.browser.IDefaultLayer" />
+<defaultLayer
+  type="zope.publisher.interfaces.browser.IBrowserRequest"
+  layer="zope.publisher.interfaces.browser.IDefaultBrowserLayer" />
 
+<browser:layer name="default"
+  interface="zope.publisher.interfaces.browser.IDefaultBrowserLayer" />
+  
 <content class="zope.publisher.browser.BrowserRequest">
   <allow
     interface="zope.publisher.interfaces.browser.IBrowserApplicationRequest"
