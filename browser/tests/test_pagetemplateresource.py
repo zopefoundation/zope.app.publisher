@@ -12,14 +12,14 @@
 #
 ##############################################################################
 """
-$Id: test_pagetemplateresource.py,v 1.1 2003/08/11 14:58:13 philikon Exp $
+$Id: test_pagetemplateresource.py,v 1.2 2003/11/21 17:12:10 jim Exp $
 """
 
 import os
 from unittest import TestCase, main, makeSuite
 
 from zope.exceptions import NotFoundError
-from zope.component.adapter import provideAdapter
+from zope.app.tests import ztapi
 from zope.security.checker import NamesChecker
 from zope.publisher.browser import TestRequest
 
@@ -40,7 +40,7 @@ class Test(PlacelessSetup, TestCase):
 
     def setUp(self):
         PlacelessSetup.setUp(self)
-        provideAdapter(None, ITraversable, DefaultTraversable)
+        ztapi.provideAdapter(None, ITraversable, DefaultTraversable)
 
     def testNoTraversal(self):
         path = os.path.join(test_directory, 'testfiles', 'test.pt')

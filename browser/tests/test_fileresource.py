@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_fileresource.py,v 1.7 2003/08/11 14:58:13 philikon Exp $
+$Id: test_fileresource.py,v 1.8 2003/11/21 17:12:10 jim Exp $
 """
 
 import os
@@ -26,7 +26,7 @@ from zope.security.checker import NamesChecker
 from zope.exceptions import NotFoundError
 
 from zope.app.tests.placelesssetup import PlacelessSetup
-from zope.component.adapter import provideAdapter
+from zope.app.tests import ztapi
 from zope.proxy import removeAllProxies
 
 from zope.i18n.interfaces import IUserPreferredCharsets
@@ -49,7 +49,8 @@ class Test(PlacelessSetup, TestCase):
 
     def setUp(self):
         PlacelessSetup.setUp(self)
-        provideAdapter(IHTTPRequest, IUserPreferredCharsets, HTTPCharsets)
+        ztapi.provideAdapter(IHTTPRequest, IUserPreferredCharsets,
+                             HTTPCharsets)
 
     def testNoTraversal(self):
 

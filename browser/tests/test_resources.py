@@ -14,14 +14,13 @@
 """
 
 Revision information:
-$Id: test_resources.py,v 1.5 2003/05/01 19:35:28 faassen Exp $
+$Id: test_resources.py,v 1.6 2003/11/21 17:12:10 jim Exp $
 """
 
 from unittest import TestCase, main, makeSuite
-
+from zope.app.tests import ztapi
 from zope.app.tests.placelesssetup import PlacelessSetup
-from zope.component.resource import provideResource
-from zope.component.adapter import provideAdapter
+from zope.app.tests import ztapi
 
 from zope.i18n.interfaces import IUserPreferredCharsets
 
@@ -34,7 +33,8 @@ class Test(PlacelessSetup, TestCase):
 
     def setUp(self):
         PlacelessSetup.setUp(self)
-        provideAdapter(IHTTPRequest, IUserPreferredCharsets, HTTPCharsets)
+        ztapi.provideAdapter(IHTTPRequest, IUserPreferredCharsets,
+                             HTTPCharsets)
 
     def test_publishTraverse(self):
         from zope.app.publisher.browser.resources import Resources
@@ -44,7 +44,7 @@ class Test(PlacelessSetup, TestCase):
             def __init__(self, request): pass
             def __call__(self): return 42
 
-        provideResource('test', IBrowserView, Resource)
+        ztapi.browserResource('test', Resource)
         view = Resources(None, request)
         resource = view.publishTraverse(request, 'test')
         self.assertEqual(resource(), 42)
@@ -57,7 +57,7 @@ class Test(PlacelessSetup, TestCase):
             def __init__(self, request): pass
             def __call__(self): return 42
 
-        provideResource('test', IBrowserView, Resource)
+        ztapi.browserResource('test', Resource)
         view = Resources(None, request)
         resource = view['test']
         self.assertEqual(resource(), 42)

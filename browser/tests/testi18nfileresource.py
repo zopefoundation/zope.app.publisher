@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: testi18nfileresource.py,v 1.5 2003/08/11 14:58:13 philikon Exp $
+$Id: testi18nfileresource.py,v 1.6 2003/11/21 17:12:10 jim Exp $
 """
 
 from unittest import main, makeSuite
@@ -24,7 +24,7 @@ import os
 from zope.exceptions import NotFoundError
 
 from zope.app.tests.placelesssetup import PlacelessSetup
-from zope.component.adapter import provideAdapter
+from zope.app.tests import ztapi
 
 from zope.i18n.interfaces import IUserPreferredCharsets
 from zope.i18n.interfaces import IUserPreferredLanguages
@@ -54,8 +54,10 @@ class Test(PlacelessSetup, TestII18nAware):
     def setUp(self):
         PlacelessSetup.setUp(self)
         TestII18nAware.setUp(self)
-        provideAdapter(IHTTPRequest, IUserPreferredCharsets, HTTPCharsets)
-        provideAdapter(IHTTPRequest, IUserPreferredLanguages, BrowserLanguages)
+        ztapi.provideAdapter(IHTTPRequest, IUserPreferredCharsets,
+                             HTTPCharsets)
+        ztapi.provideAdapter(IHTTPRequest, IUserPreferredLanguages,
+                             BrowserLanguages)
         # Setup the negotiator service registry entry
         managerHandler('defineService', 'LanguageNegotiation', INegotiator)
         provideService('LanguageNegotiation', negotiator, 'zope.Public')
