@@ -26,7 +26,7 @@ from zope.component import getDefaultViewName, getResource
 from zope.app.services.servicenames import Permissions
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.security.proxy import ProxyFactory
-from zope.proxy.introspection import removeAllProxies
+from zope.proxy import removeAllProxies
 import zope.configuration
 
 from zope.app.publisher.browser.globalbrowsermenuservice import \

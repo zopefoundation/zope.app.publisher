@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_fileresource.py,v 1.5 2003/05/01 19:35:28 faassen Exp $
+$Id: test_fileresource.py,v 1.6 2003/05/28 15:46:10 jim Exp $
 """
 
 import os
@@ -27,7 +27,7 @@ from zope.exceptions import NotFoundError
 
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.component.adapter import provideAdapter
-from zope.proxy.introspection import removeAllProxies
+from zope.proxy import removeAllProxies
 
 from zope.i18n.interfaces import IUserPreferredCharsets
 
