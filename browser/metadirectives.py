@@ -412,6 +412,12 @@ class IMenuItemsDirective(Interface):
         required=False
         )
 
+    layer = LayerField(
+        title=u"Layer",
+        description=u"The Layer for which the item is declared.",
+        required=False
+        )
+
 class IMenuItem(Interface):
     """Common menu item configuration
     """

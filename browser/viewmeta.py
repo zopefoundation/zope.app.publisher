@@ -372,9 +372,6 @@ def _handle_menu(_context, menu, title, for_, name, permission, layer=IDefaultBr
                     "Menus can be specified only for single-view, not for "
                     "multi-views.")
 
-        # TODO: menuItemDirective does not handle layers.
-        # IMO this fix is just a work around and menu should 
-        # support layers too.
         registeredTitles = _registeredMenus.setdefault(menu, {})
         registered = registeredTitles.setdefault(title, [])
 
@@ -382,7 +379,7 @@ def _handle_menu(_context, menu, title, for_, name, permission, layer=IDefaultBr
             registered.append(for_[0])
             return menuItemDirective(
                 _context, menu, for_[0], '@@' + name, title,
-                permission=permission)
+                permission=permission, layer=layer)
 
     return []
 

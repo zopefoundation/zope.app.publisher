@@ -248,7 +248,8 @@ def menuDirective(_context, id=None, interface=None,
 
 def menuItemDirective(_context, menu, for_,
                       action, title, description=u'', icon=None, filter=None,
-                      permission=None, extra=None, order=0):
+                      permission=None, layer=IBrowserRequest, extra=None,
+                      order=0):
     """Register a single menu item."""
     return menuItemsDirective(_context, menu, for_).menuItem(
         _context, action, title, description, icon, filter,
@@ -257,7 +258,8 @@ def menuItemDirective(_context, menu, for_,
 
 def subMenuItemDirective(_context, menu, for_, title, submenu,
                          action=u'', description=u'', icon=None, filter=None,
-                         permission=None, extra=None, order=0):
+                         permission=None, layer=IBrowserRequest, extra=None,
+                         order=0):
     """Register a single sub-menu menu item."""
     return menuItemsDirective(_context, menu, for_).subMenuItem(
         _context, submenu, title, description, action, icon, filter,
@@ -289,9 +291,10 @@ class MenuItemFactory(object):
 class menuItemsDirective(object):
     """Register several menu items for a particular menu."""
 
-    def __init__(self, _context, menu, for_):
+    def __init__(self, _context, menu, for_, layer=IBrowserRequest):
         self.for_ = for_
         self.menuItemType = menu
+        self.layer = layer
 
     def menuItem(self, _context, action, title, description=u'',
                  icon=None, filter=None, permission=None, extra=None, order=0):
@@ -309,7 +312,7 @@ class menuItemsDirective(object):
             filter=filter, permission=permission, extra=extra, order=order,
             _for=self.for_)
         adapter(_context, (factory,), self.menuItemType,
-                (self.for_, IBrowserRequest), name=title)
+                (self.for_, self.layer), name=title)
 
     def subMenuItem(self, _context, submenu, title, description=u'',
                     action=u'', icon=None, filter=None, permission=None,
@@ -328,7 +331,7 @@ class menuItemsDirective(object):
             filter=filter, permission=permission, extra=extra, order=order,
             _for=self.for_, submenuType=submenu)
         adapter(_context, (factory,), self.menuItemType,
-                (self.for_, IBrowserRequest), name=title)
+                (self.for_, self.layer), name=title)
         
     def __call__(self, _context):
         # Nothing to do.

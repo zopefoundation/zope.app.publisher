@@ -58,6 +58,8 @@ class TestObject(object):
             raise Unauthorized, name
         return self.f
 
+class IMyLayer(Interface):
+    pass
 
 class Test(PlacelessSetup, unittest.TestCase):
 
@@ -65,7 +67,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         super(Test, self).setUp()
         XMLConfig('meta.zcml', zope.app.publisher.browser)()
 
-    def test(self):
+    def testMenusAndMenuItems(self):
         XMLConfig('tests/menus.zcml', zope.app.publisher.browser)()
 
         from zope.app.menus import test_id
@@ -103,6 +105,18 @@ class Test(PlacelessSetup, unittest.TestCase):
             test_id, TestObject(), TestRequest())
 
         self.assertEqual(first, d(5))
+
+    def testMenuItemWithLayer(self):
+        XMLConfig('tests/menus.zcml', zope.app.publisher.browser)()
+        from zope.app.menus import test_id
+        
+        menu = zope.app.publisher.browser.menu.getMenu(
+            test_id, TestObject(), TestRequest())
+        self.assertEqual(len(menu), 6)
+
+        menu = zope.app.publisher.browser.menu.getMenu(
+            test_id, TestObject(), TestRequest(skin=IMyLayer))
+        self.assertEqual(len(menu), 8)
 
 
 def test_suite():

@@ -9,7 +9,7 @@
 
   <browser:menu 
       id="test_sub_id" 
-      title="test sub menu" />
+      title="test sub menu 2" />
 
   <browser:menuItems 
       menu="test_id" 
@@ -50,6 +50,14 @@
       menu="test_sub_id"
       for=".tests.test_menudirectives.I111">
     <browser:menuItem action="a10" title="t10" />
+  </browser:menuItems>
+
+  <browser:menuItems 
+      menu="test_id"
+      for=".tests.test_menudirectives.I111"
+      layer=".tests.test_menudirectives.IMyLayer">
+    <browser:menuItem action="a11" title="t11" />
+    <browser:subMenuItem submenu="test_sub_id" title="s2" />
   </browser:menuItems>
 
 </configure>
