@@ -46,7 +46,7 @@ skins = module('skins')
 sys.modules['zope.app.skins'] = skins
 
 
-def layer(_context, name=None, interface=None, base=Interface):
+def layer(_context, name=None, interface=None, base=IBrowserRequest):
     """Provides a new layer.
 
     >>> class Context(object):
@@ -72,7 +72,7 @@ def layer(_context, name=None, interface=None, base=Interface):
     Possibility 2: Providing a custom base interface
     ------------------------------------------------
     
-    >>> class BaseLayer(ILayer):
+    >>> class BaseLayer(IBrowserRequest):
     ...     pass
     >>> context = Context()
     >>> layer(context, u'layer1', base=BaseLayer)
@@ -89,7 +89,7 @@ def layer(_context, name=None, interface=None, base=Interface):
     Possibility 3: Define a Layer just through an Interface
     -------------------------------------------------------
 
-    >>> class layer1(ILayer):
+    >>> class layer1(IBrowserRequest):
     ...     pass
     >>> context = Context()
     >>> layer(context, interface=layer1)
@@ -138,7 +138,13 @@ def layer(_context, name=None, interface=None, base=Interface):
     if name is None and interface is None: 
         raise ConfigurationError(
             "You must specify the 'name' or 'interface' attribute.")
-    if interface is not None and base is not Interface:
+    if interface and not interface.extends(IBrowserRequest):
+        raise ConfigurationError(
+            "The layer interface must extend `IBrowserRequest`.")
+    if base is not IBrowserRequest and not IBrowserRequest.extends(base):
+        raise ConfigurationError(
+            "The base interface must extend `IBRowserRequest`.")
+    if interface is not None and base is not IBrowserRequest:
         raise ConfigurationError(
             "You cannot specify the 'interface' and 'base' together.")
 
