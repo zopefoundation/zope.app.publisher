@@ -245,6 +245,72 @@ as before, we will get an error if we don't supply credentials:
   </methodResponse>
   <BLANKLINE>
 
+Parameters
+----------
+
+Of course, XML-RPC views can take parameters, too:
+
+  >>> class ParameterDemo:
+  ...     def __init__(self, context, request):
+  ...         self.context = context
+  ...         self.request = request
+  ...
+  ...     def add(self, first, second):
+  ...         return first + second
+
+Now we'll register it as a view:
+
+  >>> from zope.configuration import xmlconfig
+  >>> ignored = xmlconfig.string("""
+  ... <configure 
+  ...     xmlns="http://namespaces.zope.org/zope"
+  ...     xmlns:xmlrpc="http://namespaces.zope.org/xmlrpc"
+  ...     >
+  ...   <!-- We only need to do this include in this example, 
+  ...        Normally the include has already been done for us. -->
+  ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
+  ...
+  ...   <xmlrpc:view
+  ...       for="zope.app.folder.folder.IFolder"
+  ...       methods="add"
+  ...       class="zope.app.publisher.xmlrpc.README.ParameterDemo"
+  ...       permission="zope.ManageContent"
+  ...       />
+  ... </configure>
+  ... """)
+
+Then we can issue a remote procedure call with a parameter and get
+back, surprise!, the sum:
+
+  >>> print http(r"""
+  ... POST / HTTP/1.0
+  ... Authorization: Basic bWdyOm1ncnB3
+  ... Content-Length: 159
+  ... Content-Type: text/xml
+  ... 
+  ... <?xml version='1.0'?>
+  ... <methodCall>
+  ... <methodName>add</methodName>
+  ... <params>
+  ... <param><int>20</int></param>
+  ... <param><int>22</int></param>
+  ... </params>
+  ... </methodCall>
+  ... """, handle_errors=False)
+  HTTP/1.0 200 Ok
+  Content-Length: 122
+  Content-Type: text/xml;charset=utf-8
+  <BLANKLINE>
+  <?xml version='1.0'?>
+  <methodResponse>
+  <params>
+  <param>
+  <value><int>42</int></value>
+  </param>
+  </params>
+  </methodResponse>
+  <BLANKLINE>
+
 Faults
 ------
 
