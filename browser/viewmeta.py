@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.23 2003/05/02 18:27:07 jim Exp $
+$Id: viewmeta.py,v 1.24 2003/05/14 13:33:02 gotcha Exp $
 """
 
 from zope.interface import classProvides, directlyProvides
@@ -32,7 +32,7 @@ from zope.configuration.interfaces import ISubdirectiveHandler
 from zope.configuration.action import Action
 from zope.configuration.exceptions import ConfigurationError
 
-from zope.app.services.servicenames import Interfaces
+from zope.app.services.servicenames import Interfaces, Views
 
 from zope.publisher.interfaces.browser import IBrowserPresentation
 from zope.publisher.interfaces.browser import IBrowserPublisher
@@ -186,7 +186,7 @@ def page(_context, name, permission, for_,
         Action(
           discriminator = ('view', for_, name, IBrowserPresentation, layer),
           callable = handler,
-          args = ('Views', 'provideView',
+          args = (Views, 'provideView',
                   for_, name, IBrowserPresentation, [new_class], layer),
           )
         )
@@ -382,7 +382,7 @@ class view:
               discriminator = ('view',
                                for_, name, IBrowserPresentation, layer),
               callable = handler,
-              args = ('Views', 'provideView',
+              args = (Views, 'provideView',
                       for_, name, IBrowserPresentation, [newclass], layer),
               )
             )
@@ -414,7 +414,7 @@ def defaultView(_context, name, for_=None):
         Action(
         discriminator = ('defaultViewName', for_, IBrowserPresentation, name),
         callable = handler,
-        args = ('Views','setDefaultViewName', for_, IBrowserPresentation,
+        args = (Views,'setDefaultViewName', for_, IBrowserPresentation,
                 name),
         )]
 
