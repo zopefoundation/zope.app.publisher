@@ -31,7 +31,7 @@ from resources import empty
 
 _marker = []
 
-# we only need this class a context for DirectoryResource
+# we only need this class as a context for DirectoryResource
 class Directory(object):
 
     def __init__(self, path, checker):
@@ -66,7 +66,6 @@ class DirectoryResource(BrowserView, Resource):
         if res is None:
             raise KeyError, name
         return res
-
 
     def get(self, name, default=_marker):
         path = self.context.path
