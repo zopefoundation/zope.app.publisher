@@ -94,6 +94,9 @@ class GlobalBrowserMenuService(object):
         seen = {}
         sm = getSecurityManager()
 
+        # stuff for figuring out the selected view
+        request_url = request.getURL()
+
         for items in registry.getAllForObject(object):
             for action, title, description, filter, permission in items:
 
@@ -139,7 +142,15 @@ class GlobalBrowserMenuService(object):
                     except (Unauthorized, Forbidden):
                         continue # Skip unauthorized or forbidden
 
-                if request.getURL().endswith(action):
+                normalized_action = action
+                if action.startswith('@@'):
+                    normalized_action = action[2:]
+
+                if request_url.endswith(action):
+                    selected='selected'
+                elif request_url.endswith('/'+normalized_action):
+                    selected='selected'
+                elif request_url.endswith('++view++'+normalized_action):
                     selected='selected'
                 else:
                     selected=''
@@ -228,5 +239,5 @@ del addCleanUp
 
 __doc__ = GlobalBrowserMenuService.__doc__ + """
 
-$Id: globalbrowsermenuservice.py,v 1.16 2003/06/12 09:34:15 jim Exp $
+$Id: globalbrowsermenuservice.py,v 1.17 2003/07/10 01:35:12 richard Exp $
 """

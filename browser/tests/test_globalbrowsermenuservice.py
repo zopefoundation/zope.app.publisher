@@ -15,7 +15,7 @@
 
 XXX longer description goes here.
 
-$Id: test_globalbrowsermenuservice.py,v 1.10 2003/06/07 05:46:03 stevea Exp $
+$Id: test_globalbrowsermenuservice.py,v 1.11 2003/07/10 01:35:15 richard Exp $
 """
 
 from unittest import TestCase, main, makeSuite
@@ -150,6 +150,41 @@ class Test(PlacelessSetup, TestCase):
                     'selected': ''}
 
         self.assertEqual(list(menu), [d(5), d(6), d(3), d(2), d(1)])
+
+    def test_identify_action(self):
+        r = self.__reg()
+        r.menu('test_id', 'test menu')
+        r.menuItem('test_id', Interface, 'a1', 't1', 'd1')
+        r.menuItem('test_id', I11, 'a12', 't12', 'd12')
+        r.menuItem('test_id', I111, 'a2', 't2', 'd2')
+
+        def d(n, selected=''):
+            return {'action': "a%s" % n,
+                    'title':  "t%s" % n,
+                    'description':  "d%s" % n,
+                    'selected': selected}
+
+        menu = r.getMenu('test_id', X(),
+            TestRequest(SERVER_URL='http://127.0.0.1/a1', PATH_INFO='/a1'))
+        self.assertEqual(list(menu), [d(2), d(12), d(1, 'selected')])
+        menu = r.getMenu('test_id', X(), 
+            TestRequest(SERVER_URL='http://127.0.0.1/a12', PATH_INFO='/a12'))
+        self.assertEqual(list(menu), [d(2), d(12, 'selected'), d(1)])
+        menu = r.getMenu('test_id', X(),
+            TestRequest(SERVER_URL='http://127.0.0.1/@@a1', PATH_INFO='/@@a1'))
+        self.assertEqual(list(menu), [d(2), d(12), d(1, 'selected')])
+        menu = r.getMenu('test_id', X(), 
+            TestRequest(SERVER_URL='http://127.0.0.1/@@a12',
+            PATH_INFO='/@@a12'))
+        self.assertEqual(list(menu), [d(2), d(12, 'selected'), d(1)])
+        menu = r.getMenu('test_id', X(),
+            TestRequest(SERVER_URL='http://127.0.0.1/++view++a1',
+            PATH_INFO='/++view++a1'))
+        self.assertEqual(list(menu), [d(2), d(12), d(1, 'selected')])
+        menu = r.getMenu('test_id', X(), 
+            TestRequest(SERVER_URL='http://127.0.0.1/++view++a12',
+            PATH_INFO='/++view++a12'))
+        self.assertEqual(list(menu), [d(2), d(12, 'selected'), d(1)])
 
     def testEmpty(self):
         r = self.__reg()
