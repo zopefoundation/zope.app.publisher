@@ -100,7 +100,7 @@ def view(_context, for_=None, interface=None, methods=None,
                         _context.info)
                 )
 
-    # Register the used interfaces with the interface service
+    # Register the used interfaces with the site manager
     if for_ is not None:
         _context.action(
             discriminator = None,

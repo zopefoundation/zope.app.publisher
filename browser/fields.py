@@ -31,7 +31,7 @@ class MenuField(GlobalObject):
     r"""This fields represents a menu (item type).
 
     Besides being able to look up the menu by importing it, we also try
-    to look up the name in the utility service.
+    to look up the name in the site manager.
 
     >>> from zope.interface import directlyProvides
     >>> from zope.interface.interface import InterfaceClass
@@ -75,8 +75,8 @@ class MenuField(GlobalObject):
     >>> if old is not None:
     ...     sys.modules['zope.app.menus'] = old
 
-    Test 3: Get the menu from the utility service
-    ---------------------------------------------
+    Test 3: Get the menu from the Site Manager
+    ------------------------------------------
     
     >>> from zope.app.testing import ztapi
     >>> ztapi.provideUtility(IMenuItemType, menu1, 'menu1')
