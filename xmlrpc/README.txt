@@ -48,7 +48,7 @@ Now, we'll add some items to the root folder:
   ... Content-Length: 73
   ... Content-Type: application/x-www-form-urlencoded
   ... 
-  ... type_name=zope.app.browser.add.zope.app.folder.folder.Folder&new_value=f1""")
+  ... type_name=BrowserAdd__zope.app.folder.folder.Folder&new_value=f1""")
   HTTP/1.1 303 See Other
   ...
 
@@ -58,7 +58,7 @@ Now, we'll add some items to the root folder:
   ... Content-Length: 73
   ... Content-Type: application/x-www-form-urlencoded
   ... 
-  ... type_name=zope.app.browser.add.zope.app.folder.folder.Folder&new_value=f2""")
+  ... type_name=BrowserAdd__zope.app.folder.folder.Folder&new_value=f2""")
   HTTP/1.1 303 See Other
   ...
 
