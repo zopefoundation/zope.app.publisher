@@ -13,13 +13,14 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: metaconfigure.py,v 1.13 2003/08/16 00:43:46 srichter Exp $
+$Id: metaconfigure.py,v 1.14 2003/11/21 17:10:27 jim Exp $
 """
 
-from zope.publisher.interfaces.browser import IBrowserPresentation
+from zope.app import zapi
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.app.services.servicenames import Interfaces
 
-from zope.app.component.metaconfigure import skin as _skin
+from zope.app.component.metaconfigure import skin, layer
 from zope.app.component.metaconfigure import handler
 
 # referred to through ZCML
@@ -29,20 +30,18 @@ from zope.app.publisher.browser.i18nresourcemeta import I18nResource
 
 from zope.app.publisher.browser.viewmeta import view
 
-def skin(_context, **__kw):
-    return _skin(_context, type=IBrowserPresentation, **__kw)
-
 def defaultView(_context, name, for_=None, **__kw):
 
     if __kw:
         view(_context, name=name, for_=for_, **__kw)()
 
-    type = IBrowserPresentation
+    type = IBrowserRequest
 
     _context.action(
         discriminator = ('defaultViewName', for_, type, name),
         callable = handler,
-        args = ('Views','setDefaultViewName', for_, type, name),
+        args = (zapi.servicenames.Presentation,
+                'setDefaultViewName', for_, type, name),
         )
 
     if for_ is not None:

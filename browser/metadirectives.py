@@ -15,7 +15,7 @@
 
 This module defines the schemas for browser directives.
 
-$Id: metadirectives.py,v 1.7 2003/10/06 22:08:53 sidnei Exp $
+$Id: metadirectives.py,v 1.8 2003/11/21 17:10:27 jim Exp $
 """
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, Tokens, Path, \
@@ -472,9 +472,18 @@ class IMenuItemDirective(IMenuItemsDirective, IMenuItemSubdirective):
 # misc. directives
 #
 
-class ISkinDirective(Interface):
+class ILayerDirective(Interface):
+    """Defines a browser layer
     """
-    Defines a browser skin
+
+    name = TextLine(
+        title=u"Name",
+        description=u"The name of the skin.",
+        required=True
+        )
+
+class ISkinDirective(Interface):
+    """Defines a browser skin
     """
 
     name = TextLine(
