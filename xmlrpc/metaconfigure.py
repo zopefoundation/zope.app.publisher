@@ -13,7 +13,7 @@
 ##############################################################################
 """XMLRPC configuration code
 
-$Id: metaconfigure.py,v 1.5 2003/02/06 06:49:45 seanb Exp $
+$Id: metaconfigure.py,v 1.6 2003/02/11 15:59:54 sidnei Exp $
 """
 
 from zope.security.proxy import Proxy

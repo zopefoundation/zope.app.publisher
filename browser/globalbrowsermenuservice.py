@@ -207,5 +207,5 @@ del addCleanUp
 
 __doc__ = GlobalBrowserMenuService.__doc__ + """
 
-$Id: globalbrowsermenuservice.py,v 1.9 2003/02/06 06:49:39 seanb Exp $
+$Id: globalbrowsermenuservice.py,v 1.10 2003/02/11 15:59:53 sidnei Exp $
 """

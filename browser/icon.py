@@ -14,7 +14,7 @@
 """Icon support
 
 
-$Id: icon.py,v 1.4 2003/02/06 06:49:39 seanb Exp $
+$Id: icon.py,v 1.5 2003/02/11 15:59:53 sidnei Exp $
 """
 
 import os

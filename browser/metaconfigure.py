@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: metaconfigure.py,v 1.3 2003/02/06 06:49:39 seanb Exp $
+$Id: metaconfigure.py,v 1.4 2003/02/11 15:59:53 sidnei Exp $
 """
 
 from zope.configuration.action import Action
