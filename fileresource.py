@@ -34,8 +34,9 @@ class File(object):
         f.close()
         self.content_type, enc = guess_content_type(path, data)
         self.__name__ = posixpath.basename(path)
-        self.lmt = float(os.stat(path)[8]) or time()
+        self.lmt = float(os.path.getmtime(path)) or time()
         self.lmh = rfc1123_date(self.lmt)
+
 
 class Image(File):
     """Image objects stored in external files."""
