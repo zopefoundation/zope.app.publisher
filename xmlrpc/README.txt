@@ -43,7 +43,7 @@ Now we'll register it as a view:
 Now, we'll add some items to the root folder:
 
   >>> print http(r"""
-  ... POST /++skin++Debug/@@contents.html HTTP/1.1
+  ... POST /@@contents.html HTTP/1.1
   ... Authorization: Basic bWdyOm1ncnB3
   ... Content-Length: 73
   ... Content-Type: application/x-www-form-urlencoded
