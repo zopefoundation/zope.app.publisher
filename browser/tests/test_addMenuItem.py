@@ -16,7 +16,7 @@
 >>> context = Context()
 >>> addMenuItem(context, class_=X, title="Add an X",
 ...             permission="zope.ManageContent")
->>> context # doctest: +CONTEXT_DIFF
+>>> context
 ((('utility',
    <InterfaceClass zope.component.interfaces.IFactory>,
    'zope.app.browser.add.zope.app.publisher.browser.tests.test_addMenuItem.X'),
@@ -131,7 +131,7 @@ def test_w_factory_class_view():
     >>> addMenuItem(context, class_=X, title="Add an X",
     ...             permission="zope.ManageContent", description="blah blah",
     ...             filter="context/foo", view="AddX")
-    >>> context # doctest: +CONTEXT_DIFF
+    >>> context
     ((('utility',
        <InterfaceClass zope.component.interfaces.IFactory>,
        'zope.app.browser.add.""" \

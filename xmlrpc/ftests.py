@@ -39,11 +39,11 @@ globs = NoCopyDict()
 name = 'zope.app.publisher.xmlrpc.README'
 
 
-def setUp():
+def setUp(test):
     globs['__name__'] = name    
     sys.modules[name] = FakeModule(globs)
 
-def tearDown():
+def tearDown(test):
     # clean up the views we registered:
     
     # we use the fact that registering None unregisters whatever is
