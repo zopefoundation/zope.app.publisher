@@ -13,7 +13,7 @@
 ##############################################################################
 """
 
-$Id: resource.py,v 1.8 2003/09/24 17:31:29 sidnei Exp $
+$Id: resource.py,v 1.9 2003/09/24 22:00:42 sidnei Exp $
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 
@@ -39,7 +39,7 @@ class Resource(Location):
         names.append(name)
 
         site = self.__parent__
-        while site and 1:
+        while 1:
             if ISite.isImplementedBy(site):
                 break
             if IContainmentRoot.isImplementedBy(site):
