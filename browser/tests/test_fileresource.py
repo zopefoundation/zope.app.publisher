@@ -11,25 +11,20 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
+"""File-based browser resource tests.
 
-Revision information:
 $Id$
 """
-
 import os
-
 from unittest import TestCase, main, makeSuite
 
-from zope.security.checker import NamesChecker
-
 from zope.exceptions import NotFoundError
+from zope.i18n.interfaces import IUserPreferredCharsets
+from zope.proxy import removeAllProxies
+from zope.security.checker import NamesChecker
 
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.app.tests import ztapi
-from zope.proxy import removeAllProxies
-
-from zope.i18n.interfaces import IUserPreferredCharsets
 
 from zope.publisher.http import IHTTPRequest
 from zope.publisher.http import HTTPCharsets
