@@ -13,12 +13,11 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: resourcemeta.py,v 1.2 2002/12/25 14:13:09 jim Exp $
+$Id: resourcemeta.py,v 1.3 2002/12/28 14:16:15 jim Exp $
 """
 
 from zope.security.proxy import Proxy
-from zope.security.checker \
-     import CheckerPublic, NamesChecker, Checker
+from zope.security.checker import CheckerPublic, NamesChecker, Checker
 
 from zope.interfaces.configuration import INonEmptyDirective
 from zope.interfaces.configuration import ISubdirectiveHandler
@@ -36,9 +35,6 @@ class resource(object):
 
     __class_implements__ = INonEmptyDirective
     __implements__ = ISubdirectiveHandler
-
-    type = IBrowserPresentation
-    default_allowed_attributes = '__call__'  # space separated string
 
     def __init__(self, _context, factory=None, name=None, layer='default',
                  permission=None,
@@ -106,18 +102,13 @@ class resource(object):
 
         return [
             Action(
-                discriminator = self._discriminator(name, layer),
+                discriminator = ('resource', name, IBrowserPresentation,
+                                 layer),
                 callable = handler,
-                args = self._args(name, factory, layer),
+                args = ('Resources', 'provideResource',
+                        name, IBrowserPresentation, factory, layer),
                 )
             ]
-
-    def _discriminator(self, name, layer):
-        return ('resource', name, self.type, layer)
-
-    def _args(self, name, factory, layer):
-        return ('Resources', 'provideResource',
-                name, self.type, factory, layer)
 
     def _pageFactory(self, factory, attribute, permission):
         if permission:
@@ -156,7 +147,7 @@ class resource(object):
 
             if ((not allowed_attributes) and (allowed_interface is None)
                 and (not self.pages)):
-                allowed_attributes = self.default_allowed_attributes
+                allowed_attributes = '__call__'
 
             for name in (allowed_attributes or '').split():
                 require[name] = permission
@@ -173,15 +164,18 @@ class resource(object):
 
         return [
             Action(
-                discriminator = self._discriminator(self.name, self.layer),
+                discriminator = ('resource', self.name, IBrowserPresentation,
+                                 self.layer),
                 callable = handler,
-                args = self._args(self.name, factory, self.layer),
+                args = ('Resources', 'provideResource',
+                        self.name, IBrowserPresentation, factory, self.layer),
                 )
             ]
 
     def _proxyFactory(self, factory, checker):
-        def proxyView(request,
-                      factory=factory, checker=checker):
+
+        def proxyResource(request,
+                          factory=factory, checker=checker):
             resource = factory(request)
 
             # We need this in case the resource gets unwrapped and
@@ -190,4 +184,4 @@ class resource(object):
 
             return Proxy(resource, checker)
 
-        return proxyView
+        return proxyResource
