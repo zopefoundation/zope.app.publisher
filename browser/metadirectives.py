@@ -15,7 +15,7 @@
 
 This module defines the schemas for browser directives.
 
-$Id: metadirectives.py,v 1.11 2003/12/07 11:26:11 philikon Exp $
+$Id: metadirectives.py,v 1.12 2003/12/17 15:37:27 jim Exp $
 """
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, Tokens, Path, \
@@ -40,7 +40,8 @@ class IViewDirective(IBasicViewInformation, IUsage):
     name = TextLine(
         title=u"The name of the view.",
         description=u"The name shows up in URLs/paths. For example 'foo'.",
-        required=True
+        required=False,
+        default=u'',
         )
 
     menu = TextLine(
@@ -61,6 +62,15 @@ class IViewDirective(IBasicViewInformation, IUsage):
           supplied.
           """,
         required=False
+        )
+
+    provides = GlobalObject(
+        title=u"The interface this view provides.",
+        description=u"""
+        A view can provide an interface.  This would be used for
+        views that support other views.""",
+        required=False,
+        default=Interface,
         )
 
 class IViewPageSubdirective(Interface):

@@ -16,11 +16,11 @@ import os
 import unittest
 from cStringIO import StringIO
 
-from zope.interface import Interface, implements
+from zope.interface import Interface, implements, Interface
 
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.configuration.exceptions import ConfigurationError
-from zope.app.component.tests.views import IC, V1, VZMI
+from zope.app.component.tests.views import IC, V1, VZMI, R1, IV
 from zope.component import getView, queryView, queryResource
 from zope.component import getDefaultViewName, getResource
 from zope.app.services.servicenames import Permissions
@@ -974,7 +974,73 @@ class Test(PlacelessSetup, unittest.TestCase):
             """ % path
             ))
 
+    def testViewThatProvidesAnInterface(self):
 
+        request = TestRequest()
+        self.assertEqual(queryView(ob, 'test', request, None), None)
+
+        xmlconfig(StringIO(template %
+            """
+            <browser:view
+                name="test"
+                class="zope.app.component.tests.views.V1"
+                for="zope.app.component.tests.views.IC"
+                permission="zope.Public"
+                />
+            """
+            ))
+
+        v = queryView(ob, 'test', request, None, providing=IV)
+        self.assertEqual(v, None)
+
+        xmlconfig(StringIO(template %
+            """
+            <browser:view
+                name="test"
+                class="zope.app.component.tests.views.V1"
+                for="zope.app.component.tests.views.IC"
+                provides="zope.app.component.tests.views.IV"
+                permission="zope.Public"
+                />
+            """
+            ))
+
+        v = queryView(ob, 'test', request, None, providing=IV)
+
+        self.assert_(isinstance(v, V1))
+
+    def testUnnamedViewThatProvidesAnInterface(self):
+
+        request = TestRequest()
+        self.assertEqual(queryView(ob, '', request, None), None)
+
+        xmlconfig(StringIO(template %
+            """
+            <browser:view
+                class="zope.app.component.tests.views.V1"
+                for="zope.app.component.tests.views.IC"
+                permission="zope.Public"
+                />
+            """
+            ))
+
+        v = queryView(ob, '', request, None, providing=IV)
+        self.assertEqual(v, None)
+
+        xmlconfig(StringIO(template %
+            """
+            <browser:view
+                class="zope.app.component.tests.views.V1"
+                for="zope.app.component.tests.views.IC"
+                provides="zope.app.component.tests.views.IV"
+                permission="zope.Public"
+                />
+            """
+            ))
+
+        v = queryView(ob, '', request, None, providing=IV)
+
+        self.assert_(isinstance(v, V1))
 
 def test_suite():
     loader=unittest.TestLoader()

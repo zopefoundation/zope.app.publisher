@@ -13,13 +13,13 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.36 2003/12/07 11:26:11 philikon Exp $
+$Id: viewmeta.py,v 1.37 2003/12/17 15:37:27 jim Exp $
 """
 
 import os
 
 from zope.app import zapi
-from zope.interface import implements, classImplements
+from zope.interface import implements, classImplements, Interface
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
 from zope.exceptions import NotFoundError
@@ -235,10 +235,10 @@ class view:
 
     default = None
 
-    def __init__(self, _context, name, for_, permission,
-                 layer='default', class_=None,
+    def __init__(self, _context, for_, permission,
+                 name='', layer='default', class_=None,
                  allowed_interface=None, allowed_attributes=None,
-                 menu=None, title=None, usage=u''
+                 menu=None, title=None, usage=u'', provides=Interface,
                  ):
 
         _handle_menu(_context, menu, title, for_, name, permission)
@@ -252,6 +252,7 @@ class view:
         # default usage is u''
         self.usage = usage
         self.menu = menu
+        self.provides = provides
 
     def page(self, _context, name, attribute=None, template=None, usage=None):
         if template:
@@ -306,6 +307,8 @@ class view:
 
             # XXX This context trickery is a hack around a problem, I
             # can't fix till after the alpha. :(
+
+            # XXX I now wish I could remember what the problem was. :(
 
             def publishTraverse(self, request, name,
                                 pages=pages, getattr=getattr):
@@ -362,11 +365,23 @@ class view:
 
         defineChecker(newclass, Checker(required))
 
+        if self.provides is not None:
+            _context.action(
+                discriminator = None,
+                callable = handler,
+                args = (Interfaces, 'provideInterface',
+                        self.provides.__module__+'.'+self.provides.__name__,
+                        self.provides)
+                )
+
+
         _context.action(
-            discriminator = ('view', for_, name, IBrowserRequest, layer),
+            discriminator = ('view', for_, name, IBrowserRequest, layer,
+                             self.provides),
             callable = handler,
             args = (zapi.servicenames.Presentation, 'provideView',
-                    for_, name, IBrowserRequest, [newclass], layer),
+                    for_, name, IBrowserRequest, [newclass], layer,
+                    self.provides),
             )
 
 def addview(_context, name, permission,
