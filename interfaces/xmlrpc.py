@@ -11,9 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""XML-RPC Publisher Components
-
-This module contains the MethodPublisher, and XMLRPCView.
+"""XML-RPC Publisher Interfaces
 
 $Id$
 """
