@@ -55,10 +55,10 @@ def applySkin(request, skin):
     [<InterfaceClass zope.app.publisher.browser.SkinB>,
      <InterfaceClass zope.app.publisher.browser.IRequest>]
     """
-    old_skins = [iface for iface in directlyProvidedBy(request)
-                 if ISkin.providedBy(iface)]
-
-    for old_skin in old_skins:
-        directlyProvides(request, directlyProvidedBy(request) - old_skin)
-
-    directlyProvides(request, skin)
+    # Remove all existing skin declarations (commonly the default skin).
+    ifaces = [iface
+              for iface in directlyProvidedBy(request)
+              if not ISkin.providedBy(iface)]
+    # Add the new skin.
+    ifaces.append(skin)
+    directlyProvides(request, *ifaces)
