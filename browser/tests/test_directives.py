@@ -30,10 +30,7 @@ from zope.proxy import removeAllProxies
 
 from zope.app.publisher.browser.globalbrowsermenuservice import \
     globalBrowserMenuService
-from zope.component.tests.request import Request
 from zope.publisher.browser import TestRequest
-
-from zope.publisher.interfaces.browser import IBrowserPresentation
 
 from zope.app.publisher.browser.i18nfileresource import I18nFileResource
 
@@ -59,7 +56,8 @@ template = """<configure
    %s
    </configure>"""
 
-request = Request(IBrowserPresentation)
+
+request = TestRequest()
 
 class VT(V1, object):
     def publishTraverse(self, request, name):
@@ -98,11 +96,11 @@ class Test(PlacelessSetup, unittest.TestCase):
         PlacelessSetup.setUp(self)
         XMLConfig('meta.zcml', zope.app.publisher.browser)()
 
-        from zope.component.adapter import provideAdapter
+        from zope.app.tests import ztapi
         from zope.app.traversing.adapters import DefaultTraversable
         from zope.app.interfaces.traversing import ITraversable
 
-        provideAdapter(None, ITraversable, DefaultTraversable)
+        ztapi.provideAdapter(None, ITraversable, DefaultTraversable)
 
     def testPage(self):
         self.assertEqual(queryView(ob, 'test', request),
@@ -142,7 +140,8 @@ class Test(PlacelessSetup, unittest.TestCase):
             """ % testusage
             )))
 
-        menuItem = globalBrowserMenuService.getFirstMenuItem('test_menu', ob, TestRequest())
+        menuItem = globalBrowserMenuService.getFirstMenuItem(
+            'test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = queryView(ob, 'test', request)
@@ -190,7 +189,8 @@ class Test(PlacelessSetup, unittest.TestCase):
             """ % testusage
             )))
 
-        menuItem = globalBrowserMenuService.getFirstMenuItem('test_menu', ob, TestRequest())
+        menuItem = globalBrowserMenuService.getFirstMenuItem(
+            'test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = queryView(ob, 'test', request)
@@ -215,7 +215,8 @@ class Test(PlacelessSetup, unittest.TestCase):
             """ % testusage
             )))
 
-        menuItem = globalBrowserMenuService.getFirstMenuItem('test_menu', ob, TestRequest())
+        menuItem = globalBrowserMenuService.getFirstMenuItem(
+            'test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = queryView(ob, 'test', request)
@@ -261,7 +262,8 @@ class Test(PlacelessSetup, unittest.TestCase):
             """ % testusage
             )))
 
-        menuItem = globalBrowserMenuService.getFirstMenuItem('test_menu', ob, TestRequest())
+        menuItem = globalBrowserMenuService.getFirstMenuItem(
+            'test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = queryView(ob, 'test', request)
@@ -287,7 +289,8 @@ class Test(PlacelessSetup, unittest.TestCase):
             """ % testusage
             )))
 
-        menuItem = globalBrowserMenuService.getFirstMenuItem('test_menu', ob, TestRequest())
+        menuItem = globalBrowserMenuService.getFirstMenuItem(
+            'test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = queryView(ob, 'test', request)
@@ -314,7 +317,8 @@ class Test(PlacelessSetup, unittest.TestCase):
             """ % testusage
             )))
 
-        menuItem = globalBrowserMenuService.getFirstMenuItem('test_menu', ob, TestRequest())
+        menuItem = globalBrowserMenuService.getFirstMenuItem(
+            'test_menu', ob, TestRequest())
         self.assertEqual(menuItem["title"], "Test View")
         self.assertEqual(menuItem["action"], "@@test")
         v = queryView(ob, 'test', request)
@@ -341,6 +345,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         xmlconfig(StringIO(template % (
             """
+            <browser:layer name="zmi" />
             <browser:skin name="zmi" layers="zmi default" />
             <browser:page name="test"
                   class="zope.component.tests.views.VZMI"
@@ -360,7 +365,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         v = queryView(ob, 'test', request)
         self.assert_(issubclass(v.__class__, V1))
-        v = queryView(ob, 'test', Request(IBrowserPresentation, 'zmi'))
+        v = queryView(ob, 'test', TestRequest(skin='zmi'))
         self.assert_(issubclass(v.__class__, VZMI))
 
     def testI18nResource(self):
@@ -763,6 +768,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         xmlconfig(StringIO(template %
             """
+            <browser:layer name="layer" />
             <browser:skin name="skinny" layers="layer default" />
             <browser:pages
                   for="*"
@@ -786,8 +792,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         v = getView(ob, 'index.html', request)
         self.assertEqual(v(), 'V1 here')
-        v = getView(ob, 'index.html',
-                    Request(IBrowserPresentation, "skinny"))
+        v = getView(ob, 'index.html', TestRequest(skin="skinny"))
         self.assertEqual(v(), 'done')
 
     def testFile(self):
@@ -826,6 +831,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         xmlconfig(StringIO(template % (
             """
+            <browser:layer name="zmi" />
             <browser:skin name="zmi" layers="zmi default" />
             <browser:resource name="test" file="%s" 
                   layer="zmi" />
@@ -834,7 +840,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         self.assertEqual(queryResource(ob, 'test', request), None)
 
-        r = getResource(ob, 'test', Request(IBrowserPresentation, 'zmi'))
+        r = getResource(ob, 'test', TestRequest(skin='zmi'))
         r = removeAllProxies(r)
         self.assertEqual(r._testData(), open(path, 'rb').read())
 
