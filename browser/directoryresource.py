@@ -29,7 +29,7 @@ from fileresource import FileResourceFactory, ImageResourceFactory
 from pagetemplateresource import PageTemplateResourceFactory
 from resources import empty
 
-_marker = []
+_marker = object()
 
 # we only need this class as a context for DirectoryResource
 class Directory(object):
@@ -43,12 +43,12 @@ class DirectoryResource(BrowserView, Resource):
     implements(IBrowserPublisher)
 
     resource_factories = {
-        'gif':  ImageResourceFactory,
-        'png':  ImageResourceFactory,
-        'jpg':  ImageResourceFactory,
-        'pt':   PageTemplateResourceFactory,
-        'zpt':  PageTemplateResourceFactory,
-        'html': PageTemplateResourceFactory,
+        '.gif':  ImageResourceFactory,
+        '.png':  ImageResourceFactory,
+        '.jpg':  ImageResourceFactory,
+        '.pt':   PageTemplateResourceFactory,
+        '.zpt':  PageTemplateResourceFactory,
+        '.html': PageTemplateResourceFactory,
         }
 
     default_factory = FileResourceFactory
@@ -74,7 +74,7 @@ class DirectoryResource(BrowserView, Resource):
             if default is _marker:
                 raise NotFoundError(name)
             return default
-        ext = name.split('.')[-1]
+        ext = os.path.splitext(os.path.normcase(name))[1]
         factory = self.resource_factories.get(ext, self.default_factory)
         resource = factory(filename, self.context.checker)(self.request)
         resource.__parent__ = self

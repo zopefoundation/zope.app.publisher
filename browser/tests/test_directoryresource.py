@@ -110,6 +110,8 @@ class Test(PlacelessSetup, TestCase):
         self.assert_(isinstance(removeAllProxies(template), PageTemplateResource))
         file = resource['test.txt']
         self.assert_(isinstance(removeAllProxies(file), FileResource))
+        file = resource['png']
+        self.assert_(isinstance(removeAllProxies(file), FileResource))
 
 def test_suite():
     return makeSuite(Test)
