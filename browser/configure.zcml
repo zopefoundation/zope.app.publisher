@@ -1,12 +1,10 @@
 <zopeConfigure
-   xmlns='http://namespaces.zope.org/zope'
-   xmlns:browser='http://namespaces.zope.org/browser'
->
-
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:browser="http://namespaces.zope.org/browser">
 
 <serviceType
    id="BrowserMenu"
-   interface="zope.app.interfaces.publisher.browser.IBrowserMenuService" 
+   interface="zope.app.interfaces.publisher.browser.IBrowserMenuService"
    />
 
 <service
@@ -14,7 +12,6 @@
    permission="zope.Public"
    component=".globalbrowsermenuservice.globalBrowserMenuService"
    />
-
 
 <content class="zope.publisher.browser.BrowserRequest">
   <allow

@@ -11,24 +11,22 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""XXX short summary goes here.
+"""Global Browser Menu Tests
 
-XXX longer description goes here.
-
-$Id: test_globalbrowsermenuservice.py,v 1.11 2003/07/10 01:35:15 richard Exp $
+$Id: test_globalbrowsermenuservice.py,v 1.12 2003/08/16 00:43:51 srichter Exp $
 """
-
-from unittest import TestCase, main, makeSuite
-from zope.publisher.interfaces.browser import IBrowserPublisher
+import unittest
+from zope.app.tests.placelesssetup import PlacelessSetup
+from zope.app.interfaces.security import IPermissionService
+from zope.app.publisher.browser.globalbrowsermenuservice import \
+     GlobalBrowserMenuService
+from zope.app.security.registries.permissionregistry import permissionRegistry
+from zope.app.services.servicenames import Permissions
+from zope.component.service import serviceManager
 from zope.exceptions import Forbidden, Unauthorized, DuplicationError
 from zope.interface import Interface, implements
 from zope.publisher.browser import TestRequest
-from zope.app.tests.placelesssetup import PlacelessSetup
-
-from zope.component.service import serviceManager
-from zope.app.services.servicenames import Permissions
-from zope.app.security.registries.permissionregistry import permissionRegistry
-from zope.app.interfaces.security import IPermissionService
+from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.security.management import newSecurityManager, system_user
 
 class I1(Interface): pass
@@ -36,12 +34,15 @@ class I11(I1): pass
 class I12(I1): pass
 class I111(I11): pass
 
-class X:
+class TestObject:
     implements(IBrowserPublisher, I111)
 
-    def f(self): pass
+    def f(self):
+        pass
 
-    def browserDefault(self, r): return self, ()
+    def browserDefault(self, r):
+        return self, ()
+
     def publishTraverse(self, request, name):
         if name[:1] == 'f':
             raise Forbidden, name
@@ -50,14 +51,18 @@ class X:
         return self.f
 
 
-class Test(PlacelessSetup, TestCase):
+def d(n):
+    return {'action': "a%s" % n,
+            'title':  "t%s" % n,
+            'description':  "d%s" % n,
+            'selected': ''
+            }
+
+
+class GlobalBrowserMenuServiceTest(PlacelessSetup, unittest.TestCase):
 
     def __reg(self):
-        from zope.app.publisher.browser.globalbrowsermenuservice \
-             import GlobalBrowserMenuService
-
-        r = GlobalBrowserMenuService()
-        return r
+        return GlobalBrowserMenuService()
 
     def testDup(self):
         r = self.__reg()
@@ -77,15 +82,7 @@ class Test(PlacelessSetup, TestCase):
         r.menuItem('test_id', I111, 'u8', 't8', 'd8')
         r.menuItem('test_id', I12, 'a9', 't9', 'd9')
 
-        menu = r.getMenu('test_id', X(), TestRequest())
-
-        def d(n):
-            return {'action': "a%s" % n,
-                    'title':  "t%s" % n,
-                    'description':  "d%s" % n,
-                    'selected': ''
-                    }
-
+        menu = r.getMenu('test_id', TestObject(), TestRequest())
         self.assertEqual(list(menu), [d(5), d(6), d(3), d(2), d(1)])
 
     def test_w_permission(self):
@@ -105,23 +102,15 @@ class Test(PlacelessSetup, TestCase):
         r.menuItem('test_id', I111, 'u8', 't8', 'd8')
         r.menuItem('test_id', I12, 'a9', 't9', 'd9')
 
-        def d(n):
-            return {'action': "a%s" % n,
-                    'title':  "t%s" % n,
-                    'description':  "d%s" % n,
-                    'selected': ''
-                    }
-
         newSecurityManager('test')
 
-        menu = r.getMenu('test_id', X(), TestRequest())
+        menu = r.getMenu('test_id', TestObject(), TestRequest())
 
         self.assertEqual(list(menu), [d(6), d(3), d(2), d(1)])
 
         newSecurityManager(system_user)
 
-        menu = r.getMenu('test_id', X(), TestRequest())
-
+        menu = r.getMenu('test_id', TestObject(), TestRequest())
         self.assertEqual(list(menu), [d(5), d(6), d(3), d(2), d(1)])
         
 
@@ -141,14 +130,7 @@ class Test(PlacelessSetup, TestCase):
         r.menuItem('test_id', I111, 'u8', 't8', 'd8')
         r.menuItem('test_id', I12, 'a9', 't9', 'd9')
 
-        menu = r.getMenu('test_id', X(), TestRequest())
-
-        def d(n):
-            return {'action': "a%s" % n,
-                    'title':  "t%s" % n,
-                    'description':  "d%s" % n,
-                    'selected': ''}
-
+        menu = r.getMenu('test_id', TestObject(), TestRequest())
         self.assertEqual(list(menu), [d(5), d(6), d(3), d(2), d(1)])
 
     def test_identify_action(self):
@@ -164,24 +146,24 @@ class Test(PlacelessSetup, TestCase):
                     'description':  "d%s" % n,
                     'selected': selected}
 
-        menu = r.getMenu('test_id', X(),
+        menu = r.getMenu('test_id', TestObject(),
             TestRequest(SERVER_URL='http://127.0.0.1/a1', PATH_INFO='/a1'))
         self.assertEqual(list(menu), [d(2), d(12), d(1, 'selected')])
-        menu = r.getMenu('test_id', X(), 
+        menu = r.getMenu('test_id', TestObject(), 
             TestRequest(SERVER_URL='http://127.0.0.1/a12', PATH_INFO='/a12'))
         self.assertEqual(list(menu), [d(2), d(12, 'selected'), d(1)])
-        menu = r.getMenu('test_id', X(),
+        menu = r.getMenu('test_id', TestObject(),
             TestRequest(SERVER_URL='http://127.0.0.1/@@a1', PATH_INFO='/@@a1'))
         self.assertEqual(list(menu), [d(2), d(12), d(1, 'selected')])
-        menu = r.getMenu('test_id', X(), 
+        menu = r.getMenu('test_id', TestObject(), 
             TestRequest(SERVER_URL='http://127.0.0.1/@@a12',
             PATH_INFO='/@@a12'))
         self.assertEqual(list(menu), [d(2), d(12, 'selected'), d(1)])
-        menu = r.getMenu('test_id', X(),
+        menu = r.getMenu('test_id', TestObject(),
             TestRequest(SERVER_URL='http://127.0.0.1/++view++a1',
             PATH_INFO='/++view++a1'))
         self.assertEqual(list(menu), [d(2), d(12), d(1, 'selected')])
-        menu = r.getMenu('test_id', X(), 
+        menu = r.getMenu('test_id', TestObject(), 
             TestRequest(SERVER_URL='http://127.0.0.1/++view++a12',
             PATH_INFO='/++view++a12'))
         self.assertEqual(list(menu), [d(2), d(12, 'selected'), d(1)])
@@ -189,7 +171,7 @@ class Test(PlacelessSetup, TestCase):
     def testEmpty(self):
         r = self.__reg()
         r.menu('test_id', 'test menu')
-        menu = r.getMenu('test_id', X(), TestRequest())
+        menu = r.getMenu('test_id', TestObject(), TestRequest())
         self.assertEqual(list(menu), [])
 
     def testUsage(self):
@@ -199,9 +181,31 @@ class Test(PlacelessSetup, TestCase):
         r.menu('test_id2', 'test menu')
         self.assertEqual(r.getMenuUsage('test_id2'), u'')
 
+    def test_getAllMenuItema(self):
+        r = self.__reg()
+        r.menu('test_id', 'test menu')
+        r.menuItem('test_id', Interface, 'a1', 't1', 'd1')
+        r.menuItem('test_id', I1, 'a2', 't2', 'd2')
+        r.menuItem('test_id', I11, 'a3', 't3', 'd3')
+        r.menuItem('test_id', I111, 'a5', 't5', 'd5')
+        r.menuItem('test_id', I111, 'a6', 't6', 'd6')
+        r.menuItem('test_id', I111, 'a7', 't7', 'd7')
+        r.menuItem('test_id', I111, 'a8', 't8', 'd8')
+        r.menuItem('test_id', I12, 'a9', 't9', 'd9')
+
+        def d(n):
+            return ('a%s' %n, 't%s' %n, 'd%s' %n, None, None) 
+
+        menu = r.getAllMenuItems('test_id', TestObject())
+        self.assertEqual(list(menu), [d(5), d(6), d(7), d(8), d(3),
+                                      d(2), d(1)])
+
+
 
 def test_suite():
-    return makeSuite(Test)
+    return unittest.TestSuite((
+        unittest.makeSuite(GlobalBrowserMenuServiceTest),
+        ))
 
-if __name__=='__main__':
-    main(defaultTest='test_suite')
+if __name__ == '__main__':
+    unittest.main()

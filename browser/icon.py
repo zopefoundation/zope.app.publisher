@@ -14,7 +14,7 @@
 """Icon support
 
 
-$Id: icon.py,v 1.10 2003/08/03 02:13:17 philikon Exp $
+$Id: icon.py,v 1.11 2003/08/16 00:43:46 srichter Exp $
 """
 
 import os
@@ -63,7 +63,7 @@ class IconViewFactory:
 def IconDirective(_context, name, for_, file=None, resource=None,
                   layer='default', alt=None):
 
-    iname = for_.__name__
+    iname = for_.getName()
 
     if alt is None:
         alt = iname
@@ -102,6 +102,6 @@ def IconDirective(_context, name, for_, file=None, resource=None,
         discriminator = None,
         callable = handler,
         args = (Interfaces, 'provideInterface',
-                for_.__module__+'.'+for_.__name__,
+                for_.__module__+'.'+for_.getName(),
                 for_)
         )

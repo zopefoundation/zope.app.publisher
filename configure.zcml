@@ -2,8 +2,8 @@
   <include package=".browser" />
   <include file="http.zcml" />
 
-  <interface 
-     interface="zope.publisher.interfaces.xmlrpc.IXMLRPCPresentation" 
+  <interface
+     interface="zope.publisher.interfaces.xmlrpc.IXMLRPCPresentation"
      />
 
 </zopeConfigure>

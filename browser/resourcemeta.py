@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: resourcemeta.py,v 1.11 2003/08/11 14:58:07 philikon Exp $
+$Id: resourcemeta.py,v 1.12 2003/08/16 00:43:46 srichter Exp $
 """
 
 import os
@@ -65,7 +65,8 @@ def resourceDirectory(_context, name, directory, layer='default',
     if permission == 'zope.Public':
         permission = CheckerPublic
 
-    checker = NamesChecker(allowed_names, permission)
+    checker = NamesChecker(allowed_names + ('__getitem__', 'get'),
+                           permission)
 
     if not os.path.isdir(directory):
         raise ConfigurationError(

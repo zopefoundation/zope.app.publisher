@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.30 2003/08/03 02:13:17 philikon Exp $
+$Id: viewmeta.py,v 1.31 2003/08/16 00:43:46 srichter Exp $
 """
 
 from zope.interface import classProvides, directlyProvides
@@ -391,7 +391,7 @@ def defaultView(_context, name, for_=None):
             discriminator = None,
             callable = handler,
             args = (Interfaces, 'provideInterface',
-                    for_.__module__+'.'+for_.__name__, for_)
+                    for_.__module__+'.'+for_.getName(), for_)
             )
 
 def _handle_menu(_context, menu, title, for_, name, permission):

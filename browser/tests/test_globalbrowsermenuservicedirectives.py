@@ -15,7 +15,7 @@
 
 XXX longer description goes here.
 
-$Id: test_globalbrowsermenuservicedirectives.py,v 1.6 2003/08/03 17:50:24 philikon Exp $
+$Id: test_globalbrowsermenuservicedirectives.py,v 1.7 2003/08/16 00:43:51 srichter Exp $
 """
 
 from StringIO import StringIO
@@ -87,9 +87,10 @@ class Test(PlacelessSetup, TestCase):
 
 
         from zope.app.publisher.browser.tests.test_globalbrowsermenuservice \
-             import X
+             import TestObject
 
-        menu = globalBrowserMenuService.getMenu('test_id', X(), TestRequest())
+        menu = globalBrowserMenuService.getMenu('test_id', TestObject(),
+                                                TestRequest())
 
         def d(n):
             return {'action': "a%s" % n,
@@ -101,7 +102,7 @@ class Test(PlacelessSetup, TestCase):
         self.assertEqual(list(menu), [d(5), d(6), d(3), d(2), d(1)])
 
         first = globalBrowserMenuService.getFirstMenuItem(
-            'test_id', X(), TestRequest())
+            'test_id', TestObject(), TestRequest())
 
         self.assertEqual(first, d(5))
 

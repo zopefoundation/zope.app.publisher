@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: metaconfigure.py,v 1.12 2003/08/11 14:58:07 philikon Exp $
+$Id: metaconfigure.py,v 1.13 2003/08/16 00:43:46 srichter Exp $
 """
 
 from zope.publisher.interfaces.browser import IBrowserPresentation
@@ -50,6 +50,6 @@ def defaultView(_context, name, for_=None, **__kw):
             discriminator = None,
             callable = handler,
             args = (Interfaces, 'provideInterface',
-                    for_.__module__+'.'+for_.__name__,
+                    for_.__module__+'.'+for_.getName(),
                     for_)
             )

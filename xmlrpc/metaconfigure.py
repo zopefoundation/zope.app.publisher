@@ -13,7 +13,7 @@
 ##############################################################################
 """XMLRPC configuration code
 
-$Id: metaconfigure.py,v 1.13 2003/08/04 23:19:10 srichter Exp $
+$Id: metaconfigure.py,v 1.14 2003/08/16 00:43:54 srichter Exp $
 """
 from zope.app.component.metaconfigure import handler
 from zope.app.services.servicenames import Interfaces
@@ -80,7 +80,7 @@ def view(_context, name, class_=None, for_=None, layer=None,
             discriminator = None,
             callable = handler,
             args = (Interfaces, 'provideInterface',
-                    for_.__module__+'.'+for_.__name__, for_)
+                    for_.__module__+'.'+for_.getName(), for_)
             )
 
 

@@ -13,7 +13,7 @@
 ##############################################################################
 """
 
-$Id: resource.py,v 1.4 2003/05/27 14:18:22 jim Exp $
+$Id: resource.py,v 1.5 2003/08/16 00:43:46 srichter Exp $
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 
@@ -21,6 +21,7 @@ from zope.component import queryView
 from zope.context import getWrapperContainer, getInnerWrapperData
 from zope.context import ContextMethod
 from zope.app.traversing import joinPath
+from zope.component.interfaces import IResourceService
 
 class Resource:
 
@@ -33,6 +34,11 @@ class Resource:
             name = name[12:]
 
         service = getWrapperContainer(wrapped_self)
+        while not IResourceService.isImplementedBy(service):
+            name = "%s/%s" % (getInnerWrapperData(service)['name'],
+                              name)
+            service = getWrapperContainer(service)
+
         site = getWrapperContainer(service)
 
         skin = wrapped_self.request.getPresentationSkin()

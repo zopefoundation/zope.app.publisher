@@ -11,7 +11,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+"""Global Browser Menu Service
 
+$Id: globalbrowsermenuservice.py,v 1.22 2003/08/16 00:43:46 srichter Exp $
+"""
 from zope.interface import classProvides
 from zope.exceptions import DuplicationError, Unauthorized, Forbidden
 
@@ -26,13 +29,15 @@ from zope.security.management import getSecurityManager
 from zope.app.security.permission import checkPermission
 
 from zope.app.component.metaconfigure import handler
-from zope.app.interfaces.publisher.browser import IBrowserMenuService
+from zope.app.interfaces.publisher.browser import \
+     IBrowserMenuService, IGlobalBrowserMenuService, IBrowserMenu
 from zope.app.pagetemplate.engine import Engine
 from zope.app.publication.browser import PublicationTraverser
 
 class Menu(object):
-    '''Browser menu
-    '''
+    """Browser menu"""
+
+    implements(IBrowserMenu)
 
     def __init__(self, title, description=u'', usage=u''):
         self.title = title
@@ -40,12 +45,126 @@ class Menu(object):
         self.usage = usage
         self.registry = TypeRegistry()
 
+    def getMenuItems(self, object=None):
+        """See zope.app.interfaces.publisher.browser.IMenuItem"""
+        results = []
+        if object is None:
+            for items in self.registry._reg.values():
+                results += items
+        else:
+            for items in self.registry.getAllForObject(object):
+                results += items
+        return results
 
-class GlobalBrowserMenuService(object):
-    """Global Browser Menu Service
-    """
+
+class BaseBrowserMenuService(object):
+    """Global Browser Menu Service"""
 
     implements(IBrowserMenuService)
+
+    def __init__(self):
+        self._registry = {}
+
+    def getAllMenuItems(self, menu_id, object):
+        return self._registry[menu_id].getMenuItems(object)
+
+    def getMenu(self, menu_id, object, request, max=999999):
+        traverser = PublicationTraverser()
+
+        result = []
+        seen = {}
+        sm = getSecurityManager()
+
+        # stuff for figuring out the selected view
+        request_url = request.getURL()
+
+        for items in self.getAllMenuItems(menu_id, object):
+            action, title, description, filter, permission = items
+
+            # Make sure we don't repeat a specification for a given title
+            if title in seen:
+                continue
+            seen[title] = 1
+
+            if filter is not None:
+
+                try:
+                    include = filter(Engine.getContext(
+                        context = object,
+                        nothing = None,
+                        request = request,
+                        ))
+                except Unauthorized:
+                    include = 0
+
+                if not include:
+                    continue
+
+            if permission:
+                # If we have an explicit permission, check that we
+                # can access it.
+                if not sm.checkPermission(permission, object) and \
+                       permission is not CheckerPublic:
+                    continue
+
+            elif action:
+                # Otherwise, test access by attempting access
+                path = action
+                l = action.find('?')
+                if l >= 0:
+                   path = action[:l]
+                try:
+                    v = traverser.traverseRelativeURL(
+                        request, object, path)
+                    # XXX
+                    # tickle the security proxy's checker
+                    # we're assuming that view pages are callable
+                    # this is a pretty sound assumption
+                    v.__call__
+                except (Unauthorized, Forbidden):
+                    continue # Skip unauthorized or forbidden
+
+            normalized_action = action
+            if action.startswith('@@'):
+                normalized_action = action[2:]
+
+            if request_url.endswith(action):
+                selected='selected'
+            elif request_url.endswith('/'+normalized_action):
+                selected='selected'
+            elif request_url.endswith('++view++'+normalized_action):
+                selected='selected'
+            else:
+                selected=''
+
+            result.append({
+                'title': title,
+                'description': description,
+                'action': "%s" % action,
+                'selected': selected
+                })
+
+            if len(result) >= max:
+                return result
+
+        return result
+
+    def getMenuUsage(self, menu_id):
+        return self._registry[menu_id].usage
+
+
+    def getFirstMenuItem(self, menu_id, object, request):
+        r = self.getMenu(menu_id, object, request, max=1)
+        if r:
+            return r[0]
+        return None
+
+
+class GlobalBrowserMenuService(BaseBrowserMenuService):
+    """Global Browser Menu Service that can be manipulated by adding new menus
+    and menu entries."""
+
+    implements(IGlobalBrowserMenuService)
 
     def __init__(self):
         self._registry = {}
@@ -81,96 +200,6 @@ class GlobalBrowserMenuService(object):
         data.append((action, title, description, filter, permission))
         registry.register(interface, data)
 
-    def getMenu(self, menu_id, object, request, max=999999):
-        registry = self._registry[menu_id].registry
-        traverser = PublicationTraverser()
-
-        result = []
-        seen = {}
-        sm = getSecurityManager()
-
-        # stuff for figuring out the selected view
-        request_url = request.getURL()
-
-        for items in registry.getAllForObject(object):
-            for action, title, description, filter, permission in items:
-
-                # Make sure we don't repeat a specification for a given title
-                if title in seen:
-                    continue
-                seen[title] = 1
-
-                if filter is not None:
-
-                    try:
-                        include = filter(Engine.getContext(
-                            context = object,
-                            nothing = None,
-                            request = request,
-                            ))
-                    except Unauthorized:
-                        include = 0
-
-                    if not include:
-                        continue
-
-                if permission:
-                    # If we have an explicit permission, check that we
-                    # can access it.
-                    if not sm.checkPermission(permission, object):
-                        continue
-
-                elif action:
-                    # Otherwise, test access by attempting access
-                    path = action
-                    l = action.find('?')
-                    if l >= 0:
-                       path = action[:l] 
-                    try:
-                        v = traverser.traverseRelativeURL(
-                            request, object, path)
-                        # XXX
-                        # tickle the security proxy's checker
-                        # we're assuming that view pages are callable
-                        # this is a pretty sound assumption
-                        v.__call__
-                    except (Unauthorized, Forbidden):
-                        continue # Skip unauthorized or forbidden
-
-                normalized_action = action
-                if action.startswith('@@'):
-                    normalized_action = action[2:]
-
-                if request_url.endswith(action):
-                    selected='selected'
-                elif request_url.endswith('/'+normalized_action):
-                    selected='selected'
-                elif request_url.endswith('++view++'+normalized_action):
-                    selected='selected'
-                else:
-                    selected=''
-
-                result.append({
-                    'title': title,
-                    'description': description,
-                    'action': "%s" % action,
-                    'selected': selected
-                    })
-
-                if len(result) >= max:
-                    return result
-
-        return result
-
-    def getMenuUsage(self, menu_id):
-        return self._registry[menu_id].usage
-        
-
-    def getFirstMenuItem(self, menu_id, object, request):
-        r = self.getMenu(menu_id, object, request, max=1)
-        if r:
-            return r[0]
-        return None
 
 def menuDirective(_context, id, title, description='', usage=u''):
     _context.action(
@@ -207,7 +236,7 @@ class menuItemsDirective:
             discriminator = None,
             callable = handler,
             args = (Interfaces, 'provideInterface',
-                    self.interface.__module__+'.'+self.interface.__name__,
+                    self.interface.__module__+'.'+self.interface.getName(),
                     self.interface)
             )
 
@@ -219,8 +248,3 @@ _clear = globalBrowserMenuService._clear
 from zope.testing.cleanup import addCleanUp
 addCleanUp(_clear)
 del addCleanUp
-
-__doc__ = GlobalBrowserMenuService.__doc__ + """
-
-$Id: globalbrowsermenuservice.py,v 1.21 2003/08/03 02:13:17 philikon Exp $
-"""
