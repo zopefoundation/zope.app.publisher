@@ -75,14 +75,16 @@ def defaultView(_context, name, for_=None):
             )
 
 
-_next_id = 0
 def addMenuItem(_context, title, class_=None, factory=None, description='',
                 permission=None, filter=None, view=None):
     """Create an add menu item for a given class or factory
 
-    As a convenience, a class can be provided, in which case, a factory is
-    automatically defined based on the class.
+    As a convenience, a class can be provided, in which case, a
+    factory is automatically defined based on the class.  In this
+    case, the factory id is based on the class name.
+
     """
+    
     if class_ is None:
         if factory is None:
             raise ValueError("Must specify either class or factory")
@@ -92,10 +94,8 @@ def addMenuItem(_context, title, class_=None, factory=None, description='',
         if permission is None:
             raise ValueError(
                 "A permission must be specified when a class is used")
-        global _next_id
-        _next_id += 1
-        factory = "zope.app.browser.add.%s.f%s" % (
-            class_.__name__, _next_id) 
+        factory = "zope.app.browser.add.%s.%s" % (
+            class_.__module__, class_.__name__) 
         ContentDirective(_context, class_).factory(
             _context,
             id = factory)
@@ -110,11 +110,3 @@ def addMenuItem(_context, title, class_=None, factory=None, description='',
     menuItemDirective(_context, 'zope.app.container.add', IAdding,
                       action, title, description, filter,
                       permission, extra)
-
-
-def test_reset():
-    global _next_id
-    _next_id = 0
-    
-from zope.testing.cleanup import addCleanUp
-addCleanUp(test_reset)
