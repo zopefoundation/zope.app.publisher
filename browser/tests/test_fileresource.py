@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_fileresource.py,v 1.6 2003/05/28 15:46:10 jim Exp $
+$Id: test_fileresource.py,v 1.7 2003/08/11 14:58:13 philikon Exp $
 """
 
 import os
@@ -53,7 +53,7 @@ class Test(PlacelessSetup, TestCase):
 
     def testNoTraversal(self):
 
-        path = os.path.join(test_directory, 'test.txt')
+        path = os.path.join(test_directory, 'testfiles', 'test.txt')
         resource = FileResourceFactory(path, checker)(TestRequest())
         self.assertRaises(NotFoundError,
                           resource.publishTraverse,
@@ -62,7 +62,7 @@ class Test(PlacelessSetup, TestCase):
 
     def testFileGET(self):
 
-        path = os.path.join(test_directory, 'test.txt')
+        path = os.path.join(test_directory, 'testfiles', 'test.txt')
 
         resource = FileResourceFactory(path, checker)(TestRequest())
         self.assertEqual(resource.GET(), open(path, 'rb').read())
@@ -72,7 +72,7 @@ class Test(PlacelessSetup, TestCase):
 
     def testFileHEAD(self):
 
-        path = os.path.join(test_directory, 'test.txt')
+        path = os.path.join(test_directory, 'testfiles', 'test.txt')
         resource = FileResourceFactory(path, checker)(TestRequest())
 
         self.assertEqual(resource.HEAD(), '')
@@ -82,7 +82,7 @@ class Test(PlacelessSetup, TestCase):
 
     def testImageGET(self):
 
-        path = os.path.join(test_directory, 'test.gif')
+        path = os.path.join(test_directory, 'testfiles', 'test.gif')
 
         resource = ImageResourceFactory(path, checker)(TestRequest())
 
@@ -93,7 +93,7 @@ class Test(PlacelessSetup, TestCase):
 
     def testImageHEAD(self):
 
-        path = os.path.join(test_directory, 'test.gif')
+        path = os.path.join(test_directory, 'testfiles', 'test.gif')
         resource = ImageResourceFactory(path, checker)(TestRequest())
 
         self.assertEqual(resource.HEAD(), '')

@@ -50,6 +50,10 @@
   <allow attributes="GET HEAD __call__" />
 </content>
 
+<content class=".pagetemplateresource.PageTemplateResource">
+  <allow interface="zope.publisher.interfaces.browser.IBrowserPublisher" />
+  <allow attributes="__call__" />
+</content>
 
 <browser:page 
     name=""

@@ -13,8 +13,10 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: resourcemeta.py,v 1.10 2003/08/03 02:13:17 philikon Exp $
+$Id: resourcemeta.py,v 1.11 2003/08/11 14:58:07 philikon Exp $
 """
+
+import os
 
 from zope.security.checker import CheckerPublic, NamesChecker
 from zope.configuration.exceptions import ConfigurationError
@@ -23,29 +25,54 @@ from zope.publisher.interfaces.browser import IBrowserPresentation
 from zope.app.component.metaconfigure import handler
 
 from fileresource import FileResourceFactory, ImageResourceFactory
+from pagetemplateresource import PageTemplateResourceFactory
+from directoryresource import DirectoryResourceFactory
 
 allowed_names = ('GET', 'HEAD', 'publishTraverse', 'browserDefault',
                  'request', '__call__')
 
 def resource(_context, name, layer='default', permission='zope.Public',
-             file=None, image=None):
+             file=None, image=None, template=None):
 
     if permission == 'zope.Public':
         permission = CheckerPublic
 
     checker = NamesChecker(allowed_names, permission)
 
-    if file and image or not (file or image):
+    if ((file and image) or (file and template) or
+        (image and template) or not (file or image or template)):
         raise ConfigurationError(
-            "Must use exactly one of file or image "
+            "Must use exactly one of file or image or template"
             "attributes for resource directives"
             )
 
     if file:
-        factory = FileResourceFactory(_context.path(file), checker)
+        factory = FileResourceFactory(file, checker)
+    elif image:
+        factory = ImageResourceFactory(image, checker)
     else:
-        factory = ImageResourceFactory(_context.path(image), checker)
+        factory = PageTemplateResourceFactory(template, checker)
 
+    _context.action(
+        discriminator = ('resource', name, IBrowserPresentation, layer),
+        callable = handler,
+        args = (Resources, 'provideResource',
+                name, IBrowserPresentation, factory, layer),
+        )
+
+def resourceDirectory(_context, name, directory, layer='default',
+                      permission='zope.Public'):
+    if permission == 'zope.Public':
+        permission = CheckerPublic
+
+    checker = NamesChecker(allowed_names, permission)
+
+    if not os.path.isdir(directory):
+        raise ConfigurationError(
+            "Directory %s does not exist" % directory
+            )
+
+    factory = DirectoryResourceFactory(directory, checker)
     _context.action(
         discriminator = ('resource', name, IBrowserPresentation, layer),
         callable = handler,

@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_icondirective.py,v 1.8 2003/08/03 17:50:24 philikon Exp $
+$Id: test_icondirective.py,v 1.9 2003/08/11 14:58:13 philikon Exp $
 """
 import os
 from StringIO import StringIO
@@ -69,7 +69,7 @@ class Test(PlacelessSetup, TestCase):
 
         import zope.app.publisher.browser.tests as p
         path = os.path.split(p.__file__)[0]
-        path = os.path.join(path, 'test.gif')
+        path = os.path.join(path, 'testfiles', 'test.gif')
 
         xmlconfig(StringIO(template % (
             """
@@ -100,7 +100,7 @@ class Test(PlacelessSetup, TestCase):
 
         import zope.app.publisher.browser.tests as p
         path = os.path.split(p.__file__)[0]
-        path = os.path.join(path, 'test.gif')
+        path = os.path.join(path, 'testfiles', 'test.gif')
 
         xmlconfig(StringIO(template % (
             """
@@ -133,7 +133,7 @@ class Test(PlacelessSetup, TestCase):
 
         import zope.app.publisher.browser.tests as p
         path = os.path.split(p.__file__)[0]
-        path = os.path.join(path, 'test.gif')
+        path = os.path.join(path, 'testfiles', 'test.gif')
 
         config = StringIO(template % (
             """

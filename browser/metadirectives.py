@@ -15,7 +15,7 @@
 
 This module defines the schemas for browser directives.
 
-$Id: metadirectives.py,v 1.4 2003/08/03 17:50:20 philikon Exp $
+$Id: metadirectives.py,v 1.5 2003/08/11 14:58:07 philikon Exp $
 """
 
 from zope.interface import Interface
@@ -279,6 +279,14 @@ class IResourceDirective(IBasicResourceInformation):
         required=False
         )
 
+    template = Path(
+        title=u"Template",
+        description=u"""
+        If the image attribute is used, then a page template resource,
+        rather than a file resource will be created.""",
+        required=False
+        )
+
 class II18nResourceDirective(IBasicResourceInformation):
     """
     Defines an i18n'd resource.
@@ -325,6 +333,29 @@ class II18nResourceTranslationSubdirective(IBasicResourceInformation):
         If the image attribute is used, then an image resource, rather
         than a file resource will be created.""",
         required=False
+        )
+
+class IResourceDirectoryDirective(IBasicResourceInformation):
+    """
+    Defines a directory containing browser resource
+    """
+
+    name = TextLine(
+        title=u"The name of the resource",
+        description=u"""
+        This is the name used in resource urls. Resource urls are of
+        the form site/@@/resourcename, where site is the url of
+        "site", a folder with a service manager.
+
+        We make resource urls site-relative (as opposed to
+        content-relative) so as not to defeat caches.""",
+        required=True
+        )
+
+    directory = Path(
+        title=u"Directory",
+        description=u"The directory containing the resource data.",
+        required=True
         )
 
 #

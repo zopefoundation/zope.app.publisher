@@ -79,6 +79,12 @@
         handler=".metaconfigure.resource"
         />
 
+    <meta:directive
+        name="resourceDirectory"
+        schema=".metadirectives.IResourceDirectoryDirective"
+        handler=".metaconfigure.resourceDirectory"
+        />
+
     <meta:complexDirective
         name="i18n-resource"
         schema=".metadirectives.II18nResourceDirective"

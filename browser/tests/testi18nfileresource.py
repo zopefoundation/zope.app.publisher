@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: testi18nfileresource.py,v 1.4 2003/05/01 19:35:28 faassen Exp $
+$Id: testi18nfileresource.py,v 1.5 2003/08/11 14:58:13 philikon Exp $
 """
 
 from unittest import main, makeSuite
@@ -68,8 +68,8 @@ class Test(PlacelessSetup, TestII18nAware):
 
 
     def _createDict(self, filename1='test.pt', filename2='test2.pt'):
-        path1 = os.path.join(test_directory, filename1)
-        path2 = os.path.join(test_directory, filename2)
+        path1 = os.path.join(test_directory, 'testfiles', filename1)
+        path2 = os.path.join(test_directory, 'testfiles', filename2)
         return { 'en': File(path1),
                  'fr': File(path2) }
 
@@ -87,7 +87,7 @@ class Test(PlacelessSetup, TestII18nAware):
     def testFileGET(self):
 
         # case 1: no language preference, should get en
-        path = os.path.join(test_directory, 'test.txt')
+        path = os.path.join(test_directory, 'testfiles', 'test.txt')
 
         resource = I18nFileResourceFactory(self._createDict('test.txt'), 'en')\
                                           (TestRequest())
@@ -109,7 +109,7 @@ class Test(PlacelessSetup, TestII18nAware):
         self.assertEqual(response.getHeader('Content-Type'), 'text/plain')
 
         # case 3: prefer fr, have it, should get fr
-        path = os.path.join(test_directory, 'test2.pt')
+        path = os.path.join(test_directory, 'testfiles', 'test2.pt')
         resource = I18nFileResourceFactory(
                         self._createDict('test.pt', 'test2.pt'), 'en')\
                         (TestRequest(HTTP_ACCEPT_LANGUAGE='fr'))

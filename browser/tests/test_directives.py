@@ -126,7 +126,7 @@ class Test(PlacelessSetup, unittest.TestCase):
     def testPageWithClassWithMenu(self):
         self.assertEqual(queryView(ob, 'test', request),
                          None)
-        testusage = os.path.join(tests_path, 'testusage.pt')
+        testusage = os.path.join(tests_path, 'testfiles', 'testusage.pt')
                          
 
         xmlconfig(StringIO(template % (
@@ -152,7 +152,7 @@ class Test(PlacelessSetup, unittest.TestCase):
     def testPageWithClassWithUsage(self):
         self.assertEqual(queryView(ob, 'test', request),
                          None)
-        testusage = os.path.join(tests_path, 'testusage.pt')
+        testusage = os.path.join(tests_path, 'testfiles', 'testusage.pt')
                          
 
         xmlconfig(StringIO(template % (
@@ -173,7 +173,7 @@ class Test(PlacelessSetup, unittest.TestCase):
     def testPageWithClassWithMenuAndUsage(self):
         self.assertEqual(queryView(ob, 'test', request),
                          None)
-        testusage = os.path.join(tests_path, 'testusage.pt')
+        testusage = os.path.join(tests_path, 'testfiles', 'testusage.pt')
                          
 
         xmlconfig(StringIO(template % (
@@ -200,7 +200,7 @@ class Test(PlacelessSetup, unittest.TestCase):
     def testPageWithTemplateWithMenu(self):
         self.assertEqual(queryView(ob, 'test', request),
                          None)
-        testusage = os.path.join(tests_path, 'testusage.pt')
+        testusage = os.path.join(tests_path, 'testfiles', 'testusage.pt')
                          
 
         xmlconfig(StringIO(template % (
@@ -225,7 +225,7 @@ class Test(PlacelessSetup, unittest.TestCase):
     def testPageWithTemplateWithUsage(self):
         self.assertEqual(queryView(ob, 'test', request),
                          None)
-        testusage = os.path.join(tests_path, 'testusage.pt')
+        testusage = os.path.join(tests_path, 'testfiles', 'testusage.pt')
                          
 
         xmlconfig(StringIO(template % (
@@ -245,7 +245,7 @@ class Test(PlacelessSetup, unittest.TestCase):
     def testPageWithTemplateWithMenuAndUsage(self):
         self.assertEqual(queryView(ob, 'test', request),
                          None)
-        testusage = os.path.join(tests_path, 'testusage.pt')
+        testusage = os.path.join(tests_path, 'testfiles', 'testusage.pt')
                          
 
         xmlconfig(StringIO(template % (
@@ -271,7 +271,7 @@ class Test(PlacelessSetup, unittest.TestCase):
     def testPageInPagesWithTemplateWithMenu(self):
         self.assertEqual(queryView(ob, 'test', request),
                          None)
-        testusage = os.path.join(tests_path, 'testusage.pt')
+        testusage = os.path.join(tests_path, 'testfiles', 'testusage.pt')
                          
 
         xmlconfig(StringIO(template % (
@@ -297,7 +297,7 @@ class Test(PlacelessSetup, unittest.TestCase):
     def testPageInPagesWithClassWithMenu(self):
         self.assertEqual(queryView(ob, 'test', request),
                          None)
-        testusage = os.path.join(tests_path, 'testusage.pt')
+        testusage = os.path.join(tests_path, 'testfiles', 'testusage.pt')
                          
 
         xmlconfig(StringIO(template % (
@@ -369,8 +369,8 @@ class Test(PlacelessSetup, unittest.TestCase):
                                        None),
                          None)
 
-        path1 = os.path.join(tests_path, 'test.pt')
-        path2 = os.path.join(tests_path, 'test2.pt')
+        path1 = os.path.join(tests_path, 'testfiles', 'test.pt')
+        path2 = os.path.join(tests_path, 'testfiles', 'test2.pt')
 
         xmlconfig(StringIO(template % (
             """
@@ -518,7 +518,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
     def testPageViews(self):
         self.assertEqual(queryView(ob, 'test', request), None)
-        test3 = os.path.join(tests_path, 'test3.pt')
+        test3 = os.path.join(tests_path, 'testfiles', 'test3.pt')
 
         xmlconfig(StringIO(template %
             """
@@ -611,7 +611,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
     def testNamedViewPageViewsNoDefault(self):
         self.assertEqual(queryView(ob, 'test', request), None)
-        test3 = os.path.join(tests_path, 'test3.pt')
+        test3 = os.path.join(tests_path, 'testfiles', 'test3.pt')
 
         xmlconfig(StringIO(template %
             """
@@ -646,7 +646,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
     def testNamedViewPageViewsWithDefault(self):
         self.assertEqual(queryView(ob, 'test', request), None)
-        test3 = os.path.join(tests_path, 'test3.pt')
+        test3 = os.path.join(tests_path, 'testfiles', 'test3.pt')
 
         xmlconfig(StringIO(template %
             """
@@ -792,7 +792,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(v(), 'done')
 
     def testFile(self):
-        path = os.path.join(tests_path, 'test.pt')
+        path = os.path.join(tests_path, 'testfiles', 'test.pt')
 
         self.assertEqual(queryResource(ob, 'test', request),
                          None)
@@ -823,7 +823,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             queryResource(ob, 'test', request, None),
             None)
 
-        path = os.path.join(tests_path, 'test.pt')
+        path = os.path.join(tests_path, 'testfiles', 'test.pt')
 
         xmlconfig(StringIO(template % (
             """
@@ -840,7 +840,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(r._testData(), open(path, 'rb').read())
 
     def test_template_page(self):
-        path = os.path.join(tests_path, 'test.pt')
+        path = os.path.join(tests_path, 'testfiles', 'test.pt')
 
         self.assertEqual(queryView(ob, 'index.html', request),
                          None)
@@ -859,7 +859,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(v().strip(), '<html><body><p>test</p></body></html>')
 
     def testtemplateWClass(self):
-        path = os.path.join(tests_path, 'test2.pt')
+        path = os.path.join(tests_path, 'testfiles', 'test2.pt')
 
         self.assertEqual(queryView(ob, 'index.html', request),
                          None)
@@ -883,7 +883,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         serviceManager.defineService(Permissions, IPermissionService)
         serviceManager.provideService(Permissions, permissionRegistry)
         
-        path = os.path.join(tests_path, 'test.pt')
+        path = os.path.join(tests_path, 'testfiles', 'test.pt')
 
         self.assertEqual(queryView(ob, 'test', request),
                          None)
@@ -932,7 +932,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
 
     def testtemplateNoName(self):
-        path = os.path.join(tests_path, 'test.pt')
+        path = os.path.join(tests_path, 'testfiles', 'test.pt')
         self.assertRaises(
             ConfigurationError,
             xmlconfig,
@@ -946,7 +946,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             ))
 
     def testtemplateAndPage(self):
-        path = os.path.join(tests_path, 'test.pt')
+        path = os.path.join(tests_path, 'testfiles', 'test.pt')
         self.assertRaises(
             ConfigurationError,
             xmlconfig,

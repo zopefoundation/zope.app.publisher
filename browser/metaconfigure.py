@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: metaconfigure.py,v 1.11 2003/08/03 02:13:17 philikon Exp $
+$Id: metaconfigure.py,v 1.12 2003/08/11 14:58:07 philikon Exp $
 """
 
 from zope.publisher.interfaces.browser import IBrowserPresentation
@@ -23,7 +23,8 @@ from zope.app.component.metaconfigure import skin as _skin
 from zope.app.component.metaconfigure import handler
 
 # referred to through ZCML
-from zope.app.publisher.browser.resourcemeta import resource
+from zope.app.publisher.browser.resourcemeta import resource, \
+     resourceDirectory
 from zope.app.publisher.browser.i18nresourcemeta import I18nResource
 
 from zope.app.publisher.browser.viewmeta import view
