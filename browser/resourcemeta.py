@@ -42,7 +42,7 @@ def resource(_context, name, layer='default', permission='zope.Public',
         (image and template) or not (file or image or template)):
         raise ConfigurationError(
             "Must use exactly one of file or image or template"
-            "attributes for resource directives"
+            " attributes for resource directives"
             )
 
     if file:
