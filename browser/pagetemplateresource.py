@@ -13,13 +13,13 @@
 ##############################################################################
 """Page Template Resource
 
-$Id: pagetemplateresource.py,v 1.3 2003/11/21 17:10:05 jim Exp $
+$Id: pagetemplateresource.py,v 1.4 2004/03/19 20:26:30 srichter Exp $
 """
 
 from zope.interface import implements
 from zope.exceptions import NotFoundError
 from zope.security.proxy import Proxy
-from zope.publisher.browser import BrowserView
+from zope.app.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
 from zope.app.publisher.pagetemplateresource import PageTemplate

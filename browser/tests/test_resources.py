@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_resources.py,v 1.7 2003/11/27 13:59:23 philikon Exp $
+$Id: test_resources.py,v 1.8 2004/03/19 20:26:31 srichter Exp $
 """
 
 from unittest import TestCase, main, makeSuite
@@ -27,7 +27,7 @@ from zope.i18n.interfaces import IUserPreferredCharsets
 from zope.publisher.http import IHTTPRequest
 from zope.publisher.http import HTTPCharsets
 from zope.publisher.browser import TestRequest
-from zope.publisher.interfaces.browser import IBrowserView
+from zope.app.publisher.interfaces.browser import IBrowserView
 
 class Test(PlacelessSetup, TestCase):
 

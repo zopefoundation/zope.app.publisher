@@ -13,13 +13,13 @@
 ##############################################################################
 """
 
-$Id: fileresource.py,v 1.9 2003/11/21 17:10:05 jim Exp $
+$Id: fileresource.py,v 1.10 2004/03/19 20:26:30 srichter Exp $
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 
 from zope.exceptions import NotFoundError
 
-from zope.publisher.browser import BrowserView
+from zope.app.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
 from zope.app.publisher.fileresource import File, Image

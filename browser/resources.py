@@ -13,9 +13,9 @@
 ##############################################################################
 """Resource URL acess
 
-$Id: resources.py,v 1.13 2004/03/13 23:55:20 srichter Exp $
+$Id: resources.py,v 1.14 2004/03/19 20:26:30 srichter Exp $
 """
-from zope.publisher.browser import BrowserView
+from zope.app.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.exceptions import NotFoundError
 from zope.interface import implements

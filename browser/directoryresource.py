@@ -13,14 +13,14 @@
 ##############################################################################
 """Resource Directory
 
-$Id: directoryresource.py,v 1.5 2004/02/16 21:38:51 srichter Exp $
+$Id: directoryresource.py,v 1.6 2004/03/19 20:26:30 srichter Exp $
 """
 import os
 
 from zope.interface import implements
 from zope.exceptions import NotFoundError
 from zope.security.proxy import Proxy
-from zope.publisher.browser import BrowserView
+from zope.app.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
 from zope.app.publisher.browser.resource import Resource
