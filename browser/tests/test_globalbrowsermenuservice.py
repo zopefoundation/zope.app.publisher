@@ -21,7 +21,6 @@ from zope.interface import Interface, implements
 from zope.publisher.browser import TestRequest
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.security.management import newInteraction, endInteraction
-from zope.security.management import system_user
 
 from zope.app import zapi
 from zope.app.tests import ztapi
@@ -113,6 +112,7 @@ class GlobalBrowserMenuServiceTest(PlacelessSetup, unittest.TestCase):
         r.menuItem('test_id', I111, 'u8', 't8', 'd8')
         r.menuItem('test_id', I12, 'a9', 't9', 'd9')
 
+        endInteraction()
         newInteraction(ParticipationStub('test'))
 
         menu = r.getMenu('test_id', TestObject(), TestRequest())
@@ -120,9 +120,7 @@ class GlobalBrowserMenuServiceTest(PlacelessSetup, unittest.TestCase):
         self.assertEqual(list(menu), [d(6), d(3), d(2), d(1)])
 
         endInteraction()
-
-        newInteraction(ParticipationStub(system_user))
-
+        newInteraction()
         menu = r.getMenu('test_id', TestObject(), TestRequest())
         self.assertEqual(list(menu), [d(5), d(6), d(3), d(2), d(1)])
 
