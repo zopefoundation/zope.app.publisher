@@ -29,11 +29,12 @@
 </content>
 
 
-<browser:view name=""
-              factory="zope.app.publisher.browser.resources.Resources"
-              for="zope.app.interfaces.services.service.IServiceManagerContainer"
-              permission="zope.Public"
-              allowed_interface="zope.publisher.interfaces.browser.IBrowserPublisher"
-              />
+<browser:page 
+    name=""
+    class="zope.app.publisher.browser.resources.Resources"
+    for="zope.app.interfaces.services.service.IServiceManagerContainer"
+    permission="zope.Public"
+    allowed_interface="zope.publisher.interfaces.browser.IBrowserPublisher"
+    />
 
 </zopeConfigure>

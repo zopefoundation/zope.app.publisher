@@ -13,13 +13,14 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.3 2002/12/28 14:14:09 jim Exp $
+$Id: viewmeta.py,v 1.4 2002/12/30 23:33:46 jim Exp $
 """
 
 # XXX this will need to be refactored soon. :)
 
 from zope.security.proxy import Proxy
 from zope.security.checker import CheckerPublic, NamesChecker, Checker
+from zope.security.checker import defineChecker
 
 from zope.interfaces.configuration import INonEmptyDirective
 from zope.interfaces.configuration import ISubdirectiveHandler
@@ -29,13 +30,194 @@ from zope.configuration.exceptions import ConfigurationError
 from zope.publisher.interfaces.browser import IBrowserPresentation
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
+from zope.publisher.browser import BrowserView
+
 from zope.app.component.metaconfigure import handler
 
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
+from zope.app.security.permission import checkPermission
+
 from zope.proxy.context import ContextMethod
 
+from zope.app.publisher.browser.globalbrowsermenuservice \
+     import menuItemDirective
+
+# There are three cases we want to suport:
+#
+# Named view without pages (single-page view)
+#
+#     <browser:page
+#         for=".IContact.IContactInfo."
+#         name="info.html" 
+#         template="info.pt"
+#         class=".ContactInfoView."
+#         permission="Zope.View"
+#         />
+#
+# Unamed view with pages (multi-page view)
+#
+#     <browser:pages
+#         for=".IContact."
+#         class=".ContactEditView."
+#         permission="ZopeProducts.Contact.ManageContacts"
+#         >
+# 
+#       <browser:page name="edit.html"       template="edit.pt" />
+#       <browser:page name="editAction.html" attribute="action" />
+#       </browser:pages>
+#
+# Named view with pages (add view is a special case of this)
+#
+#        <browser:view
+#            name="ZopeProducts.Contact"
+#            for="Zope.App.OFS.Container.IAdding."
+#            class=".ContactAddView."
+#            permission="ZopeProducts.Contact.ManageContacts"
+#            >
+#
+#          <browser:page name="add.html"    template="add.pt" />
+#          <browser:page name="action.html" attribute="action" />
+#          </browser:view>
+
+# We'll also provide a convenience directive for add views:
+#
+#        <browser:add
+#            name="ZopeProducts.Contact"
+#            class=".ContactAddView."
+#            permission="ZopeProducts.Contact.ManageContacts"
+#            >
+#
+#          <browser:page name="add.html"    template="add.pt" />
+#          <browser:page name="action.html" attribute="action" />
+#          </browser:view>
+
+# page
+
+def _handle_permission(_context, permission, actions):
+    if permission == 'zope.Public':
+        permission = CheckerPublic
+    else:
+        actions.append(Action(discriminator = None, callable = checkPermission,
+                              args = (None, permission)))
+
+    return permission
+
+def _handle_allowed_interface(_context, allowed_interface, permission,
+                              required, actions):
+    # Allow access for all names defined by named interfaces
+    if allowed_interface.strip():
+        for i in allowed_interface.strip().split():
+            i = _context.resolve(i)
+            actions .append(
+                Action(discriminator = None, callable = handler,
+                       args = ('Interfaces', 'provideInterface', None, i)
+                       ))
+            for name in i:
+                required[name] = permission
+
+def _handle_allowed_attributes(_context, allowed_attributes, permission,
+                               required):
+    # Allow access for all named attributes
+    if allowed_attributes.strip():
+        for name in allowed_attributes.strip().split():
+            required[name] = permission
+
+def _handle_for(_context, for_, actions):
+    if for_ == '*':
+        for_ = None
+        
+    if for_ is not None:
+        for_ = _context.resolve(for_)
+        
+        actions .append(
+            Action(discriminator = None, callable = handler,
+                   args = ('Interfaces', 'provideInterface', None, for_)
+            ))
+
+    return for_
+
+class simple(BrowserView):
+
+    __implements__ = IBrowserPublisher, BrowserView.__implements__
+
+    def publishTraverse(self, request, name):
+        raise NotFound(self, name, request)
+
+def page(_context, name, permission, for_,
+         layer='default', template=None, class_=None,
+         allowed_interface='', allowed_attributes='',
+         attribute='__call__', menu=None, title=None
+         ):
+
+    actions = []
+    required = {}
+
+    if menu or title:
+        if not (menu and title):
+            raise ConfigurationError(
+                "If either menu or title are specified, they must "
+                "both be specified.")
+
+        actions = menuItemDirective(_context, menu, for_, '@@' + name, title,
+                                    permission=permission)
+
+    permission = _handle_permission(_context, permission, actions)
+            
+    if not (class_ or template):
+        raise ConfigurationError("Must specify a class or template")
+
+    if attribute != '__call__' and template:
+        raise ConfigurationError(
+            "Attribute and template cannot be used together.")
+
+    if template:
+        template = str(_context.path(template))
+        required['__getitem__'] = permission
+
+    if class_:
+        class_ = _context.resolve(class_)
+        if template:
+            template = str(_context.path(template))
+
+            class_ = SimpleViewClass(template, bases=(class_, ))
+
+        else:
+            if not hasattr(class_, 'browserDefault'):
+                cdict = { 'browserDefault':
+                          lambda self, request:
+                          (getattr(self, attribute), ())
+                          }
+            else:
+                cdict = {}
+                
+            class_ = type(class_.__name__, (class_, simple,), cdict)
+            
+    else:
+        class_ = SimpleViewClass(template)
+        
+    for n in (attribute, 'browserDefault'):
+        required[n] = permission
+
+    _handle_allowed_interface(_context, allowed_interface, permission,
+                              required, actions)
+    _handle_allowed_attributes(_context, allowed_interface, permission,
+                               required)
+    for_ = _handle_for(_context, for_, actions)
+
+    defineChecker(class_, Checker(required))
+
+    actions.append(
+        Action(
+          discriminator = ('view', for_, name, IBrowserPresentation, layer),
+          callable = handler,
+          args = ('Views', 'provideView',
+                  for_, name, IBrowserPresentation, [class_], layer),
+          )
+        )
+
+    return actions
 
 class view:
 
@@ -120,8 +302,6 @@ class view:
             self.__pages[name] = attribute, permission, template
             if self.__default is None:
                 self.__default = name
-
-
 
             return ()
 

@@ -33,6 +33,9 @@ from zope.publisher.interfaces.browser import IBrowserPresentation
 from zope.app.publisher.browser.i18nfileresource import I18nFileResource
 
 import zope.app.publisher.browser
+from zope.component.service import serviceManager
+from zope.app.interfaces.security import IPermissionService
+from zope.app.security.registries.permissionregistry import permissionRegistry
 
 tests_path = os.path.join(
     os.path.split(zope.app.publisher.browser.__file__)[0],
@@ -71,21 +74,23 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         provideAdapter(None, ITraversable, DefaultTraversable)
 
-    def testView(self):
+    def testPage(self):
         self.assertEqual(queryView(ob, 'test', request),
                          None)
 
         xmlconfig(StringIO(template % (
             """
-            <browser:view name="test"
-                  factory="zope.component.tests.views.V1"
-                  for="zope.component.tests.views.IC" />
+            <browser:page name="test"
+                          class="zope.component.tests.views.V1"
+                          for="zope.component.tests.views.IC"
+                          permission="zope.Public"
+                          attribute="index"
+                          />
             """
             )))
 
-        self.assertEqual(
-            queryView(ob, 'test', request).__class__,
-            V1)
+        v = queryView(ob, 'test', request)
+        self.assert_(issubclass(v.__class__, V1))
 
     def testDefaultView(self):
         self.assertEqual(queryView(ob, 'test', request,
@@ -94,42 +99,41 @@ class Test(PlacelessSetup, unittest.TestCase):
         xmlconfig(StringIO(template % (
             """
             <browser:defaultView name="test"
-                  factory="zope.component.tests.views.V1"
-                  for="zope.component.tests.views.IC" />
+                                 for="zope.component.tests.views.IC" />
             """
             )))
 
-        self.assertEqual(queryView(ob, 'test',
-                                   request, None
-                                 ).__class__, V1)
         self.assertEqual(getDefaultViewName(ob, request
                                  ), 'test')
 
 
-    def testSkinView(self):
+    def testSkinPage(self):
         self.assertEqual(queryView(ob, 'test', request,
                                    None), None)
 
         xmlconfig(StringIO(template % (
             """
             <browser:skin name="zmi" layers="zmi default" />
-            <browser:view name="test"
-                  factory="zope.component.tests.views.VZMI"
+            <browser:page name="test"
+                  class="zope.component.tests.views.VZMI"
                   layer="zmi"
-                  for="zope.component.tests.views.IC" />
-            <browser:view name="test"
-                  factory="zope.component.tests.views.V1"
-                  for="zope.component.tests.views.IC" />
+                  for="zope.component.tests.views.IC"
+                  permission="zope.Public"
+                  attribute="index"
+                  />
+            <browser:page name="test"
+                  class="zope.component.tests.views.V1"
+                  for="zope.component.tests.views.IC"
+                  permission="zope.Public"
+                  attribute="index"
+                  />
             """
             )))
 
-        self.assertEqual(
-            queryView(ob, 'test', request).__class__,
-            V1)
-        self.assertEqual(
-            queryView(ob, 'test',
-                      Request(IBrowserPresentation, 'zmi')).__class__,
-            VZMI)
+        v = queryView(ob, 'test', request)
+        self.assert_(issubclass(v.__class__, V1))
+        v = queryView(ob, 'test', Request(IBrowserPresentation, 'zmi'))
+        self.assert_(issubclass(v.__class__, VZMI))
 
     def testI18nResource(self):
         self.assertEqual(queryResource(ob, 'test', request,
@@ -177,11 +181,12 @@ class Test(PlacelessSetup, unittest.TestCase):
             ))
         self.assertRaises(ConfigurationError, xmlconfig, config)
 
-    def testInterfaceProtectedView(self):
+    def testInterfaceProtectedPage(self):
         xmlconfig(StringIO(template %
             """
-            <browser:view name="test"
-                  factory="zope.component.tests.views.V1"
+            <browser:page name="test"
+                  class="zope.component.tests.views.V1"
+                  attribute="index"
                   for="zope.component.tests.views.IC"
                   permission="zope.Public"
               allowed_interface="zope.component.tests.views.IV"
@@ -194,12 +199,13 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(v.index(), 'V1 here')
         self.assertRaises(Exception, getattr, v, 'action')
 
-    def testAttributeProtectedView(self):
+    def testAttributeProtectedPage(self):
         xmlconfig(StringIO(template %
             """
-            <browser:view name="test"
-                  factory="zope.component.tests.views.V1"
+            <browser:page name="test"
+                  class="zope.component.tests.views.V1"
                   for="zope.component.tests.views.IC"
+                  attribute="action"
                   permission="zope.Public"
                   allowed_attributes="action"
                   />
@@ -211,15 +217,16 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(v.action(), 'done')
         self.assertRaises(Exception, getattr, v, 'index')
 
-    def testInterfaceAndAttributeProtectedView(self):
+    def testInterfaceAndAttributeProtectedPage(self):
         xmlconfig(StringIO(template %
             """
-            <browser:view name="test"
-                  factory="zope.component.tests.views.V1"
+            <browser:page name="test"
+                  class="zope.component.tests.views.V1"
                   for="zope.component.tests.views.IC"
                   permission="zope.Public"
+                  attribute="index"
                   allowed_attributes="action"
-              allowed_interface="zope.component.tests.views.IV"
+                  allowed_interface="zope.component.tests.views.IV"
                   />
             """
             ))
@@ -228,15 +235,16 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(v.index(), 'V1 here')
         self.assertEqual(v.action(), 'done')
 
-    def testDuplicatedInterfaceAndAttributeProtectedView(self):
+    def testDuplicatedInterfaceAndAttributeProtectedPage(self):
         xmlconfig(StringIO(template %
             """
-            <browser:view name="test"
-                  factory="zope.component.tests.views.V1"
+            <browser:page name="test"
+                  class="zope.component.tests.views.V1"
                   for="zope.component.tests.views.IC"
+                  attribute="index"
                   permission="zope.Public"
                   allowed_attributes="action index"
-              allowed_interface="zope.component.tests.views.IV"
+                  allowed_interface="zope.component.tests.views.IV"
                   />
             """
             ))
@@ -245,15 +253,16 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(v.index(), 'V1 here')
         self.assertEqual(v.action(), 'done')
 
-    def testIncompleteProtectedViewNoPermission(self):
+    def testIncompleteProtectedPageNoPermission(self):
         self.assertRaises(
             ConfigurationError,
             xmlconfig,
             StringIO(template %
             """
-            <browser:view name="test"
-                  factory="zope.component.tests.views.V1"
+            <browser:page name="test"
+                  class="zope.component.tests.views.V1"
                   for="zope.component.tests.views.IC"
+                  attribute="index"
                   allowed_attributes="action index"
                   />
             """
@@ -530,7 +539,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         r = removeAllProxies(r)
         self.assertEqual(r._testData(), open(path, 'rb').read())
 
-    def testtemplate(self):
+    def test_template_page(self):
         path = os.path.join(tests_path, 'test.pt')
 
         self.assertEqual(queryView(ob, 'index.html', request),
@@ -538,9 +547,10 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         xmlconfig(StringIO(template %
             """
-            <browser:view
+            <browser:page
                   name="index.html"
                   template="%s"
+                  permission="zope.Public"
                   for="zope.component.tests.views.IC" />
             """ % path
             ))
@@ -556,9 +566,10 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         xmlconfig(StringIO(template %
             """
-            <browser:view
+            <browser:page
                   name="index.html"
                   template="%s"
+                  permission="zope.Public"
                   class="zope.app.publisher.browser.tests.templateclass."
                   for="zope.component.tests.views.IC" />
             """ % path
@@ -568,6 +579,10 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(v().strip(), '<html><body><p>42</p></body></html>')
 
     def testProtectedtemplate(self):
+
+        serviceManager.defineService('Permissions', IPermissionService)
+        serviceManager.provideService('Permissions', permissionRegistry)
+        
         path = os.path.join(tests_path, 'test.pt')
 
         self.assertEqual(queryView(ob, 'test', request),
@@ -584,7 +599,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
             <permission id="XXX" title="xxx" />
 
-            <browser:view
+            <browser:page
                   name="xxx.html"
                   template="%s"
                   permission="XXX"
@@ -623,7 +638,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             xmlconfig,
             StringIO(template %
             """
-            <browser:view
+            <browser:page
                   template="%s"
                   for="zope.component.tests.views.IC"
                   />
