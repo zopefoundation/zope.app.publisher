@@ -277,7 +277,7 @@
     <directive name="view" handler=".viewmeta.view">
 
       <description>
-        The view directive defines a viewe that has subpages.
+        The view directive defines a view that has subpages.
 
         The pages provided by the defined view are accessed by first
         traversing to the view name and then traversing to the page
@@ -421,7 +421,7 @@
 
         An add view is a view for a specific adding interface,
         IAdding. This directive is a convenience directive that allows
-        the for interface to be ommitted, since it is implied.
+        the for interface to be omitted, since it is implied.
 
         The pages provided by the defined view are accessed by first
         traversing to the view name and then traversing to the page
@@ -766,7 +766,7 @@
 
         <attribute name="description">
           <description>
-          A longer explaination of the menu item
+          A longer explanation of the menu item
 
           A UI may display this with the item or display it when the
           user requests more assistance.
@@ -777,10 +777,10 @@
           <description>
             The id of the permission needed access the item
 
-            This can usually be infered by the system, however, doing
+            This can usually be inferred by the system, however, doing
             so may be expensive. When displaying a menu, the system
             tries to traverse to the URLs given in each action to
-            determine whether the url is accessable to the current
+            determine whether the url is accessible to the current
             user.  This can be avoided if the permission is given explicitly. 
           </description>
       </attribute>
