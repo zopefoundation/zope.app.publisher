@@ -16,7 +16,7 @@
 <content class="zope.publisher.browser.BrowserRequest">
   <allow
     interface="zope.publisher.interfaces.browser.IBrowserApplicationRequest"
-    attributes="response"
+    attributes="response locale"
     />
   <allow
     interface="zope.component.interfaces.IPresentationRequest" />
