@@ -489,6 +489,113 @@ def menuItemDirective(_context, menu, for_,
         _context, action, title, description, icon, filter,
         permission, extra, order)
 
+class MenuItemFactory(object):
+    # XXX this used to be a function created inline within menuItemsDirective,
+    # with the necessary values bound in context.  That approach may be
+    # faster than this one, but it does not encourage approachable doc tests.
+    # Please revise as desired, or remove this triple-X comment if this 
+    # solution is acceptable for now.
+    """generic factory for menu items.
+    
+    The factory needs a class to instantiate.  This will generally implement
+    IBrowserMenuItem.  Here is a dummy example.
+    
+    >>> class DummyBrowserMenuItem(object):
+    ...     "a dummy factory for menu items"
+    ...     def __init__(self, context, request):
+    ...         self.context = context
+    ...         self.request = request
+    ... 
+    
+    To instantiate this class, pass the factory and the other arguments as 
+    described by the signature (and mapped to the IBrowserMenuItem interface).
+    We use dummy values for this example.
+    
+    >>> factory = MenuItemFactory(
+    ...     DummyBrowserMenuItem, 'Title', 'Description', 'Icon', 'Action',
+    ...     'Filter', 'zope.Public', 'Extra', 'Order', 'For_')
+    >>> factory.factory is DummyBrowserMenuItem
+    True
+    
+    The 'zope.Public' permission needs to be translated to CheckerPublic.
+    
+    >>> factory.permission is CheckerPublic
+    True
+    
+    Call the factory with context and request to return the instance.  We 
+    continue to use dummy values.
+    
+    >>> item = factory('Context', 'Request')
+    
+    The returned value should be an instance of the DummyBrowserMenuItem,
+    and have all of the values we initially set on the factory.
+    
+    >>> isinstance(item, DummyBrowserMenuItem)
+    True
+    >>> item.context
+    'Context'
+    >>> item.request
+    'Request'
+    >>> item.title
+    'Title'
+    >>> item.description
+    'Description'
+    >>> item.icon
+    'Icon'
+    >>> item.action
+    'Action'
+    >>> item.filter
+    'Filter'
+    >>> item.permission is CheckerPublic
+    True
+    >>> item.extra
+    'Extra'
+    >>> item.order
+    'Order'
+    >>> item._for
+    'For_'
+    
+    If you pass a permission other than zope.Public to the MenuItemFactory,
+    it should pass through unmodified.
+    
+    >>> factory = MenuItemFactory(
+    ...     DummyBrowserMenuItem, 'Title', 'Description', 'Icon', 'Action',
+    ...     'Filter', 'another.Permission', 'Extra', 'Order', 'For_')
+    >>> factory.permission
+    'another.Permission'
+    """
+    def __init__(self, factory, title, description, icon, action, filter, 
+                 permission, extra, order, for_):
+        self.factory = factory
+        self.title = title
+        self.description = description
+        self.icon = icon
+        self.action = action
+        self.filter = filter
+        if permission == 'zope.Public':
+            permission = CheckerPublic
+        self.permission = permission
+        self.extra = extra
+        self.order = order
+        self.for_ = for_
+    
+    def __call__(self, context, request):
+        item = self.factory(context, request)
+        item.title = self.title
+        item.description = self.description
+        item.icon = self.icon
+        item.action = self.action
+        item.filter = self.filter
+        # we could not set the permission if self.permission is CheckerPublic.
+        # choosing to be explicit for now.
+        item.permission = self.permission
+        item.extra = self.extra
+        item.order = self.order
+        item._for = self.for_
+        if self.permission is not None:
+            checker = InterfaceChecker(IBrowserMenuItem, self.permission)
+            item = proxify(item, checker)
+        return item
 
 class menuItemsDirective(object):
     """Register several menu items for a particular menu.
@@ -525,30 +632,10 @@ class menuItemsDirective(object):
             order = _order_counter.get(self.for_, 1)
             _order_counter[self.for_] = order + 1
 
-        def MenuItemFactory(context, request):
-            item = BrowserMenuItem(context, request)
-            item.title = title
-            item.description = description
-            item.icon = icon
-            item.action = action
-            item.filter = filter
-            item.permission = permission
-            item.extra = extra
-            item.order = order
-            item._for = self.for_
-
-            if permission is not None:
-                if permission == 'zope.Public':
-                    perm = CheckerPublic
-                else:
-                    perm = permission
-                checker = InterfaceChecker(IBrowserMenuItem, perm)
-                item = proxify(item, checker)
-
-            return item
-        MenuItemFactory.factory = BrowserMenuItem
-
-        adapter(_context, (MenuItemFactory,), self.menuItemType,
+        factory = MenuItemFactory(
+            BrowserMenuItem, title, description, icon, action, filter, 
+            permission, extra, order, self.for_)
+        adapter(_context, (factory,), self.menuItemType,
                 (self.for_, IBrowserRequest), name=title)
         
     def __call__(self, _context):
