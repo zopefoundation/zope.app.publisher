@@ -14,7 +14,7 @@
 """Icon support
 
 
-$Id: icon.py,v 1.2 2002/12/28 16:23:04 stevea Exp $
+$Id: icon.py,v 1.3 2002/12/28 17:49:30 stevea Exp $
 """
 
 import os
@@ -23,7 +23,7 @@ import re
 from zope.app.component.metaconfigure import handler
 from zope.configuration.action import Action
 from zope.app.publisher.browser import metaconfigure
-from zope.app.traversing.getresource import getResource
+from zope.app.traversing.namespace import getResourceInContext
 from zope.publisher.interfaces.browser import IBrowserPresentation
 from zope.configuration.exceptions import ConfigurationError
 
@@ -40,14 +40,14 @@ class IconView:
         self.alt = alt
 
     def __call__(self):
-        resource = getResource(self.context, self.rname, self.request)
+        resource = getResourceInContext(self.context, self.rname, self.request)
         src = resource()
 
         return ('<img src="%s" alt="%s" width="16" height="16" border="0" />'
                 % (src, self.alt))
 
     def url(self):
-        resource = getResource(self.context, self.rname, self.request)
+        resource = getResourceInContext(self.context, self.rname, self.request)
         src = resource()
         return src
 

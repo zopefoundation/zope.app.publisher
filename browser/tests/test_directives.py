@@ -65,9 +65,8 @@ class Test(PlacelessSetup, unittest.TestCase):
         XMLConfig('metameta.zcml', zope.configuration)()
         XMLConfig('meta.zcml', zope.app.publisher.browser)()
 
-        from zope.component.adapter \
-             import provideAdapter
-        from zope.app.traversing.defaulttraversable import DefaultTraversable
+        from zope.component.adapter import provideAdapter
+        from zope.app.traversing.adapters import DefaultTraversable
         from zope.app.interfaces.traversing import ITraversable
 
         provideAdapter(None, ITraversable, DefaultTraversable)
