@@ -20,7 +20,7 @@ from unittest import TestCase, main, makeSuite
 
 from zope.exceptions import NotFoundError
 from zope.i18n.interfaces import IUserPreferredCharsets
-from zope.proxy import removeAllProxies
+from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import NamesChecker
 
 from zope.app.tests.placelesssetup import PlacelessSetup
@@ -65,7 +65,7 @@ class Test(PlacelessSetup, TestCase):
         resource = factory(TestRequest())
         self.assertEqual(resource.GET(), open(path, 'rb').read())
 
-        response = removeAllProxies(resource.request).response
+        response = removeSecurityProxy(resource.request).response
         self.assertEqual(response.getHeader('Content-Type'), 'text/plain')
 
     def testFileHEAD(self):
@@ -76,7 +76,7 @@ class Test(PlacelessSetup, TestCase):
 
         self.assertEqual(resource.HEAD(), '')
 
-        response = removeAllProxies(resource.request).response
+        response = removeSecurityProxy(resource.request).response
         self.assertEqual(response.getHeader('Content-Type'), 'text/plain')
 
     def testImageGET(self):
@@ -88,7 +88,7 @@ class Test(PlacelessSetup, TestCase):
 
         self.assertEqual(resource.GET(), open(path, 'rb').read())
 
-        response = removeAllProxies(resource.request).response
+        response = removeSecurityProxy(resource.request).response
         self.assertEqual(response.getHeader('Content-Type'), 'image/gif')
 
     def testImageHEAD(self):
@@ -99,7 +99,7 @@ class Test(PlacelessSetup, TestCase):
 
         self.assertEqual(resource.HEAD(), '')
 
-        response = removeAllProxies(resource.request).response
+        response = removeSecurityProxy(resource.request).response
         self.assertEqual(response.getHeader('Content-Type'), 'image/gif')
 
 

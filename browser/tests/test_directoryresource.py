@@ -19,7 +19,8 @@ import os
 from unittest import TestCase, main, makeSuite
 
 from zope.exceptions import NotFoundError
-from zope.proxy import isProxy, removeAllProxies
+from zope.proxy import isProxy
+from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import TestRequest
 from zope.security.checker import NamesChecker, ProxyFactory
 from zope.interface import implements
@@ -98,13 +99,14 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
         resource = DirectoryResourceFactory(path, checker, 'files')(request)
 
         image = resource['test.gif']
-        self.assert_(isinstance(removeAllProxies(image), FileResource))
+        self.assert_(isinstance(removeSecurityProxy(image), FileResource))
         template = resource['test.pt']
-        self.assert_(isinstance(removeAllProxies(template), PageTemplateResource))
+        self.assert_(isinstance(removeSecurityProxy(template),
+                                PageTemplateResource))
         file = resource['test.txt']
-        self.assert_(isinstance(removeAllProxies(file), FileResource))
+        self.assert_(isinstance(removeSecurityProxy(file), FileResource))
         file = resource['png']
-        self.assert_(isinstance(removeAllProxies(file), FileResource))
+        self.assert_(isinstance(removeSecurityProxy(file), FileResource))
 
 def test_suite():
     return makeSuite(Test)
