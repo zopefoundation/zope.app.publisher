@@ -13,7 +13,7 @@
 ##############################################################################
 """Page Template Resource
 
-$Id: pagetemplateresource.py,v 1.1 2003/08/11 14:58:05 philikon Exp $
+$Id$
 """
 
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile

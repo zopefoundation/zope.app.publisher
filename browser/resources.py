@@ -13,7 +13,7 @@
 ##############################################################################
 """Resource URL acess
 
-$Id: resources.py,v 1.14 2004/03/19 20:26:30 srichter Exp $
+$Id$
 """
 from zope.app.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher

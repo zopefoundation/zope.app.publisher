@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: resourcemeta.py,v 1.14 2004/02/16 21:38:52 srichter Exp $
+$Id$
 """
 import os
 

@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.46 2004/04/15 13:25:40 srichter Exp $
+$Id$
 """
 import os
 

@@ -14,7 +14,7 @@
 """Icon support
 
 
-$Id: icon.py,v 1.13 2004/03/05 15:55:51 eddala Exp $
+$Id$
 """
 
 import os

@@ -13,7 +13,7 @@
 ##############################################################################
 """XMLRPC configuration code
 
-$Id: metaconfigure.py,v 1.18 2004/03/15 20:42:19 jim Exp $
+$Id$
 """
 
 from zope.component.servicenames import Presentation

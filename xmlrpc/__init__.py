@@ -15,7 +15,7 @@
 
 This module contains the MethodPublisher, and XMLRPCView.
 
-$Id: __init__.py,v 1.3 2004/03/19 20:26:31 srichter Exp $
+$Id$
 """
 from zope.interface import implements
 from zope.app.publisher.interfaces.xmlrpc import IXMLRPCView

@@ -13,7 +13,7 @@
 ##############################################################################
 """Page Template Resource
 
-$Id: pagetemplateresource.py,v 1.4 2004/03/19 20:26:30 srichter Exp $
+$Id$
 """
 
 from zope.interface import implements

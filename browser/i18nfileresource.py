@@ -14,7 +14,7 @@
 """
 Internationalized file resource.
 
-$Id: i18nfileresource.py,v 1.6 2003/11/21 17:10:05 jim Exp $
+$Id$
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 

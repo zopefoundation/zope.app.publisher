@@ -13,7 +13,7 @@
 ##############################################################################
 """Zope-specific request field converters.
 
-$Id: fieldconverters.py,v 1.2 2003/04/25 19:28:44 jeremy Exp $
+$Id$
 """
 from datetime import datetime
 

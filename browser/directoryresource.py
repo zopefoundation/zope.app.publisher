@@ -13,7 +13,7 @@
 ##############################################################################
 """Resource Directory
 
-$Id: directoryresource.py,v 1.6 2004/03/19 20:26:30 srichter Exp $
+$Id$
 """
 import os
 

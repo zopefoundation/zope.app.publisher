@@ -13,7 +13,7 @@
 ##############################################################################
 """
 
-$Id: fileresource.py,v 1.4 2003/11/04 04:04:26 jeremy Exp $
+$Id$
 """
 from zope.app.content_types import guess_content_type
 from zope.app.datetimeutils import rfc1123_date

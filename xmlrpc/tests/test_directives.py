@@ -13,7 +13,7 @@
 ##############################################################################
 """Test 'xmlrpc' ZCML Namespace directives.
 
-$Id: test_directives.py,v 1.10 2003/12/17 10:06:42 jim Exp $
+$Id$
 """
 import unittest
 

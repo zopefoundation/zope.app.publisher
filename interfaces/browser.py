@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser-Specific Publisher interfaces
 
-$Id: browser.py,v 1.4 2004/04/24 23:17:58 srichter Exp $
+$Id$
 """
 from zope.component.interfaces import IView
 from zope.app.i18n import ZopeMessageIDFactory as _

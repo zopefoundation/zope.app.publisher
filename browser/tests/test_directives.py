@@ -13,7 +13,7 @@
 ##############################################################################
 """'browser' namespace directive tests
 
-$Id: test_directives.py,v 1.37 2004/05/10 06:18:25 philikon Exp $
+$Id$
 """
 
 import os

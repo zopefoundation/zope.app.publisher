@@ -13,7 +13,7 @@
 ##############################################################################
 """'xmlrpc' ZCML Namespace Schemas
 
-$Id: metadirectives.py,v 1.2 2003/08/04 23:19:10 srichter Exp $
+$Id$
 """
 from zope.app.component.metadirectives import IBasicViewInformation
 from zope.configuration.fields import GlobalObject

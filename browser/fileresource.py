@@ -13,7 +13,7 @@
 ##############################################################################
 """
 
-$Id: fileresource.py,v 1.10 2004/03/19 20:26:30 srichter Exp $
+$Id$
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 

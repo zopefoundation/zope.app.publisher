@@ -13,7 +13,7 @@
 ##############################################################################
 """
 
-$Id: resource.py,v 1.14 2004/05/10 06:35:38 philikon Exp $
+$Id$
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 

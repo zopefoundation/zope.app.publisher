@@ -13,7 +13,7 @@
 ##############################################################################
 """Global Browser Menu Tests
 
-$Id: test_globalbrowsermenuservice.py,v 1.17 2004/03/23 22:08:10 srichter Exp $
+$Id$
 """
 import unittest
 from zope.exceptions import Forbidden, Unauthorized, DuplicationError

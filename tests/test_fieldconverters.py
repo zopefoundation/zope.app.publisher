@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_fieldconverters.py,v 1.1 2003/02/13 17:46:20 tseaver Exp $
+$Id$
 """
 
 from unittest import TestCase, TestSuite, main, makeSuite

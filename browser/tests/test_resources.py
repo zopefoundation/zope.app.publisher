@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_resources.py,v 1.8 2004/03/19 20:26:31 srichter Exp $
+$Id$
 """
 
 from unittest import TestCase, main, makeSuite

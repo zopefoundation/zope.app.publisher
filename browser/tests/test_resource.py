@@ -13,7 +13,7 @@
 ##############################################################################
 """Unit tests for Resource
 
-$Id: test_resource.py,v 1.9 2004/03/13 21:03:18 srichter Exp $
+$Id$
 """
 import unittest
 from zope.app.publisher.browser.resource import Resource

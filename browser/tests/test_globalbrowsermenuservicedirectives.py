@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser Menu Directives Tests
 
-$Id: test_globalbrowsermenuservicedirectives.py,v 1.12 2004/03/23 22:08:10 srichter Exp $
+$Id$
 """
 
 from StringIO import StringIO

@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: i18nresourcemeta.py,v 1.16 2004/03/13 23:55:20 srichter Exp $
+$Id$
 """
 
 from zope.security.proxy import Proxy

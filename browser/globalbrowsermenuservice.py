@@ -13,7 +13,7 @@
 ##############################################################################
 """Global Browser Menu Service
 
-$Id: globalbrowsermenuservice.py,v 1.31 2004/03/23 22:08:09 srichter Exp $
+$Id$
 """
 __metaclass__ = type 
 

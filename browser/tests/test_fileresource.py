@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_fileresource.py,v 1.9 2003/11/27 13:59:23 philikon Exp $
+$Id$
 """
 
 import os

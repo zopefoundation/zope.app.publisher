@@ -46,7 +46,7 @@
    'zope.ManageContent',
    {'factory': 'zope.app.browser.add.X.f1'})))
 
-$Id: test_addMenuItem.py,v 1.4 2004/03/09 12:39:07 srichter Exp $
+$Id$
 """
 
 import unittest

@@ -13,7 +13,7 @@
 ##############################################################################
 """Provide zope app-server customizatioin of publisher browser facilities
 
-$Id: __init__.py,v 1.6 2004/03/20 21:36:16 philikon Exp $
+$Id$
 """
 from zope.interface import implements
 from zope.app.location import Location

@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: metaconfigure.py,v 1.22 2004/04/06 20:58:16 jim Exp $
+$Id$
 """
 
 from zope.app import zapi
