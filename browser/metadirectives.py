@@ -1,4 +1,4 @@
-##############################################################################
+#############################################################################
 #
 # Copyright (c) 2001, 2002 Zope Corporation and Contributors.
 # All Rights Reserved.
@@ -15,7 +15,7 @@
 
 This module defines the schemas for browser directives.
 
-$Id: metadirectives.py,v 1.15 2004/03/02 17:40:51 philikon Exp $
+$Id: metadirectives.py,v 1.16 2004/03/15 20:42:16 jim Exp $
 """
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, Tokens, Path, \
@@ -156,6 +156,11 @@ class IPagesDirective(IBasicViewInformation, IUsage):
     without repeating the 'for', 'permission', 'class', 'layer',
     'allowed_attributes', and 'allowed_interface' attributes.
     """
+
+    for_ = GlobalObject(
+        title=u"The interface this view is for.",
+        required=False
+        )
 
 class IPagesPageSubdirective(Interface):
     """
