@@ -57,7 +57,7 @@ def view(_context, name, class_=None, for_=None, layer=None,
                 for field_name in iface:
                     require[field_name] = permission
     
-        checker = Checker(require.get)
+        checker = Checker(require)
     
         def proxyView(context, request, class_=class_, checker=checker):
             view = class_(context, request)

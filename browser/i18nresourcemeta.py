@@ -96,7 +96,7 @@ class I18nResource(object):
                 permission = CheckerPublic
 
         if require:
-            checker = Checker(require.get)
+            checker = Checker(require)
 
             factory = self._proxyFactory(factory, checker)
 
