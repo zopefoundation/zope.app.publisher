@@ -17,39 +17,20 @@ $Id$
 """
 import unittest
 
-from zope.component.service import serviceManager
-from zope.interface import implements
 from zope.publisher.browser import TestRequest
 
-from zope.app.component.hooks import setSite
 from zope.app.publisher.browser.resource import Resource
-from zope.app.site.interfaces import ISite
+from zope.app.publisher.browser.tests import support
 from zope.app.tests.placelesssetup import PlacelessSetup
-from zope.app.traversing.interfaces import IContainmentRoot
 
-class Site(object):
-    implements(ISite, IContainmentRoot)
 
-    def getSiteManager(self):
-        return serviceManager
-
-site = Site()
-
-class TestResource(PlacelessSetup, unittest.TestCase):
-
-    def setUp(self):
-        super(TestResource, self).setUp()
-        setSite(site)
-
-    def tearDown(self):
-        setSite()
-        super(TestResource, self).tearDown()
+class TestResource(support.SiteHandler, PlacelessSetup, unittest.TestCase):
 
     def testGlobal(self):
         req = TestRequest()
         r = Resource(req)
-        req._vh_root = site
-        r.__parent__ = site
+        req._vh_root = support.site
+        r.__parent__ = support.site
         r.__name__ = 'foo'
         self.assertEquals(r(), 'http://127.0.0.1/@@/foo')
         r.__name__ = '++resource++foo'
@@ -59,17 +40,14 @@ class TestResource(PlacelessSetup, unittest.TestCase):
         req = TestRequest()
         req.setVirtualHostRoot(['x', 'y'])
         r = Resource(req)
-        req._vh_root = site
-        r.__parent__ = site
+        req._vh_root = support.site
+        r.__parent__ = support.site
         r.__name__ = 'foo'
         self.assertEquals(r(), 'http://127.0.0.1/x/y/@@/foo')
 
 
 def test_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(TestResource))
-    return suite
-
+    return unittest.makeSuite(TestResource)
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(defaultTest="test_suite")
