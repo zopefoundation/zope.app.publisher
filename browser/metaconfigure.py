@@ -58,7 +58,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
     >>> layer(context, u'layer1')
     >>> iface = context.actions[0]['args'][1]
     >>> iface.getName()
-    u'layer1'
+    'layer1'
     >>> ILayer.providedBy(iface)
     True
     >>> hasattr(sys.modules['zope.app.layers'], 'layer1')
@@ -75,7 +75,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
     >>> layer(context, u'layer1', base=BaseLayer)
     >>> iface = context.actions[0]['args'][1]
     >>> iface.getName()
-    u'layer1'
+    'layer1'
     >>> iface.__bases__
     (<InterfaceClass zope.app.publisher.browser.metaconfigure.BaseLayer>,)
     >>> hasattr(sys.modules['zope.app.layers'], 'layer1')
@@ -204,7 +204,7 @@ def skin(_context, name=None, interface=None, layers=None):
     >>> skin(context, u'skin1', layers=[Layer1, Layer2])
     >>> iface = context.actions[3]['args'][1]
     >>> iface.getName()
-    u'skin1'
+    'skin1'
     >>> pprint.pprint(iface.__bases__)
     (<InterfaceClass zope.app.publisher.browser.metaconfigure.Layer1>,
      <InterfaceClass zope.app.publisher.browser.metaconfigure.Layer2>)
