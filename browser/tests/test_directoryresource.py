@@ -12,17 +12,19 @@
 #
 ##############################################################################
 """
-$Id: test_directoryresource.py,v 1.1 2003/08/11 14:58:13 philikon Exp $
+$Id: test_directoryresource.py,v 1.2 2003/09/24 17:22:07 sidnei Exp $
 """
 
 import os
 from unittest import TestCase, main, makeSuite
 
-from zope.proxy import isProxy, removeAllProxies
-from zope.security.checker import NamesChecker
 from zope.exceptions import NotFoundError
+from zope.proxy import isProxy, removeAllProxies
 from zope.publisher.browser import TestRequest
+from zope.security.checker import NamesChecker, ProxyFactory
+from zope.interface import implements
 
+from zope.app import zapi
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.app.publisher.browser.directoryresource import \
      DirectoryResourceFactory
@@ -30,12 +32,20 @@ from zope.app.publisher.browser.fileresource import FileResource
 from zope.app.publisher.browser.pagetemplateresource import \
      PageTemplateResource
 import zope.app.publisher.browser.tests as p
+from zope.app.interfaces.traversing import IContainmentRoot
+from zope.app.interfaces.services.service import ISite
 
 test_directory = os.path.split(p.__file__)[0]
 
 checker = NamesChecker(
     ('get', '__getitem__', 'request', 'publishTraverse')
     )
+
+class Site:
+    implements(ISite, IContainmentRoot)
+
+site = Site()
+
 
 class Test(PlacelessSetup, TestCase):
 
@@ -61,8 +71,18 @@ class Test(PlacelessSetup, TestCase):
         path = os.path.join(test_directory, 'testfiles')
         request = TestRequest()
         resource = DirectoryResourceFactory(path, checker)(request)
-        file = resource['test.txt']
+        file = ProxyFactory(resource['test.txt'])
         self.assert_(isProxy(file))
+
+    def testURL(self):
+        request = TestRequest()
+        request._vh_root = site
+        path = os.path.join(test_directory, 'testfiles')
+        files = DirectoryResourceFactory(path, checker)(request)
+        files.__parent__ = site
+        files.__name__ = 'test_files'
+        file = files['test.gif']
+        self.assertEquals(file(), 'http://127.0.0.1/@@/test_files/test.gif')
 
     def testCorrectFactories(self):
         path = os.path.join(test_directory, 'testfiles')

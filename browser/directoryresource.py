@@ -12,7 +12,7 @@
 #
 ##############################################################################
 """
-$Id: directoryresource.py,v 1.2 2003/09/22 21:05:13 sidnei Exp $
+$Id: directoryresource.py,v 1.3 2003/09/24 17:22:07 sidnei Exp $
 """
 
 import os
@@ -90,5 +90,6 @@ class DirectoryResourceFactory:
         self.__checker = checker
 
     def __call__(self, request):
-        return Proxy(DirectoryResource(self.__dir, request),
-                     self.__checker)
+        resource = DirectoryResource(self.__dir, request)
+        resource.__Security_checker__ = self.__checker
+        return resource

@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_icondirective.py,v 1.12 2003/09/22 22:37:26 jim Exp $
+$Id: test_icondirective.py,v 1.13 2003/09/24 17:22:07 sidnei Exp $
 """
 import os
 from StringIO import StringIO
@@ -91,7 +91,6 @@ class Test(PlacelessSetup, TestCase):
             % rname)
 
         resource = ProxyFactory(getResource(ob, rname, request))
-
         self.assertRaises(Forbidden, getattr, resource, '_testData')
         resource = removeAllProxies(resource)
         self.assertEqual(resource._testData(), open(path, 'rb').read())
@@ -122,9 +121,6 @@ class Test(PlacelessSetup, TestCase):
             % rname)
 
         resource = ProxyFactory(getResource(ob, rname, request))
-
-        # Resources come ready-wrapped from the factory
-        #resource = ProxyFactory(resource)
 
         self.assertRaises(Forbidden, getattr, resource, '_testData')
         resource = removeAllProxies(resource)
