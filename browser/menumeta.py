@@ -20,6 +20,7 @@ from zope.interface.interface import InterfaceClass
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.security.checker import InterfaceChecker, CheckerPublic
 
+from zope.app import zapi
 from zope.app.component.interface import provideInterface
 from zope.app.component.metaconfigure import adapter, proxify
 from zope.app.component.metaconfigure import utility
@@ -29,6 +30,11 @@ from zope.app.publisher.browser.menu import BrowserMenuItem, BrowserSubMenuItem
 from zope.app.publisher.interfaces.browser import IBrowserMenu
 from zope.app.publisher.interfaces.browser import IBrowserMenuItem
 from zope.app.publisher.interfaces.browser import IMenuItemType
+
+from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.app.container.interfaces import IAdding
+from zope.app.component.contentdirective import ContentDirective
+from zope.app.publisher.interfaces.browser import AddMenu
 
 
 # Create special modules that contain all menu item types
@@ -100,7 +106,7 @@ def menuItemDirective(_context, menu, for_,
                       permission=None, layer=IDefaultBrowserLayer, extra=None,
                       order=0):
     """Register a single menu item."""
-    return menuItemsDirective(_context, menu, for_).menuItem(
+    return menuItemsDirective(_context, menu, for_, layer).menuItem(
         _context, action, title, description, icon, filter,
         permission, extra, order)
 
@@ -110,7 +116,7 @@ def subMenuItemDirective(_context, menu, for_, title, submenu,
                          permission=None, layer=IDefaultBrowserLayer,
                          extra=None, order=0):
     """Register a single sub-menu menu item."""
-    return menuItemsDirective(_context, menu, for_).subMenuItem(
+    return menuItemsDirective(_context, menu, for_, layer).subMenuItem(
         _context, submenu, title, description, action, icon, filter,
         permission, extra, order)
 
@@ -185,3 +191,61 @@ class menuItemsDirective(object):
     def __call__(self, _context):
         # Nothing to do.
         pass
+
+
+def addMenuItem(_context, title, description='', menu=None, for_=None, 
+                class_=None, factory=None, view=None, icon=None, filter=None, 
+                permission=None, layer=IDefaultBrowserLayer, extra=None, 
+                order=0):
+    """Create an add menu item for a given class or factory
+
+    As a convenience, a class can be provided, in which case, a
+    factory is automatically defined based on the class.  In this
+    case, the factory id is based on the class name.
+
+    """
+
+    if for_ is not None:
+        _context.action(
+            discriminator = None,
+            callable = provideInterface,
+            args = ('', for_)
+            )
+        forname = 'For' + for_.getName()
+    else:
+        for_ = IAdding
+        forname = ''
+
+    if menu is not None:
+        if isinstance(menu, (str, unicode)):
+            menu = zapi.getUtility(IMenuItemType, menu)
+            if menu is None:
+                raise ValueError("Missing menu id '%s'" % menu)
+    
+    if class_ is None:
+        if factory is None:
+            raise ValueError("Must specify either class or factory")
+    else:
+        if factory is not None:
+            raise ValueError("Can't specify both class and factory")
+        if permission is None:
+            raise ValueError(
+                "A permission must be specified when a class is used")
+        factory = "BrowserAdd%s__%s.%s" % (
+            forname, class_.__module__, class_.__name__) 
+        ContentDirective(_context, class_).factory(
+            _context, id=factory)
+
+    extra = {'factory': factory}
+
+    if view: 
+        action = view
+    else:
+        action = factory
+
+    if menu == None:
+        menu = AddMenu
+
+    return menuItemsDirective(_context, menu, for_, layer).menuItem(
+        _context, action, title, description, icon, filter,
+        permission, extra, order)

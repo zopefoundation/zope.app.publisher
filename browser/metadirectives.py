@@ -524,6 +524,12 @@ class ISubMenuItemDirective(IMenuItemsDirective, ISubMenuItemSubdirective):
 class IAddMenuItemDirective(IMenuItem):
     """Define an add-menu item"""
 
+    for_ = GlobalInterface(
+        title=u"Interface",
+        description=u"The interface the menu items are defined for",
+        required=False
+        )
+
     class_ = GlobalObject(
         title=u"Class",
         description=u"""
@@ -541,6 +547,12 @@ class IAddMenuItemDirective(IMenuItem):
         title=u"Custom view name",
         description=u"The name of a custom add view",
         required = False,
+        )
+
+    menu = MenuField(
+        title=u"Menu name",
+        description=u"The (name of the) menu the items are defined for",
+        required=False,
         )
 
 #

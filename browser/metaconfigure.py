@@ -17,17 +17,13 @@ $Id$
 """
 from zope.component.interfaces import IDefaultViewName
 from zope.configuration.exceptions import ConfigurationError
-from zope.interface import Interface, directlyProvides
+from zope.interface import directlyProvides
 from zope.interface.interface import InterfaceClass
 from zope.publisher.interfaces.browser import ILayer, ISkin, IDefaultSkin
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 from zope.app import zapi
 from zope.app.component.metaconfigure import handler
-from zope.app.container.interfaces import IAdding
-from zope.app.publisher.browser.menumeta import menuItemDirective
-from zope.app.component.contentdirective import ContentDirective
-from zope.app.publisher.interfaces.browser import AddMenu
 
 # referred to through ZCML
 from zope.app.publisher.browser.resourcemeta import resource
@@ -348,40 +344,3 @@ def defaultView(_context, name, for_=None, layer=IBrowserRequest):
             callable = provideInterface,
             args = ('', for_)
             )
-
-
-def addMenuItem(_context, title, class_=None, factory=None, description='',
-                permission=None, filter=None, view=None, layer=IBrowserRequest):
-    """Create an add menu item for a given class or factory
-
-    As a convenience, a class can be provided, in which case, a
-    factory is automatically defined based on the class.  In this
-    case, the factory id is based on the class name.
-
-    """
-    
-    if class_ is None:
-        if factory is None:
-            raise ValueError("Must specify either class or factory")
-    else:
-        if factory is not None:
-            raise ValueError("Can't specify both class and factory")
-        if permission is None:
-            raise ValueError(
-                "A permission must be specified when a class is used")
-        factory = "BrowserAdd__%s.%s" % (
-            class_.__module__, class_.__name__) 
-        ContentDirective(_context, class_).factory(
-            _context,
-            id = factory)
-
-    extra = {'factory': factory}
-
-    if view: 
-        action = view
-    else:
-        action = factory
-
-    menuItemDirective(_context, AddMenu, IAdding,
-                      action, title, description, None, filter,
-                      permission, layer, extra)
