@@ -11,10 +11,9 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
+"""Test Icon-Directive
 
-Revision information:
-$Id: test_icondirective.py,v 1.16 2003/12/17 10:06:42 jim Exp $
+$Id: test_icondirective.py,v 1.17 2004/03/08 12:05:59 srichter Exp $
 """
 import os
 from StringIO import StringIO
@@ -31,8 +30,9 @@ from zope.configuration.exceptions import ConfigurationError
 from zope.interface import implements
 from zope.app.interfaces.services.service import ISite
 from zope.app.interfaces.traversing import IContainmentRoot
-from zope.security.checker import ProxyFactory
+from zope.security.checker import ProxyFactory, CheckerPublic
 
+from zope.app.tests import ztapi
 import zope.app.publisher.browser
 
 template = """<configure

@@ -13,22 +13,22 @@
 ##############################################################################
 """Global Browser Menu Tests
 
-$Id: test_globalbrowsermenuservice.py,v 1.15 2003/12/07 10:04:53 gotcha Exp $
+$Id: test_globalbrowsermenuservice.py,v 1.16 2004/03/08 12:05:59 srichter Exp $
 """
 import unittest
-from zope.app.tests.placelesssetup import PlacelessSetup
-from zope.app.interfaces.security import IPermissionService
-from zope.app.publisher.browser.globalbrowsermenuservice import \
-     GlobalBrowserMenuService
-from zope.app.security.registries.permissionregistry import permissionRegistry
-from zope.app.services.servicenames import Permissions
-from zope.component.service import serviceManager
 from zope.exceptions import Forbidden, Unauthorized, DuplicationError
 from zope.interface import Interface, implements
 from zope.publisher.browser import TestRequest
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.security.management import newSecurityManager, system_user
+
 from zope.app import zapi
+from zope.app.tests import ztapi
+from zope.app.security.interfaces import IPermission
+from zope.app.security.permission import Permission
+from zope.app.publisher.browser.globalbrowsermenuservice import \
+     GlobalBrowserMenuService
+from zope.app.tests.placelesssetup import PlacelessSetup
 
 class I1(Interface): pass
 class I11(I1): pass
@@ -88,9 +88,7 @@ class GlobalBrowserMenuServiceTest(PlacelessSetup, unittest.TestCase):
         self.assertEqual(list(menu), [d(5), d(6), d(3), d(2), d(1)])
 
     def test_w_permission(self):
-        serviceManager.defineService(Permissions, IPermissionService)
-        serviceManager.provideService(Permissions, permissionRegistry)
-        permissionRegistry.definePermission('p', 'P')
+        ztapi.provideUtility(IPermission, Permission('p', 'P'), 'p')
         
         r = self.__reg()
         r.menu('test_id', 'test menu')

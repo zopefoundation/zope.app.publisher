@@ -11,6 +11,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+"""'browser' namespace directive tests
+
+$Id: test_directives.py,v 1.31 2004/03/08 12:05:59 srichter Exp $
+"""
 
 import os
 import unittest
@@ -23,7 +27,6 @@ from zope.configuration.exceptions import ConfigurationError
 from zope.app.component.tests.views import IC, V1, VZMI, R1, IV
 from zope.component import getView, queryView, queryResource
 from zope.component import getDefaultViewName, getResource
-from zope.app.services.servicenames import Permissions
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.security.proxy import ProxyFactory
 from zope.proxy import removeAllProxies
@@ -36,15 +39,15 @@ from zope.app.publisher.browser.i18nfileresource import I18nFileResource
 
 import zope.app.publisher.browser
 from zope.component.service import serviceManager
-from zope.app.interfaces.security import IPermissionService
-from zope.app.security.registries.permissionregistry import permissionRegistry
-
-from zope.component.service import serviceManager
-from zope.app.security.registries.permissionregistry import permissionRegistry
-from zope.app.interfaces.security import IPermissionService
 
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.app import zapi
+from zope.app.tests import ztapi
+from zope.app.traversing.adapters import DefaultTraversable
+from zope.app.interfaces.traversing import ITraversable
+
+from zope.app.security.permission import Permission 
+from zope.app.security.interfaces import IPermission 
 
 tests_path = os.path.join(
     os.path.split(zope.app.publisher.browser.__file__)[0],
@@ -97,10 +100,6 @@ class Test(PlacelessSetup, unittest.TestCase):
         super(Test, self).setUp()
         
         XMLConfig('meta.zcml', zope.app.publisher.browser)()
-
-        from zope.app.tests import ztapi
-        from zope.app.traversing.adapters import DefaultTraversable
-        from zope.app.interfaces.traversing import ITraversable
 
         ztapi.provideAdapter(None, ITraversable, DefaultTraversable)
 
@@ -691,11 +690,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(str(v()), '<html><body><p>done</p></body></html>\n')
 
     def testProtectedPageViews(self):
-
-        serviceManager.defineService(Permissions, IPermissionService)
-        serviceManager.provideService(Permissions, permissionRegistry)
-        permissionRegistry.definePermission('p', 'P')
-
+        ztapi.provideUtility(IPermission, Permission('p', 'P'), 'p')
 
         self.assertEqual(queryView(ob, 'test', request),
                          None)
@@ -706,7 +701,7 @@ class Test(PlacelessSetup, unittest.TestCase):
               <directive name="permission"
                  attributes="id title description"
                  handler="
-             zope.app.security.registries.metaconfigure.definePermission" />
+             zope.app.security.metaconfigure.definePermission" />
             </directives>
 
             <permission id="zope.TestPermission" title="Test permission" />
@@ -740,7 +735,7 @@ class Test(PlacelessSetup, unittest.TestCase):
               <directive name="permission"
                  attributes="id title description"
                  handler="
-             zope.app.security.registries.metaconfigure.definePermission" />
+             zope.app.security.metaconfigure.definePermission" />
             </directives>
 
             <permission id="zope.TestPermission" title="Test permission" />
@@ -891,9 +886,6 @@ class Test(PlacelessSetup, unittest.TestCase):
 
     def testProtectedtemplate(self):
 
-        serviceManager.defineService(Permissions, IPermissionService)
-        serviceManager.provideService(Permissions, permissionRegistry)
-        
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
 
         self.assertEqual(queryView(ob, 'test', request),
@@ -905,7 +897,7 @@ class Test(PlacelessSetup, unittest.TestCase):
               <directive name="permission"
                  attributes="id title description"
                  handler="
-               zope.app.security.registries.metaconfigure.definePermission" />
+               zope.app.security.metaconfigure.definePermission" />
             </directives>
 
             <permission id="zope.TestPermission" title="Test permission" />
