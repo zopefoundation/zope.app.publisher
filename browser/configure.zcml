@@ -59,8 +59,8 @@
 
 <browser:page 
     name=""
+    for="*"
     class="zope.app.publisher.browser.resources.Resources"
-    for="zope.app.site.interfaces.ISite"
     permission="zope.Public"
     allowed_interface="zope.publisher.interfaces.browser.IBrowserPublisher"
     />
