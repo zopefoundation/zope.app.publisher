@@ -13,14 +13,14 @@
 ##############################################################################
 """'browser' namespace directive tests
 
-$Id: test_directives.py,v 1.36 2004/05/05 12:14:42 philikon Exp $
+$Id: test_directives.py,v 1.37 2004/05/10 06:18:25 philikon Exp $
 """
 
 import os
 import unittest
 from cStringIO import StringIO
 
-from zope.interface import Interface, implements, Interface
+from zope.interface import Interface, implements
 
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.configuration.exceptions import ConfigurationError
@@ -88,7 +88,6 @@ class CV(NCV):
 
 
 class C_w_implements(NCV):
-
     implements(Interface)
 
     def index(self):
@@ -953,9 +952,8 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assert_(isinstance(v, V1))
 
     def testUnnamedViewThatProvidesAnInterface(self):
-
         request = TestRequest()
-        self.assertEqual(queryView(ob, '', request, None), None)
+        self.assertEqual(queryView(ob, '', request, None, providing=IV), None)
 
         xmlconfig(StringIO(template %
             """
