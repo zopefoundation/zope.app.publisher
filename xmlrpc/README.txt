@@ -384,4 +384,69 @@ Now, when we call it, we get a proper XML-RPC fault:
   </methodResponse>
   <BLANKLINE>
 
+DateTime values
+---------------
 
+Unfortunately, `xmlrpclib` does not support Python 2.3's new
+`datetime.datetime` class (it should be made to, really).  DateTime
+values need to be encoded as `xmlrpclib.DateTime` instances:
+  
+  >>> import xmlrpclib, time
+
+  >>> class DateTimeDemo:
+  ...     def __init__(self, context, request):
+  ...         self.context = context
+  ...         self.request = request
+  ...
+  ...     def epoch(self):
+  ...         return xmlrpclib.DateTime(1)
+
+Now we'll register it as a view:
+
+  >>> from zope.configuration import xmlconfig
+  >>> ignored = xmlconfig.string("""
+  ... <configure 
+  ...     xmlns="http://namespaces.zope.org/zope"
+  ...     xmlns:xmlrpc="http://namespaces.zope.org/xmlrpc"
+  ...     >
+  ...   <!-- We only need to do this include in this example, 
+  ...        Normally the include has already been done for us. -->
+  ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
+  ...
+  ...   <xmlrpc:view
+  ...       for="zope.app.folder.folder.IFolder"
+  ...       methods="epoch"
+  ...       class="zope.app.publisher.xmlrpc.README.DateTimeDemo"
+  ...       permission="zope.ManageContent"
+  ...       />
+  ... </configure>
+  ... """)
+
+Now, when we call it, we get a DateTime value
+
+  >>> print http(r"""
+  ... POST / HTTP/1.0
+  ... Authorization: Basic bWdyOm1ncnB3
+  ... Content-Length: 100
+  ... Content-Type: text/xml
+  ... 
+  ... <?xml version='1.0'?>
+  ... <methodCall>
+  ... <methodName>epoch</methodName>
+  ... <params>
+  ... </params>
+  ... </methodCall>
+  ... """, handle_errors=False)
+  HTTP/1.0 200 Ok
+  Content-Length: 163
+  Content-Type: text/xml;charset=utf-8
+  <BLANKLINE>
+  <?xml version='1.0'?>
+  <methodResponse>
+  <params>
+  <param>
+  <value><dateTime.iso8601>19700101T01:00:01</dateTime.iso8601></value>
+  </param>
+  </params>
+  </methodResponse>
+  <BLANKLINE>
