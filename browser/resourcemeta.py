@@ -13,9 +13,8 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: resourcemeta.py,v 1.13 2003/11/21 17:10:30 jim Exp $
+$Id: resourcemeta.py,v 1.14 2004/02/16 21:38:52 srichter Exp $
 """
-
 import os
 
 from zope.app import zapi

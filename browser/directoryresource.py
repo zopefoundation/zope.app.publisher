@@ -11,10 +11,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
-$Id: directoryresource.py,v 1.4 2003/11/21 17:10:05 jim Exp $
-"""
+"""Resource Directory
 
+$Id: directoryresource.py,v 1.5 2004/02/16 21:38:51 srichter Exp $
+"""
 import os
 
 from zope.interface import implements
