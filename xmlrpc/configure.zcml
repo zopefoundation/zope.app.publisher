@@ -3,6 +3,10 @@
     xmlns:xmlrpc="http://namespaces.zope.org/xmlrpc"
     >
 
+  <class class="xmlrpclib.Fault">
+    <require permission="zope.Public" attributes="faultCode faultString" />
+  </class>
+
   <view 
       for="zope.interface.Interface"
       type="zope.publisher.interfaces.xmlrpc.IXMLRPCRequest"
