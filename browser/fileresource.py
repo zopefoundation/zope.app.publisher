@@ -13,7 +13,7 @@
 ##############################################################################
 """
 
-$Id: fileresource.py,v 1.7 2003/09/22 21:05:13 sidnei Exp $
+$Id: fileresource.py,v 1.8 2003/11/03 21:37:58 jeremy Exp $
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 
@@ -48,9 +48,8 @@ class FileResource(BrowserView, Resource):
 
     # for unit tests
     def _testData(self):
-        file = self.chooseContext()
-        f=open(self.context.path,'rb')
-        data=f.read()
+        f = open(self.context.path, 'rb')
+        data = f.read()
         f.close()
         return data
 
