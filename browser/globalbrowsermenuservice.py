@@ -15,8 +15,6 @@
 from zope.interface import classProvides
 from zope.exceptions import DuplicationError, Unauthorized, Forbidden
 
-from zope.configuration.action import Action
-
 from zope.interface.type import TypeRegistry
 from zope.interface import implements
 
@@ -27,7 +25,7 @@ from zope.security.management import getSecurityManager
 
 from zope.app.security.permission import checkPermission
 
-from zope.app.component.metaconfigure import handler, resolveInterface
+from zope.app.component.metaconfigure import handler
 from zope.app.interfaces.publisher.browser import IBrowserMenuService
 from zope.app.pagetemplate.engine import Engine
 from zope.app.publication.browser import PublicationTraverser
@@ -175,11 +173,11 @@ class GlobalBrowserMenuService(object):
         return None
 
 def menuDirective(_context, id, title, description='', usage=u''):
-    return [Action(
+    _context.action(
         discriminator = ('browser:menu', id),
         callable = globalBrowserMenuService.menu,
         args = (id, title, description, usage),
-        )]
+        )
 
 def menuItemDirective(_context, menu, for_,
                       action, title, description='', filter=None,
@@ -191,36 +189,27 @@ def menuItemDirective(_context, menu, for_,
 class menuItemsDirective:
 
     def __init__(self, _context, menu, for_):
-        if for_ == '*':
-            self.interface = None
-        else:
-            self.interface = resolveInterface(_context, for_)
+        self.interface = for_
         self.menu = menu
 
     def menuItem(self, _context, action, title, description='',
                  filter=None, permission=None):
+        _context.action(
+            discriminator = ('browser:menuItem',
+                             self.menu, self.interface, title),
+            callable = globalBrowserMenuService.menuItem,
+            args = (self.menu, self.interface,
+                    action, title, description, filter, permission),
+            ),
 
-        return [
-            Action(
-              discriminator = ('browser:menuItem',
-                               self.menu, self.interface, title),
-              callable = globalBrowserMenuService.menuItem,
-              args = (self.menu, self.interface,
-                      action, title, description, filter, permission),
-              ),
-                ]
-
-    def __call__(self):
-        return [
-            Action(
-              discriminator = None,
-              callable = handler,
-              args = (Interfaces, 'provideInterface',
-                      self.interface.__module__+'.'+self.interface.__name__,
-                      self.interface)
-              )
-            ]
-
+    def __call__(self, _context):
+        _context.action(
+            discriminator = None,
+            callable = handler,
+            args = (Interfaces, 'provideInterface',
+                    self.interface.__module__+'.'+self.interface.__name__,
+                    self.interface)
+            )
 
 globalBrowserMenuService = GlobalBrowserMenuService()
 
@@ -233,5 +222,5 @@ del addCleanUp
 
 __doc__ = GlobalBrowserMenuService.__doc__ + """
 
-$Id: globalbrowsermenuservice.py,v 1.20 2003/08/02 09:11:21 anthony Exp $
+$Id: globalbrowsermenuservice.py,v 1.21 2003/08/03 02:13:17 philikon Exp $
 """

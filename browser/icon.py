@@ -14,14 +14,13 @@
 """Icon support
 
 
-$Id: icon.py,v 1.9 2003/08/02 09:11:21 anthony Exp $
+$Id: icon.py,v 1.10 2003/08/03 02:13:17 philikon Exp $
 """
 
 import os
 import re
 
-from zope.app.component.metaconfigure import handler, resolveInterface
-from zope.configuration.action import Action
+from zope.app.component.metaconfigure import handler
 from zope.app.publisher.browser import metaconfigure
 from zope.app.traversing.namespace import getResourceInContext
 from zope.publisher.interfaces.browser import IBrowserPresentation
@@ -64,7 +63,6 @@ class IconViewFactory:
 def IconDirective(_context, name, for_, file=None, resource=None,
                   layer='default', alt=None):
 
-    for_ = resolveInterface(_context, for_)
     iname = for_.__name__
 
     if alt is None:
@@ -72,7 +70,6 @@ def IconDirective(_context, name, for_, file=None, resource=None,
         if IName.match(alt):
             alt = alt[1:] # Remove leading 'I'
 
-    results = []
     if file is not None and resource is not None:
         raise ConfigurationError(
             "Can't use more than one of file, and resource "
@@ -84,8 +81,8 @@ def IconDirective(_context, name, for_, file=None, resource=None,
         ext = os.path.splitext(file)[1]
         if ext:
             resource += ext
-        results = metaconfigure.resource(_context, image=file,
-                                         name=resource, layer=layer)
+        metaconfigure.resource(_context, image=file,
+                               name=resource, layer=layer)
     elif resource is None:
         raise ConfigurationError(
             "At least one of the file, and resource "
@@ -94,18 +91,17 @@ def IconDirective(_context, name, for_, file=None, resource=None,
 
     vfactory = IconViewFactory(resource, alt)
 
-    return results + [
-        Action(
+    _context.action(
         discriminator = ('view', name, vfactory, layer),
         callable = handler,
         args = ('Views', 'provideView',
                 for_, name, IBrowserPresentation,
-                vfactory, layer)),
-        Action(
+                vfactory, layer)
+        )
+    _context.action(
         discriminator = None,
         callable = handler,
         args = (Interfaces, 'provideInterface',
                 for_.__module__+'.'+for_.__name__,
                 for_)
         )
-        ]

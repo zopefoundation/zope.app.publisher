@@ -53,11 +53,11 @@ tests_path = os.path.join(
     os.path.split(zope.app.publisher.browser.__file__)[0],
     'tests')
 
-template = """<zopeConfigure
+template = """<configure
    xmlns='http://namespaces.zope.org/zope'
    xmlns:browser='http://namespaces.zope.org/browser'>
    %s
-   </zopeConfigure>"""
+   </configure>"""
 
 request = Request(IBrowserPresentation)
 
@@ -698,12 +698,12 @@ class Test(PlacelessSetup, unittest.TestCase):
              zope.app.security.registries.metaconfigure.definePermission" />
             </directives>
 
-            <permission id="XXX" title="xxx" />
+            <permission id="zope.TestPermission" title="Test permission" />
 
             <browser:pages
                   class="zope.component.tests.views.V1"
                   for="zope.component.tests.views.IC"
-                  permission="XXX"
+                  permission="zope.TestPermission"
                   >
 
                 <browser:page name="index.html" attribute="index" />
@@ -732,7 +732,7 @@ class Test(PlacelessSetup, unittest.TestCase):
              zope.app.security.registries.metaconfigure.definePermission" />
             </directives>
 
-            <permission id="XXX" title="xxx" />
+            <permission id="zope.TestPermission" title="Test permission" />
 
             <browser:view
                   name="test"
@@ -896,12 +896,12 @@ class Test(PlacelessSetup, unittest.TestCase):
                zope.app.security.registries.metaconfigure.definePermission" />
             </directives>
 
-            <permission id="XXX" title="xxx" />
+            <permission id="zope.TestPermission" title="Test permission" />
 
             <browser:page
                   name="xxx.html"
                   template="%s"
-                  permission="XXX"
+                  permission="zope.TestPermission"
                   for="zope.component.tests.views.IC" />
             """ % path
             ))
