@@ -13,7 +13,7 @@
 ##############################################################################
 """XMLRPC configuration code
 
-$Id: metaconfigure.py,v 1.3 2002/12/31 02:52:05 jim Exp $
+$Id: metaconfigure.py,v 1.4 2003/01/25 05:13:43 rdmurray Exp $
 """
 
 from zope.security.proxy import Proxy
@@ -144,7 +144,7 @@ class view(object):
             for name in (allowed_methods or '').split():
                 require[name] = permission
             if allowed_interface:
-                for name in allowed_interface.names(1):
+                for name in allowed_interface.names(all=True):
                     require[name] = permission
 
             checker = Checker(require.get)
