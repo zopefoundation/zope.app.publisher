@@ -15,7 +15,7 @@
 
 This module defines the schemas for browser directives.
 
-$Id: metadirectives.py,v 1.14 2004/03/01 10:52:45 philikon Exp $
+$Id: metadirectives.py,v 1.15 2004/03/02 17:40:51 philikon Exp $
 """
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, Tokens, Path, \
@@ -23,7 +23,7 @@ from zope.configuration.fields import GlobalObject, Tokens, Path, \
 from zope.schema import TextLine, Text, Id
 
 from zope.app.component.metadirectives import IBasicViewInformation
-from zope.app.interfaces.publisher.browser import IUsage
+from zope.app.publisher.interfaces.browser import IUsage
 
 #
 # browser views

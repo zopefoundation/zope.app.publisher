@@ -13,7 +13,7 @@
 ##############################################################################
 """Global Browser Menu Service
 
-$Id: globalbrowsermenuservice.py,v 1.28 2003/12/07 10:04:53 gotcha Exp $
+$Id: globalbrowsermenuservice.py,v 1.29 2004/03/02 17:40:51 philikon Exp $
 """
 __metaclass__ = type 
 
@@ -26,9 +26,9 @@ from zope.security.checker import CheckerPublic
 from zope.security.management import getSecurityManager
 from zope.app.security.permission import checkPermission
 from zope.app.component.metaconfigure import handler
-from zope.app.interfaces.publisher.browser import IBrowserMenuService
-from zope.app.interfaces.publisher.browser import IGlobalBrowserMenuService
-from zope.app.interfaces.publisher.browser import IBrowserMenu
+from zope.app.publisher.interfaces.browser import IBrowserMenuService
+from zope.app.publisher.interfaces.browser import IGlobalBrowserMenuService
+from zope.app.publisher.interfaces.browser import IBrowserMenu
 from zope.app.pagetemplate.engine import Engine
 from zope.app.publication.browser import PublicationTraverser
 from zope.security.proxy import ProxyFactory
@@ -46,7 +46,7 @@ class Menu:
         self.registry = TypeRegistry()
 
     def getMenuItems(self, object=None):
-        """See zope.app.interfaces.publisher.browser.IMenuItem"""
+        """See zope.app.publisher.interfaces.browser.IMenuItem"""
         results = []
         if object is None:
             for items in self.registry._reg.values():
