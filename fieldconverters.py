@@ -46,7 +46,7 @@ def field2date_via_datetimeutils(v):
     #
     # Option 2:  Use a utility (or perhaps a view, for L10N).
     #
-    #   tz_lookup = getUtility(None, ITimezoneLookup)
+    #   tz_lookup = getUtility(ITimezoneLookup)
     #   tzinfo = tz_lookup(tzname)
     #
     return datetime(year, month, day, hour, minute, second,

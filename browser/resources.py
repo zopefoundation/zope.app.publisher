@@ -33,7 +33,7 @@ class Resources(BrowserView):
     def publishTraverse(self, request, name):
         '''See interface IBrowserPublisher'''
 
-        resource_service = zapi.getService(self, Presentation)
+        resource_service = zapi.getService(Presentation)
         resource = resource_service.queryResource(name, request)
         if resource is None:
             raise NotFoundError(self, name)

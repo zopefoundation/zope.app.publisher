@@ -276,9 +276,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assert_(issubclass(v.__class__, VZMI))
 
     def testI18nResource(self):
-        self.assertEqual(queryResource(ob, 'test', request,
-                                       None),
-                         None)
+        self.assertEqual(queryResource('test', request, None), None)
 
         path1 = os.path.join(tests_path, 'testfiles', 'test.pt')
         path2 = os.path.join(tests_path, 'testfiles', 'test2.pt')
@@ -292,9 +290,9 @@ class Test(PlacelessSetup, unittest.TestCase):
             """ % (path1, path2)
             )))
 
-        v = getResource(ob, 'test', request)
+        v = getResource('test', request)
         self.assertEqual(
-            queryResource(ob, 'test', request).__class__,
+            queryResource('test', request).__class__,
             I18nFileResource)
         self.assertEqual(v._testData('en'), open(path1, 'rb').read())
         self.assertEqual(v._testData('fr'), open(path2, 'rb').read())
@@ -750,8 +748,7 @@ class Test(PlacelessSetup, unittest.TestCase):
     def testFile(self):
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
 
-        self.assertEqual(queryResource(ob, 'test', request),
-                         None)
+        self.assertEqual(queryResource('test', request), None)
 
         xmlconfig(StringIO(template %
             """
@@ -762,7 +759,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             """ % path
             ))
 
-        r = ProxyFactory(getResource(ob, 'index.html', request))
+        r = ProxyFactory(getResource('index.html', request))
 
         # Make sure we can access available attrs and not others
         for n in ('GET', 'HEAD', 'publishTraverse', 'request', '__call__'):
@@ -776,7 +773,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
     def testSkinResource(self):
         self.assertEqual(
-            queryResource(ob, 'test', request, None),
+            queryResource('test', request, None),
             None)
 
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
@@ -790,9 +787,9 @@ class Test(PlacelessSetup, unittest.TestCase):
             """ % path
             )))
 
-        self.assertEqual(queryResource(ob, 'test', request), None)
+        self.assertEqual(queryResource('test', request), None)
 
-        r = getResource(ob, 'test', TestRequest(skin='zmi'))
+        r = getResource('test', TestRequest(skin='zmi'))
         r = removeAllProxies(r)
         self.assertEqual(r._testData(), open(path, 'rb').read())
 

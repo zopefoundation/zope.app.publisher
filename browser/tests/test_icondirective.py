@@ -89,7 +89,7 @@ class Test(PlacelessSetup, TestCase):
             'width="16" height="16" border="0" />'
             % rname)
 
-        resource = ProxyFactory(getResource(ob, rname, request))
+        resource = ProxyFactory(getResource(rname, request))
         self.assertRaises(Forbidden, getattr, resource, '_testData')
         resource = removeAllProxies(resource)
         self.assertEqual(resource._testData(), open(path, 'rb').read())
@@ -119,7 +119,7 @@ class Test(PlacelessSetup, TestCase):
             'height="16" border="0" />'
             % rname)
 
-        resource = ProxyFactory(getResource(ob, rname, request))
+        resource = ProxyFactory(getResource(rname, request))
 
         self.assertRaises(Forbidden, getattr, resource, '_testData')
         resource = removeAllProxies(resource)
