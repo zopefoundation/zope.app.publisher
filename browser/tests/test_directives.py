@@ -806,12 +806,15 @@ class Test(PlacelessSetup, unittest.TestCase):
             ''' % path
             ))
 
-        r = ProxyFactory(getResource('index.html', request))
+        r = getResource('index.html', request)
+        self.assertEquals(r.__class__, FileResource)
+        r = ProxyFactory(r)
         self.assertEqual(r.__name__, "index.html")
 
         # Make sure we can access available attrs and not others
         for n in ('GET', 'HEAD', 'publishTraverse', 'request', '__call__'):
             getattr(r, n)
+        self.assertEqual(r.__name__, "index.html")
 
         self.assertRaises(Exception, getattr, r, '_testData')
 
@@ -1022,8 +1025,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assert_(isinstance(v, V1))
 
 def test_suite():
-    loader=unittest.TestLoader()
-    return loader.loadTestsFromTestCase(Test)
+    return unittest.makeSuite(Test)
 
 if __name__=='__main__':
-    unittest.TextTestRunner().run(test_suite())
+    unittest.main(defaultTest="test_suite")
