@@ -124,9 +124,13 @@ class GlobalBrowserMenuService(object):
 
                 elif action:
                     # Otherwise, test access by attempting access
+                    path = action
+                    l = action.find('?')
+                    if l >= 0:
+                       path = action[:l] 
                     try:
                         v = traverser.traverseRelativeURL(
-                            request, object, action)
+                            request, object, path)
                         # XXX
                         # tickle the security proxy's checker
                         # we're assuming that view pages are callable
@@ -224,5 +228,5 @@ del addCleanUp
 
 __doc__ = GlobalBrowserMenuService.__doc__ + """
 
-$Id: globalbrowsermenuservice.py,v 1.15 2003/06/07 05:46:02 stevea Exp $
+$Id: globalbrowsermenuservice.py,v 1.16 2003/06/12 09:34:15 jim Exp $
 """
