@@ -68,7 +68,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         from zope.component.adapter \
              import provideAdapter
         from zope.app.traversing.defaulttraversable import DefaultTraversable
-        from zope.app.interfaces.traversing.traversable import ITraversable
+        from zope.app.interfaces.traversing import ITraversable
 
         provideAdapter(None, ITraversable, DefaultTraversable)
 
