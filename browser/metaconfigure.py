@@ -141,9 +141,9 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
     if interface and not interface.extends(IBrowserRequest):
         raise ConfigurationError(
             "The layer interface must extend `IBrowserRequest`.")
-    if base is not IBrowserRequest and not IBrowserRequest.extends(base):
+    if base is not IBrowserRequest and not base.extends(IBrowserRequest):
         raise ConfigurationError(
-            "The base interface must extend `IBRowserRequest`.")
+            "The base interface must extend `IBrowserRequest`.")
     if interface is not None and base is not IBrowserRequest:
         raise ConfigurationError(
             "You cannot specify the 'interface' and 'base' together.")

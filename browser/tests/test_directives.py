@@ -95,9 +95,10 @@ class ITestMenu(Interface):
 
 directlyProvides(ITestMenu, IMenuItemType)
 
-class ITestLayer(ILayer):
+class ITestLayer(IBrowserRequest):
     """Test Layer."""
 
+directlyProvides(ITestLayer, ILayer)
 
 
 class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
