@@ -29,7 +29,7 @@ from zope.component import getDefaultViewName, getResource
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.security.proxy import ProxyFactory
 import zope.security.management
-from zope.proxy import removeAllProxies
+from zope.security.proxy import removeSecurityProxy
 
 from zope.app.publisher.browser.globalbrowsermenuservice import \
     globalBrowserMenuService
@@ -530,15 +530,15 @@ class Test(PlacelessSetup, unittest.TestCase):
             ))
 
         view = getView(ob, 'test', request)
-        view = removeAllProxies(view)
+        view = removeSecurityProxy(view)
         self.assertEqual(view.browserDefault(request)[1], (u'index.html', ))
 
 
         v = view.publishTraverse(request, 'index.html')
-        v = removeAllProxies(v)
+        v = removeSecurityProxy(v)
         self.assertEqual(v(), 'V1 here')
         v = view.publishTraverse(request, 'action.html')
-        v = removeAllProxies(v)
+        v = removeSecurityProxy(v)
         self.assertEqual(v(), 'done')
 
 
@@ -557,7 +557,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             ))
 
         view = getView(ob, 'test', request)
-        view = removeAllProxies(view)
+        view = removeSecurityProxy(view)
         self.assertEqual(view.browserDefault(request), (view, ()))
 
     def testNamedViewNoPagesForNonCallable(self):
@@ -575,7 +575,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             ))
 
         view = getView(ob, 'test', request)
-        view = removeAllProxies(view)
+        view = removeSecurityProxy(view)
         self.assertEqual(getattr(view, 'browserDefault', None), None)
 
     def testNamedViewPageViewsNoDefault(self):
@@ -599,18 +599,18 @@ class Test(PlacelessSetup, unittest.TestCase):
             ))
 
         view = getView(ob, 'test', request)
-        view = removeAllProxies(view)
+        view = removeSecurityProxy(view)
         self.assertEqual(view.browserDefault(request)[1], (u'index.html', ))
 
 
         v = view.publishTraverse(request, 'index.html')
-        v = removeAllProxies(v)
+        v = removeSecurityProxy(v)
         self.assertEqual(v(), 'V1 here')
         v = view.publishTraverse(request, 'action.html')
-        v = removeAllProxies(v)
+        v = removeSecurityProxy(v)
         self.assertEqual(v(), 'done')
         v = view.publishTraverse(request, 'test.html')
-        v = removeAllProxies(v)
+        v = removeSecurityProxy(v)
         self.assertEqual(str(v()), '<html><body><p>done</p></body></html>\n')
 
     def testNamedViewPageViewsWithDefault(self):
@@ -635,18 +635,18 @@ class Test(PlacelessSetup, unittest.TestCase):
             ))
 
         view = getView(ob, 'test', request)
-        view = removeAllProxies(view)
+        view = removeSecurityProxy(view)
         self.assertEqual(view.browserDefault(request)[1], (u'test.html', ))
 
 
         v = view.publishTraverse(request, 'index.html')
-        v = removeAllProxies(v)
+        v = removeSecurityProxy(v)
         self.assertEqual(v(), 'V1 here')
         v = view.publishTraverse(request, 'action.html')
-        v = removeAllProxies(v)
+        v = removeSecurityProxy(v)
         self.assertEqual(v(), 'done')
         v = view.publishTraverse(request, 'test.html')
-        v = removeAllProxies(v)
+        v = removeSecurityProxy(v)
         self.assertEqual(str(v()), '<html><body><p>done</p></body></html>\n')
 
     def testTraversalOfPageForView(self):
@@ -668,7 +668,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             ))
 
         view = getView(ob, 'test', request)
-        view = removeAllProxies(view)
+        view = removeSecurityProxy(view)
         view.publishTraverse(request, 'index.html')
         
     def testTraversalOfPageForViewWithPublishTraverse(self):
@@ -695,7 +695,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             ))
 
         view = getView(ob, 'test', request)
-        view = removeAllProxies(view)
+        view = removeSecurityProxy(view)
         view.publishTraverse(request, 'index.html')
 
     def testProtectedPageViews(self):
@@ -815,7 +815,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         self.assertRaises(Exception, getattr, r, '_testData')
 
-        r = removeAllProxies(r)
+        r = removeSecurityProxy(r)
         self.assert_(r.__class__ is FileResource)
         self.assertEqual(r._testData(), open(path, 'rb').read())
 
@@ -839,7 +839,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(queryResource('test', request), None)
 
         r = getResource('test', TestRequest(skin='zmi'))
-        r = removeAllProxies(r)
+        r = removeSecurityProxy(r)
         self.assertEqual(r._testData(), open(path, 'rb').read())
 
     def test_template_page(self):

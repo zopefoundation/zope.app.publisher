@@ -23,7 +23,7 @@ from zope.component import queryView, getView, getResource
 from zope.configuration.exceptions import ConfigurationError
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.interface import implements
-from zope.proxy import removeAllProxies
+from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import TestRequest
 from zope.security.checker import ProxyFactory, CheckerPublic
 from zope.security.interfaces import Forbidden
@@ -93,7 +93,7 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
 
         resource = ProxyFactory(getResource(rname, request))
         self.assertRaises(Forbidden, getattr, resource, '_testData')
-        resource = removeAllProxies(resource)
+        resource = removeSecurityProxy(resource)
         self.assertEqual(resource._testData(), open(path, 'rb').read())
 
     def testResource(self):
@@ -124,7 +124,7 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
         resource = ProxyFactory(getResource(rname, request))
 
         self.assertRaises(Forbidden, getattr, resource, '_testData')
-        resource = removeAllProxies(resource)
+        resource = removeSecurityProxy(resource)
         self.assertEqual(resource._testData(), open(path, 'rb').read())
 
     def testResourceErrors(self):
