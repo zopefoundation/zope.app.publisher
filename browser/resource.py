@@ -13,51 +13,34 @@
 ##############################################################################
 """
 
-$Id: resource.py,v 1.5 2003/08/16 00:43:46 srichter Exp $
+$Id: resource.py,v 1.6 2003/09/21 17:32:40 jim Exp $
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 
-from zope.component import queryView
-from zope.context import getWrapperContainer, getInnerWrapperData
-from zope.context import ContextMethod
-from zope.app.traversing import joinPath
-from zope.component.interfaces import IResourceService
+from zope.app import zapi
+from zope.app.location import Location
+from zope.app.interfaces.services.service import ISite
+from zope.app.interfaces.traversing import IContainmentRoot
 
-class Resource:
+
+class Resource(Location):
 
     def __init__(self, request):
         self.request = request
 
-    def __call__(wrapped_self):
-        name = getInnerWrapperData(wrapped_self)['name']
+    def __call__(self):
+        name = self.__name__
         if name.startswith('++resource++'):
             name = name[12:]
 
-        service = getWrapperContainer(wrapped_self)
-        while not IResourceService.isImplementedBy(service):
-            name = "%s/%s" % (getInnerWrapperData(service)['name'],
-                              name)
-            service = getWrapperContainer(service)
+        site = self.__parent__
+        while 1:
+            if ISite.isImplementedBy(site):
+                break
+            if IContainmentRoot.isImplementedBy(site):
+                site = None
+                break
+            site = site.__parent__
 
-        site = getWrapperContainer(service)
-
-        skin = wrapped_self.request.getPresentationSkin()
-        if skin:
-            skin = "++skin++%s" % skin
-
-        base_url = wrapped_self.request.getApplicationURL(path_only=True)
-
-        if site is not None:
-            raise NotImplementedError("This code path is not tested")
-            absolute_url = queryView(service,
-                                     'absolute_url',
-                                     wrapped_self.request)
-            if absolute_url is not None:
-                base_url = absolute_url()
-
-        if skin:
-            return joinPath(base_url, skin, '@@', name) # XXX joinPath should
-        else:                                           # XXX eat empty path
-            return joinPath(base_url, '@@', name)       # XXX elements
-
-    __call__ = ContextMethod(__call__)
+        url = str(zapi.getView(site, 'absolute_url', self.request))
+        return "%s/@@/%s" % (url, name)

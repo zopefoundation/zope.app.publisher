@@ -13,7 +13,7 @@
 ##############################################################################
 """Resource URL acess
 
-$Id: resources.py,v 1.9 2003/06/07 05:46:02 stevea Exp $
+$Id: resources.py,v 1.10 2003/09/21 17:32:40 jim Exp $
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 
@@ -21,10 +21,9 @@ from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.component import getService
 from zope.app.services.servicenames import Resources as ResourceService
-from zope.app.context import ContextWrapper
-from zope.context import ContextMethod
 from zope.exceptions import NotFoundError
 from zope.interface import implements
+from zope.app.location import locate
 
 class Resources(BrowserView):
     """Provide a URL-accessible resource namespace
@@ -32,16 +31,16 @@ class Resources(BrowserView):
 
     implements(IBrowserPublisher)
 
-    def publishTraverse(wrapped_self, request, name):
+    def publishTraverse(self, request, name):
         '''See interface IBrowserPublisher'''
 
-        resource_service = getService(wrapped_self, ResourceService)
-        resource = resource_service.queryResource(wrapped_self, name, request)
+        resource_service = getService(self, ResourceService)
+        resource = resource_service.queryResource(self, name, request)
         if resource is None:
-            raise NotFoundError(wrapped_self, name)
-        return ContextWrapper(resource, resource_service, name=name)
+            raise NotFoundError(self, name)
 
-    publishTraverse = ContextMethod(publishTraverse)
+        locate(resource, resource_service, name)
+        return resource
 
     def browserDefault(self, request):
         '''See interface IBrowserPublisher'''
@@ -50,7 +49,6 @@ class Resources(BrowserView):
     def __getitem__(self, name):
         return self.publishTraverse(self.request, name)
 
-    __getitem__ = ContextMethod(__getitem__)
 
 def empty():
     return ''
