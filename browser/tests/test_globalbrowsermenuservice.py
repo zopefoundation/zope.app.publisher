@@ -98,6 +98,41 @@ class GlobalBrowserMenuServiceTest(PlacelessSetup, unittest.TestCase):
         menu = r.getMenu('test_id', TestObject(), TestRequest())
         self.assertEqual(list(menu), [d(5), d(6), d(3), d(2), d(1)])
 
+    def test_w_class(self):
+        r = self.__reg()
+        r.menu('test_id', 'test menu')
+        r.menuItem('test_id', Interface, 'a1', 't1', 'd1')
+        r.menuItem('test_id', I1, 'a2', 't2', 'd2')
+        r.menuItem('test_id', I11, 'a3', 't3', 'd3', 'context')
+        r.menuItem('test_id', I11, 'a4', 't4', 'd4', 'not:context')
+        r.menuItem('test_id', I111, 'a5', 't5', 'd5')
+        r.menuItem('test_id', I111, 'a6', 't6', 'd6')
+        r.menuItem('test_id', I111, 'f7', 't7', 'd7')
+        r.menuItem('test_id', I111, 'u8', 't8', 'd8')
+        r.menuItem('test_id', I12, 'a9', 't9', 'd9')
+        r.menuItem('test_id', TestObject, 'a0', 't0', 'd0')
+
+        menu = r.getMenu('test_id', TestObject(), TestRequest())
+        self.assertEqual(list(menu), [d(0), d(5), d(6), d(3), d(2), d(1)])
+
+    def test_w_class_that_does_not_implement(self):
+        r = self.__reg()
+        r.menu('test_id', 'test menu')
+
+        class C:
+            pass
+
+        # We provide a permission so C doesn't have to implement
+        # IBrowserPublisher.  We use CheckerPublic so we don't have to set
+        # up any other security machinery.
+
+        from zope.security.checker import CheckerPublic
+        r.menuItem('test_id', C, 'a0', 't0', 'd0', permission=CheckerPublic)
+        r.menuItem('test_id', C, 'a10', 't10', 'd10', permission=CheckerPublic)
+
+        menu = r.getMenu('test_id', C(), TestRequest())
+        self.assertEqual(list(menu), [d(0), d(10)])
+
     def test_w_permission(self):
         ztapi.provideUtility(IPermission, Permission('p', 'P'), 'p')
 

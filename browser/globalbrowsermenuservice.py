@@ -48,14 +48,7 @@ class TypeRegistry:
     def __init__(self):
         self._reg = {}
 
-    def register(self, interface, object):
-        if interface is not None and not IInterface.providedBy(interface):
-            if isinstance(interface, (type, types.ClassType)):
-                interface = implementedBy(interface)
-            else:
-                raise TypeError(
-                    "The interface argument must be an interface (or None) or a class.")
-        
+    def register(self, interface, object):        
         self._reg[interface] = object
 
     def get(self, interface, default=None):
@@ -63,7 +56,7 @@ class TypeRegistry:
 
     def getAll(self, interface_spec):
         result = []
-        for interface in interface_spec.flattened():
+        for interface in interface_spec.__sro__:
             object = self._reg.get(interface)
             if object is not None:
                 result.append(object)
@@ -265,6 +258,15 @@ class GlobalBrowserMenuService(BaseBrowserMenuService):
         if permission:
             if permission == 'zope.Public':
                 permission = CheckerPublic
+
+
+        if interface is not None and not IInterface.providedBy(interface):
+            if isinstance(interface, (type, types.ClassType)):
+                interface = implementedBy(interface)
+            else:
+                raise TypeError(
+                    "The interface argument must be an interface (or None) "
+                    "or a class.")
 
         data = registry.get(interface) or []
         data.append(
