@@ -13,17 +13,15 @@
 ##############################################################################
 """Icon support
 
-
 $Id$
 """
-
 import os
 import re
 
 from zope.app import zapi
 from zope.app.component.metaconfigure import handler
 from zope.app.publisher.browser import metaconfigure
-from zope.app.traversing.namespace import getResourceInContext
+from zope.app.traversing.namespace import getResource
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.configuration.exceptions import ConfigurationError
 from zope.app.component.interface import provideInterface
@@ -41,14 +39,16 @@ class IconView:
         self.alt = alt
 
     def __call__(self):
-        resource = getResourceInContext(self.context, self.rname, self.request)
+        # The context is important here, since it becomes the parent of the
+        # icon, which is needed to generate the absolute URL.
+        resource = getResource(self.context, self.rname, self.request)
         src = resource()
 
         return ('<img src="%s" alt="%s" width="16" height="16" border="0" />'
                 % (src, self.alt))
 
     def url(self):
-        resource = getResourceInContext(self.context, self.rname, self.request)
+        resource = getResource(self.context, self.rname, self.request)
         src = resource()
         return src
 
