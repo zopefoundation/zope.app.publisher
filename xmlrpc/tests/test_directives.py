@@ -13,7 +13,7 @@
 ##############################################################################
 """Test 'xmlrpc' ZCML Namespace directives.
 
-$Id: test_directives.py,v 1.8 2003/08/17 06:07:42 philikon Exp $
+$Id: test_directives.py,v 1.9 2003/11/21 17:12:25 jim Exp $
 """
 import unittest
 
@@ -26,13 +26,13 @@ from zope.security.proxy import ProxyFactory
 
 from zope.component.tests.request import Request
 
-from zope.publisher.interfaces.xmlrpc import IXMLRPCPresentation
+from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
 
 from zope.app.publisher import xmlrpc
 from zope.interface import implements
 
 
-request = Request(IXMLRPCPresentation)
+request = Request(IXMLRPCRequest)
 
 class Ob:
     implements(IC)

@@ -3,7 +3,7 @@
   <include file="http.zcml" />
 
   <interface
-     interface="zope.publisher.interfaces.xmlrpc.IXMLRPCPresentation"
+     interface="zope.publisher.interfaces.xmlrpc.IXMLRPCRequest"
      />
 
 </configure>
