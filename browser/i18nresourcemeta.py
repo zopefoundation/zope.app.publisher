@@ -13,20 +13,24 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: i18nresourcemeta.py,v 1.11 2003/08/02 07:04:09 philikon Exp $
+$Id: i18nresourcemeta.py,v 1.12 2003/08/02 09:11:21 anthony Exp $
 """
 
 from zope.interface import classProvides, implements
 from zope.security.proxy import Proxy
 from zope.security.checker import CheckerPublic, Checker
 
+from zope.configuration.action import Action
 from zope.configuration.exceptions import ConfigurationError
+
 from zope.app.services.servicenames import Resources
+
 from zope.publisher.interfaces.browser import IBrowserPresentation
+
 from zope.app.component.metaconfigure import handler
 
 from zope.app.publisher.fileresource import File, Image
-from i18nfileresource import I18nFileResourceFactory
+from zope.app.publisher.browser.i18nfileresource import I18nFileResourceFactory
 
 class I18nResource(object):
 
@@ -35,13 +39,13 @@ class I18nResource(object):
 
     def __init__(self, _context, name=None, defaultLanguage='en',
                  layer='default', permission=None):
-        self._context = _context
         self.name = name
         self.defaultLanguage = defaultLanguage
         self.layer = layer
         self.permission = permission
         self.__data = {}
         self.__format = None
+
 
     def translation(self, _context, language, file=None, image=None):
 
@@ -100,12 +104,15 @@ class I18nResource(object):
 
             factory = self._proxyFactory(factory, checker)
 
-        self._context.action(
-            discriminator = ('i18n-resource', self.name, self.type, self.layer),
-            callable = handler,
-            args = (Resources, 'provideResource', self.name, self.type,
-                    factory, self.layer)
-            )
+        return [
+            Action(
+                discriminator = ('i18n-resource', self.name, self.type,
+                                 self.layer),
+                callable = handler,
+                args = (Resources, 'provideResource', self.name, self.type,
+                        factory, self.layer)
+                )
+            ]
 
 
     def _proxyFactory(self, factory, checker):
