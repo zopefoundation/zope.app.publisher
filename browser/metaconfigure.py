@@ -350,7 +350,7 @@ def defaultView(_context, name, for_=None, layer=IBrowserRequest):
 
 
 def addMenuItem(_context, title, class_=None, factory=None, description='',
-                permission=None, filter=None, view=None):
+                permission=None, filter=None, view=None, layer=IBrowserRequest):
     """Create an add menu item for a given class or factory
 
     As a convenience, a class can be provided, in which case, a
@@ -376,11 +376,11 @@ def addMenuItem(_context, title, class_=None, factory=None, description='',
 
     extra = {'factory': factory}
 
-    if view:
+    if view: 
         action = view
     else:
         action = factory
 
     menuItemDirective(_context, AddMenu, IAdding,
                       action, title, description, None, filter,
-                      permission, extra)
+                      permission, layer, extra)
