@@ -36,6 +36,7 @@ from zope.app.publisher.browser.globalbrowsermenuservice import \
     globalBrowserMenuService
 from zope.publisher.browser import TestRequest
 
+from zope.app.publisher.browser.fileresource import FileResource
 from zope.app.publisher.browser.i18nfileresource import I18nFileResource
 
 import zope.app.publisher.browser
@@ -805,6 +806,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             ))
 
         r = ProxyFactory(getResource('index.html', request))
+        self.assertEqual(r.__name__, "index.html")
 
         # Make sure we can access available attrs and not others
         for n in ('GET', 'HEAD', 'publishTraverse', 'request', '__call__'):
@@ -813,6 +815,7 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertRaises(Exception, getattr, r, '_testData')
 
         r = removeAllProxies(r)
+        self.assert_(r.__class__ is FileResource)
         self.assertEqual(r._testData(), open(path, 'rb').read())
 
 

@@ -16,6 +16,7 @@
 $Id$
 """
 import os
+import posixpath
 
 from zope.interface import implements
 from zope.exceptions import NotFoundError
@@ -34,9 +35,10 @@ _marker = object()
 # we only need this class a context for DirectoryResource
 class Directory:
 
-    def __init__(self, path, checker):
+    def __init__(self, path, checker, name):
         self.path = path
         self.checker = checker
+        self.__name__ = name
 
 class DirectoryResource(BrowserView, Resource):
 
@@ -77,18 +79,20 @@ class DirectoryResource(BrowserView, Resource):
             return default
         ext = os.path.splitext(os.path.normcase(name))[1]
         factory = self.resource_factories.get(ext, self.default_factory)
-        resource = factory(filename, self.context.checker)(self.request)
+        rname = posixpath.join(self.]__name__, name)
+        resource = factory(filename, self.context.checker, rname)(self.request)
         resource.__parent__ = self
-        resource.__name__ = name
         return resource
 
 class DirectoryResourceFactory:
 
-    def __init__(self, path, checker):
-        self.__dir = Directory(path, checker)
+    def __init__(self, path, checker, name):
+        self.__dir = Directory(path, checker, name)
         self.__checker = checker
+        self.__name = name
 
     def __call__(self, request):
         resource = DirectoryResource(self.__dir, request)
         resource.__Security_checker__ = self.__checker
+        resource.__name__ = self.__name
         return resource
