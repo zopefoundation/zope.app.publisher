@@ -29,7 +29,27 @@ from zope.app.component.metadirectives import IBasicViewInformation
 # browser views
 #
 
-class IViewDirective(IBasicViewInformation):
+class IPagesDirective(IBasicViewInformation):
+    """
+    Define multiple pages without repeating all of the parameters.
+
+    The pages directive allows multiple page views to be defined
+    without repeating the 'for', 'permission', 'class', 'layer',
+    'allowed_attributes', and 'allowed_interface' attributes.
+    """
+
+    for_ = GlobalObject(
+        title=u"The interface this view is for.",
+        required=False
+        )
+
+    permission = Permission(
+        title=u"Permission",
+        description=u"The permission needed to use the view.",
+        required=True
+        )
+
+class IViewDirective(IPagesDirective):
     """
     The view directive defines a view that has subpages.
 
@@ -84,11 +104,14 @@ class IViewPageSubdirective(Interface):
     """
 
     name = TextLine(
-        title=u"The name of a sub page of a view.",
+        title=u"The name of the page (view)",
         description=u"""
-        The name attribute is always required for the 'page'
-        directive. It is common to use an extension for the name, such
-        as '.html'.""",
+        The name shows up in URLs/paths. For example 'foo' or
+        'foo.html'. This attribute is required unless you use the
+        subdirective 'page' to create sub views. If you do not have
+        sub pages, it is common to use an extension for the view name
+        such as '.html'. If you do have sub pages and you want to
+        provide a view name, you shouldn't use extensions.""",
         required=True
         )
 
@@ -153,55 +176,10 @@ class IDefaultViewDirective(Interface):
 # browser pages
 #
 
-class IPagesDirective(IBasicViewInformation):
-    """
-    Define multiple pages without repeating all of the parameters.
-
-    The pages directive allows multiple page views to be defined
-    without repeating the 'for', 'permission', 'class', 'layer',
-    'allowed_attributes', and 'allowed_interface' attributes.
-    """
-
-    for_ = GlobalObject(
-        title=u"The interface this view is for.",
-        required=False
-        )
-
-class IPagesPageSubdirective(Interface):
+class IPagesPageSubdirective(IViewPageSubdirective):
     """
     Subdirective to IPagesDirective
     """
-
-    name = TextLine(
-        title=u"The name of the page (view)",
-        description=u"""
-        The name shows up in URLs/paths. For example 'foo' or
-        'foo.html'. This attribute is required unless you use the
-        subdirective 'page' to create sub views. If you do not have
-        sub pages, it is common to use an extension for the view name
-        such as '.html'. If you do have sub pages and you want to
-        provide a view name, you shouldn't use extensions.""",
-        required=True
-        )
-
-    template = TextLine(
-        title=u"The name of a page template.",
-        description=u"""
-        Refers to a file containing a page template (must end in
-        extension '.pt').""",
-        required=False
-        )
-
-    attribute = PythonIdentifier(
-        title=u"The name of an attribute to publish.",
-        description=u"""
-        This is used to publish an attribute provided by a class,
-        instead of a template.
-
-        This is the attribute, usually a method, to be published as
-        the page (view).  The default is "__call__".""",
-        required=False
-        )
 
     menu = TextLine(
         title=u"The browser menu to include the page (view) in.",
@@ -424,7 +402,7 @@ class IMenuItem(Interface):
         required=False
         )
 
-    permission = Id(
+    permission = Permission(
         title=u"The permission needed access the item",
         description=u"""
         This can usually be inferred by the system, however, doing so
