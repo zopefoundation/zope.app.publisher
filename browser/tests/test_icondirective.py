@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_icondirective.py,v 1.11 2003/09/21 17:32:42 jim Exp $
+$Id: test_icondirective.py,v 1.12 2003/09/22 22:37:26 jim Exp $
 """
 import os
 from StringIO import StringIO
@@ -32,6 +32,7 @@ from zope.configuration.exceptions import ConfigurationError
 from zope.interface import implements
 from zope.app.interfaces.services.service import ISite
 from zope.app.interfaces.traversing import IContainmentRoot
+from zope.security.checker import ProxyFactory
 
 import zope.app.publisher.browser
 
@@ -89,7 +90,7 @@ class Test(PlacelessSetup, TestCase):
             'width="16" height="16" border="0" />'
             % rname)
 
-        resource = getResource(ob, rname, request)
+        resource = ProxyFactory(getResource(ob, rname, request))
 
         self.assertRaises(Forbidden, getattr, resource, '_testData')
         resource = removeAllProxies(resource)
@@ -120,7 +121,7 @@ class Test(PlacelessSetup, TestCase):
             'height="16" border="0" />'
             % rname)
 
-        resource = getResource(ob, rname, request)
+        resource = ProxyFactory(getResource(ob, rname, request))
 
         # Resources come ready-wrapped from the factory
         #resource = ProxyFactory(resource)

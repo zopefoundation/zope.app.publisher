@@ -805,7 +805,7 @@ class Test(PlacelessSetup, unittest.TestCase):
             """ % path
             ))
 
-        r = getResource(ob, 'index.html', request)
+        r = ProxyFactory(getResource(ob, 'index.html', request))
 
         # Make sure we can access available attrs and not others
         for n in ('GET', 'HEAD', 'publishTraverse', 'request', '__call__'):
