@@ -85,10 +85,8 @@ class MenuAccessView(BrowserView):
     implements(IMenuAccessView)
 
     def __getitem__(self, menu_id):
-        browser_menu_service = zapi.getService(self.context, BrowserMenu)
-        return browser_menu_service.getMenu(menu_id,
-                                            self.context,
-                                            self.request)
+        browser_menu_service = zapi.getService(BrowserMenu)
+        return browser_menu_service.getMenu(menu_id, self.context, self.request)
 
 
 class Menu:

@@ -29,7 +29,7 @@ class ManagementViewSelector(BrowserView):
         return self, ()
 
     def __call__(self):
-        browser_menu_service = zapi.getService(self.context, BrowserMenu)
+        browser_menu_service = zapi.getService(BrowserMenu)
         item = browser_menu_service.getFirstMenuItem(
             'zmi_views', self.context, self.request)
 

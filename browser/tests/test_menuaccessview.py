@@ -18,7 +18,7 @@ $Id$
 import unittest
 
 from zope.interface import Interface, implements
-from zope.component import getServices, getGlobalServices
+from zope.component import getGlobalServices
 
 from zope.security.management import newInteraction
 from zope.security.checker import defineChecker, NamesChecker, CheckerPublic
