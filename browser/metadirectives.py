@@ -15,7 +15,7 @@
 
 This module defines the schemas for browser directives.
 
-$Id: metadirectives.py,v 1.16 2004/03/15 20:42:16 jim Exp $
+$Id: metadirectives.py,v 1.17 2004/03/18 12:19:24 jim Exp $
 """
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, Tokens, Path, \
@@ -36,6 +36,11 @@ class IViewDirective(IBasicViewInformation, IUsage):
     The pages provided by the defined view are accessed by first
     traversing to the view name and then traversing to the page name.
     """
+
+    for_ = GlobalObject(
+        title=u"The interface this view is for.",
+        required=False
+        )
 
     name = TextLine(
         title=u"The name of the view.",

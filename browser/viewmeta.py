@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.41 2004/03/15 20:42:18 jim Exp $
+$Id: viewmeta.py,v 1.42 2004/03/18 12:19:25 jim Exp $
 """
 import os
 
@@ -171,7 +171,7 @@ def page(_context, name, permission, for_,
     _handle_allowed_attributes(_context, allowed_interface, permission,
                                required)
 
-    _handle_for(_context, [for_])
+    _handle_for(_context, for_)
 
     defineChecker(new_class, Checker(required))
 
@@ -239,7 +239,7 @@ class view:
                  menu=None, title=None, usage=u'', provides=Interface,
                  ):
 
-        _handle_menu(_context, menu, title, for_, name, permission)
+        _handle_menu(_context, menu, title, [for_], name, permission)
 
         permission = _handle_permission(_context, permission)
 
@@ -372,15 +372,12 @@ class view:
                 args = ('', self.provides)
                 )
 
-            
-
-
         _context.action(
-            discriminator = ('view', tuple(for_), name, IBrowserRequest, layer,
+            discriminator = ('view', for_, name, IBrowserRequest, layer,
                              self.provides),
             callable = handler,
             args = (zapi.servicenames.Presentation, 'provideAdapter',
-                    IBrowserRequest, newclass, name, for_,  self.provides,
+                    IBrowserRequest, newclass, name, [for_],  self.provides,
                     layer),
             )
 
@@ -472,13 +469,12 @@ def _handle_usage_from_menu(view, menu_id):
     view.usage = usage
 
 def _handle_for(_context, for_):
-    for iface in for_:
-        if iface is not None:
-            _context.action(
-                discriminator = None,
-                callable = provideInterface,
-                args = ('', iface)
-                )        
+    if for_ is not None:
+        _context.action(
+            discriminator = None,
+            callable = provideInterface,
+            args = ('', for_)
+            )        
 
 class simple(BrowserView):
     implements(IBrowserPublisher)
