@@ -13,7 +13,7 @@
 ##############################################################################
 """XML-RPC Publisher Components
 
-This module contains the MethodPublisher, and XMLRPCView.
+This module contains the XMLRPCView.
 
 $Id$
 """
