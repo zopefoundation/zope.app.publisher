@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.42 2004/03/18 12:19:25 jim Exp $
+$Id: viewmeta.py,v 1.43 2004/03/23 22:08:09 srichter Exp $
 """
 import os
 
@@ -96,15 +96,12 @@ def page(_context, name, permission, for_,
          layer='default', template=None, class_=None,
          allowed_interface=None, allowed_attributes=None,
          attribute='__call__', menu=None, title=None, 
-         usage=u''
          ):
 
     try:
         s = zapi.getService(None, zapi.servicenames.Presentation)
     except ComponentLookupError, err:
         pass
-    else:
-        s.useUsage(usage)
 
     _handle_menu(_context, menu, title, [for_], name, permission)
 
@@ -139,8 +136,7 @@ def page(_context, name, permission, for_,
         if template:
             # class and template
             new_class = SimpleViewClass(
-                template, bases=(class_, ), usage=usage
-                )
+                template, bases=(class_, ))
         else:
             if not hasattr(class_, 'browserDefault'):
                 cdict = {
@@ -154,14 +150,13 @@ def page(_context, name, permission, for_,
             new_class = type(class_.__name__,
                              (class_, simple,),
                              cdict)
-            new_class.usage = usage
 
         if hasattr(class_, '__implements__'):
             classImplements(new_class, IBrowserPublisher)
 
     else:
         # template
-        new_class = SimpleViewClass(template, usage=usage)
+        new_class = SimpleViewClass(template)
 
     for n in (attribute, 'browserDefault', '__call__', 'publishTraverse'):
         required[n] = permission
@@ -182,13 +177,6 @@ def page(_context, name, permission, for_,
                 IBrowserRequest, new_class, name, [for_], Interface, layer),
         )
 
-    if not usage and menu:
-        _context.action(
-            discriminator = None,
-            callable = _handle_usage_from_menu,
-            args = (new_class, menu, ),
-            )
-
 
 # pages, which are just a short-hand for multiple page directives.
 
@@ -203,13 +191,11 @@ class pages:
     def __init__(self, _context, for_, permission,
                  layer='default', class_=None,
                  allowed_interface=None, allowed_attributes=None,
-                 usage=u''
                  ):
         self.opts = opts(for_=for_, permission=permission,
                          layer=layer, class_=class_,
                          allowed_interface=allowed_interface,
                          allowed_attributes=allowed_attributes,
-                         usage=usage
                          )
 
     def page(self, _context, name, attribute='__call__', template=None,
@@ -236,7 +222,7 @@ class view:
     def __init__(self, _context, for_, permission,
                  name='', layer='default', class_=None,
                  allowed_interface=None, allowed_attributes=None,
-                 menu=None, title=None, usage=u'', provides=Interface,
+                 menu=None, title=None, provides=Interface,
                  ):
 
         _handle_menu(_context, menu, title, [for_], name, permission)
@@ -247,12 +233,10 @@ class view:
                      allowed_interface, allowed_attributes)
 
         self.pages = []
-        # default usage is u''
-        self.usage = usage
         self.menu = menu
         self.provides = provides
 
-    def page(self, _context, name, attribute=None, template=None, usage=None):
+    def page(self, _context, name, attribute=None, template=None):
         if template:
             template = os.path.abspath(_context.path(template))
             if not os.path.isfile(template):
@@ -262,7 +246,7 @@ class view:
                 raise ConfigurationError(
                     "Must specify either a template or an attribute name")
 
-        self.pages.append((name, attribute, template, usage))
+        self.pages.append((name, attribute, template))
         return ()
 
     def defaultPage(self, _context, name):
@@ -278,19 +262,14 @@ class view:
         cdict = {}
         pages = {}
 
-        for pname, attribute, template, usage in self.pages:
-            if usage is None:
-                # If no usage is declared explicitly for this page, use the
-                # usage given for the whole view.
-                usage = self.usage
+        for pname, attribute, template in self.pages:
             try:
                 s = zapi.getService(None, zapi.servicenames.Presentation)
             except ComponentLookupError, err:
                 pass
-            else:
-                s.useUsage(usage)
+
             if template:
-                cdict[pname] = ViewPageTemplateFile(template, usage=usage)
+                cdict[pname] = ViewPageTemplateFile(template)
                 if attribute and attribute != name:
                     cdict[attribute] = cdict[pname]
             else:
@@ -384,14 +363,14 @@ class view:
 def addview(_context, name, permission,
             layer='default', class_=None,
             allowed_interface=None, allowed_attributes=None,
-            menu=None, title=None, usage=u'',
+            menu=None, title=None
             ):
     return view(_context, name,
                 'zope.app.container.interfaces.IAdding',
                 permission,
                 layer, class_,
                 allowed_interface, allowed_attributes,
-                menu, title, usage
+                menu, title
                 )
 
 def defaultView(_context, name, for_=None):
@@ -463,10 +442,6 @@ def _handle_allowed_attributes(_context, allowed_attributes, permission,
     if allowed_attributes:
         for name in allowed_attributes:
             required[name] = permission
-
-def _handle_usage_from_menu(view, menu_id):
-    usage = globalBrowserMenuService.getMenuUsage(menu_id)
-    view.usage = usage
 
 def _handle_for(_context, for_):
     if for_ is not None:

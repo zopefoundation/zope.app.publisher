@@ -13,12 +13,12 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: metaconfigure.py,v 1.20 2004/03/15 20:41:51 jim Exp $
+$Id: metaconfigure.py,v 1.21 2004/03/23 22:08:09 srichter Exp $
 """
 
 from zope.app import zapi
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.app.component.metaconfigure import skin, layer, usage
+from zope.app.component.metaconfigure import skin, layer
 from zope.app.component.metaconfigure import handler
 from zope.app.container.interfaces import IAdding
 from zope.app.publisher.browser.globalbrowsermenuservice \

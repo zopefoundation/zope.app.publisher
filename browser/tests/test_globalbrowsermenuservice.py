@@ -13,7 +13,7 @@
 ##############################################################################
 """Global Browser Menu Tests
 
-$Id: test_globalbrowsermenuservice.py,v 1.16 2004/03/08 12:05:59 srichter Exp $
+$Id: test_globalbrowsermenuservice.py,v 1.17 2004/03/23 22:08:10 srichter Exp $
 """
 import unittest
 from zope.exceptions import Forbidden, Unauthorized, DuplicationError
@@ -196,15 +196,6 @@ class GlobalBrowserMenuServiceTest(PlacelessSetup, unittest.TestCase):
         r.menu('test_id', 'test menu')
         menu = r.getMenu('test_id', TestObject(), TestRequest())
         self.assertEqual(list(menu), [])
-
-    def testUsage(self):
-        ps = zapi.getService(None, zapi.servicenames.Presentation)
-        ps.defineUsage(u'objectview')
-        r = self.__reg()
-        r.menu('test_id', 'test menu', usage=u'objectview')
-        self.assertEqual(r.getMenuUsage('test_id'), u'objectview')
-        r.menu('test_id2', 'test menu')
-        self.assertEqual(r.getMenuUsage('test_id2'), u'')
 
     def test_getAllMenuItema(self):
         r = self.__reg()

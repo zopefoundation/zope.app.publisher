@@ -15,7 +15,7 @@
 
 This module defines the schemas for browser directives.
 
-$Id: metadirectives.py,v 1.18 2004/03/20 19:52:46 srichter Exp $
+$Id: metadirectives.py,v 1.19 2004/03/23 22:08:09 srichter Exp $
 """
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, Tokens, Path, \
@@ -24,13 +24,12 @@ from zope.schema import TextLine, Text, Id
 from zope.app.security.fields import Permission
 
 from zope.app.component.metadirectives import IBasicViewInformation
-from zope.app.publisher.interfaces.browser import IUsage
 
 #
 # browser views
 #
 
-class IViewDirective(IBasicViewInformation, IUsage):
+class IViewDirective(IBasicViewInformation):
     """
     The view directive defines a view that has subpages.
 
@@ -154,7 +153,7 @@ class IDefaultViewDirective(Interface):
 # browser pages
 #
 
-class IPagesDirective(IBasicViewInformation, IUsage):
+class IPagesDirective(IBasicViewInformation):
     """
     Define multiple pages without repeating all of the parameters.
 
@@ -221,7 +220,7 @@ class IPagesPageSubdirective(Interface):
         required=False
         )
 
-class IPageDirective(IPagesDirective, IPagesPageSubdirective, IUsage):
+class IPageDirective(IPagesDirective, IPagesPageSubdirective):
     """
     The page directive is used to create views that provide a single
     url or page.
@@ -370,7 +369,7 @@ class IResourceDirectoryDirective(IBasicResourceInformation):
 # browser menus
 #
 
-class IMenuDirective(IUsage):
+class IMenuDirective(Interface):
     """
     Define a browser menu
     """
@@ -505,16 +504,6 @@ class ILayerDirective(Interface):
     name = TextLine(
         title=u"Name",
         description=u"The name of the skin.",
-        required=True
-        )
-
-class IUsageDirective(Interface):
-    """Defines a view usage
-    """
-
-    name = TextLine(
-        title=u"Name",
-        description=u"The name of the usage.",
         required=True
         )
 

@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser-Specific Publisher interfaces
 
-$Id: browser.py,v 1.2 2004/03/19 20:26:48 srichter Exp $
+$Id: browser.py,v 1.3 2004/03/23 22:08:06 srichter Exp $
 """
 from zope.component.interfaces import IView
 from zope.app.component.interfacefield import InterfaceField
@@ -25,24 +25,6 @@ from zope.schema import TextLine, Text
 
 class IBrowserView(IView):
     """Browser View"""
-
-class IUsage(Interface):
-
-    usage = TextLine(
-        title=u"The template usage top-level variable",
-        description=u"""
-          See the usage documentation in the README.txt in the
-          zope/app/browser/skins directory.
-          If this view is associated with a menu item, this attribute should
-          not be supplied as the view will get its usage from the menu the
-          menu item is registered to.
-          This attribute is available for views not associated with a menu
-          item.
-          """,
-        required=False,
-        default=u""
-        )
-
 
 class IBrowserMenuItem(Interface):
     """A menu item represents one view. These views might be conditioned
@@ -97,7 +79,7 @@ class IBrowserMenuItem(Interface):
         required=False)
 
 
-class IBrowserMenu(IUsage):
+class IBrowserMenu(Interface):
     """A menu can contain a set of views that a represented asa
     collective."""
 
@@ -165,15 +147,11 @@ class IBrowserMenuService(Interface):
         If no entry can be found, None is returned.
         """
 
-    def getMenuUsage(self, menu_id):
-        """Return the usage attribute of a specified menu."""
-
-
 class IGlobalBrowserMenuService(IBrowserMenuService):
     """The global menu defines some additional methods that make it easier to
     setup the service (via ZCML for example)."""
 
-    def menu(self, menu_id, title, description=u'', usage=u''):
+    def menu(self, menu_id, title, description=u''):
         """Add a new menu to the service."""
 
     def menuItem(self, menu_id, interface, action, title,

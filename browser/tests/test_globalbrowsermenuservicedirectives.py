@@ -11,11 +11,9 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""XXX short summary goes here.
+"""Browser Menu Directives Tests
 
-XXX longer description goes here.
-
-$Id: test_globalbrowsermenuservicedirectives.py,v 1.11 2003/12/07 10:04:53 gotcha Exp $
+$Id: test_globalbrowsermenuservicedirectives.py,v 1.12 2004/03/23 22:08:10 srichter Exp $
 """
 
 from StringIO import StringIO
@@ -105,20 +103,6 @@ class Test(PlacelessSetup, TestCase):
             'test_id', TestObject(), TestRequest())
 
         self.assertEqual(first, d(5))
-
-    def testUsage(self):
-
-        xmlconfig(StringIO(template % (
-            """
-            <browser:usage name="objectview" />
-            <browser:menu id="test_id" title="test menu" usage="objectview" />
-
-            <browser:menu id="test_id2" title="test menu" />
-
-            """)))
-
-        self.assertEqual(globalBrowserMenuService.getMenuUsage('test_id'), u'objectview')
-        self.assertEqual(globalBrowserMenuService.getMenuUsage('test_id2'), u'')
 
 
 def test_suite():
