@@ -47,6 +47,7 @@ class DirectivesTest(PlacelessSetup, unittest.TestCase):
         xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
         view = zapi.queryMultiAdapter((ob, request), name='test')
         self.assert_(V1 in view.__class__.__bases__)
+        self.assert_(xmlrpc.MethodPublisher in view.__class__.__bases__)
 
     def testInterfaceProtectedView(self):
         xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)

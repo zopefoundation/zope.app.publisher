@@ -52,7 +52,6 @@ def view(_context, for_=None, interface=None, methods=None,
 
     # Make sure that the class inherits MethodPublisher, so that the views
     # have a location
-    # XXX: Needs tests
     if class_ is None:
         class_ = MethodPublisher
     else:
