@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.15 2003/02/20 18:24:58 jim Exp $
+$Id: viewmeta.py,v 1.16 2003/03/25 11:23:09 gotcha Exp $
 """
 
 import os
@@ -106,7 +106,8 @@ from zope.app.publisher.browser.globalbrowsermenuservice \
 def page(_context, name, permission, for_,
          layer='default', template=None, class_=None,
          allowed_interface='', allowed_attributes='',
-         attribute='__call__', menu=None, title=None
+         attribute='__call__', menu=None, title=None, 
+         usage=u'',
          ):
 
     actions = _handle_menu(_context, menu, title, for_, name, permission)
@@ -145,7 +146,7 @@ def page(_context, name, permission, for_,
         if template:
             template = str(_context.path(template))
 
-            new_class = SimpleViewClass(template, bases=(original_class, ))
+            new_class = SimpleViewClass(template, bases=(original_class, ), usage=usage)
 
         else:
             if not hasattr(original_class, 'browserDefault'):
@@ -167,7 +168,7 @@ def page(_context, name, permission, for_,
             implements(new_class, IBrowserPresentation, check=False)
 
     else:
-        new_class = SimpleViewClass(template)
+        new_class = SimpleViewClass(template, usage=usage)
 
 
 
@@ -219,12 +220,13 @@ class pages:
                          )
 
     def page(self, _context, name, attribute='__call__', template=None,
-             menu=None, title=None):
+             menu=None, title=None, usage=u''):
         return page(_context,
                     name=name,
                     attribute=attribute,
                     template=template,
                     menu=menu, title=title,
+                    usage=usage,
                     **(self.opts))
 
     def __call__(self):
@@ -245,7 +247,7 @@ class view:
     def __init__(self, _context, name, for_, permission,
                  layer='default', class_=None,
                  allowed_interface='', allowed_attributes='',
-                 menu=None, title=None,
+                 menu=None, title=None, 
                  ):
 
         actions = _handle_menu(_context, menu, title, for_, name, permission)
@@ -260,7 +262,7 @@ class view:
 
         self.pages = []
 
-    def page(self, _context, name, attribute=None, template=None):
+    def page(self, _context, name, attribute=None, template=None, usage=u''):
         if template:
             template = _context.path(template)
             if not os.path.isfile(template):
@@ -270,7 +272,7 @@ class view:
                 raise ConfigurationError(
                     "Must specify either a template or an attribute name")
 
-        self.pages.append((name, attribute, template))
+        self.pages.append((name, attribute, template, usage))
         return ()
 
     def defaultPage(self, _context, name):
@@ -287,9 +289,9 @@ class view:
         cdict = {}
         pages = {}
 
-        for pname, attribute, template in self.pages:
+        for pname, attribute, template, usage in self.pages:
             if template:
-                cdict[pname] = ViewPageTemplateFile(template)
+                cdict[pname] = ViewPageTemplateFile(template, usage=usage)
                 if attribute and attribute != name:
                     cdict[attribute] = cdict[pname]
             else:
@@ -380,14 +382,14 @@ class view:
 def addview(_context, name, permission,
             layer='default', class_=None,
             allowed_interface='', allowed_attributes='',
-            menu=None, title=None,
+            menu=None, title=None, usage=u'',
             ):
     return view(_context, name,
                 'zope.app.interfaces.container.IAdding',
                 permission,
                 layer, class_,
                 allowed_interface, allowed_attributes,
-                menu, title,
+                menu, title, usage
                 )
 
 addview.__implements__ = INonEmptyDirective
