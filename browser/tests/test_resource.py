@@ -13,13 +13,13 @@
 ##############################################################################
 """Unit tests for Resource
 
-$Id: test_resource.py,v 1.7 2003/09/24 17:22:07 sidnei Exp $
+$Id: test_resource.py,v 1.8 2004/03/13 15:21:30 srichter Exp $
 """
 import unittest
 from zope.app.publisher.browser.resource import Resource
 from zope.interface import implements
 from zope.publisher.browser import TestRequest
-from zope.app.interfaces.services.service import ISite
+from zope.app.site.interfaces import ISite
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.app.interfaces.traversing import IContainmentRoot
 

@@ -12,7 +12,7 @@
 #
 ##############################################################################
 """
-$Id: test_directoryresource.py,v 1.4 2003/11/27 13:59:23 philikon Exp $
+$Id: test_directoryresource.py,v 1.5 2004/03/13 15:21:30 srichter Exp $
 """
 
 import os
@@ -34,7 +34,7 @@ from zope.app.publisher.browser.pagetemplateresource import \
      PageTemplateResource
 import zope.app.publisher.browser.tests as p
 from zope.app.interfaces.traversing import IContainmentRoot
-from zope.app.interfaces.services.service import ISite
+from zope.app.site.interfaces import ISite
 
 test_directory = os.path.split(p.__file__)[0]
 

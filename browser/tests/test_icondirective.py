@@ -13,7 +13,7 @@
 ##############################################################################
 """Test Icon-Directive
 
-$Id: test_icondirective.py,v 1.17 2004/03/08 12:05:59 srichter Exp $
+$Id: test_icondirective.py,v 1.18 2004/03/13 15:21:30 srichter Exp $
 """
 import os
 from StringIO import StringIO
@@ -28,7 +28,7 @@ from zope.app.component.tests.views import IC
 from zope.component import queryView, getView, getResource
 from zope.configuration.exceptions import ConfigurationError
 from zope.interface import implements
-from zope.app.interfaces.services.service import ISite
+from zope.app.site.interfaces import ISite
 from zope.app.interfaces.traversing import IContainmentRoot
 from zope.security.checker import ProxyFactory, CheckerPublic
 
