@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_icondirective.py,v 1.2 2002/12/25 14:13:10 jim Exp $
+$Id: test_icondirective.py,v 1.3 2003/04/15 12:24:33 alga Exp $
 """
 import os
 from StringIO import StringIO
@@ -24,7 +24,7 @@ from zope.exceptions import Forbidden
 from zope.proxy.introspection import removeAllProxies
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
-from zope.component.tests.request import Request
+from zope.publisher.browser import TestRequest
 from zope.component.tests.views import IC
 from zope.publisher.interfaces.browser import IBrowserPresentation
 from zope.component import queryView, getView, getResource
@@ -42,7 +42,7 @@ template = """<zopeConfigure
    </zopeConfigure>"""
 
 
-request = Request(IBrowserPresentation)
+request = TestRequest(IBrowserPresentation)
 
 class Ob:
     __implements__ = IC
