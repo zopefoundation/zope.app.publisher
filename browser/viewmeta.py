@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.11 2003/02/06 06:49:39 seanb Exp $
+$Id: viewmeta.py,v 1.12 2003/02/07 15:59:44 jim Exp $
 """
 
 import os
@@ -317,11 +317,17 @@ class view:
         cdict['publishTraverse'] = publishTraverse
 
         if not hasattr(class_, 'browserDefault'):
-            default = self.default or self.pages[0][0]
-            cdict['browserDefault'] = (
-                lambda self, request, default=default:
-                (self, (default, ))
-                )
+            if self.default or self.pages:
+                default = self.default or self.pages[0][0]
+                cdict['browserDefault'] = (
+                    lambda self, request, default=default:
+                    (self, (default, ))
+                    )
+            elif providesCallable(class_):
+                cdict['browserDefault'] = (
+                    lambda self, request: (self, ())
+                    )
+                
 
         if class_ is not None:
             bases = (class_, simple)
@@ -473,3 +479,10 @@ class simple(BrowserView, ContextAware):
 
         meth = getattr(self, attr)
         return meth(*a, **k)
+
+def providesCallable(class_):
+    if hasattr(class_, '__call__'):
+        for c in class_.__mro__:
+            if '__call__' in c.__dict__:
+                return True
+    return False

@@ -66,6 +66,17 @@ class Ob:
 
 ob = Ob()
 
+class NCV(object):
+    "non callable view"
+    
+    def __init__(self, context, request):
+        pass
+
+class CV(NCV):
+    "callable view"
+    def __call__(self):
+        pass
+
 class Test(PlacelessSetup, unittest.TestCase):
 
     def setUp(self):
@@ -330,6 +341,42 @@ class Test(PlacelessSetup, unittest.TestCase):
         v = removeAllProxies(v)
         self.assertEqual(v(), 'done')
 
+
+    def testNamedViewNoPagesForCallable(self):
+        self.assertEqual(queryView(ob, 'test', request), None)
+
+        xmlconfig(StringIO(template %
+            """
+            <browser:view
+                  name="test"
+                  class="zope.app.publisher.browser.tests.test_directives.CV"
+                  for="zope.component.tests.views.IC"
+                  permission="zope.Public"
+                  />
+            """
+            ))
+
+        view = getView(ob, 'test', request)
+        view = removeAllProxies(view)
+        self.assertEqual(view.browserDefault(request), (view, ()))
+
+    def testNamedViewNoPagesForNonCallable(self):
+        self.assertEqual(queryView(ob, 'test', request), None)
+
+        xmlconfig(StringIO(template %
+            """
+            <browser:view
+                  name="test"
+                  class="zope.app.publisher.browser.tests.test_directives.NCV"
+                  for="zope.component.tests.views.IC"
+                  permission="zope.Public"
+                  />
+            """
+            ))
+
+        view = getView(ob, 'test', request)
+        view = removeAllProxies(view)
+        self.assertEqual(getattr(view, 'browserDefault', None), None)
 
     def testNamedViewPageViewsNoDefault(self):
         self.assertEqual(queryView(ob, 'test', request), None)
