@@ -16,7 +16,8 @@
 $Id$
 """
 import sys
-from zope.exceptions import DuplicationError, Unauthorized, Forbidden
+from zope.exceptions import DuplicationError
+from zope.security.interfaces import Unauthorized, Forbidden
 from zope.interface import implements, implementedBy
 from zope.security.checker import CheckerPublic
 from zope.security import checkPermission

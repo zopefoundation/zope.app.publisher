@@ -19,7 +19,7 @@ import os
 from StringIO import StringIO
 from unittest import TestCase, main, makeSuite
 
-from zope.exceptions import Forbidden
+from zope.security.interfaces import Forbidden
 from zope.proxy import removeAllProxies
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
