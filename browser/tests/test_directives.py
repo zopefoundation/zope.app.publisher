@@ -508,7 +508,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
         v = getView(ob, 'test', request)
         self.assertEqual(v.index(), v)
-        self.assert_(IBrowserPublisher.isImplementedBy(v))
+        self.assert_(IBrowserPublisher.providedBy(v))
 
     def testIncompleteProtectedPageNoPermission(self):
         self.assertRaises(
