@@ -15,12 +15,13 @@
 
 This module defines the schemas for browser directives.
 
-$Id: metadirectives.py,v 1.17 2004/03/18 12:19:24 jim Exp $
+$Id: metadirectives.py,v 1.18 2004/03/20 19:52:46 srichter Exp $
 """
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, Tokens, Path, \
      PythonIdentifier, MessageID
 from zope.schema import TextLine, Text, Id
+from zope.app.security.fields import Permission
 
 from zope.app.component.metadirectives import IBasicViewInformation
 from zope.app.publisher.interfaces.browser import IUsage
@@ -247,7 +248,7 @@ class IBasicResourceInformation(Interface):
         required=False
         )
 
-    permission = Id(
+    permission = Permission(
         title=u"The permission needed to access the resource.",
         description=u"""
         If a permission isn't specified, the resource will always be
