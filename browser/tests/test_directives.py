@@ -96,7 +96,6 @@ class Test(PlacelessSetup, unittest.TestCase):
 
     def setUp(self):
         PlacelessSetup.setUp(self)
-        XMLConfig('metameta.zcml', zope.configuration)()
         XMLConfig('meta.zcml', zope.app.publisher.browser)()
 
         from zope.component.adapter import provideAdapter
@@ -870,7 +869,7 @@ class Test(PlacelessSetup, unittest.TestCase):
                   name="index.html"
                   template="%s"
                   permission="zope.Public"
-                  class="zope.app.publisher.browser.tests.templateclass."
+          class="zope.app.publisher.browser.tests.templateclass.templateclass"
                   for="zope.component.tests.views.IC" />
             """ % path
             ))
