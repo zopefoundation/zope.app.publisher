@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: metaconfigure.py,v 1.19 2004/03/09 12:39:06 srichter Exp $
+$Id: metaconfigure.py,v 1.20 2004/03/15 20:41:51 jim Exp $
 """
 
 from zope.app import zapi
@@ -32,10 +32,7 @@ from zope.app.publisher.browser.i18nresourcemeta import I18nResource
 from zope.app.publisher.browser.viewmeta import view
 from zope.app.component.interface import provideInterface
 
-def defaultView(_context, name, for_=None, **__kw):
-
-    if __kw:
-        view(_context, name=name, for_=for_, **__kw)()
+def defaultView(_context, name, for_=None):
 
     type = IBrowserRequest
 
@@ -50,8 +47,7 @@ def defaultView(_context, name, for_=None, **__kw):
         _context.action(
             discriminator = None,
             callable = provideInterface,
-            args = (for_.__module__+'.'+for_.getName(),
-                    for_)
+            args = ('', for_)
             )
 
 
