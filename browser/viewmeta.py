@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.44 2004/04/08 15:34:02 garrett Exp $
+$Id: viewmeta.py,v 1.45 2004/04/09 14:18:36 garrett Exp $
 """
 import os
 
@@ -294,6 +294,9 @@ class view:
 
                 if name in pages:
                     return getattr(self, pages[name])
+                view = zapi.queryView(self, name, request)
+                if view is not None:
+                    return view
 
                 m = class_.publishTraverse.__get__(self)
                 return m(request, name)

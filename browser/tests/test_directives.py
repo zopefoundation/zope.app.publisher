@@ -13,7 +13,7 @@
 ##############################################################################
 """'browser' namespace directive tests
 
-$Id: test_directives.py,v 1.34 2004/04/08 15:34:03 garrett Exp $
+$Id: test_directives.py,v 1.35 2004/04/09 14:18:37 garrett Exp $
 """
 
 import os
@@ -600,6 +600,33 @@ class Test(PlacelessSetup, unittest.TestCase):
             <browser:view
                   name="test"
                   class="zope.app.component.tests.views.V1"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public" />
+
+            <browser:page name="index.html"
+                for="zope.app.component.tests.views.IV" 
+                class="zope.app.publisher.browser.tests.test_directives.CV"
+                permission="zope.Public" />
+            """
+            ))
+
+        view = getView(ob, 'test', request)
+        view = removeAllProxies(view)
+        view.publishTraverse(request, 'index.html')
+        
+    def testTraversalOfPageForViewWithPublishTraverse(self):
+        """Tests proper traversal of a page defined for a view.
+        
+        This test is different from testTraversalOfPageForView in that it
+        tests the behavior on a view that has a publishTraverse method --
+        the implementation of the lookup is slightly different in such a
+        case.
+        """
+        xmlconfig(StringIO(template %
+            """
+            <browser:view
+                  name="test"
+                  class="zope.app.publisher.browser.tests.test_directives.VT"
                   for="zope.app.component.tests.views.IC"
                   permission="zope.Public" />
 
