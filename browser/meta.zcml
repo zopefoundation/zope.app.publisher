@@ -148,7 +148,7 @@
 
     <meta:directive
         name="addMenuItem"
-        schema=".metadirectives.IAddMenuItem"
+        schema=".metadirectives.IAddMenuItemDirective"
         handler=".metaconfigure.addMenuItem"
         />
     

@@ -15,7 +15,7 @@
 
 This module defines the schemas for browser directives.
 
-$Id: metadirectives.py,v 1.13 2004/02/13 22:35:39 srichter Exp $
+$Id: metadirectives.py,v 1.14 2004/03/01 10:52:45 philikon Exp $
 """
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, Tokens, Path, \
@@ -396,18 +396,9 @@ class IMenuItemsDirective(Interface):
         required=False
         )
 
-class IMenuItemSubdirective(Interface):
+class IMenuItem(Interface):
+    """Common menu item configuration
     """
-    Define a menu item within a group of menu items
-    """
-
-    action = TextLine(
-        title=u"The relative url to use if the item is selected",
-        description=u"""
-        The url is relative to the object the menu is being displayed
-        for.""",
-        required=True
-        )
 
     title = MessageID(
         title=u"Title",
@@ -451,10 +442,46 @@ class IMenuItemSubdirective(Interface):
         required=False
         )
 
+class IMenuItemSubdirective(IMenuItem):
+    """
+    Define a menu item within a group of menu items
+    """
+
+    action = TextLine(
+        title=u"The relative url to use if the item is selected",
+        description=u"""
+        The url is relative to the object the menu is being displayed
+        for.""",
+        required=True
+        )
+
 class IMenuItemDirective(IMenuItemsDirective, IMenuItemSubdirective):
     """
     Define one menu item
     """
+
+class IAddMenuItemDirective(IMenuItem):
+    """Define an add-menu item
+    """
+
+    class_ = GlobalObject(
+        title=u"Class",
+        description=u"""
+        A class to be used as a factory for creating new objects""",
+        required=False
+        )
+
+    factory = Id(
+        title=u"Factory",
+        description=u"A factory id for creating new objects",
+        required = False,
+        )
+
+    view = TextLine(
+        title=u"Custom view name",
+        description=u"The name of a custom add view",
+        required = False,
+        )
 
 #
 # misc. directives
@@ -531,8 +558,7 @@ class IIconDirective(Interface):
         required=False
         )
 
-    # XXX this ought to be renamed title
-    alt = TextLine(
+    title = MessageID(
         title=u"Title",
         description=u"Descriptive title",
         required=False
@@ -544,70 +570,4 @@ class IIconDirective(Interface):
         For information on layers, see the documentation for the skin
         directive. Defaults to "default".""",
         required=False
-        )
-
-class IAddMenuItem(Interface):
-    """Define an add-menu item
-    """
-
-    class_ = GlobalObject(
-        __doc__ = """Class
-
-                 A class to be used as a factory for creating new objects
-                 """,
-        required = False,
-        )
-
-    factory = Id(
-        __doc__ = """Factory
-
-                 A factory id for creating new objects
-                 """,
-        required = False,
-        )
-
-    title = TextLine(
-        __doc__ = """Title
-
-                  A one-line description of the objects to be added
-                  """,
-        required = True,
-        )
-
-    description = Text(
-        __doc__ = """Text
-
-                  A multi-line description of the objects to be added
-                  """,
-        required = False,
-        )
-
-    permission = Id(
-        title=u"The permission needed to add an object.",
-        required=False,
-        )
-
-    filter = TextLine(
-        title=u"A condition for displaying the menu item",
-        description=u"""
-        The condition is given as a TALES expression. The expression
-        has access to the variables:
-
-        context -- The object the menu is being displayed for
-
-        request -- The browser request
-
-        nothing -- None
-
-        The menu item will not be displayed if there is a filter and
-        the filter evaluates to a false value.""",
-        required=False
-        )
-
-    view = TextLine(
-        __doc__ = """Custom view name
-
-                  The name of a custom add view
-                  """,
-        required = False,
         )
