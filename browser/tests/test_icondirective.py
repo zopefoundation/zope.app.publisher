@@ -30,9 +30,8 @@ from zope.configuration.exceptions import ConfigurationError
 from zope.interface import implements
 from zope.app.site.interfaces import ISite
 from zope.app.traversing.interfaces import IContainmentRoot
-from zope.security.checker import ProxyFactory, CheckerPublic
+from zope.security.checker import ProxyFactory
 
-from zope.app.tests import ztapi
 import zope.app.publisher.browser
 
 template = """<configure
@@ -70,7 +69,7 @@ class Test(PlacelessSetup, TestCase):
         self.assertEqual(queryView(ob, 'zmi_icon', request), None)
 
         import zope.app.publisher.browser.tests as p
-        path = os.path.split(p.__file__)[0]
+        path = os.path.dirname(p.__file__)
         path = os.path.join(path, 'testfiles', 'test.gif')
 
         xmlconfig(StringIO(template % (
@@ -98,7 +97,7 @@ class Test(PlacelessSetup, TestCase):
         self.assertEqual(queryView(ob, 'zmi_icon', request), None)
 
         import zope.app.publisher.browser.tests as p
-        path = os.path.split(p.__file__)[0]
+        path = os.path.dirname(p.__file__)
         path = os.path.join(path, 'testfiles', 'test.gif')
 
         xmlconfig(StringIO(template % (
@@ -129,7 +128,7 @@ class Test(PlacelessSetup, TestCase):
         self.assertEqual(queryView(ob, 'zmi_icon', request), None)
 
         import zope.app.publisher.browser.tests as p
-        path = os.path.split(p.__file__)[0]
+        path = os.path.dirname(p.__file__)
         path = os.path.join(path, 'testfiles', 'test.gif')
 
         config = StringIO(template % (
