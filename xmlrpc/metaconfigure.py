@@ -13,7 +13,7 @@
 ##############################################################################
 """XMLRPC configuration code
 
-$Id: metaconfigure.py,v 1.4 2003/01/25 05:13:43 rdmurray Exp $
+$Id: metaconfigure.py,v 1.5 2003/02/06 06:49:45 seanb Exp $
 """
 
 from zope.security.proxy import Proxy
@@ -24,6 +24,8 @@ from zope.configuration.interfaces import INonEmptyDirective
 from zope.configuration.interfaces import ISubdirectiveHandler
 from zope.configuration.action import Action
 from zope.configuration.exceptions import ConfigurationError
+
+from zope.component.servicenames import Interfaces
 
 from zope.publisher.interfaces.xmlrpc import IXMLRPCPresentation
 
@@ -173,7 +175,7 @@ class view(object):
                 Action(
                 discriminator = None,
                 callable = handler,
-                args = ('Interfaces', 'provideInterface',
+                args = (Interfaces, 'provideInterface',
                         self.for_.__module__+'.'+self.for_.__name__, self.for_)
                 )
                 )

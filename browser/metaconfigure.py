@@ -13,12 +13,13 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: metaconfigure.py,v 1.2 2002/12/25 14:13:09 jim Exp $
+$Id: metaconfigure.py,v 1.3 2003/02/06 06:49:39 seanb Exp $
 """
 
 from zope.configuration.action import Action
 
 from zope.publisher.interfaces.browser import IBrowserPresentation
+from zope.component.servicenames import Interfaces
 
 from zope.app.component.metaconfigure \
      import defaultView as _defaultView, skin as _skin, handler
@@ -58,7 +59,7 @@ def defaultView(_context, name, for_=None, **__kw):
         Action(
         discriminator = None,
         callable = handler,
-        args = ('Interfaces', 'provideInterface',
+        args = (Interfaces, 'provideInterface',
                 for_.__module__+'.'+for_.__name__,
                 for_)
               )

@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: i18nresourcemeta.py,v 1.3 2002/12/31 02:52:01 jim Exp $
+$Id: i18nresourcemeta.py,v 1.4 2003/02/06 06:49:39 seanb Exp $
 """
 
 from zope.security.proxy import Proxy
@@ -24,6 +24,8 @@ from zope.configuration.interfaces import ISubdirectiveHandler
 from zope.configuration.interfaces import INonEmptyDirective
 from zope.configuration.action import Action
 from zope.configuration.exceptions import ConfigurationError
+
+from zope.component.servicenames import ResourceService
 
 from zope.publisher.interfaces.browser import IBrowserPresentation
 
@@ -113,7 +115,7 @@ class I18nResource(object):
                 discriminator = ('i18n-resource', self.name, self.type,
                                  self.layer),
                 callable = handler,
-                args = ('Resources', 'provideResource', self.name, self.type,
+                args = (ResourceService, 'provideResource', self.name, self.type,
                         factory, self.layer)
                 )
             ]

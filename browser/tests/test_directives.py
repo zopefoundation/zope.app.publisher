@@ -21,6 +21,7 @@ from zope.configuration.exceptions import ConfigurationError
 from zope.component.tests.views import IC, V1, VZMI, R1, RZMI
 from zope.component import getView, queryView, queryResource
 from zope.component import getDefaultViewName, getResource
+from zope.component.servicenames import Permissions
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.security.proxy import ProxyFactory
 from zope.proxy.introspection import removeAllProxies
@@ -403,8 +404,8 @@ class Test(PlacelessSetup, unittest.TestCase):
 
     def testProtectedPageViews(self):
 
-        serviceManager.defineService('Permissions', IPermissionService)
-        serviceManager.provideService('Permissions', permissionRegistry)
+        serviceManager.defineService(Permissions, IPermissionService)
+        serviceManager.provideService(Permissions, permissionRegistry)
         permissionRegistry.definePermission('p', 'P')
 
 
@@ -601,8 +602,8 @@ class Test(PlacelessSetup, unittest.TestCase):
 
     def testProtectedtemplate(self):
 
-        serviceManager.defineService('Permissions', IPermissionService)
-        serviceManager.provideService('Permissions', permissionRegistry)
+        serviceManager.defineService(Permissions, IPermissionService)
+        serviceManager.provideService(Permissions, permissionRegistry)
         
         path = os.path.join(tests_path, 'test.pt')
 

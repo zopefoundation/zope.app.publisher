@@ -13,13 +13,15 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: resourcemeta.py,v 1.4 2002/12/28 16:14:00 jim Exp $
+$Id: resourcemeta.py,v 1.5 2003/02/06 06:49:39 seanb Exp $
 """
 
 from zope.security.checker import CheckerPublic, NamesChecker
 
 from zope.configuration.action import Action
 from zope.configuration.exceptions import ConfigurationError
+
+from zope.component.servicenames import ResourceService
 
 from zope.publisher.interfaces.browser import IBrowserPresentation
 
@@ -54,7 +56,7 @@ def resource(_context, name, layer='default', permission='zope.Public',
         Action(
             discriminator = ('resource', name, IBrowserPresentation, layer),
             callable = handler,
-            args = ('Resources', 'provideResource',
+            args = (ResourceService, 'provideResource',
                     name, IBrowserPresentation, factory, layer),
             )
         ]

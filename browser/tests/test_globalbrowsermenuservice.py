@@ -15,7 +15,7 @@
 
 XXX longer description goes here.
 
-$Id: test_globalbrowsermenuservice.py,v 1.4 2002/12/31 03:35:09 jim Exp $
+$Id: test_globalbrowsermenuservice.py,v 1.5 2003/02/06 06:49:42 seanb Exp $
 """
 
 from unittest import TestCase, TestSuite, main, makeSuite
@@ -26,6 +26,7 @@ from zope.publisher.browser import TestRequest
 from zope.app.tests.placelesssetup import PlacelessSetup
 
 from zope.component.service import serviceManager
+from zope.component.servicenames import Permissions
 from zope.app.security.registries.permissionregistry import permissionRegistry
 from zope.app.interfaces.security import IPermissionService
 from zope.security.management import newSecurityManager
@@ -89,8 +90,8 @@ class Test(PlacelessSetup, TestCase):
         self.assertEqual(list(menu), [d(5), d(6), d(3), d(2), d(1)])
 
     def test_w_permission(self):
-        serviceManager.defineService('Permissions', IPermissionService)
-        serviceManager.provideService('Permissions', permissionRegistry)
+        serviceManager.defineService(Permissions, IPermissionService)
+        serviceManager.provideService(Permissions, permissionRegistry)
         permissionRegistry.definePermission('p', 'P')
         
         r = self.__reg()

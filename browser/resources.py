@@ -13,13 +13,14 @@
 ##############################################################################
 """Resource URL acess
 
-$Id: resources.py,v 1.3 2003/01/25 13:19:25 jim Exp $
+$Id: resources.py,v 1.4 2003/02/06 06:49:39 seanb Exp $
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.component import getService
+from zope.component.servicenames import ResourceService
 from zope.proxy.context import ContextWrapper
 from zope.proxy.context import ContextMethod
 from zope.exceptions import NotFoundError
@@ -33,7 +34,7 @@ class Resources(BrowserView):
     def publishTraverse(wrapped_self, request, name):
         '''See interface IBrowserPublisher'''
 
-        resource_service = getService(wrapped_self, 'Resources')
+        resource_service = getService(wrapped_self, ResourceService)
         resource = resource_service.queryResource(wrapped_self, name, request)
         if resource is None:
             raise NotFoundError(wrapped_self, name)

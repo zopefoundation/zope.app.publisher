@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.10 2003/02/03 16:34:37 stevea Exp $
+$Id: viewmeta.py,v 1.11 2003/02/06 06:49:39 seanb Exp $
 """
 
 import os
@@ -28,6 +28,8 @@ from zope.configuration.interfaces import INonEmptyDirective
 from zope.configuration.interfaces import ISubdirectiveHandler
 from zope.configuration.action import Action
 from zope.configuration.exceptions import ConfigurationError
+
+from zope.component.servicenames import Interfaces
 
 from zope.publisher.interfaces.browser import IBrowserPresentation
 from zope.publisher.interfaces.browser import IBrowserPublisher
@@ -390,7 +392,7 @@ def defaultView(_context, name, for_=None):
             Action(
             discriminator = None,
             callable = handler,
-            args = ('Interfaces', 'provideInterface',
+            args = (Interfaces, 'provideInterface',
                     for_.__module__+'.'+for_.__name__,
                     for_)
             )
@@ -429,7 +431,7 @@ def _handle_allowed_interface(_context, allowed_interface, permission,
             i = _context.resolve(i)
             actions .append(
                 Action(discriminator = None, callable = handler,
-                       args = ('Interfaces', 'provideInterface', None, i)
+                       args = (Interfaces, 'provideInterface', None, i)
                        ))
             for name in i:
                 required[name] = permission
@@ -450,7 +452,7 @@ def _handle_for(_context, for_, actions):
 
         actions .append(
             Action(discriminator = None, callable = handler,
-                   args = ('Interfaces', 'provideInterface', None, for_)
+                   args = (Interfaces, 'provideInterface', None, for_)
             ))
 
     return for_
