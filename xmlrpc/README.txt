@@ -391,7 +391,7 @@ Unfortunately, `xmlrpclib` does not support Python 2.3's new
 `datetime.datetime` class (it should be made to, really).  DateTime
 values need to be encoded as `xmlrpclib.DateTime` instances:
   
-  >>> import xmlrpclib, time
+  >>> import xmlrpclib
 
   >>> class DateTimeDemo:
   ...     def __init__(self, context, request):
@@ -399,7 +399,7 @@ values need to be encoded as `xmlrpclib.DateTime` instances:
   ...         self.request = request
   ...
   ...     def epoch(self):
-  ...         return xmlrpclib.DateTime(1)
+  ...         return xmlrpclib.DateTime("19700101T01:00:01")
 
 Now we'll register it as a view:
 
