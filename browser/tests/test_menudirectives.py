@@ -76,12 +76,28 @@ class Test(PlacelessSetup, unittest.TestCase):
         def d(n):
             return {'action': "a%s" % n,
                     'title':  "t%s" % n,
-                    'description':  "",
+                    'description': u'',
                     'selected': '',
+                    'submenu': None,
                     'icon': None,
                     'extra': None}
 
-        self.assertEqual(list(menu), [d(5), d(6), d(3), d(2), d(1)])
+        self.assertEqual(menu[:-1], [d(5), d(6), d(3), d(2), d(1)])
+        self.assertEqual(
+            menu[-1],
+            {'submenu': [{'submenu': None,
+                          'description': u'',
+                          'extra': None,
+                          'selected': u'',
+                          'action': u'a10',
+                          'title': u't10',
+                          'icon': None}],
+             'description': u'',
+             'extra': None,
+             'selected': u'',
+             'action': u'',
+             'title': u's1',
+             'icon': None})
 
         first = zope.app.publisher.browser.menu.getFirstMenuItem(
             test_id, TestObject(), TestRequest())

@@ -18,11 +18,12 @@ $Id$
 __docformat__ = "reStructuredText"
 from zope.component.interfaces import IFactory
 from zope.configuration.exceptions import ConfigurationError
+
 from zope.interface import Interface, implements, classImplements
 from zope.interface import directlyProvides, providedBy
 from zope.interface.interface import InterfaceClass
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.security import checkPermission
+from zope.security import checkPermission, canAccess
 from zope.security.checker import InterfaceChecker, CheckerPublic
 from zope.security.interfaces import Unauthorized, Forbidden
 from zope.security.proxy import ProxyFactory, removeSecurityProxy
@@ -35,6 +36,7 @@ from zope.app.publication.browser import PublicationTraverser
 from zope.app.publisher.browser import BrowserView
 from zope.app.publisher.interfaces.browser import IMenuAccessView
 from zope.app.publisher.interfaces.browser import IBrowserMenuItem
+from zope.app.publisher.interfaces.browser import IBrowserSubMenuItem
 from zope.app.publisher.interfaces.browser import IMenuItemType
 
 # Create special modules that contain all menu item types
@@ -47,157 +49,7 @@ sys.modules['zope.app.menus'] = menus
 _order_counter = {}
 
 class BrowserMenuItem(BrowserView):
-    """Browser Menu Item Base Class
-
-    >>> from zope.publisher.browser import TestRequest
-
-    >>> class ITestInterface(Interface):
-    ...     pass
-
-    >>> from zope.publisher.interfaces.browser import IBrowserPublisher
-    >>> class TestObject(object):
-    ...     implements(IBrowserPublisher, ITestInterface)
-    ... 
-    ...     def foo(self):
-    ...         pass
-    ... 
-    ...     def browserDefault(self, r):
-    ...         return self, ()
-    ... 
-    ...     def publishTraverse(self, request, name):
-    ...         if name.startswith('f'):
-    ...             raise Forbidden, name
-    ...         if name.startswith('u'):
-    ...             raise Unauthorized, name
-    ...         return self.foo
-
-
-    Since the `BrowserMenuItem` is just a view, we can initiate it with an
-    object and a request.
-
-    >>> item = BrowserMenuItem(TestObject(), TestRequest())
-
-    Now we add a title and description and see whether we can then access the
-    value. Note that these assignments are always automatically done by the
-    framework.
-
-    >>> item.title = u'Item 1'
-    >>> item.title
-    u'Item 1'
-
-    >>> item.description = u'This is Item 1.'
-    >>> item.description
-    u'This is Item 1.'
-
-    >>> item.order
-    0
-    >>> item.order = 1
-    >>> item.order
-    1
-
-    >>> item.icon is None
-    True
-    >>> item.icon = u'/@@/icon.png'
-    >>> item.icon
-    u'/@@/icon.png'
-
-    Since there is no permission or view specified yet, the menu item should
-    be available and not selected.
-
-    >>> item.available()
-    True
-    >>> item.selected()
-    False
-
-    There are two ways to deny availability of a menu item: (1) the current
-    user does not have the correct permission to access the action or the menu
-    item itself, or (2) the filter returns `False`, in which case the menu
-    item should also not be shown. 
-
-    >>> from zope.app.testing import ztapi
-    >>> from zope.app.security.interfaces import IPermission
-    >>> from zope.app.security.permission import Permission
-    >>> perm = Permission('perm', 'Permission')
-    >>> ztapi.provideUtility(IPermission, perm, 'perm')
-
-    >>> class ParticipationStub(object):
-    ...     principal = 'principal'
-    ...     interaction = None
-
-    >>> from zope.security.management import newInteraction, endInteraction
-
-    In the first case, the permission of the menu item was explicitely
-    specified. Make sure that the user needs this permission to make the menu
-    item available.
-
-    >>> item.permission = perm
-
-    Now, we are not setting any user. This means that the menu item should be
-    available.
-    
-    >>> endInteraction()
-    >>> newInteraction()
-    >>> item.available()
-    True
-
-    Now we specify a principal that does not have the specified permission.
-
-    >>> endInteraction()
-    >>> newInteraction(ParticipationStub())
-    >>> item.available()
-    False
-
-    In the second case, the permission is not explicitely defined and the
-    availability is determined by the permission required to access the
-    action.
-
-    >>> item.permission = None
-
-    All views starting with 'f' are forbidden, the ones with 'u' are
-    unauthorized and all others are allowed.
-
-    >>> item.action = u'f'
-    >>> item.available()
-    False
-    >>> item.action = u'u'
-    >>> item.available()
-    False
-    >>> item.action = u'a'
-    >>> item.available()
-    True
-
-    Now let's test filtering. If the filter is specified, it is assumed to be
-    a TALES obejct.
-
-    >>> item.filter = Engine.compile('not:context')
-    >>> item.available()
-    False
-    >>> item.filter = Engine.compile('context')
-    >>> item.available()
-    True
-
-    Finally, make sure that the menu item can be selected.
-
-    >>> item.request = TestRequest(SERVER_URL='http://127.0.0.1/@@view.html',
-    ...                            PATH_INFO='/@@view.html')
-
-    >>> item.selected()
-    False
-    >>> item.action = u'view.html'
-    >>> item.selected()
-    True
-    >>> item.action = u'@@view.html'
-    >>> item.selected()
-    True
-    >>> item.request = TestRequest(
-    ...     SERVER_URL='http://127.0.0.1/++view++view.html',
-    ...     PATH_INFO='/++view++view.html')
-    >>> item.selected()
-    True
-    >>> item.action = u'otherview.html'
-    >>> item.selected()
-    False
-    """
+    """Browser Menu Item Class"""
     implements(IBrowserMenuItem)
 
     # See zope.app.publisher.interfaces.browser.IBrowserMenuItem
@@ -231,13 +83,13 @@ class BrowserMenuItem(BrowserView):
             try:
                 view = traverser.traverseRelativeURL(
                     self.request, self.context, path)
-                # TODO:
-                # tickle the security proxy's checker
-                # we're assuming that view pages are callable
-                # this is a pretty sound assumption
-                view.__call__
             except (Unauthorized, Forbidden):
                 return False
+            else:
+                # we're assuming that view pages are callable
+                # this is a pretty sound assumption
+                if not canAccess(view, '__call__'):
+                    return False
 
         # Make sure that we really want to see this menu item
         if self.filter is not None:
@@ -276,53 +128,26 @@ class BrowserMenuItem(BrowserView):
         return False
 
 
-def getMenu(menuItemType, object, request, max=999999):
-    """Return menu item entries in a TAL-friendly form.
+class BrowserSubMenuItem(BrowserMenuItem):
+    """Browser Menu Item Base Class"""
+    implements(IBrowserSubMenuItem)
 
-    >>> from zope.publisher.browser import TestRequest
+    # See zope.app.publisher.interfaces.browser.IBrowserSubMenuItem
+    submenuType = None
 
-    >>> from zope.app.testing import ztapi
-    >>> def defineMenuItem(menuItemType, for_, title, action=u'', order=0):
-    ...     newclass = type(title, (BrowserMenuItem,),
-    ...                     {'title':title, 'action':action, 'order':order})
-    ...     classImplements(newclass, menuItemType)
-    ...     ztapi.provideAdapter((for_, IBrowserRequest), menuItemType,
-    ...                          newclass, title)
+    def selected(self):
+        """See zope.app.publisher.interfaces.browser.IBrowserMenuItem"""
+        if self.action is u'':
+            return False
+        return super(BrowserSubMenuItem, self).selected()
 
-    >>> class IFoo(Interface): pass
-    >>> class IFooBar(IFoo): pass
-    >>> class IBlah(Interface): pass
 
-    >>> class FooBar(object):
-    ...     implements(IFooBar)
-
-    >>> class Menu1(Interface): pass
-    >>> class Menu2(Interface): pass
-
-    >>> defineMenuItem(Menu1, IFoo,    'i1')
-    >>> defineMenuItem(Menu1, IFooBar, 'i2')
-    >>> defineMenuItem(Menu1, IBlah,   'i3')
-    >>> defineMenuItem(Menu2, IFoo,    'i4')
-    >>> defineMenuItem(Menu2, IFooBar, 'i5')
-    >>> defineMenuItem(Menu2, IBlah,   'i6')
-    >>> defineMenuItem(Menu1, IFoo,    'i7', order=-1)
-
-    >>> items = getMenu(Menu1, FooBar(), TestRequest())
-    >>> [item['title'] for item in items]
-    ['i7', 'i1', 'i2']
-    >>> items = getMenu(Menu2, FooBar(), TestRequest())
-    >>> [item['title'] for item in items]
-    ['i4', 'i5']
-    >>> items = getMenu(Menu2, FooBar(), TestRequest())
-    >>> [item['title'] for item in items]
-    ['i4', 'i5']
-    """
+def getMenu(menuItemType, object, request):
+    """Return menu item entries in a TAL-friendly form."""
     result = []
     for name, item in zapi.getAdapters((object, request), menuItemType):
         if item.available():
             result.append(item)
-            if len(result) >= max:
-                break
         
     # Now order the result. This is not as easy as it seems.
     #
@@ -335,13 +160,16 @@ def getMenu(menuItemType, object, request, max=999999):
         for item in result]
     result.sort()
     
-    result = [{'title': item.title,
-               'description': item.description,
-               'action': item.action,
-               'selected': (item.selected() and u'selected') or u'',
-               'icon': item.icon,
-               'extra': item.extra}
-              for index, order, title, item in result]
+    result = [
+        {'title': item.title,
+         'description': item.description,
+         'action': item.action,
+         'selected': (item.selected() and u'selected') or u'',
+         'icon': item.icon,
+         'extra': item.extra,
+         'submenu': (IBrowserSubMenuItem.providedBy(item) and
+                     getMenu(item.submenuType, object, request)) or None}
+        for index, order, title, item in result]
     return result
 
 
@@ -351,6 +179,7 @@ def getFirstMenuItem(menuItemType, object, request):
     if items:
         return items[0]
     return None
+
 
 class MenuAccessView(BrowserView):
     """A view allowing easy access to menus."""
@@ -364,68 +193,7 @@ class MenuAccessView(BrowserView):
 
 def menuDirective(_context, id=None, interface=None,
                   title=u'', description=u''):
-    """Provides a new menu (item type).
-
-    >>> import pprint
-    >>> class Context(object):
-    ...     info = u'doc'
-    ...     def __init__(self): self.actions = []
-    ...     def action(self, **kw): self.actions.append(kw)
-
-    Possibility 1: The Old Way
-    --------------------------
-    
-    >>> context = Context()
-    >>> menuDirective(context, u'menu1', title=u'Menu 1')
-    >>> iface = context.actions[0]['args'][1]
-    >>> iface.getName()
-    u'menu1'
-    >>> iface.getTaggedValue('title')
-    u'Menu 1'
-    >>> iface.getTaggedValue('description')
-    u''
-
-    >>> hasattr(sys.modules['zope.app.menus'], 'menu1')
-    True
-
-    >>> del sys.modules['zope.app.menus'].menu1
-
-    Possibility 2: Just specify an interface
-    ----------------------------------------
-
-    >>> class menu1(Interface):
-    ...     pass
-
-    >>> context = Context()
-    >>> menuDirective(context, interface=menu1)
-    >>> context.actions[0]['args'][1] is menu1
-    True
-
-    Possibility 3: Specify an interface and an id
-    ---------------------------------------------
-
-    >>> context = Context()
-    >>> menuDirective(context, id='menu1', interface=menu1)
-    >>> context.actions[0]['args'][1] is menu1
-    True
-    >>> import pprint
-    >>> pprint.pprint([action['discriminator'] for action in context.actions])
-    [('browser', 'MenuItemType', 'zope.app.publisher.browser.menu.menu1'),
-     ('interface', 'zope.app.publisher.browser.menu.menu1'),
-     ('browser', 'MenuItemType', 'menu1')]
-     
-    Here are some disallowed configurations.
-
-    >>> context = Context()
-    >>> menuDirective(context)
-    Traceback (most recent call last):
-    ...
-    ConfigurationError: You must specify the 'id' or 'interface' attribute.
-    >>> menuDirective(context, title='Menu 1')
-    Traceback (most recent call last):
-    ...
-    ConfigurationError: You must specify the 'id' or 'interface' attribute.
-    """
+    """Provides a new menu (item type)."""
     if id is None and interface is None: 
         raise ConfigurationError(
             "You must specify the 'id' or 'interface' attribute.")
@@ -481,143 +249,46 @@ def menuDirective(_context, id=None, interface=None,
 def menuItemDirective(_context, menu, for_,
                       action, title, description=u'', icon=None, filter=None,
                       permission=None, extra=None, order=0):
-    """Register a single menu item.
-
-    See the `menuItemsDirective` class for tests.
-    """
+    """Register a single menu item."""
     return menuItemsDirective(_context, menu, for_).menuItem(
         _context, action, title, description, icon, filter,
         permission, extra, order)
 
+
+def subMenuItemDirective(_context, menu, for_, title, submenu,
+                         action=u'', description=u'', icon=None, filter=None,
+                         permission=None, extra=None, order=0):
+    """Register a single sub-menu menu item."""
+    return menuItemsDirective(_context, menu, for_).subMenuItem(
+        _context, submenu, title, description, action, icon, filter,
+        permission, extra, order)
+
+
 class MenuItemFactory(object):
-    # XXX this used to be a function created inline within menuItemsDirective,
-    # with the necessary values bound in context.  That approach may be
-    # faster than this one, but it does not encourage approachable doc tests.
-    # Please revise as desired, or remove this triple-X comment if this 
-    # solution is acceptable for now.
-    """generic factory for menu items.
-    
-    The factory needs a class to instantiate.  This will generally implement
-    IBrowserMenuItem.  Here is a dummy example.
-    
-    >>> class DummyBrowserMenuItem(object):
-    ...     "a dummy factory for menu items"
-    ...     def __init__(self, context, request):
-    ...         self.context = context
-    ...         self.request = request
-    ... 
-    
-    To instantiate this class, pass the factory and the other arguments as 
-    described by the signature (and mapped to the IBrowserMenuItem interface).
-    We use dummy values for this example.
-    
-    >>> factory = MenuItemFactory(
-    ...     DummyBrowserMenuItem, 'Title', 'Description', 'Icon', 'Action',
-    ...     'Filter', 'zope.Public', 'Extra', 'Order', 'For_')
-    >>> factory.factory is DummyBrowserMenuItem
-    True
-    
-    The 'zope.Public' permission needs to be translated to CheckerPublic.
-    
-    >>> factory.permission is CheckerPublic
-    True
-    
-    Call the factory with context and request to return the instance.  We 
-    continue to use dummy values.
-    
-    >>> item = factory('Context', 'Request')
-    
-    The returned value should be an instance of the DummyBrowserMenuItem,
-    and have all of the values we initially set on the factory.
-    
-    >>> isinstance(item, DummyBrowserMenuItem)
-    True
-    >>> item.context
-    'Context'
-    >>> item.request
-    'Request'
-    >>> item.title
-    'Title'
-    >>> item.description
-    'Description'
-    >>> item.icon
-    'Icon'
-    >>> item.action
-    'Action'
-    >>> item.filter
-    'Filter'
-    >>> item.permission is CheckerPublic
-    True
-    >>> item.extra
-    'Extra'
-    >>> item.order
-    'Order'
-    >>> item._for
-    'For_'
-    
-    If you pass a permission other than zope.Public to the MenuItemFactory,
-    it should pass through unmodified.
-    
-    >>> factory = MenuItemFactory(
-    ...     DummyBrowserMenuItem, 'Title', 'Description', 'Icon', 'Action',
-    ...     'Filter', 'another.Permission', 'Extra', 'Order', 'For_')
-    >>> factory.permission
-    'another.Permission'
-    """
-    def __init__(self, factory, title, description, icon, action, filter, 
-                 permission, extra, order, for_):
+    """generic factory for menu items."""
+
+    def __init__(self, factory, **kwargs):
         self.factory = factory
-        self.title = title
-        self.description = description
-        self.icon = icon
-        self.action = action
-        self.filter = filter
-        if permission == 'zope.Public':
-            permission = CheckerPublic
-        self.permission = permission
-        self.extra = extra
-        self.order = order
-        self.for_ = for_
+        if 'permission' in kwargs and kwargs['permission'] == 'zope.Public':
+            kwargs['permission'] = CheckerPublic
+        self.kwargs = kwargs
     
     def __call__(self, context, request):
         item = self.factory(context, request)
-        item.title = self.title
-        item.description = self.description
-        item.icon = self.icon
-        item.action = self.action
-        item.filter = self.filter
-        # we could not set the permission if self.permission is CheckerPublic.
-        # choosing to be explicit for now.
-        item.permission = self.permission
-        item.extra = self.extra
-        item.order = self.order
-        item._for = self.for_
-        if self.permission is not None:
-            checker = InterfaceChecker(IBrowserMenuItem, self.permission)
+
+        for key, value in self.kwargs.items():
+            setattr(item, key, value)
+
+        if item.permission is not None:
+            checker = InterfaceChecker(IBrowserMenuItem, item.permission)
             item = proxify(item, checker)
+
         return item
 
+
 class menuItemsDirective(object):
-    """Register several menu items for a particular menu.
+    """Register several menu items for a particular menu."""
 
-    >>> class Context(object):
-    ...     info = u'doc'
-    ...     def __init__(self): self.actions = []
-    ...     def action(self, **kw): self.actions.append(kw)
-
-    >>> class TestMenuItemType(Interface): pass
-    >>> class ITest(Interface): pass
-
-    >>> context = Context()
-    >>> items = menuItemsDirective(context, TestMenuItemType, ITest)
-    >>> context.actions
-    []
-    >>> items.menuItem(context, u'view.html', 'View')
-    >>> context.actions[0]['args'][0]
-    'provideAdapter'
-    >>> len(context.actions)
-    4
-    """
     def __init__(self, _context, menu, for_):
         self.for_ = for_
         self.menuItemType = menu
@@ -633,8 +304,29 @@ class menuItemsDirective(object):
             _order_counter[self.for_] = order + 1
 
         factory = MenuItemFactory(
-            BrowserMenuItem, title, description, icon, action, filter, 
-            permission, extra, order, self.for_)
+            BrowserMenuItem,
+            title=title, description=description, icon=icon, action=action,
+            filter=filter, permission=permission, extra=extra, order=order,
+            _for=self.for_)
+        adapter(_context, (factory,), self.menuItemType,
+                (self.for_, IBrowserRequest), name=title)
+
+    def subMenuItem(self, _context, submenu, title, description=u'',
+                    action=u'', icon=None, filter=None, permission=None,
+                    extra=None, order=0):
+
+        if filter is not None:
+            filter = Engine.compile(filter)
+
+        if order == 0:
+            order = _order_counter.get(self.for_, 1)
+            _order_counter[self.for_] = order + 1
+
+        factory = MenuItemFactory(
+            BrowserSubMenuItem,
+            title=title, description=description, icon=icon, action=action,
+            filter=filter, permission=permission, extra=extra, order=order,
+            _for=self.for_, submenuType=submenu)
         adapter(_context, (factory,), self.menuItemType,
                 (self.for_, IBrowserRequest), name=title)
         

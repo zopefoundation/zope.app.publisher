@@ -16,15 +16,19 @@
 $Id$
 """
 import unittest
-from zope.testing.doctestunit import DocTestSuite
+from zope.testing import doctest, doctestunit
 
 from zope.app.testing import placelesssetup
 
 
 def test_suite():
-    return DocTestSuite('zope.app.publisher.browser.menu',
-                        setUp=placelesssetup.setUp,
-                        tearDown=placelesssetup.tearDown)
-    
-if __name__=='__main__':
-    unittest.main(defaultTest='test_suite')
+    return unittest.TestSuite((
+        doctest.DocFileSuite('../menu.txt',
+                             setUp=placelesssetup.setUp,
+                             tearDown=placelesssetup.tearDown,
+                             globs={'pprint': doctestunit.pprint},
+                             optionflags=doctest.NORMALIZE_WHITESPACE),
+        ))
+
+if __name__ == '__main__':
+    unittest.main(default='test_suite')

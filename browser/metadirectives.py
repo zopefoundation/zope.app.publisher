@@ -450,11 +450,8 @@ class IMenuItem(Interface):
         default=0
         )
 
-
 class IMenuItemSubdirective(IMenuItem):
-    """
-    Define a menu item within a group of menu items
-    """
+    """Define a menu item within a group of menu items"""
 
     action = TextLine(
         title=u"The relative url to use if the item is selected",
@@ -465,13 +462,34 @@ class IMenuItemSubdirective(IMenuItem):
         )
 
 class IMenuItemDirective(IMenuItemsDirective, IMenuItemSubdirective):
-    """
-    Define one menu item
+    """Define one menu item"""
+
+class ISubMenuItemSubdirective(IMenuItem):
+    """Define a menu item that represents a a sub menu.
+
+    For a sub-menu menu item, the action is optional, this the item itself
+    might not represent a destination, but just an entry point to the sub menu. 
     """
 
+    action = TextLine(
+        title=u"The relative url to use if the item is selected",
+        description=u"""
+        The url is relative to the object the menu is being displayed
+        for.""",
+        required=False
+        )
+
+    submenu = MenuField(
+        title=u"Sub-Menu name",
+        description=u"The menu that will be used to provide the sub-entries.",
+        required=True,
+        )
+    
+class ISubMenuItemDirective(IMenuItemsDirective, ISubMenuItemSubdirective):
+    """Define one menu item"""
+
 class IAddMenuItemDirective(IMenuItem):
-    """Define an add-menu item
-    """
+    """Define an add-menu item"""
 
     class_ = GlobalObject(
         title=u"Class",

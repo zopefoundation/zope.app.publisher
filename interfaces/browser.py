@@ -19,7 +19,7 @@ from zope.component.interfaces import IView
 from zope.app.i18n import ZopeMessageIDFactory as _
 from zope.interface import Interface, directlyProvides
 from zope.interface.interfaces import IInterface
-from zope.schema import TextLine, Text, Choice, URI, Int
+from zope.schema import TextLine, Text, Choice, URI, Int, InterfaceField
 
 
 class IBrowserView(IView):
@@ -100,6 +100,25 @@ class IBrowserMenuItem(Interface):
         A menu item might not be available for an object, for example
         due to security limitations or constraints.
         """
+
+class IBrowserSubMenuItem(IBrowserMenuItem):
+    """A menu item that points to a sub-menu."""
+
+    submenuType = InterfaceField(
+        title=_("Sub-Menu Type"),
+        description=_("The menu interface of the menu that describes the "
+                      "sub-menu below this item."),
+        required=True)
+        
+    action = TextLine(
+        title=_("The URL to display if the item is selected"),
+        description=_("When a user selects a browser menu item, the URL"
+                      "given in the action is displayed. The action is "
+                      "usually given as a relative URL, relative to the "
+                      "object the menu item is for."),
+       required=False
+       )
+
 
 class IMenuAccessView(Interface):
     """View that provides access to menus"""

@@ -118,12 +118,23 @@
           schema=".metadirectives.IMenuItemSubdirective"
           />
 
+      <meta:subdirective
+          name="subMenuItem"
+          schema=".metadirectives.ISubMenuItemSubdirective"
+          />
+
     </meta:complexDirective>
 
     <meta:directive
         name="menuItem"
         schema=".metadirectives.IMenuItemDirective"
         handler=".menu.menuItemDirective"
+        />
+
+    <meta:directive
+        name="subMenuItem"
+        schema=".metadirectives.ISubMenuItemDirective"
+        handler=".menu.subMenuItemDirective"
         />
 
     <!-- misc. directives -->
