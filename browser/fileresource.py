@@ -13,14 +13,13 @@
 ##############################################################################
 """
 
-$Id: fileresource.py,v 1.8 2003/11/03 21:37:58 jeremy Exp $
+$Id: fileresource.py,v 1.9 2003/11/21 17:10:05 jim Exp $
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 
 from zope.exceptions import NotFoundError
 
 from zope.publisher.browser import BrowserView
-from zope.publisher.interfaces.browser import IBrowserResource
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
 from zope.app.publisher.fileresource import File, Image
@@ -33,7 +32,7 @@ from zope.interface import implements
 
 class FileResource(BrowserView, Resource):
 
-    implements(IBrowserResource, IBrowserPublisher)
+    implements(IBrowserPublisher)
 
     def publishTraverse(self, request, name):
         '''See interface IBrowserPublisher'''

@@ -12,7 +12,7 @@
 #
 ##############################################################################
 """
-$Id: directoryresource.py,v 1.3 2003/09/24 17:22:07 sidnei Exp $
+$Id: directoryresource.py,v 1.4 2003/11/21 17:10:05 jim Exp $
 """
 
 import os
@@ -21,8 +21,7 @@ from zope.interface import implements
 from zope.exceptions import NotFoundError
 from zope.security.proxy import Proxy
 from zope.publisher.browser import BrowserView
-from zope.publisher.interfaces.browser import IBrowserResource, \
-     IBrowserPublisher
+from zope.publisher.interfaces.browser import IBrowserPublisher
 
 from zope.app.publisher.browser.resource import Resource
 
@@ -41,7 +40,7 @@ class Directory:
 
 class DirectoryResource(BrowserView, Resource):
 
-    implements(IBrowserResource, IBrowserPublisher)
+    implements(IBrowserPublisher)
 
     resource_factories = {
         'gif':  ImageResourceFactory,
