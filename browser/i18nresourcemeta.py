@@ -13,15 +13,13 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: i18nresourcemeta.py,v 1.9 2003/06/07 05:46:02 stevea Exp $
+$Id: i18nresourcemeta.py,v 1.10 2003/07/28 22:21:02 jim Exp $
 """
 
 from zope.interface import classProvides, implements
 from zope.security.proxy import Proxy
 from zope.security.checker import CheckerPublic, Checker
 
-from zope.configuration.interfaces import ISubdirectiveHandler
-from zope.configuration.interfaces import INonEmptyDirective
 from zope.configuration.action import Action
 from zope.configuration.exceptions import ConfigurationError
 
@@ -35,9 +33,6 @@ from zope.app.publisher.fileresource import File, Image
 from zope.app.publisher.browser.i18nfileresource import I18nFileResourceFactory
 
 class I18nResource(object):
-
-    classProvides(INonEmptyDirective)
-    implements(ISubdirectiveHandler)
 
     type = IBrowserPresentation
     default_allowed_attributes = '__call__'

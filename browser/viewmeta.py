@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.26 2003/06/07 05:46:02 stevea Exp $
+$Id: viewmeta.py,v 1.27 2003/07/28 22:21:02 jim Exp $
 """
 
 from zope.interface import classProvides, directlyProvides
@@ -27,8 +27,6 @@ from zope.exceptions import NotFoundError
 from zope.security.checker import CheckerPublic, Checker
 from zope.security.checker import defineChecker
 
-from zope.configuration.interfaces import INonEmptyDirective
-from zope.configuration.interfaces import ISubdirectiveHandler
 from zope.configuration.action import Action
 from zope.configuration.exceptions import ConfigurationError
 
@@ -212,9 +210,6 @@ def opts(**kw):
 
 class pages:
 
-    classProvides(INonEmptyDirective)
-    implements(ISubdirectiveHandler)
-
     def __init__(self, _context, for_, permission,
                  layer='default', class_=None,
                  allowed_interface='', allowed_attributes='',
@@ -244,9 +239,6 @@ class pages:
 # for all of the given pages.
 
 class view:
-
-    classProvides(INonEmptyDirective)
-    implements(ISubdirectiveHandler)
 
     default = None
 
@@ -401,9 +393,6 @@ def addview(_context, name, permission,
                 allowed_interface, allowed_attributes,
                 menu, title, usage
                 )
-
-directlyProvides(addview, INonEmptyDirective)
-
 
 def defaultView(_context, name, for_=None):
 

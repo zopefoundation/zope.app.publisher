@@ -20,9 +20,6 @@ from zope.configuration.action import Action
 from zope.interface.type import TypeRegistry
 from zope.interface import implements
 
-from zope.configuration.interfaces import INonEmptyDirective
-from zope.configuration.interfaces import ISubdirectiveHandler
-
 from zope.app.services.servicenames import Interfaces
 
 from zope.security.checker import CheckerPublic
@@ -193,9 +190,6 @@ def menuItemDirective(_context, menu, for_,
 
 class menuItemsDirective:
 
-    classProvides(INonEmptyDirective)
-    implements(ISubdirectiveHandler)
-
     def __init__(self, _context, menu, for_):
         if for_ == '*':
             self.interface = None
@@ -239,5 +233,5 @@ del addCleanUp
 
 __doc__ = GlobalBrowserMenuService.__doc__ + """
 
-$Id: globalbrowsermenuservice.py,v 1.17 2003/07/10 01:35:12 richard Exp $
+$Id: globalbrowsermenuservice.py,v 1.18 2003/07/28 22:21:02 jim Exp $
 """
