@@ -50,7 +50,7 @@ from zope.app.security.permission import Permission
 from zope.app.security.interfaces import IPermission 
 
 tests_path = os.path.join(
-    os.path.split(zope.app.publisher.browser.__file__)[0],
+    os.path.dirname(zope.app.publisher.browser.__file__),
     'tests')
 
 template = """<configure

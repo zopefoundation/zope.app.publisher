@@ -30,7 +30,7 @@ from zope.app.traversing.interfaces import ITraversable
 from zope.app.traversing.adapters import DefaultTraversable
 import zope.app.publisher.browser.tests as p
 
-test_directory = os.path.split(p.__file__)[0]
+test_directory = os.path.dirname(p.__file__)
 
 checker = NamesChecker(
     ('__call__', 'request', 'publishTraverse')

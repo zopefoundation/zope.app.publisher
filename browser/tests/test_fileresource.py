@@ -38,7 +38,7 @@ checker = NamesChecker(
     ('__call__', 'HEAD', 'request', 'publishTraverse', 'GET')
     )
 
-test_directory = os.path.split(p.__file__)[0]
+test_directory = os.path.dirname(p.__file__)
 
 class Test(PlacelessSetup, TestCase):
 

@@ -36,7 +36,7 @@ import zope.app.publisher.browser.tests as p
 from zope.app.traversing.interfaces import IContainmentRoot
 from zope.app.site.interfaces import ISite
 
-test_directory = os.path.split(p.__file__)[0]
+test_directory = os.path.dirname(p.__file__)
 
 checker = NamesChecker(
     ('get', '__getitem__', 'request', 'publishTraverse')

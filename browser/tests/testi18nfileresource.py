@@ -39,7 +39,7 @@ from zope.i18n.negotiator import negotiator
 
 from zope.i18n.tests.testii18naware import TestII18nAware
 
-test_directory = os.path.split(p.__file__)[0]
+test_directory = os.path.dirname(p.__file__)
 
 
 class Test(PlacelessSetup, TestII18nAware):
