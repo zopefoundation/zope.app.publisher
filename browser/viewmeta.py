@@ -13,13 +13,13 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.2 2002/12/25 14:13:09 jim Exp $
+$Id: viewmeta.py,v 1.3 2002/12/28 14:14:09 jim Exp $
 """
 
 # XXX this will need to be refactored soon. :)
 
 from zope.security.proxy import Proxy
-from zope.security.checker import CheckerPublic, NamesChecker
+from zope.security.checker import CheckerPublic, NamesChecker, Checker
 
 from zope.interfaces.configuration import INonEmptyDirective
 from zope.interfaces.configuration import ISubdirectiveHandler
@@ -34,12 +34,12 @@ from zope.app.component.metaconfigure import handler
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 
-from zope.app.publisher.browser.resourcemeta import resource
-
 from zope.proxy.context import ContextMethod
 
 
-class view(resource):
+class view:
+
+    default_allowed_attributes = '__call__'  # space separated string
 
     __class_implements__ = INonEmptyDirective
     __implements__ = ISubdirectiveHandler
@@ -74,8 +74,23 @@ class view(resource):
             for_ = _context.resolve(for_)
         self.for_ = for_
 
-        resource.__init__(self, _context, factory, name, layer,
-                          permission, allowed_interface, allowed_attributes)
+        if ((allowed_attributes or allowed_interface)
+            and ((name is None) or not permission)):
+            raise ConfigurationError(
+                "Must use name attribute with allowed_interface or "
+                "allowed_attributes"
+                )
+
+        if allowed_interface is not None:
+            allowed_interface = _context.resolve(allowed_interface)
+
+        self.factory = self._factory(_context, factory)
+        self.layer = layer
+        self.name = name
+        self.permission = permission
+        self.allowed_attributes = allowed_attributes
+        self.allowed_interface = allowed_interface
+        self.pages = 0
 
         if name:
             self.__pages = {}
@@ -88,6 +103,8 @@ class view(resource):
             raise ConfigurationError(
                 "Can't use page or defaultPage subdirectives for simple "
                 "template views")
+
+        self.pages += 1
 
         if self.name:
             # Named view with pages.
@@ -104,12 +121,8 @@ class view(resource):
             if self.__default is None:
                 self.__default = name
 
-            # Call super(view, self).page() in order to get the side
-            # effects. (At the time of writing, this is to increment
-            # self.pages by one.)
-            # Throw away the result, as all the pages are accessed by
-            # traversing the PageTraverser subclass.
-            super(view, self).page(_context, name, attribute)
+
+
             return ()
 
         factory = self.factory
@@ -124,9 +137,24 @@ class view(resource):
             factory = factory[:]
             factory[-1] = klass
 
-        return super(view, self).page(
-            _context, name, attribute, permission, layer,
-            factory=factory)
+        permission = permission or self.permission
+
+        factory = self._pageFactory(factory or self.factory,
+                                    attribute, permission)
+
+        if layer is None:
+            layer = self.layer
+
+        return [
+            Action(
+                discriminator = ('view', self.for_, name,
+                                 IBrowserPresentation, layer),
+                callable = handler,
+                args = ('Views', 'provideView',
+                        self.for_, name, IBrowserPresentation, factory, layer),
+                )
+            ]
+
 
     def defaultPage(self, _context, name):
         if self.name:
@@ -134,9 +162,11 @@ class view(resource):
             return ()
 
         return [Action(
-            discriminator = ('defaultViewName', self.for_, self.type, name),
+            discriminator = ('defaultViewName', self.for_,
+                             IBrowserPresentation, name),
             callable = handler,
-            args = ('Views','setDefaultViewName', self.for_, self.type, name),
+            args = ('Views','setDefaultViewName', self.for_,
+                    IBrowserPresentation, name),
             )]
 
 
@@ -158,13 +188,6 @@ class view(resource):
                 )]
         else:
             return map(_context.resolve, factory.strip().split())
-
-    def _discriminator(self, name, layer):
-        return ('view', self.for_, name, self.type, layer)
-
-    def _args(self, name, factory, layer):
-        return ('Views', 'provideView',
-                self.for_, name, self.type, factory, layer)
 
     def _pageFactory(self, factory, attribute, permission):
         factory = factory[:]
@@ -202,9 +225,54 @@ class view(resource):
 
         return factory
 
+    def _call(self, require=None):
+        if self.name is None:
+            return ()
+
+        permission = self.permission
+        allowed_interface = self.allowed_interface
+        allowed_attributes = self.allowed_attributes
+        factory = self.factory
+
+        if permission:
+            if require is None:
+                require = {}
+
+            if permission == 'zope.Public':
+                permission = CheckerPublic
+
+            if ((not allowed_attributes) and (allowed_interface is None)
+                and (not self.pages)):
+                allowed_attributes = self.default_allowed_attributes
+
+            for name in (allowed_attributes or '').split():
+                require[name] = permission
+
+            if allowed_interface:
+                for name in allowed_interface.names(1):
+                    require[name] = permission
+
+        if require:
+            checker = Checker(require.get)
+
+            factory = self._proxyFactory(factory, checker)
+
+
+        return [
+            Action(
+                discriminator = ('view', self.for_, self.name,
+                                 IBrowserPresentation, self.layer),
+                callable = handler,
+                args = ('Views', 'provideView',
+                        self.for_, self.name, IBrowserPresentation,
+                        factory, self.layer),
+                )
+            ]
+
+
     def __call__(self):
         if not self.__pages:
-            return super(view, self).__call__()
+            return self._call()
 
         # OK, we have named pages on a named view.
         # We'll replace the original class with a new subclass that
@@ -220,6 +288,7 @@ class view(resource):
                      '__implements__':
                      (klass.__implements__, PageTraverser.__implements__),
                      }
+
         for name in self.__pages:
             attribute, permission, template = self.__pages[name]
 
@@ -251,7 +320,7 @@ class view(resource):
         for name in IBrowserPublisher.names(all=1):
             require[name] = permission_for_browser_publisher
 
-        return super(view, self).__call__(require=require)
+        return self._call(require=require)
 
 
 class PageTraverser:
@@ -270,34 +339,28 @@ class PageTraverser:
     browserDefault = ContextMethod(browserDefault)
 
 
-def defaultView(_context, name, for_=None, **__kw):
-
-    if __kw:
-        actions = view(_context, name=name, for_=for_, **__kw)()
-    else:
-        actions = []
+def defaultView(_context, name, for_=None):
 
     if for_ is not None:
         for_ = _context.resolve(for_)
 
-    type = IBrowserPresentation
-
-    actions += [
+    actions = [
         Action(
-        discriminator = ('defaultViewName', for_, type, name),
+        discriminator = ('defaultViewName', for_, IBrowserPresentation, name),
         callable = handler,
-        args = ('Views','setDefaultViewName', for_, type, name),
+        args = ('Views','setDefaultViewName', for_, IBrowserPresentation,
+                name),
         )]
 
     if for_ is not None:
-        actions += [
-        Action(
-        discriminator = None,
-        callable = handler,
-        args = ('Interfaces', 'provideInterface',
-                for_.__module__+'.'+for_.__name__,
-                for_)
+        actions .append(
+            Action(
+            discriminator = None,
+            callable = handler,
+            args = ('Interfaces', 'provideInterface',
+                    for_.__module__+'.'+for_.__name__,
+                    for_)
+            )
         )
-        ]
 
     return actions
