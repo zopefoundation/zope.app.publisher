@@ -13,8 +13,10 @@
 ##############################################################################
 """Global Browser Menu Service
 
-$Id: globalbrowsermenuservice.py,v 1.22 2003/08/16 00:43:46 srichter Exp $
+$Id: globalbrowsermenuservice.py,v 1.23 2003/08/16 15:32:37 srichter Exp $
 """
+__metaclass__ = type 
+
 from zope.interface import classProvides
 from zope.exceptions import DuplicationError, Unauthorized, Forbidden
 
@@ -34,7 +36,7 @@ from zope.app.interfaces.publisher.browser import \
 from zope.app.pagetemplate.engine import Engine
 from zope.app.publication.browser import PublicationTraverser
 
-class Menu(object):
+class Menu:
     """Browser menu"""
 
     implements(IBrowserMenu)
@@ -57,7 +59,7 @@ class Menu(object):
         return results
 
 
-class BaseBrowserMenuService(object):
+class BaseBrowserMenuService:
     """Global Browser Menu Service"""
 
     implements(IBrowserMenuService)
