@@ -13,19 +13,16 @@
 ##############################################################################
 """Provide zope app-server customizatioin of publisher browser facilities
 
-$Id: __init__.py,v 1.5 2004/03/19 20:26:30 srichter Exp $
+$Id: __init__.py,v 1.6 2004/03/20 21:36:16 philikon Exp $
 """
 from zope.interface import implements
 from zope.app.location import Location
 from zope.app.publisher.interfaces.browser import IBrowserView
 
 class BrowserView(Location):
-
     implements(IBrowserView)
 
     def __init__(self, context, request):
         self.context = context
         self.request = request
         self.__parent__ = context
-
-
