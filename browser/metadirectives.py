@@ -128,6 +128,7 @@ class IViewPageSubdirective(Interface):
         description=u"""
         Refers to a file containing a page template (should end in
         extension '.pt' or '.html').""",
+        required=False
         )
 
 class IViewDefaultPageSubdirective(Interface):
