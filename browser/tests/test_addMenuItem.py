@@ -11,27 +11,32 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-'''Test the addMenuItem directive
+"""Test the addMenuItem directive
 
 >>> test_reset()
 >>> context = Context()
 >>> addMenuItem(context, class_=X, title="Add an X",
 ...             permission="zope.ManageContent")
 >>> context
-((('FactoryFromClass', 'zope.app.browser.add.X.f1'),
-  <function provideClass>,
-  ('zope.app.browser.add.X.f1',
-   <class zope.app.publisher.browser.tests.test_addMenuItem.X>,
-   'zope.ManageContent',
-   '',
-   '')),
+((('utility',
+   <InterfaceClass zope.component.interfaces.IFactory>,
+   'zope.app.browser.add.X.f1'),
+  <function checkingHandler>,
+  (Global(CheckerPublic,zope.security.checker),
+   'Utilities',
+   'provideUtility',
+   <InterfaceClass zope.component.interfaces.IFactory>,
+   <zope.component.factory.Factory object>,
+   'zope.app.browser.add.X.f1')),
+ (None,
+  <function provideInterface>,
+  ('zope.component.interfaces.IFactory',
+   <InterfaceClass zope.component.interfaces.IFactory>)),
  (('browser:menuItem',
    'zope.app.container.add',
    <InterfaceClass zope.app.container.interfaces.IAdding>,
    'Add an X'),
-  <bound method GlobalBrowserMenuService.menuItem of ''' \
-       '''<zope.app.publisher.browser.globalbrowsermenuservice.''' \
-       '''GlobalBrowserMenuService object>>,
+  <bound method GlobalBrowserMenuService.menuItem of <zope.app.publisher.browser.globalbrowsermenuservice.GlobalBrowserMenuService object>>,
   ('zope.app.container.add',
    <InterfaceClass zope.app.container.interfaces.IAdding>,
    'zope.app.browser.add.X.f1',
@@ -41,8 +46,8 @@
    'zope.ManageContent',
    {'factory': 'zope.app.browser.add.X.f1'})))
 
-$Id: test_addMenuItem.py,v 1.3 2004/03/03 10:38:49 philikon Exp $
-'''
+$Id: test_addMenuItem.py,v 1.4 2004/03/09 12:39:07 srichter Exp $
+"""
 
 import unittest
 from zope.testing.doctestunit import DocTestSuite
@@ -126,20 +131,25 @@ def test_w_factory_class_view():
     ...             permission="zope.ManageContent", description="blah blah",
     ...             filter="context/foo", view="AddX")
     >>> context
-    ((('FactoryFromClass', 'zope.app.browser.add.X.f1'),
-      <function provideClass>,
-      ('zope.app.browser.add.X.f1',
-       <class zope.app.publisher.browser.tests.test_addMenuItem.X>,
-       'zope.ManageContent',
-       '',
-       '')),
+    ((('utility',
+       <InterfaceClass zope.component.interfaces.IFactory>,
+       'zope.app.browser.add.X.f1'),
+      <function checkingHandler>,
+      (Global(CheckerPublic,zope.security.checker),
+       'Utilities',
+       'provideUtility',
+       <InterfaceClass zope.component.interfaces.IFactory>,
+       <zope.component.factory.Factory object>,
+       'zope.app.browser.add.X.f1')),
+     (None,
+      <function provideInterface>,
+      ('zope.component.interfaces.IFactory',
+       <InterfaceClass zope.component.interfaces.IFactory>)),
      (('browser:menuItem',
        'zope.app.container.add',
        <InterfaceClass zope.app.container.interfaces.IAdding>,
        'Add an X'),
-      <bound method GlobalBrowserMenuService.menuItem of """ \
-           """<zope.app.publisher.browser.globalbrowsermenuservice.""" \
-           """GlobalBrowserMenuService object>>,
+      <bound method GlobalBrowserMenuService.menuItem of <zope.app.publisher.browser.globalbrowsermenuservice.GlobalBrowserMenuService object>>,
       ('zope.app.container.add',
        <InterfaceClass zope.app.container.interfaces.IAdding>,
        'AddX',
@@ -148,8 +158,7 @@ def test_w_factory_class_view():
        'context/foo',
        'zope.ManageContent',
        {'factory': 'zope.app.browser.add.X.f1'})))
-    """
-    
+"""
 
 
 def test_suite():

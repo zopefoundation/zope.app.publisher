@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: metaconfigure.py,v 1.18 2004/03/05 15:55:51 eddala Exp $
+$Id: metaconfigure.py,v 1.19 2004/03/09 12:39:06 srichter Exp $
 """
 
 from zope.app import zapi
@@ -78,7 +78,6 @@ def addMenuItem(_context, title, class_=None, factory=None, description='',
             class_.__name__, _next_id) 
         ContentDirective(_context, class_).factory(
             _context,
-            permission=permission,
             id = factory)
 
     extra = {'factory': factory}
