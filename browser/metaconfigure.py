@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: metaconfigure.py,v 1.21 2004/03/23 22:08:09 srichter Exp $
+$Id: metaconfigure.py,v 1.22 2004/04/06 20:58:16 jim Exp $
 """
 
 from zope.app import zapi
@@ -91,3 +91,6 @@ def addMenuItem(_context, title, class_=None, factory=None, description='',
 def test_reset():
     global _next_id
     _next_id = 0
+    
+from zope.testing.cleanup import addCleanUp
+addCleanUp(test_reset)
