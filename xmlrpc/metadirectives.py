@@ -15,42 +15,73 @@
 
 $Id$
 """
-from zope.app.component.metadirectives import IBasicViewInformation
-from zope.configuration.fields import GlobalObject
-from zope.interface import Interface
-from zope.schema import TextLine
+import zope.configuration.fields
+import zope.interface
+import zope.schema
 
-class IViewDirective(IBasicViewInformation):
+import zope.app.security.fields
+
+class IViewDirective(zope.interface.Interface):
     """View Directive for XML-RPC methods."""
+    
+    for_ = zope.configuration.fields.GlobalObject(
+        title=u"Published Object Type",
+        description=u"""The types of objects to be published via XML-RPC
 
-    name = TextLine(
-        title=u"The name of the view.",
-        description=u"The name shows up in URLs/paths. For example 'foo'.",
-        required=False)
-
-
-class IDefaultViewDirective(Interface):
-    """
-    The name of the view that should be the default.
-              
-    This name refers to view that should be the
-    view used by default (if no view name is supplied
-    explicitly).
-    """
-
-    name = TextLine(
-        title=u"The name of the view that should be the default.",
-        description=u"""
-        This name refers to view that should be the view used by
-        default (if no view name is supplied explicitly).""",
-        required=True
+        This can be expressed with either a class or an interface
+        """,
+        required=True,
         )
 
-    for_ = GlobalObject(
-        title=u"The interface this view is the default for.",
-        description=u"""Specifies the interface for which the view is
-        registered. All objects implementing this interface can make use of
-        this view. If this attribute is not specified, the view is available
-        for all objects.""",
+    interface = zope.configuration.fields.Tokens(
+        title=u"Interface to be published.",
+        required=False,
+        value_type=zope.configuration.fields.GlobalObject()
+        )
+
+    methods = zope.configuration.fields.Tokens(
+        title=u"Methods (or attributes) to be published",
+        required=False,
+        value_type=zope.configuration.fields.PythonIdentifier()
+        )
+
+    class_ = zope.configuration.fields.GlobalObject(
+        title=u"Class",
+        description=u"A class that provides attributes used by the view.",
         required=False
+        )
+
+    permission = zope.app.security.fields.Permission(
+        title=u"Permission",
+        description=u"""The permission needed to use the view.
+
+        If this option is used and a name is given for the view, then
+        the names defined by the given methods or interfaces will be
+        under the given permission.
+
+        If a name is not given for the view, then, this option is
+        required and the the given permission is required to call the
+        individual views defined by the given interface and methods.
+
+        (See the name attribute.)
+
+        If no permission is given, then permissions should be declared
+        for the view using other means, such as the class directive.
+        """,
+        required=False, )
+
+    name = zope.schema.TextLine(
+        title=u"The name of the view.",
+        description=u"""
+        
+        If a name is given, then rpc methods are accessed by
+        traversing the name and then accessing the methods.  In this
+        case, the class should implement
+        zope.pubisher.interfaces.IPublishTraverse.
+
+        If no name is provided, then the names given by the attributes
+        and interfaces are published directly as callable views.
+
+        """,
+        required=False,
         )
