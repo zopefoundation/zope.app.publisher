@@ -25,6 +25,15 @@
     interface="zope.component.interfaces.IPresentationRequest" />
 </content>
 
+<content class="zope.publisher.browser.TestRequest">
+  <allow
+    interface="zope.publisher.interfaces.browser.IBrowserApplicationRequest"
+    attributes="response"
+    />
+  <allow
+    interface="zope.component.interfaces.IPresentationRequest" />
+</content>
+
 <content class="zope.publisher.browser.BrowserResponse">
   <allow
     interface="zope.publisher.interfaces.http.IHTTPResponse"
