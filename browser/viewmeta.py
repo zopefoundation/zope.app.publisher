@@ -13,11 +13,12 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.33 2003/09/21 17:31:58 jim Exp $
+$Id: viewmeta.py,v 1.34 2003/11/21 17:10:30 jim Exp $
 """
 
 import os
 
+from zope.app import zapi
 from zope.interface import implements, classImplements
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
@@ -28,9 +29,9 @@ from zope.security.checker import defineChecker
 
 from zope.configuration.exceptions import ConfigurationError
 
-from zope.app.services.servicenames import Interfaces, Views
+from zope.app.services.servicenames import Interfaces
 
-from zope.publisher.interfaces.browser import IBrowserPresentation
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
 from zope.app.publisher.browser import BrowserView
@@ -155,7 +156,6 @@ def page(_context, name, permission, for_,
 
         if hasattr(class_, '__implements__'):
             classImplements(new_class, IBrowserPublisher)
-            classImplements(new_class, IBrowserPresentation)
 
     else:
         # template
@@ -173,10 +173,10 @@ def page(_context, name, permission, for_,
     defineChecker(new_class, Checker(required))
 
     _context.action(
-        discriminator = ('view', for_, name, IBrowserPresentation, layer),
+        discriminator = ('view', for_, name, IBrowserRequest, layer),
         callable = handler,
-        args = (Views, 'provideView',
-                for_, name, IBrowserPresentation, [new_class], layer),
+        args = (zapi.servicenames.Presentation, 'provideView',
+                for_, name, IBrowserRequest, [new_class], layer),
         )
 
     if not usage and menu:
@@ -353,10 +353,10 @@ class view:
         defineChecker(newclass, Checker(required))
 
         _context.action(
-            discriminator = ('view', for_, name, IBrowserPresentation, layer),
+            discriminator = ('view', for_, name, IBrowserRequest, layer),
             callable = handler,
-            args = (Views, 'provideView',
-                    for_, name, IBrowserPresentation, [newclass], layer),
+            args = (zapi.servicenames.Presentation, 'provideView',
+                    for_, name, IBrowserRequest, [newclass], layer),
             )
 
 def addview(_context, name, permission,
@@ -375,9 +375,10 @@ def addview(_context, name, permission,
 def defaultView(_context, name, for_=None):
 
     _context.action(
-        discriminator = ('defaultViewName', for_, IBrowserPresentation, name),
+        discriminator = ('defaultViewName', for_, IBrowserRequest, name),
         callable = handler,
-        args = (Views,'setDefaultViewName', for_, IBrowserPresentation,
+        args = (zapi.servicenames.Presentation,'setDefaultViewName',
+                for_, IBrowserRequest,
                 name),
         )
 

@@ -13,15 +13,15 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: resourcemeta.py,v 1.12 2003/08/16 00:43:46 srichter Exp $
+$Id: resourcemeta.py,v 1.13 2003/11/21 17:10:30 jim Exp $
 """
 
 import os
 
+from zope.app import zapi
 from zope.security.checker import CheckerPublic, NamesChecker
 from zope.configuration.exceptions import ConfigurationError
-from zope.app.services.servicenames import Resources
-from zope.publisher.interfaces.browser import IBrowserPresentation
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.app.component.metaconfigure import handler
 
 from fileresource import FileResourceFactory, ImageResourceFactory
@@ -54,10 +54,10 @@ def resource(_context, name, layer='default', permission='zope.Public',
         factory = PageTemplateResourceFactory(template, checker)
 
     _context.action(
-        discriminator = ('resource', name, IBrowserPresentation, layer),
+        discriminator = ('resource', name, IBrowserRequest, layer),
         callable = handler,
-        args = (Resources, 'provideResource',
-                name, IBrowserPresentation, factory, layer),
+        args = (zapi.servicenames.Presentation, 'provideResource',
+                name, IBrowserRequest, factory, layer),
         )
 
 def resourceDirectory(_context, name, directory, layer='default',
@@ -75,8 +75,8 @@ def resourceDirectory(_context, name, directory, layer='default',
 
     factory = DirectoryResourceFactory(directory, checker)
     _context.action(
-        discriminator = ('resource', name, IBrowserPresentation, layer),
+        discriminator = ('resource', name, IBrowserRequest, layer),
         callable = handler,
-        args = (Resources, 'provideResource',
-                name, IBrowserPresentation, factory, layer),
+        args = (zapi.servicenames.Presentation, 'provideResource',
+                name, IBrowserRequest, factory, layer),
         )
