@@ -81,7 +81,7 @@ def addMenuItem(_context, title, class_=None, factory=None, description='',
     """Create an add menu item for a given class or factory
 
     As a convenience, a class can be provided, in which case, a factory is
-    automatically defined baded on the class.
+    automatically defined based on the class.
     """
     if class_ is None:
         if factory is None:
