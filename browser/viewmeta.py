@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.4 2002/12/30 23:33:46 jim Exp $
+$Id: viewmeta.py,v 1.5 2002/12/31 02:52:01 jim Exp $
 """
 
 # XXX this will need to be refactored soon. :)
@@ -22,8 +22,8 @@ from zope.security.proxy import Proxy
 from zope.security.checker import CheckerPublic, NamesChecker, Checker
 from zope.security.checker import defineChecker
 
-from zope.interfaces.configuration import INonEmptyDirective
-from zope.interfaces.configuration import ISubdirectiveHandler
+from zope.configuration.interfaces import INonEmptyDirective
+from zope.configuration.interfaces import ISubdirectiveHandler
 from zope.configuration.action import Action
 from zope.configuration.exceptions import ConfigurationError
 

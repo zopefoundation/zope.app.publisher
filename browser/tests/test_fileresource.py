@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_fileresource.py,v 1.3 2002/12/28 16:14:01 jim Exp $
+$Id: test_fileresource.py,v 1.4 2002/12/31 02:52:03 jim Exp $
 """
 
 import os
@@ -30,7 +30,7 @@ from zope.component.resource import provideResource
 from zope.component.adapter import provideAdapter
 from zope.proxy.introspection import removeAllProxies
 
-from zope.interfaces.i18n import IUserPreferredCharsets
+from zope.i18n.interfaces import IUserPreferredCharsets
 
 from zope.publisher.http import IHTTPRequest
 from zope.publisher.http import HTTPCharsets

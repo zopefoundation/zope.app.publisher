@@ -14,7 +14,7 @@
 """
 Internationalized file resource.
 
-$Id: i18nfileresource.py,v 1.2 2002/12/25 14:13:09 jim Exp $
+$Id: i18nfileresource.py,v 1.3 2002/12/31 02:52:01 jim Exp $
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 
@@ -26,7 +26,7 @@ from zope.app.publisher.fileresource import File, Image
 from zope.app.publisher.browser.fileresource import FileResource
 
 from zope.i18n.negotiator import negotiator
-from zope.interfaces.i18n import II18nAware
+from zope.i18n.interfaces import II18nAware
 
 
 class I18nFileResource(FileResource):

@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_resources.py,v 1.2 2002/12/25 14:13:10 jim Exp $
+$Id: test_resources.py,v 1.3 2002/12/31 02:52:03 jim Exp $
 """
 
 from unittest import TestCase, TestSuite, main, makeSuite
@@ -23,7 +23,7 @@ from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.component.resource import provideResource
 from zope.component.adapter import provideAdapter
 
-from zope.interfaces.i18n import IUserPreferredCharsets
+from zope.i18n.interfaces import IUserPreferredCharsets
 
 from zope.publisher.http import IHTTPRequest
 from zope.publisher.http import HTTPCharsets

@@ -13,15 +13,15 @@
 ##############################################################################
 """XMLRPC configuration code
 
-$Id: metaconfigure.py,v 1.2 2002/12/25 14:13:11 jim Exp $
+$Id: metaconfigure.py,v 1.3 2002/12/31 02:52:05 jim Exp $
 """
 
 from zope.security.proxy import Proxy
 from zope.security.checker \
      import InterfaceChecker, CheckerPublic, NamesChecker, Checker
 
-from zope.interfaces.configuration import INonEmptyDirective
-from zope.interfaces.configuration import ISubdirectiveHandler
+from zope.configuration.interfaces import INonEmptyDirective
+from zope.configuration.interfaces import ISubdirectiveHandler
 from zope.configuration.action import Action
 from zope.configuration.exceptions import ConfigurationError
 
