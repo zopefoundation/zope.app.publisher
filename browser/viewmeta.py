@@ -420,12 +420,6 @@ def _handle_menu(_context, menu, title, for_, name, permission):
 def _handle_permission(_context, permission):
     if permission == 'zope.Public':
         permission = CheckerPublic
-    else:
-        _context.action(
-            discriminator = None,
-            callable = checkPermission,
-            args = (None, permission)
-            )
 
     return permission
 

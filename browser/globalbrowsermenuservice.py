@@ -22,8 +22,6 @@ from zope.exceptions import DuplicationError, Unauthorized, Forbidden
 from zope.interface import implements
 from zope.security.checker import CheckerPublic
 from zope.security import checkPermission
-from zope.app.security.permission import checkPermission \
-                                            as checkPermissionDefined
 from zope.app.component.metaconfigure import handler
 from zope.app.publisher.interfaces.browser import IBrowserMenuService
 from zope.app.publisher.interfaces.browser import IGlobalBrowserMenuService
@@ -268,8 +266,6 @@ class GlobalBrowserMenuService(BaseBrowserMenuService):
         if permission:
             if permission == 'zope.Public':
                 permission = CheckerPublic
-            else:
-                checkPermissionDefined(None, permission)
 
         data = registry.get(interface) or []
         data.append(

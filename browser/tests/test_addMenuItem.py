@@ -1,4 +1,4 @@
-##############################################################################
+#############################################################################
 #
 # Copyright (c) 2003 Zope Corporation and Contributors.
 # All Rights Reserved.
@@ -21,9 +21,8 @@
 ((('utility',
    <InterfaceClass zope.component.interfaces.IFactory>,
    'zope.app.browser.add.X.f1'),
-  <function checkingHandler>,
-  (Global(CheckerPublic,zope.security.checker),
-   'Utilities',
+  <function handler>,
+  ('Utilities',
    'provideUtility',
    <InterfaceClass zope.component.interfaces.IFactory>,
    <zope.component.factory.Factory object>,
@@ -134,9 +133,8 @@ def test_w_factory_class_view():
     ((('utility',
        <InterfaceClass zope.component.interfaces.IFactory>,
        'zope.app.browser.add.X.f1'),
-      <function checkingHandler>,
-      (Global(CheckerPublic,zope.security.checker),
-       'Utilities',
+      <function handler>,
+      ('Utilities',
        'provideUtility',
        <InterfaceClass zope.component.interfaces.IFactory>,
        <zope.component.factory.Factory object>,
