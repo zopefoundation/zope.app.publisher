@@ -13,14 +13,14 @@
 ##############################################################################
 """Test 'xmlrpc' ZCML Namespace directives.
 
-$Id: test_directives.py,v 1.6 2003/08/03 23:47:51 srichter Exp $
+$Id: test_directives.py,v 1.7 2003/08/04 23:19:14 srichter Exp $
 """
 import unittest
 
 from zope.configuration import xmlconfig
 from zope.configuration.exceptions import ConfigurationError
 from zope.component.tests.views import IC, V1
-from zope.component import getView, queryView
+from zope.component import getView, queryView, getDefaultViewName
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.security.proxy import ProxyFactory
 from cStringIO import StringIO
@@ -47,14 +47,12 @@ class DirectivesTest(PlacelessSetup, unittest.TestCase):
         context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
         self.assertEqual(queryView(ob, 'test', request).__class__, V1)
 
-
     def testInterfaceProtectedView(self):
         context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
         v = getView(ob, 'test2', request)
         v = ProxyFactory(v)
         self.assertEqual(v.index(), 'V1 here')
         self.assertRaises(Exception, getattr, v, 'action')
-
 
     def testAttributeProtectedView(self):
         context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
@@ -63,13 +61,11 @@ class DirectivesTest(PlacelessSetup, unittest.TestCase):
         self.assertEqual(v.action(), 'done')
         self.assertRaises(Exception, getattr, v, 'index')
 
-
     def testInterfaceAndAttributeProtectedView(self):
         context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
         v = getView(ob, 'test4', request)
         self.assertEqual(v.index(), 'V1 here')
         self.assertEqual(v.action(), 'done')
-
 
     def testDuplicatedInterfaceAndAttributeProtectedView(self):
         context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
@@ -77,41 +73,13 @@ class DirectivesTest(PlacelessSetup, unittest.TestCase):
         self.assertEqual(v.index(), 'V1 here')
         self.assertEqual(v.action(), 'done')
 
-
     def testIncompleteProtectedViewNoPermission(self):
         self.assertRaises(ConfigurationError, xmlconfig.file,
                           "xmlrpc_error.zcml", xmlrpc.tests)
 
-
-    def testMethodViews(self):
+    def testDefaultView(self):
         context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
-        v = getView(ob, 'index2.html', request)
-        self.assertEqual(v(), 'V1 here')
-        v = getView(ob, 'action2.html', request)
-        self.assertEqual(v(), 'done')
-
-
-    def testMethodViewsWithName(self):
-        context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
-        v = getView(ob, 'index3.html', request)
-        self.assertEqual(v(), 'V1 here')
-        v = getView(ob, 'action3.html', request)
-        self.assertEqual(v(), 'done')
-        v = getView(ob, 'test', request)
-        self.assertEqual(v.index(), 'V1 here')
-        self.assertEqual(v.action(), 'done')
-
-
-    def testProtectedMethodViews(self):
-        context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
-        # Need to "log someone in" to turn on checks
-        from zope.security.management import newSecurityManager
-        newSecurityManager('someuser')
-
-        v = getView(ob, 'index4.html', request)
-        self.assertRaises(Exception, v)
-        v = getView(ob, 'action4.html', request)
-        self.assertEqual(v(), 'done')
+        self.assertEqual(getDefaultViewName(ob, request), 'test')
 
 
 def test_suite():

@@ -2,16 +2,16 @@
     xmlns:meta="http://namespaces.zope.org/meta"
     xmlns="http://namespaces.zope.org/zope">
   
-  <meta:complexDirective 
+  <meta:directive 
        namespace="http://namespaces.zope.org/xmlrpc"
        name="view" 
        schema=".metadirectives.IViewDirective"
-       handler=".metaconfigure.view">
+       handler=".metaconfigure.view" />
 
-     <meta:subdirective 
-         name="method" 
-         schema=".metadirectives.IMethodDirective" /> 
-
-  </meta:complexDirective>
+  <meta:directive
+      namespace="http://namespaces.zope.org/xmlrpc"
+      name="defaultView"
+      schema=".metadirectives.IDefaultViewDirective"
+      handler=".metaconfigure.defaultView" />
 
 </configure>
