@@ -22,7 +22,6 @@ from cStringIO import StringIO
 from zope.interface import Interface, implements, directlyProvides, providedBy
 
 import zope.security.management
-from zope.component.interfaces import IDefaultViewName
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.configuration.exceptions import ConfigurationError
 from zope.publisher.browser import TestRequest
@@ -247,9 +246,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             '''
             )))
 
-        self.assertEqual(
-            zapi.getSiteManager().adapters.lookup(
-            map(providedBy, (ob, request)), IDefaultViewName), 'test')
+        self.assertEqual(zapi.getDefaultViewName(ob, request), 'test')
 
     def testSkinResource(self):
         self.assertEqual(
