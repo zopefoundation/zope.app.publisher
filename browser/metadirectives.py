@@ -15,12 +15,12 @@
 
 This module defines the schemas for browser directives.
 
-$Id: metadirectives.py,v 1.3 2003/08/03 03:19:07 philikon Exp $
+$Id: metadirectives.py,v 1.4 2003/08/03 17:50:20 philikon Exp $
 """
 
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, Tokens, Path, \
-     PythonIdentifier
+     PythonIdentifier, MessageID
 from zope.schema import Text, TextLine, Id
 
 from zope.app.component.metadirectives import IBasicViewInformation
@@ -54,7 +54,7 @@ class IViewDirective(IBasicViewInformation):
         required=False
         )
 
-    title = TextLine(
+    title = MessageID(
         title=u"The browser menu label for the page (view)",
         description=u"""
           This attribute must be supplied if a menu attribute is
@@ -192,7 +192,7 @@ class IPagesPageSubdirective(Interface):
         required=False
         )
 
-    title = TextLine(
+    title = MessageID(
         title=u"The browser menu label for the page (view)",
         description=u"""
         This attribute must be supplied if a menu attribute is
@@ -342,7 +342,7 @@ class IMenuDirective(Interface):
         required=True
         )
 
-    title = TextLine(
+    title = MessageID(
         title=u"Title",
         description=u"A descriptive title for documentation purposes",
         required=True
@@ -391,13 +391,13 @@ class IMenuItemSubdirective(Interface):
         required=True
         )
 
-    title = TextLine(
+    title = MessageID(
         title=u"Title",
         description=u"The text to be displayed for the menu item",
         required=True
         )
 
-    description = Text(
+    description = MessageID(
         title=u"A longer explanation of the menu item",
         description=u"""
         A UI may display this with the item or display it when the

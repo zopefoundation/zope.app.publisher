@@ -15,7 +15,7 @@
 
 XXX longer description goes here.
 
-$Id: test_globalbrowsermenuservicedirectives.py,v 1.5 2003/07/28 22:20:06 jim Exp $
+$Id: test_globalbrowsermenuservicedirectives.py,v 1.6 2003/08/03 17:50:24 philikon Exp $
 """
 
 from StringIO import StringIO
@@ -30,11 +30,12 @@ import zope.configuration
 
 import zope.app.publisher.browser
 
-template = """<zopeConfigure
+template = """<configure
    xmlns='http://namespaces.zope.org/zope'
-   xmlns:browser='http://namespaces.zope.org/browser'>
+   xmlns:browser='http://namespaces.zope.org/browser'
+   i18n_domain='zope'>
    %s
-   </zopeConfigure>"""
+   </configure>"""
 
 class Test(PlacelessSetup, TestCase):
 

@@ -55,7 +55,8 @@ tests_path = os.path.join(
 
 template = """<configure
    xmlns='http://namespaces.zope.org/zope'
-   xmlns:browser='http://namespaces.zope.org/browser'>
+   xmlns:browser='http://namespaces.zope.org/browser'
+   i18n_domain='zope'>
    %s
    </configure>"""
 
