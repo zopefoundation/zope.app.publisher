@@ -163,6 +163,8 @@ class menuItemsDirective:
     __implements__ = ISubdirectiveHandler
 
     def __init__(self, _context, menu, for_):
+        if for_ == '*':
+            for_ = None
         self.menu = menu
         self.interface = _context.resolve(for_)
 
@@ -202,5 +204,5 @@ del addCleanUp
 
 __doc__ = GlobalBrowserMenuService.__doc__ + """
 
-$Id: globalbrowsermenuservice.py,v 1.6 2002/12/31 03:35:09 jim Exp $
+$Id: globalbrowsermenuservice.py,v 1.7 2002/12/31 11:20:18 jim Exp $
 """
