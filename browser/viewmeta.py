@@ -184,16 +184,13 @@ def page(_context, name, permission, for_,
 # Note that a class might want to access one of the defined
 # templates. If it does though, it should use getView.
 
-def opts(**kw):
-    return kw
-
 class pages:
 
     def __init__(self, _context, for_, permission,
                  layer='default', class_=None,
                  allowed_interface=None, allowed_attributes=None,
                  ):
-        self.opts = opts(for_=for_, permission=permission,
+        self.opts = dict(for_=for_, permission=permission,
                          layer=layer, class_=class_,
                          allowed_interface=allowed_interface,
                          allowed_attributes=allowed_attributes,
