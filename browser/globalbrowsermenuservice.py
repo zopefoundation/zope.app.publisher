@@ -76,7 +76,9 @@ class GlobalBrowserMenuService:
                     try:
                         include = filter(Engine.getContext(
                             context = object,
-                            nothing = None))
+                            nothing = None,
+                            request = request,
+                            ))
                     except Unauthorized:
                         include = 0
 
@@ -174,5 +176,5 @@ del addCleanUp
 
 __doc__ = GlobalBrowserMenuService.__doc__ + """
 
-$Id: globalbrowsermenuservice.py,v 1.2 2002/12/25 14:13:09 jim Exp $
+$Id: globalbrowsermenuservice.py,v 1.3 2002/12/27 23:32:16 jim Exp $
 """
