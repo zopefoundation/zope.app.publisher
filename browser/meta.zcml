@@ -1,0 +1,302 @@
+<zopeConfigure xmlns='http://namespaces.zope.org/zope'>
+  
+  <directives namespace="http://namespaces.zope.org/browser">
+
+    <directive 
+        name="view" 
+        handler="zope.app.publisher.browser.metaconfigure.view" >
+      <attribute
+          name="name"
+          description="The name of the view. 
+ 
+              The name shows up in URLs/paths. For example 'foo' or 
+              'foo.html'. This attribute is required unless you use the
+              subdirective 'page' to create sub views. If you do not have
+              sub pages, it is common to use an extension for the view name 
+              such as '.html'. If you do have sub pages and you want to
+              provide a view name, you shouldn't use extensions." />
+       <attribute
+          name="for"
+          description="The interface this view applies to. 
+
+              The view will be for all objects that implement this interface.
+              If 'for' is not supplied, the view applies to all objects 
+              (XXX this ought to change)." />
+      <attribute
+          name="factory"
+          description="A callable that realizes the view. 
+
+              The view factory interface is documented in IViewFactory. View
+              factories are passed two arguments, the context object
+              and the request object. You must specify either 'factory' or 
+              'template'. If it not allowed to use 'class' when you use
+              the 'factory' attribute. Attributes of the view can be exposed 
+              as pages with the 'page' subdirective." />
+       <attribute
+          name="template"
+          description="The name of a page template.
+
+              Refers to a file containing a page template (must end in
+              extension '.pt'). You must specify either 'template' or
+              'factory'. If you supply a template, you must
+              also supply a name. You can also optionally supply a
+              'class' attribute which contains a view class that has
+              methods that can be used by the template.
+
+              You cannot have sub pages if you use 'template'." />
+       <attribute
+          name="class"
+          description="A class to use with the template.
+
+              If you use the 'template' attribute you can optionally use
+              the 'class' attribute. This should point to a class that
+              provides methods that can be used in the template. This class
+              will be mixed in with the page template. From the template
+              you can refer to the methods using 'view/method_name'.
+    
+              You cannot use the 'class' attribute in combination with the
+              'factory' attribute." />
+       <attribute
+          name="permission" 
+          description="The permission needed to use the view. 
+
+              This attribute is required." />
+       <attribute
+          name="layer"
+          description="The layer the view is in. 
+
+              A skin is composed of layers. It is common to put skin specific
+              views in a layer named after the skin. If the 'layer' attribute
+              is not supplied, it defaults to 'default'." />
+       <attribute
+          name="allowed_interface"
+          description="Interface that is also allowed if user has permission.
+
+              By default, 'permission' only applies to viewing the view and 
+              any possible sub views. By specifying this attribute, you can
+              make the permission also apply to everything described in the 
+              supplied interface." />
+       <attribute
+          name="allowed_attributes"
+          description="View attributes that are also allowed if user has permission.
+
+              By default, 'permission' only applies to viewing the view and any
+              possible sub views. By specifying 'allowed_attributes', you can
+              make the permission also apply to the extra attributes on the 
+              view object." />
+       <subdirective name="page">
+         <attribute
+             name="name" 
+             description="The name of a sub page of a view.
+
+                 The name attribute is always required for the 'page'
+                 directive. It is common to use an extension for the name, 
+                 such as '.html'." />
+         <attribute
+             name="attribute"
+             description="The name of the view attribute implementing the page.
+
+                 This refers to the attribute (method) on the view that is 
+                 implementing a specific sub page." />
+         <attribute
+             name="permission"
+             description="The permission needed to use this page.
+ 
+                 XXX Should we deprecate this? Could always be the same as
+                 the main view." />
+         <attribute
+             name="layer" 
+             description="XXX deprecated" />
+       </subdirective>
+       <subdirective name="defaultPage">
+         <attribute
+             name="name"
+             description="The name of the page that is the default.
+
+                 The named page will be used as the default if no name is
+                 specified explicitly in the path. If no defaultPage 
+                 directive is supplied, the default page will be the
+                 first page listed." />
+         <attribute
+             name="attribute"
+             description="XXX deprecated" />
+         <attribute
+             name="permission"
+             description="XXX deprecated" />
+       </subdirective>
+    </directive>
+
+    <directive 
+       name="defaultView" 
+       handler="zope.app.publisher.browser.metaconfigure.defaultView">
+      <attribute
+          name="name" 
+          description="The name of the view that should be the default.
+              
+              This name refers to another view that should be the
+              view used by default (if no view name is supplied
+              explicitly)." />
+       <attribute
+          name="for"
+          description="The interface this view is the default for.
+
+              The view is the default view for the supplied interface." />
+       <attribute
+          name="layer"
+          description="The layer the named view is the default view.
+
+              The named view is only the default view in the supplied
+              layer" />
+      <attribute
+          name="factory"
+          description="XXX deprecated" />
+       <attribute
+          name="template"
+          description="XXX deprecated" />
+       <attribute
+          name="permission"
+          description="XXX deprecated" />
+       <attribute
+          name="allowed_interface" 
+          description="XXX deprecated" />
+       <attribute
+          name="allowed_attributes"
+          description="XXX deprecated" />
+    </directive>
+
+    <directive
+        name="resource"
+        handler="zope.app.publisher.browser.metaconfigure.resource">
+      <attribute
+          name="name" />
+      <attribute
+          name="factory" />
+       <attribute
+          name="layer" />
+       <attribute
+          name="file" />
+       <attribute
+          name="image" />
+       <attribute
+          name="permission" />
+       <attribute
+          name="allowed_interface" />
+       <attribute
+          name="allowed_attributes" />
+       <subdirective name="page"> 
+         <attribute
+             name="name" />
+         <attribute
+             name="attribute" />
+         <attribute
+             name="permission" />
+         <attribute
+             name="layer" />
+       </subdirective>
+    </directive>
+
+    <directive
+        name="i18n-resource"
+        attributes="name default_language"
+        handler="zope.app.publisher.browser.metaconfigure.I18nResource">
+      <attribute
+          name="name" />
+      <attribute
+          name="default_language" />
+      <subdirective name="translation">
+        <attribute
+            name="language" />
+        <attribute
+            name="file" />
+        <attribute
+            name="image" />
+      </subdirective>
+    </directive>
+
+    <directive
+        name="skin"
+        handler="zope.app.publisher.browser.metaconfigure.skin">
+      <attribute
+          name="name"
+          description="The name of the skin." />
+      <attribute
+          name="layers"
+          description="A list of names of layers. 
+
+              This should be in order of lookup. Usually one of the layers
+              has the same name as the skin, and the last skin should be
+              'default', unless you want to completely override all views." />
+    </directive>
+
+    <directive
+        name="menu"
+        handler="
+            zope.app.publisher.browser.globalbrowsermenuservice.menuDirective">
+      <attribute
+          name="name" />
+      <attribute
+          name="title" />
+      <attribute
+          name="description" />
+    </directive>
+
+    <directive
+        name="menuItems"
+        attributes="menu for" 
+        handler="
+        zope.app.publisher.browser.globalbrowsermenuservice.menuItemsDirective"
+    >
+      <subdirective
+          name="menuItem" 
+      >
+        <attribute
+            name="action" />
+        <attribute
+            name="title" />
+        <attribute
+            name="description" />
+        <attribute
+            name="filter" />
+       </subdirective> 
+    </directive>
+
+    <directive 
+        name="menuItem" 
+        handler="
+        zope.app.publisher.browser.globalbrowsermenuservice.menuItemDirective"
+    >
+      <attribute
+          name="menu" />
+      <attribute
+          name="for" />
+      <attribute
+          name="action" />
+      <attribute
+          name="title" />
+      <attribute
+          name="description" />
+      <attribute
+          name="filter" />
+    </directive>
+
+    <directive
+        name="icon"
+        handler="zope.app.interfaces.publisher.browser.IconDirective"
+    >
+      <attribute
+          name="name" />
+      <attribute
+          name="for" />
+      <attribute
+          name="file" />
+      <attribute
+          name="resource" />
+      <attribute
+          name="alt" />
+      <attribute
+          name="layer" />
+    </directive>
+
+  </directives>
+
+</zopeConfigure>

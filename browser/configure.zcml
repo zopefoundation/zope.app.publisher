@@ -1,0 +1,39 @@
+<zopeConfigure
+   xmlns='http://namespaces.zope.org/zope'
+   xmlns:browser='http://namespaces.zope.org/browser'
+>
+
+
+<serviceType id="BrowserMenu"
+             interface="zope.app.interfaces.publisher.browser.IBrowserMenuService" />
+<service serviceType="BrowserMenu"
+         permission="zope.Public"
+         component="zope.app.publisher.browser.globalbrowsermenuservice.globalBrowserMenuService" />
+
+
+<content class="zope.publisher.browser.BrowserRequest">
+  <allow
+      interface="zope.publisher.interfaces.browser.IBrowserApplicationRequest" />
+  <allow
+      interface="zope.component.interfaces.IPresentationRequest" />
+</content>
+
+<content class="zope.app.publisher.browser.fileresource.FileResource">
+  <allow interface="zope.publisher.interfaces.browser.IBrowserPublisher" />
+  <allow attributes="GET HEAD __call__" />
+</content>
+
+<content class="zope.app.publisher.browser.i18nfileresource.I18nFileResource">
+  <allow interface="zope.publisher.interfaces.browser.IBrowserPublisher" />
+  <allow attributes="GET HEAD __call__" />
+</content>
+
+
+<browser:view name=""
+              factory="zope.app.publisher.browser.resources.Resources"
+              for="zope.app.interfaces.services.service.IServiceManagerContainer"
+              permission="zope.Public"
+              allowed_interface="zope.publisher.interfaces.browser.IBrowserPublisher"
+              />
+
+</zopeConfigure>

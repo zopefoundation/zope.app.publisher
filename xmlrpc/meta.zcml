@@ -1,0 +1,16 @@
+<zopeConfigure xmlns='http://namespaces.zope.org/zope'>
+  
+<directives namespace="http://namespaces.zope.org/xmlrpc">
+
+  <directive 
+       name="view" 
+       attributes="factory for name
+                   permission allowed_interface allowed_methods"
+       handler="zope.app.publisher.xmlrpc.metaconfigure.view">
+     <subdirective name="method" 
+                   attributes="name attribute permission" /> 
+  </directive>
+
+</directives>
+
+</zopeConfigure>

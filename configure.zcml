@@ -1,0 +1,5 @@
+<zopeConfigure xmlns='http://namespaces.zope.org/zope' >
+  <include package=".browser" />
+  <!-- XXX Decoy: include package='.xmlrpc' / -->
+  <include file="http.zcml" />
+</zopeConfigure>
