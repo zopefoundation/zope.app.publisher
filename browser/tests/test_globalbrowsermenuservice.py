@@ -15,13 +15,13 @@
 
 XXX longer description goes here.
 
-$Id: test_globalbrowsermenuservice.py,v 1.9 2003/05/01 19:35:28 faassen Exp $
+$Id: test_globalbrowsermenuservice.py,v 1.10 2003/06/07 05:46:03 stevea Exp $
 """
 
 from unittest import TestCase, main, makeSuite
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.exceptions import Forbidden, Unauthorized, DuplicationError
-from zope.interface import Interface
+from zope.interface import Interface, implements
 from zope.publisher.browser import TestRequest
 from zope.app.tests.placelesssetup import PlacelessSetup
 
@@ -37,7 +37,7 @@ class I12(I1): pass
 class I111(I11): pass
 
 class X:
-    __implements__ = IBrowserPublisher, I111
+    implements(IBrowserPublisher, I111)
 
     def f(self): pass
 

@@ -13,7 +13,7 @@
 ##############################################################################
 """
 
-$Id: fileresource.py,v 1.5 2003/02/11 15:59:53 sidnei Exp $
+$Id: fileresource.py,v 1.6 2003/06/07 05:46:02 stevea Exp $
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 
@@ -29,9 +29,11 @@ from zope.app.datetimeutils import time as timeFromDateTimeString
 
 from zope.security.proxy import Proxy
 
+from zope.interface import implements
+
 class FileResource(BrowserView, Resource):
 
-    __implements__ = IBrowserResource, IBrowserPublisher
+    implements(IBrowserResource, IBrowserPublisher)
 
     def publishTraverse(self, request, name):
         '''See interface IBrowserPublisher'''

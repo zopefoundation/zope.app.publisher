@@ -13,13 +13,13 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.25 2003/05/27 14:18:22 jim Exp $
+$Id: viewmeta.py,v 1.26 2003/06/07 05:46:02 stevea Exp $
 """
 
 from zope.interface import classProvides, directlyProvides
 import os
 
-from zope.interface.implements import implements
+from zope.interface import implements, classImplements
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
 from zope.exceptions import NotFoundError
@@ -161,11 +161,11 @@ def page(_context, name, permission, for_,
             new_class = type(original_class.__name__,
                           (original_class, simple,),
                           cdict)
-            new_class.usage = usage              
+            new_class.usage = usage
 
         if hasattr(original_class, '__implements__'):
-            implements(new_class, IBrowserPublisher)
-            implements(new_class, IBrowserPresentation, check=False)
+            classImplements(new_class, IBrowserPublisher)
+            classImplements(new_class, IBrowserPresentation)
 
     else:
         # template
@@ -213,7 +213,7 @@ def opts(**kw):
 class pages:
 
     classProvides(INonEmptyDirective)
-    __implements__ = ISubdirectiveHandler
+    implements(ISubdirectiveHandler)
 
     def __init__(self, _context, for_, permission,
                  layer='default', class_=None,
@@ -246,7 +246,7 @@ class pages:
 class view:
 
     classProvides(INonEmptyDirective)
-    __implements__ = ISubdirectiveHandler
+    implements(ISubdirectiveHandler)
 
     default = None
 
@@ -493,7 +493,7 @@ def _handle_for(_context, for_, actions):
     return for_
 
 class simple(BrowserView):
-    __implements__ = IBrowserPublisher, BrowserView.__implements__
+    implements(IBrowserPublisher)
 
     def publishTraverse(self, request, name):
         raise NotFoundError(self, name, request)

@@ -18,6 +18,7 @@ from zope.exceptions import DuplicationError, Unauthorized, Forbidden
 from zope.configuration.action import Action
 
 from zope.interface.type import TypeRegistry
+from zope.interface import implements
 
 from zope.configuration.interfaces import INonEmptyDirective
 from zope.configuration.interfaces import ISubdirectiveHandler
@@ -37,19 +38,19 @@ from zope.app.publication.browser import PublicationTraverser
 class Menu(object):
     '''Browser menu
     '''
-    
+
     def __init__(self, title, description=u'', usage=u''):
         self.title = title
         self.description = description
         self.usage = usage
         self.registry = TypeRegistry()
-        
+
 
 class GlobalBrowserMenuService(object):
     """Global Browser Menu Service
     """
 
-    __implements__ = IBrowserMenuService
+    implements(IBrowserMenuService)
 
     def __init__(self):
         self._registry = {}
@@ -178,7 +179,7 @@ def menuItemDirective(_context, menu, for_,
 class menuItemsDirective:
 
     classProvides(INonEmptyDirective)
-    __implements__ = ISubdirectiveHandler
+    implements(ISubdirectiveHandler)
 
     def __init__(self, _context, menu, for_):
         if for_ == '*':
@@ -189,7 +190,7 @@ class menuItemsDirective:
 
     def menuItem(self, _context, action, title, description='',
                  filter=None, permission=None):
-        
+
         return [
             Action(
               discriminator = ('browser:menuItem',
@@ -223,5 +224,5 @@ del addCleanUp
 
 __doc__ = GlobalBrowserMenuService.__doc__ + """
 
-$Id: globalbrowsermenuservice.py,v 1.14 2003/04/18 22:12:27 jim Exp $
+$Id: globalbrowsermenuservice.py,v 1.15 2003/06/07 05:46:02 stevea Exp $
 """

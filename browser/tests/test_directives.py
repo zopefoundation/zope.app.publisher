@@ -16,7 +16,7 @@ import os
 import unittest
 from cStringIO import StringIO
 
-from zope.interface import Interface
+from zope.interface import Interface, implements
 
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.configuration.exceptions import ConfigurationError
@@ -69,13 +69,13 @@ class VT(V1, object):
             return super(VT, self).publishTraverse(request, name)
 
 class Ob:
-    __implements__ = IC
+    implements(IC)
 
 ob = Ob()
 
 class NCV(object):
     "non callable view"
-    
+
     def __init__(self, context, request):
         pass
 
@@ -87,7 +87,7 @@ class CV(NCV):
 
 class C_w_implements(NCV):
 
-    __implements__ = Interface
+    implements(Interface)
 
     def index(self):
         return self

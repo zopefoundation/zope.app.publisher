@@ -14,7 +14,7 @@
 """
 Internationalized file resource.
 
-$Id: i18nfileresource.py,v 1.4 2003/05/01 19:35:27 faassen Exp $
+$Id: i18nfileresource.py,v 1.5 2003/06/07 05:46:02 stevea Exp $
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 
@@ -25,11 +25,12 @@ from zope.app.publisher.browser.fileresource import FileResource
 
 from zope.i18n.negotiator import negotiator
 from zope.i18n.interfaces import II18nAware
+from zope.interface import implements
 
 
 class I18nFileResource(FileResource):
 
-    __implements__ = IBrowserResource, IBrowserPublisher, II18nAware
+    implements(IBrowserResource, IBrowserPublisher, II18nAware)
 
     def __init__(self, data, request, defaultLanguage='en'):
         """Creates an internationalized file resource.  data should be

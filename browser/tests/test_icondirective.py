@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_icondirective.py,v 1.5 2003/05/28 15:46:10 jim Exp $
+$Id: test_icondirective.py,v 1.6 2003/06/07 05:46:03 stevea Exp $
 """
 import os
 from StringIO import StringIO
@@ -30,6 +30,7 @@ from zope.publisher.interfaces.browser import IBrowserPresentation
 from zope.component import queryView, getView, getResource
 from zope.configuration.exceptions import ConfigurationError
 import zope.configuration
+from zope.interface import implements
 
 import zope.app.publisher.browser
 
@@ -44,7 +45,7 @@ template = """<zopeConfigure
 request = TestRequest(IBrowserPresentation)
 
 class Ob:
-    __implements__ = IC
+    implements(IC)
 
 ob = Ob()
 
