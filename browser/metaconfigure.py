@@ -335,7 +335,7 @@ def defaultSkin(_context, name):
 def defaultView(_context, name, for_=None, layer=IBrowserRequest):
 
     _context.action(
-        discriminator = ('defaultViewName', for_, type, name),
+        discriminator = ('defaultViewName', for_, layer, name),
         callable = handler,
         args = ('provideAdapter',
                 (for_, layer), IDefaultViewName, '', name, _context.info)
