@@ -193,7 +193,7 @@ class GlobalBrowserMenuService(BaseBrowserMenuService):
     def menu(self, menu_id, title, description=u''):
         # XXX we have nothing to do with the title and description. ;)
 
-        s = zapi.getService(None, zapi.servicenames.Presentation)
+        s = zapi.getGlobalService(zapi.servicenames.Presentation)
         if menu_id in self._registry:
             raise DuplicationError("Menu %s is already defined." % menu_id)
 

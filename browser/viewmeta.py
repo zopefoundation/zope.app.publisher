@@ -99,7 +99,7 @@ def page(_context, name, permission, for_,
          ):
 
     try:
-        s = zapi.getService(None, zapi.servicenames.Presentation)
+        s = zapi.getGlobalService(zapi.servicenames.Presentation)
     except ComponentLookupError, err:
         pass
 
@@ -265,7 +265,7 @@ class view:
 
         for pname, attribute, template in self.pages:
             try:
-                s = zapi.getService(None, zapi.servicenames.Presentation)
+                s = zapi.getGlobalService(zapi.servicenames.Presentation)
             except ComponentLookupError, err:
                 pass
 
