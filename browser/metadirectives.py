@@ -481,7 +481,7 @@ class ILayerDirective(Interface):
 
     name = TextLine(
         title=u"Name",
-        description=u"The name of the skin.",
+        description=u"The name of the layer.",
         required=True
         )
 
@@ -491,12 +491,12 @@ class ISkinDirective(Interface):
 
     name = TextLine(
         title=u"Name",
-        description=u"The name of the skin.",
+        description=u"The name of the skin",
         required=True
         )
 
     layers = Tokens(
-        title=u"A list of names of layers.",
+        title=u"A list of layer names",
         description=u"""
         This should be in order of lookup. Usually one of the layers
         has the same name as the skin, and the last skin should be
@@ -504,6 +504,17 @@ class ISkinDirective(Interface):
         """,
         value_type=TextLine()
         )
+
+class IDefaultSkinDirective(Interface):
+    """Sets the default browser skin
+    """
+
+    name = TextLine(
+        title=u"Default skin name",
+        description=u"Default skin name",
+        required=True
+        )
+
 
 class IIconDirective(Interface):
     """
