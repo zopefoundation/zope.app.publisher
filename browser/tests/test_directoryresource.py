@@ -99,14 +99,13 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
         resource = DirectoryResourceFactory(path, checker, 'files')(request)
 
         image = resource['test.gif']
-        self.assert_(isinstance(removeSecurityProxy(image), FileResource))
+        self.assert_(zapi.isinstance(image, FileResource))
         template = resource['test.pt']
-        self.assert_(isinstance(removeSecurityProxy(template),
-                                PageTemplateResource))
+        self.assert_(zapi.isinstance(template, PageTemplateResource))
         file = resource['test.txt']
-        self.assert_(isinstance(removeSecurityProxy(file), FileResource))
+        self.assert_(zapi.isinstance(file, FileResource))
         file = resource['png']
-        self.assert_(isinstance(removeSecurityProxy(file), FileResource))
+        self.assert_(zapi.isinstance(file, FileResource))
 
 def test_suite():
     return makeSuite(Test)
