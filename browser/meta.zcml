@@ -129,6 +129,12 @@
     <!-- misc. directives -->
 
     <meta:directive
+        name="layer"
+        schema=".metadirectives.ILayerDirective"
+        handler=".metaconfigure.layer"
+        />
+
+    <meta:directive
         name="skin"
         schema=".metadirectives.ISkinDirective"
         handler=".metaconfigure.skin"

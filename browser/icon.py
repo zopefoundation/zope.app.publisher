@@ -14,16 +14,17 @@
 """Icon support
 
 
-$Id: icon.py,v 1.11 2003/08/16 00:43:46 srichter Exp $
+$Id: icon.py,v 1.12 2003/11/21 17:10:25 jim Exp $
 """
 
 import os
 import re
 
+from zope.app import zapi
 from zope.app.component.metaconfigure import handler
 from zope.app.publisher.browser import metaconfigure
 from zope.app.traversing.namespace import getResourceInContext
-from zope.publisher.interfaces.browser import IBrowserPresentation
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.configuration.exceptions import ConfigurationError
 from zope.app.services.servicenames import Interfaces
 
@@ -94,8 +95,8 @@ def IconDirective(_context, name, for_, file=None, resource=None,
     _context.action(
         discriminator = ('view', name, vfactory, layer),
         callable = handler,
-        args = ('Views', 'provideView',
-                for_, name, IBrowserPresentation,
+        args = (zapi.servicenames.Presentation, 'provideView',
+                for_, name, IBrowserRequest,
                 vfactory, layer)
         )
     _context.action(

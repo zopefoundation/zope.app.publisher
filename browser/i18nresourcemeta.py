@@ -13,23 +13,24 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: i18nresourcemeta.py,v 1.14 2003/08/17 06:07:32 philikon Exp $
+$Id: i18nresourcemeta.py,v 1.15 2003/11/21 17:10:25 jim Exp $
 """
 
 from zope.security.proxy import Proxy
 from zope.security.checker import CheckerPublic, Checker
 
 from zope.configuration.exceptions import ConfigurationError
-from zope.app.services.servicenames import Resources
-from zope.publisher.interfaces.browser import IBrowserPresentation
+from zope.app.services.servicenames import Presentation
 from zope.app.component.metaconfigure import handler
 
 from zope.app.publisher.fileresource import File, Image
 from i18nfileresource import I18nFileResourceFactory
 
+from zope.publisher.interfaces.browser import IBrowserRequest
+
 class I18nResource(object):
 
-    type = IBrowserPresentation
+    type = IBrowserRequest
     default_allowed_attributes = '__call__'
 
     def __init__(self, _context, name=None, defaultLanguage='en',
@@ -102,7 +103,7 @@ class I18nResource(object):
         self._context.action(
             discriminator = ('i18n-resource', self.name, self.type, self.layer),
             callable = handler,
-            args = (Resources, 'provideResource', self.name, self.type,
+            args = (Presentation, 'provideResource', self.name, self.type,
                     factory, self.layer)
             )
 
