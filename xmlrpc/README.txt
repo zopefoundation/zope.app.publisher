@@ -1,6 +1,9 @@
 XML-RPC views
 =============
 
+XML-RPC Methods
+---------------
+
 There are two ways to write XML-RPV views. You can write views that
 provide "methods" for other objects, and you can write views that have
 their own methods.  Let's look at the former case first, since it's a
@@ -45,8 +48,7 @@ Now, we'll add some items to the root folder:
   ... Content-Length: 73
   ... Content-Type: application/x-www-form-urlencoded
   ... 
-  ... type_name=zope.app.browser.add.zope.app.folder.folder.Folder&new_value=f1"""
-  ... , handle_errors=False)
+  ... type_name=zope.app.browser.add.zope.app.folder.folder.Folder&new_value=f1""")
   HTTP/1.1 303 See Other
   ...
 
@@ -123,6 +125,8 @@ credentials:
   </methodResponse>
   <BLANKLINE>
 
+Named XM-RPC Views
+------------------
 
 Now let's look at views that have their own methods or other
 subobjects.  Views that have their own methods have names that appear
@@ -194,7 +198,7 @@ Now, when we access the `contents`, we do so through the listing view:
   ... <params>
   ... </params>
   ... </methodCall>
-  ... """, handle_errors=False)
+  ... """)
   HTTP/1.0 200 Ok
   Content-Length: 208
   Content-Type: text/xml;charset=utf-8
@@ -240,3 +244,78 @@ as before, we will get an error if we don't supply credentials:
   </params>
   </methodResponse>
   <BLANKLINE>
+
+Faults
+------
+
+If you need to raise an error, the prefered way to do it is via an
+`xmlrpclib.Fault`:
+
+  >>> import xmlrpclib
+
+  >>> class FaultDemo:
+  ...     def __init__(self, context, request):
+  ...         self.context = context
+  ...         self.request = request
+  ...
+  ...     def your_fault(self):
+  ...         return xmlrpclib.Fault(42, "It's your fault!")
+
+Now we'll register it as a view:
+
+  >>> from zope.configuration import xmlconfig
+  >>> ignored = xmlconfig.string("""
+  ... <configure 
+  ...     xmlns="http://namespaces.zope.org/zope"
+  ...     xmlns:xmlrpc="http://namespaces.zope.org/xmlrpc"
+  ...     >
+  ...   <!-- We only need to do this include in this example, 
+  ...        Normally the include has already been done for us. -->
+  ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
+  ...
+  ...   <xmlrpc:view
+  ...       for="zope.app.folder.folder.IFolder"
+  ...       methods="your_fault"
+  ...       class="zope.app.publisher.xmlrpc.README.FaultDemo"
+  ...       permission="zope.ManageContent"
+  ...       />
+  ... </configure>
+  ... """)
+
+Now, when we call it, we get a proper XML-RPC fault:
+
+  >>> print http(r"""
+  ... POST / HTTP/1.0
+  ... Authorization: Basic bWdyOm1ncnB3
+  ... Content-Length: 104
+  ... Content-Type: text/xml
+  ... 
+  ... <?xml version='1.0'?>
+  ... <methodCall>
+  ... <methodName>your_fault</methodName>
+  ... <params>
+  ... </params>
+  ... </methodCall>
+  ... """, handle_errors=False)
+  HTTP/1.0 200 Ok
+  Content-Length: 272
+  Content-Type: text/xml;charset=utf-8
+  <BLANKLINE>
+  <?xml version='1.0'?>
+  <methodResponse>
+  <fault>
+  <value><struct>
+  <member>
+  <name>faultCode</name>
+  <value><int>42</int></value>
+  </member>
+  <member>
+  <name>faultString</name>
+  <value><string>It's your fault!</string></value>
+  </member>
+  </struct></value>
+  </fault>
+  </methodResponse>
+  <BLANKLINE>
+
+
