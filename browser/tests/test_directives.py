@@ -90,7 +90,6 @@ class C_w_implements(NCV):
     def index(self):
         return self
 
-
 class ITestMenu(Interface):
     """Test menu."""
 
