@@ -18,7 +18,7 @@ $Id$
 from unittest import main, makeSuite
 import os
 
-from zope.exceptions import NotFoundError
+from zope.publisher.interfaces import NotFound
 
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.app.tests import ztapi
@@ -73,7 +73,7 @@ class Test(PlacelessSetup, TestII18nAware):
         resource = I18nFileResourceFactory(self._createDict(), 'en')\
                                           (TestRequest())
 
-        self.assertRaises(NotFoundError,
+        self.assertRaises(NotFound,
                           resource.publishTraverse,
                           resource.request,
                           '_testData')

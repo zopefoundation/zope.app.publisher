@@ -17,7 +17,7 @@ $Id$
 """
 from zope.app.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher
-from zope.exceptions import NotFoundError
+from zope.publisher.interfaces import NotFound
 from zope.interface import implements
 
 from zope.app import zapi
@@ -34,7 +34,7 @@ class Resources(BrowserView):
 
         resource = zapi.queryResource(name, request)
         if resource is None:
-            raise NotFoundError(self, name)
+            raise NotFound(self, name)
 
         adapters = zapi.getService(zapi.servicenames.Adapters)
         locate(resource, adapters, name)

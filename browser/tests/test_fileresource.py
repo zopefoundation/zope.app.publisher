@@ -18,7 +18,7 @@ $Id$
 import os
 from unittest import TestCase, main, makeSuite
 
-from zope.exceptions import NotFoundError
+from zope.publisher.interfaces import NotFound
 from zope.i18n.interfaces import IUserPreferredCharsets
 from zope.security.proxy import removeSecurityProxy
 from zope.security.checker import NamesChecker
@@ -52,7 +52,7 @@ class Test(PlacelessSetup, TestCase):
         path = os.path.join(test_directory, 'testfiles', 'test.txt')
         factory = FileResourceFactory(path, checker, 'test.txt')
         resource = factory(TestRequest())
-        self.assertRaises(NotFoundError,
+        self.assertRaises(NotFound,
                           resource.publishTraverse,
                           resource.request,
                           '_testData')

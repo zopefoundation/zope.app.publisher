@@ -15,7 +15,7 @@
 
 $Id$
 """
-from zope.exceptions import NotFoundError
+from zope.publisher.interfaces import NotFound
 
 from zope.app.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher
@@ -34,7 +34,7 @@ class FileResource(BrowserView, Resource):
 
     def publishTraverse(self, request, name):
         '''See interface IBrowserPublisher'''
-        raise NotFoundError(name)
+        raise NotFound(None, name)
 
     def browserDefault(self, request):
         '''See interface IBrowserPublisher'''

@@ -20,7 +20,7 @@ import os
 from zope.component.exceptions import ComponentLookupError
 from zope.component.interfaces import IDefaultViewName
 from zope.interface import implements, classImplements, Interface
-from zope.exceptions import NotFoundError
+from zope.publisher.interfaces import NotFound
 from zope.security.checker import CheckerPublic, Checker
 from zope.security.checker import defineChecker
 from zope.configuration.exceptions import ConfigurationError
@@ -290,7 +290,7 @@ class view(object):
                 if view is not None:
                     return view
 
-                raise NotFoundError(self, name, request)
+                raise NotFound(self, name, request)
 
         cdict['publishTraverse'] = publishTraverse
 
@@ -434,7 +434,7 @@ class simple(BrowserView):
     implements(IBrowserPublisher)
 
     def publishTraverse(self, request, name):
-        raise NotFoundError(self, name, request)
+        raise NotFound(self, name, request)
 
     def __call__(self, *a, **k):
         # If a class doesn't provide it's own call, then get the attribute

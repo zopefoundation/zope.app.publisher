@@ -27,7 +27,7 @@ import os
 import posixpath
 
 from zope.interface import implements
-from zope.exceptions import NotFoundError
+from zope.publisher.interfaces import NotFound
 from zope.security.proxy import Proxy
 from zope.app.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher
@@ -82,7 +82,7 @@ class DirectoryResource(BrowserView, Resource):
         filename = os.path.join(path, name)
         if not os.path.isfile(filename):
             if default is _marker:
-                raise NotFoundError(name)
+                raise NotFound(None, name)
             return default
         ext = os.path.splitext(os.path.normcase(name))[1]
         factory = self.resource_factories.get(ext, self.default_factory)

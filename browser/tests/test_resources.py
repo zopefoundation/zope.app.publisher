@@ -62,10 +62,10 @@ class Test(PlacelessSetup, TestCase):
 
     def testNotFound(self):
         from zope.app.publisher.browser.resources import Resources
-        from zope.exceptions import NotFoundError
+        from zope.publisher.interfaces import NotFound
         request = TestRequest()
         view = Resources(None, request)
-        self.assertRaises(NotFoundError,
+        self.assertRaises(NotFound,
                           view.publishTraverse,
                           request, 'test'
                           )

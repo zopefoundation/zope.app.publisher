@@ -18,7 +18,7 @@ $Id$
 import os
 from unittest import TestCase, main, makeSuite
 
-from zope.exceptions import NotFoundError
+from zope.publisher.interfaces import NotFound
 from zope.app.tests import ztapi
 from zope.security.checker import NamesChecker
 from zope.publisher.browser import TestRequest
@@ -47,7 +47,7 @@ class Test(PlacelessSetup, TestCase):
         request = TestRequest()
         factory = PageTemplateResourceFactory(path, checker, 'test.pt')
         resource = factory(request)
-        self.assertRaises(NotFoundError, resource.publishTraverse,
+        self.assertRaises(NotFound, resource.publishTraverse,
                           resource.request, ())
 
     def testCall(self):

@@ -18,7 +18,7 @@ $Id$
 import os
 from unittest import TestCase, main, makeSuite
 
-from zope.exceptions import NotFoundError
+from zope.publisher.interfaces import NotFound
 from zope.proxy import isProxy
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import TestRequest
@@ -53,9 +53,9 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
         request = TestRequest()
         factory = DirectoryResourceFactory(path, checker, 'testfiles')
         resource = factory(request)
-        self.assertRaises(NotFoundError, resource.publishTraverse,
+        self.assertRaises(NotFound, resource.publishTraverse,
                           resource.request, 'doesnotexist')
-        self.assertRaises(NotFoundError, resource.get, 'doesnotexist')
+        self.assertRaises(NotFound, resource.get, 'doesnotexist')
 
     def testGetitem(self):
         path = os.path.join(test_directory, 'testfiles')

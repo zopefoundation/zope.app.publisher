@@ -17,7 +17,7 @@ $Id$
 """
 
 from zope.interface import implements
-from zope.exceptions import NotFoundError
+from zope.publisher.interfaces import NotFound
 from zope.security.proxy import Proxy
 from zope.app.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher
@@ -31,7 +31,7 @@ class PageTemplateResource(BrowserView, Resource):
 
     def publishTraverse(self, request, name):
         '''See interface IBrowserPublisher'''
-        raise NotFoundError(name)
+        raise NotFound(None, name)
 
     def browserDefault(self, request):
         '''See interface IBrowserPublisher'''
