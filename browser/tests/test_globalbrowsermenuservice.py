@@ -15,10 +15,10 @@
 
 XXX longer description goes here.
 
-$Id: test_globalbrowsermenuservice.py,v 1.8 2003/04/11 22:15:47 gotcha Exp $
+$Id: test_globalbrowsermenuservice.py,v 1.9 2003/05/01 19:35:28 faassen Exp $
 """
 
-from unittest import TestCase, TestSuite, main, makeSuite
+from unittest import TestCase, main, makeSuite
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.exceptions import Forbidden, Unauthorized, DuplicationError
 from zope.interface import Interface
@@ -29,8 +29,7 @@ from zope.component.service import serviceManager
 from zope.app.services.servicenames import Permissions
 from zope.app.security.registries.permissionregistry import permissionRegistry
 from zope.app.interfaces.security import IPermissionService
-from zope.security.management import newSecurityManager
-from zope.security.management import noSecurityManager, system_user
+from zope.security.management import newSecurityManager, system_user
 
 class I1(Interface): pass
 class I11(I1): pass

@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.21 2003/04/18 22:12:27 jim Exp $
+$Id: viewmeta.py,v 1.22 2003/05/01 19:35:27 faassen Exp $
 """
 
 from zope.interface import classProvides, directlyProvides
@@ -21,12 +21,10 @@ import os
 
 from zope.interface.implements import implements
 from zope.publisher.interfaces.browser import IBrowserPublisher
-from zope.publisher.interfaces.browser import IBrowserView
 
 from zope.exceptions import NotFoundError
 
-from zope.security.proxy import Proxy
-from zope.security.checker import CheckerPublic, NamesChecker, Checker
+from zope.security.checker import CheckerPublic, Checker
 from zope.security.checker import defineChecker
 
 from zope.configuration.interfaces import INonEmptyDirective

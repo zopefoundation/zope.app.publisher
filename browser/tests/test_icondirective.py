@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_icondirective.py,v 1.3 2003/04/15 12:24:33 alga Exp $
+$Id: test_icondirective.py,v 1.4 2003/05/01 19:35:28 faassen Exp $
 """
 import os
 from StringIO import StringIO
@@ -28,7 +28,6 @@ from zope.publisher.browser import TestRequest
 from zope.component.tests.views import IC
 from zope.publisher.interfaces.browser import IBrowserPresentation
 from zope.component import queryView, getView, getResource
-from zope.security.proxy import ProxyFactory
 from zope.configuration.exceptions import ConfigurationError
 import zope.configuration
 

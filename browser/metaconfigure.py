@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: metaconfigure.py,v 1.6 2003/04/09 20:51:32 philikon Exp $
+$Id: metaconfigure.py,v 1.7 2003/05/01 19:35:27 faassen Exp $
 """
 
 from zope.configuration.action import Action
@@ -22,12 +22,14 @@ from zope.publisher.interfaces.browser import IBrowserPresentation
 from zope.app.services.servicenames import Interfaces
 
 from zope.app.component.metaconfigure \
-    import defaultView as _defaultView, skin as _skin, handler, resolveInterface
+    import defaultView as _defaultView, skin as _skin, \
+    handler, resolveInterface
 
+# referred to through ZCML
 from zope.app.publisher.browser.resourcemeta import resource
 from zope.app.publisher.browser.i18nresourcemeta import I18nResource
+
 from zope.app.publisher.browser.viewmeta import view
-from zope.interface import Interface
 
 def skin(_context, **__kw):
     return _skin(_context,

@@ -14,17 +14,16 @@
 """
 
 Revision information:
-$Id: testi18nfileresource.py,v 1.3 2002/12/31 02:52:03 jim Exp $
+$Id: testi18nfileresource.py,v 1.4 2003/05/01 19:35:28 faassen Exp $
 """
 
-from unittest import TestSuite, main, makeSuite
+from unittest import main, makeSuite
 
 import os
 
 from zope.exceptions import NotFoundError
 
 from zope.app.tests.placelesssetup import PlacelessSetup
-from zope.component.resource import provideResource
 from zope.component.adapter import provideAdapter
 
 from zope.i18n.interfaces import IUserPreferredCharsets
@@ -37,7 +36,7 @@ from zope.publisher.browser import TestRequest
 
 from zope.app.publisher.browser.i18nfileresource import I18nFileResource
 from zope.app.publisher.browser.i18nfileresource import I18nFileResourceFactory
-from zope.app.publisher.fileresource import File, Image
+from zope.app.publisher.fileresource import File
 import zope.app.publisher.browser.tests as p
 
 from zope.app.component.metaconfigure import \

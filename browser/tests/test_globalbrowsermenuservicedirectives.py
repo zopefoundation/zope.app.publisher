@@ -15,14 +15,13 @@
 
 XXX longer description goes here.
 
-$Id: test_globalbrowsermenuservicedirectives.py,v 1.3 2003/04/11 22:15:47 gotcha Exp $
+$Id: test_globalbrowsermenuservicedirectives.py,v 1.4 2003/05/01 19:35:28 faassen Exp $
 """
 
 from StringIO import StringIO
-from unittest import TestCase, TestSuite, main, makeSuite
+from unittest import TestCase, main, makeSuite
 
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
-from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.browser import TestRequest
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.app.publisher.browser.globalbrowsermenuservice \

@@ -14,19 +14,18 @@
 """
 
 Revision information:
-$Id: test_fileresource.py,v 1.4 2002/12/31 02:52:03 jim Exp $
+$Id: test_fileresource.py,v 1.5 2003/05/01 19:35:28 faassen Exp $
 """
 
 import os
 
-from unittest import TestCase, TestSuite, main, makeSuite
+from unittest import TestCase, main, makeSuite
 
-from zope.security.checker import CheckerPublic, NamesChecker
+from zope.security.checker import NamesChecker
 
 from zope.exceptions import NotFoundError
 
 from zope.app.tests.placelesssetup import PlacelessSetup
-from zope.component.resource import provideResource
 from zope.component.adapter import provideAdapter
 from zope.proxy.introspection import removeAllProxies
 

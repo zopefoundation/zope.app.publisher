@@ -14,14 +14,12 @@
 """
 Internationalized file resource.
 
-$Id: i18nfileresource.py,v 1.3 2002/12/31 02:52:01 jim Exp $
+$Id: i18nfileresource.py,v 1.4 2003/05/01 19:35:27 faassen Exp $
 """
 __metaclass__ = type # All classes are new style when run with Python 2.2+
 
 from zope.publisher.interfaces.browser import IBrowserResource
 from zope.publisher.interfaces.browser import IBrowserPublisher
-
-from zope.app.publisher.fileresource import File, Image
 
 from zope.app.publisher.browser.fileresource import FileResource
 

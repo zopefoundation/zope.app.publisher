@@ -13,16 +13,15 @@
 ##############################################################################
 """
 
-$Id: test_directives.py,v 1.3 2002/12/31 03:35:10 jim Exp $
+$Id: test_directives.py,v 1.4 2003/05/01 19:35:29 faassen Exp $
 """
 
 import unittest
 
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.configuration.exceptions import ConfigurationError
-from zope.component.tests.views import IC, V1, VZMI, R1, RZMI
+from zope.component.tests.views import IC, V1
 from zope.component import getView, queryView
-from zope.component import getDefaultViewName
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.security.proxy import ProxyFactory
 from cStringIO import StringIO

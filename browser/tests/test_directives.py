@@ -20,7 +20,7 @@ from zope.interface import Interface
 
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.configuration.exceptions import ConfigurationError
-from zope.component.tests.views import IC, V1, VZMI, R1, RZMI
+from zope.component.tests.views import IC, V1, VZMI
 from zope.component import getView, queryView, queryResource
 from zope.component import getDefaultViewName, getResource
 from zope.app.services.servicenames import Permissions

@@ -14,10 +14,10 @@
 """
 
 Revision information:
-$Id: test_resources.py,v 1.4 2003/01/25 13:19:27 jim Exp $
+$Id: test_resources.py,v 1.5 2003/05/01 19:35:28 faassen Exp $
 """
 
-from unittest import TestCase, TestSuite, main, makeSuite
+from unittest import TestCase, main, makeSuite
 
 from zope.app.tests.placelesssetup import PlacelessSetup
 from zope.component.resource import provideResource

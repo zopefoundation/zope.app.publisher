@@ -13,13 +13,12 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: i18nresourcemeta.py,v 1.7 2003/04/18 22:12:27 jim Exp $
+$Id: i18nresourcemeta.py,v 1.8 2003/05/01 19:35:27 faassen Exp $
 """
 
 from zope.interface import classProvides
 from zope.security.proxy import Proxy
-from zope.security.checker \
-     import CheckerPublic, NamesChecker, Checker
+from zope.security.checker import CheckerPublic, Checker
 
 from zope.configuration.interfaces import ISubdirectiveHandler
 from zope.configuration.interfaces import INonEmptyDirective
