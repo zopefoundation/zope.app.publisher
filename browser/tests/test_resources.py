@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_resources.py,v 1.6 2003/11/21 17:12:10 jim Exp $
+$Id: test_resources.py,v 1.7 2003/11/27 13:59:23 philikon Exp $
 """
 
 from unittest import TestCase, main, makeSuite
@@ -32,7 +32,7 @@ from zope.publisher.interfaces.browser import IBrowserView
 class Test(PlacelessSetup, TestCase):
 
     def setUp(self):
-        PlacelessSetup.setUp(self)
+        super(Test, self).setUp()
         ztapi.provideAdapter(IHTTPRequest, IUserPreferredCharsets,
                              HTTPCharsets)
 

@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_fileresource.py,v 1.8 2003/11/21 17:12:10 jim Exp $
+$Id: test_fileresource.py,v 1.9 2003/11/27 13:59:23 philikon Exp $
 """
 
 import os
@@ -48,7 +48,7 @@ test_directory = os.path.split(p.__file__)[0]
 class Test(PlacelessSetup, TestCase):
 
     def setUp(self):
-        PlacelessSetup.setUp(self)
+        super(Test, self).setUp()
         ztapi.provideAdapter(IHTTPRequest, IUserPreferredCharsets,
                              HTTPCharsets)
 

@@ -12,7 +12,7 @@
 #
 ##############################################################################
 """
-$Id: test_pagetemplateresource.py,v 1.2 2003/11/21 17:12:10 jim Exp $
+$Id: test_pagetemplateresource.py,v 1.3 2003/11/27 13:59:23 philikon Exp $
 """
 
 import os
@@ -39,7 +39,7 @@ checker = NamesChecker(
 class Test(PlacelessSetup, TestCase):
 
     def setUp(self):
-        PlacelessSetup.setUp(self)
+        super(Test, self).setUp()
         ztapi.provideAdapter(None, ITraversable, DefaultTraversable)
 
     def testNoTraversal(self):

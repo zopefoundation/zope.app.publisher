@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: test_icondirective.py,v 1.14 2003/11/21 17:10:51 jim Exp $
+$Id: test_icondirective.py,v 1.15 2003/11/27 13:59:23 philikon Exp $
 """
 import os
 from StringIO import StringIO
@@ -62,7 +62,7 @@ def defineCheckers():
 class Test(PlacelessSetup, TestCase):
 
     def setUp(self):
-        PlacelessSetup.setUp(self)
+        super(Test, self).setUp()
         XMLConfig('meta.zcml', zope.app.publisher.browser)()
         defineCheckers()
 

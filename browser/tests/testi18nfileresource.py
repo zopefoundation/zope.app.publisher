@@ -14,7 +14,7 @@
 """
 
 Revision information:
-$Id: testi18nfileresource.py,v 1.6 2003/11/21 17:12:10 jim Exp $
+$Id: testi18nfileresource.py,v 1.7 2003/11/27 13:59:23 philikon Exp $
 """
 
 from unittest import main, makeSuite
@@ -52,7 +52,7 @@ test_directory = os.path.split(p.__file__)[0]
 class Test(PlacelessSetup, TestII18nAware):
 
     def setUp(self):
-        PlacelessSetup.setUp(self)
+        super(Test, self).setUp()
         TestII18nAware.setUp(self)
         ztapi.provideAdapter(IHTTPRequest, IUserPreferredCharsets,
                              HTTPCharsets)

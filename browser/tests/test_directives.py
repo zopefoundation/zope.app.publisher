@@ -93,7 +93,7 @@ class C_w_implements(NCV):
 class Test(PlacelessSetup, unittest.TestCase):
 
     def setUp(self):
-        PlacelessSetup.setUp(self)
+        super(Test, self).setUp()
         XMLConfig('meta.zcml', zope.app.publisher.browser)()
 
         from zope.app.tests import ztapi

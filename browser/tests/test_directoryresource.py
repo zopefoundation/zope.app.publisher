@@ -12,7 +12,7 @@
 #
 ##############################################################################
 """
-$Id: test_directoryresource.py,v 1.3 2003/09/24 17:31:30 sidnei Exp $
+$Id: test_directoryresource.py,v 1.4 2003/11/27 13:59:23 philikon Exp $
 """
 
 import os
@@ -53,7 +53,7 @@ ob = Ob()
 class Test(PlacelessSetup, TestCase):
 
     def setUp(self):
-        PlacelessSetup.setUp(self)
+        super(Test, self).setUp()
 
     def testNotFound(self):
         path = os.path.join(test_directory, 'testfiles')

@@ -15,7 +15,7 @@
 
 XXX longer description goes here.
 
-$Id: test_globalbrowsermenuservicedirectives.py,v 1.8 2003/08/17 06:07:35 philikon Exp $
+$Id: test_globalbrowsermenuservicedirectives.py,v 1.9 2003/11/27 13:59:23 philikon Exp $
 """
 
 from StringIO import StringIO
@@ -39,7 +39,7 @@ template = """<configure
 class Test(PlacelessSetup, TestCase):
 
     def setUp(self):
-        PlacelessSetup.setUp(self)
+        super(Test, self).setUp()
         XMLConfig('meta.zcml', zope.app.publisher.browser)()
 
     def test(self):
