@@ -23,7 +23,7 @@ from zope.app.datetimeutils import parse as parseDateTime
 def field2date_via_datetimeutils(v):
     """Converter for request fields marshalled as ':date'.
 
-    o XXX:  Uses the non-localized and non-tzinfo-aware 'parseDateTime'
+    o TODO: Uses the non-localized and non-tzinfo-aware 'parseDateTime'
             utility from zope.app.datetimeutils;  a better alternative
             would be more I18N / L10N aware, perhaps even adapting to
             the expressed preferences of the user.
