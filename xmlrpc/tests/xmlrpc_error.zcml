@@ -1,0 +1,12 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:xmlrpc="http://namespaces.zope.org/xmlrpc">
+
+  <include package="zope.app.publisher.xmlrpc" file="meta.zcml"/>
+ 
+  <xmlrpc:view 
+        name="test"
+        factory="zope.component.tests.views.V1"
+        for="zope.component.tests.views.IC"
+        allowed_methods="action index" />
+
+</configure>

@@ -11,14 +11,13 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
+"""Test 'xmlrpc' ZCML Namespace directives.
 
-$Id: test_directives.py,v 1.5 2003/06/06 20:25:31 stevea Exp $
+$Id: test_directives.py,v 1.6 2003/08/03 23:47:51 srichter Exp $
 """
-
 import unittest
 
-from zope.configuration.xmlconfig import xmlconfig, XMLConfig
+from zope.configuration import xmlconfig
 from zope.configuration.exceptions import ConfigurationError
 from zope.component.tests.views import IC, V1
 from zope.component import getView, queryView
@@ -30,14 +29,9 @@ from zope.component.tests.request import Request
 
 from zope.publisher.interfaces.xmlrpc import IXMLRPCPresentation
 
-import zope.app.publisher.xmlrpc
+from zope.app.publisher import xmlrpc
 from zope.interface import implements
 
-template = """<zopeConfigure
-   xmlns='http://namespaces.zope.org/zope'
-   xmlns:xmlrpc='http://namespaces.zope.org/xmlrpc'>
-   %s
-   </zopeConfigure>"""
 
 request = Request(IXMLRPCPresentation)
 
@@ -46,157 +40,62 @@ class Ob:
 
 ob = Ob()
 
-class Test(PlacelessSetup, unittest.TestCase):
-
-    def setUp(self):
-        PlacelessSetup.setUp(self)
-        XMLConfig('meta.zcml', zope.app.publisher.xmlrpc)()
+class DirectivesTest(PlacelessSetup, unittest.TestCase):
 
     def testView(self):
-        self.assertEqual(queryView(ob, 'test', request),
-                         None)
-
-        xmlconfig(StringIO(template % (
-            """
-            <xmlrpc:view name="test"
-                  factory="zope.component.tests.views.V1"
-                  for="zope.component.tests.views.IC" />
-            """
-            )))
-
-        self.assertEqual(
-            queryView(ob, 'test', request).__class__,
-            V1)
+        self.assertEqual(queryView(ob, 'test', request), None)
+        context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
+        self.assertEqual(queryView(ob, 'test', request).__class__, V1)
 
 
     def testInterfaceProtectedView(self):
-        xmlconfig(StringIO(template %
-            """
-            <xmlrpc:view name="test"
-                  factory="zope.component.tests.views.V1"
-                  for="zope.component.tests.views.IC"
-                  permission="zope.Public"
-              allowed_interface="zope.component.tests.views.IV"
-                  />
-            """
-            ))
-
-        v = getView(ob, 'test', request)
+        context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
+        v = getView(ob, 'test2', request)
         v = ProxyFactory(v)
         self.assertEqual(v.index(), 'V1 here')
         self.assertRaises(Exception, getattr, v, 'action')
 
 
     def testAttributeProtectedView(self):
-        xmlconfig(StringIO(template %
-            """
-            <xmlrpc:view name="test"
-                  factory="zope.component.tests.views.V1"
-                  for="zope.component.tests.views.IC"
-                  permission="zope.Public"
-                  allowed_methods="action"
-                  />
-            """
-            ))
-
-        v = getView(ob, 'test', request)
+        context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
+        v = getView(ob, 'test3', request)
         v = ProxyFactory(v)
         self.assertEqual(v.action(), 'done')
         self.assertRaises(Exception, getattr, v, 'index')
 
 
     def testInterfaceAndAttributeProtectedView(self):
-        xmlconfig(StringIO(template %
-            """
-            <xmlrpc:view name="test"
-                  factory="zope.component.tests.views.V1"
-                  for="zope.component.tests.views.IC"
-                  permission="zope.Public"
-                  allowed_methods="action"
-              allowed_interface="zope.component.tests.views.IV"
-                  />
-            """
-            ))
-
-        v = getView(ob, 'test', request)
+        context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
+        v = getView(ob, 'test4', request)
         self.assertEqual(v.index(), 'V1 here')
         self.assertEqual(v.action(), 'done')
 
 
     def testDuplicatedInterfaceAndAttributeProtectedView(self):
-        xmlconfig(StringIO(template %
-            """
-            <xmlrpc:view name="test"
-                  factory="zope.component.tests.views.V1"
-                  for="zope.component.tests.views.IC"
-                  permission="zope.Public"
-                  allowed_methods="action index"
-              allowed_interface="zope.component.tests.views.IV"
-                  />
-            """
-            ))
-
-        v = getView(ob, 'test', request)
+        context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
+        v = getView(ob, 'test5', request)
         self.assertEqual(v.index(), 'V1 here')
         self.assertEqual(v.action(), 'done')
 
 
     def testIncompleteProtectedViewNoPermission(self):
-        self.assertRaises(
-            ConfigurationError,
-            xmlconfig,
-            StringIO(template %
-            """
-            <xmlrpc:view name="test"
-                  factory="zope.component.tests.views.V1"
-                  for="zope.component.tests.views.IC"
-                  allowed_methods="action index"
-                  />
-            """
-            ))
+        self.assertRaises(ConfigurationError, xmlconfig.file,
+                          "xmlrpc_error.zcml", xmlrpc.tests)
 
 
     def testMethodViews(self):
-        self.assertEqual(queryView(ob, 'test', request),
-                         None)
-
-        xmlconfig(StringIO(template %
-            """
-            <xmlrpc:view
-                  factory="zope.component.tests.views.V1"
-                  for="zope.component.tests.views.IC">
-
-                <xmlrpc:method name="index.html" attribute="index" />
-                <xmlrpc:method name="action.html" attribute="action" />
-            </xmlrpc:view>
-            """
-            ))
-
-        v = getView(ob, 'index.html', request)
+        context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
+        v = getView(ob, 'index2.html', request)
         self.assertEqual(v(), 'V1 here')
-        v = getView(ob, 'action.html', request)
+        v = getView(ob, 'action2.html', request)
         self.assertEqual(v(), 'done')
 
 
     def testMethodViewsWithName(self):
-        self.assertEqual(queryView(ob, 'test', request),
-                         None)
-
-        xmlconfig(StringIO(template %
-            """
-            <xmlrpc:view name="test"
-                  factory="zope.component.tests.views.V1"
-                  for="zope.component.tests.views.IC">
-
-                <xmlrpc:method name="index.html" attribute="index" />
-                <xmlrpc:method name="action.html" attribute="action" />
-            </xmlrpc:view>
-            """
-            ))
-
-        v = getView(ob, 'index.html', request)
+        context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
+        v = getView(ob, 'index3.html', request)
         self.assertEqual(v(), 'V1 here')
-        v = getView(ob, 'action.html', request)
+        v = getView(ob, 'action3.html', request)
         self.assertEqual(v(), 'done')
         v = getView(ob, 'test', request)
         self.assertEqual(v.index(), 'V1 here')
@@ -204,45 +103,21 @@ class Test(PlacelessSetup, unittest.TestCase):
 
 
     def testProtectedMethodViews(self):
-        self.assertEqual(queryView(ob, 'test', request),
-                         None)
-
-        xmlconfig(StringIO(template %
-            """
-            <directives namespace="http://namespaces.zope.org/zope">
-              <directive name="permission"
-                 attributes="id title description"
-                 handler="
-               zope.app.security.registries.metaconfigure.definePermission" />
-            </directives>
-
-            <permission id="XXX" title="xxx" />
-
-            <xmlrpc:view
-                  factory="zope.component.tests.views.V1"
-                  for="zope.component.tests.views.IC"
-                  permission="XXX">
-
-                <xmlrpc:method name="index.html" attribute="index" />
-                <xmlrpc:method name="action.html" attribute="action"
-                              permission="zope.Public" />
-            </xmlrpc:view>
-            """
-            ))
-
+        context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
         # Need to "log someone in" to turn on checks
         from zope.security.management import newSecurityManager
         newSecurityManager('someuser')
 
-        v = getView(ob, 'index.html', request)
+        v = getView(ob, 'index4.html', request)
         self.assertRaises(Exception, v)
-        v = getView(ob, 'action.html', request)
+        v = getView(ob, 'action4.html', request)
         self.assertEqual(v(), 'done')
 
 
 def test_suite():
-    loader=unittest.TestLoader()
-    return loader.loadTestsFromTestCase(Test)
+    return unittest.TestSuite((
+        unittest.makeSuite(DirectivesTest),
+        ))
 
-if __name__=='__main__':
-    unittest.TextTestRunner().run(test_suite())
+if __name__ == '__main__':
+    unittest.main()

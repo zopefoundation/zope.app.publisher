@@ -1,0 +1,71 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:xmlrpc="http://namespaces.zope.org/xmlrpc">
+
+  <include package="zope.app.publisher.xmlrpc" file="meta.zcml"/>
+  <include package="zope.app.security" file="meta.zcml"/>
+ 
+  <xmlrpc:view 
+      name="test"
+      factory="zope.component.tests.views.V1"
+      for="zope.component.tests.views.IC" />
+
+  <xmlrpc:view 
+      name="test2"
+      factory="zope.component.tests.views.V1"
+      for="zope.component.tests.views.IC"
+      permission="zope.Public"
+      allowed_interface="zope.component.tests.views.IV" />
+
+  <xmlrpc:view name="test3"
+      factory="zope.component.tests.views.V1"
+      for="zope.component.tests.views.IC"
+      permission="zope.Public"
+      allowed_methods="action" />
+
+  <xmlrpc:view name="test4"
+      factory="zope.component.tests.views.V1"
+      for="zope.component.tests.views.IC"
+      permission="zope.Public"
+      allowed_methods="action"
+      allowed_interface="zope.component.tests.views.IV" />
+
+  <xmlrpc:view 
+      name="test5"
+      factory="zope.component.tests.views.V1"
+      for="zope.component.tests.views.IC"
+      permission="zope.Public"
+      allowed_methods="action index"
+      allowed_interface="zope.component.tests.views.IV" />
+
+  <xmlrpc:view
+      factory="zope.component.tests.views.V1"
+      for="zope.component.tests.views.IC">
+
+    <xmlrpc:method name="index2.html" attribute="index" />
+    <xmlrpc:method name="action2.html" attribute="action" />
+
+  </xmlrpc:view>
+
+
+  <xmlrpc:view name="test6"
+      factory="zope.component.tests.views.V1"
+      for="zope.component.tests.views.IC">
+
+    <xmlrpc:method name="index3.html" attribute="index" />
+    <xmlrpc:method name="action3.html" attribute="action" />
+
+  </xmlrpc:view>
+
+  <permission id="zope.XXX" title="xxx" />
+
+  <xmlrpc:view
+      factory="zope.component.tests.views.V1"
+      for="zope.component.tests.views.IC"
+      permission="zope.XXX">
+
+    <xmlrpc:method name="index4.html" attribute="index" />
+    <xmlrpc:method name="action4.html" attribute="action"
+                  permission="zope.Public" />
+  </xmlrpc:view>
+
+</configure>

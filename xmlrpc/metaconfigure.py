@@ -13,21 +13,15 @@
 ##############################################################################
 """XMLRPC configuration code
 
-$Id: metaconfigure.py,v 1.11 2003/07/28 22:21:08 jim Exp $
+$Id: metaconfigure.py,v 1.12 2003/08/03 23:47:47 srichter Exp $
 """
-
-from zope.interface import classProvides
+from zope.app.component.metaconfigure import handler
+from zope.app.services.servicenames import Interfaces
+from zope.configuration.exceptions import ConfigurationError
+from zope.publisher.interfaces.xmlrpc import IXMLRPCPresentation
 from zope.security.proxy import Proxy
 from zope.security.checker import CheckerPublic, NamesChecker, Checker
 
-from zope.configuration.action import Action
-from zope.configuration.exceptions import ConfigurationError
-
-from zope.app.services.servicenames import Interfaces
-
-from zope.publisher.interfaces.xmlrpc import IXMLRPCPresentation
-
-from zope.app.component.metaconfigure import handler, resolveInterface
 
 class view(object):
     '''This view class handles the directives for the XML-RPC Presentation'''
@@ -38,9 +32,6 @@ class view(object):
                  permission=None, allowed_interface=None,
                  allowed_methods=None):
 
-        # Resolve and save the component these views are for
-        if for_ is not None:
-            for_ = resolveInterface(_context, for_)
         self.for_ = for_
 
         if ((allowed_methods or allowed_interface)
@@ -50,10 +41,8 @@ class view(object):
                 "allowed_methods"
                 )
 
-        if allowed_interface is not None:
-            allowed_interface = resolveInterface(_context, allowed_interface)
-
-        self.factory = map(_context.resolve, factory.strip().split())
+        self._context = _context
+        self.factory = factory
         self.name = name
         self.permission = permission
         self.allowed_methods = allowed_methods
@@ -63,7 +52,7 @@ class view(object):
 
     def method(self, _context, name, attribute, permission=None):
         permission = permission or self.permission
-        # make a copy of the factory sequence, sinc ewe might modify it
+        # make a copy of the factory sequence, since we might modify it
         # specifically for this method.
         factory = self.factory[:]
 
@@ -73,36 +62,32 @@ class view(object):
             if permission == 'zope.Public':
                 permission = CheckerPublic
 
-            def methodView(context, request,
-                         factory=factory[-1], attribute=attribute,
-                         permission=permission):
+            def methodView(context, request, factory=factory[-1],
+                           attribute=attribute, permission=permission):
+
                 return Proxy(getattr(factory(context, request), attribute),
                              NamesChecker(__call__ = permission))
         else:
 
-            def methodView(context, request,
-                         factory=factory[-1], attribute=attribute):
+            def methodView(context, request, factory=factory[-1],
+                           attribute=attribute):
                 return getattr(factory(context, request), attribute)
 
         factory[-1] = methodView
 
         self.methods += 1
 
-        return [
-            Action(
-                discriminator = ('view', self.for_, name, self.type),
-                callable = handler,
-                args = ('Views', 'provideView', self.for_, name, self.type,
-                        factory),
-                )
-            ]
+        _context.action(
+            discriminator = ('view', self.for_, name, self.type),
+            callable = handler,
+            args = ('Views', 'provideView', self.for_, name, self.type, factory)
+            )
 
 
     def _proxyFactory(self, factory, checker):
         factory = factory[:]
 
-        def proxyView(context, request,
-                      factory=factory[-1], checker=checker):
+        def proxyView(context, request, factory=factory[-1], checker=checker):
 
             view = factory(context, request)
 
@@ -119,27 +104,26 @@ class view(object):
 
     def __call__(self):
         if self.name is None:
-            return ()
+            return
 
         permission = self.permission
-        allowed_interface = self.allowed_interface
-        allowed_methods = self.allowed_methods
+        allowed_interface = self.allowed_interface or []
+        allowed_methods = self.allowed_methods or []
         factory = self.factory[:]
+
 
         if permission:
             if permission == 'zope.Public':
                 permission = CheckerPublic
 
-            if ((not allowed_methods) and (allowed_interface is None)
-                and (not self.methods)):
-                allowed_methods = self.default_allowed_methods
-
             require = {}
-            for name in (allowed_methods or '').split():
+            for name in allowed_methods:
                 require[name] = permission
+
             if allowed_interface:
-                for name in allowed_interface.names(all=True):
-                    require[name] = permission
+                for iface in allowed_interface:
+                    for name in iface:
+                        require[name] = permission
 
             checker = Checker(require.get)
 
@@ -153,22 +137,16 @@ class view(object):
 
             factory[-1] =  proxyView
 
-        actions = [
-            Action(
+        self._context.action(
             discriminator = ('view', self.for_, self.name, self.type),
             callable = handler,
             args = ('Views', 'provideView', self.for_, self.name,
-                    self.type, factory),
-            )
-            ]
+                    self.type, factory) )
+
         if self.for_ is not None:
-            actions.append
-            (
-                Action(
+            self._context.action(
                 discriminator = None,
                 callable = handler,
                 args = (Interfaces, 'provideInterface',
                         self.for_.__module__+'.'+self.for_.__name__, self.for_)
                 )
-                )
-        return actions

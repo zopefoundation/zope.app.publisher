@@ -1,16 +1,17 @@
-<zopeConfigure xmlns='http://namespaces.zope.org/zope'>
+<configure 
+    xmlns:meta="http://namespaces.zope.org/meta"
+    xmlns="http://namespaces.zope.org/zope">
   
-<directives namespace="http://namespaces.zope.org/xmlrpc">
-
-  <directive 
+  <meta:complexDirective 
+       namespace="http://namespaces.zope.org/xmlrpc"
        name="view" 
-       attributes="factory for name
-                   permission allowed_interface allowed_methods"
-       handler="zope.app.publisher.xmlrpc.metaconfigure.view">
-     <subdirective name="method" 
-                   attributes="name attribute permission" /> 
-  </directive>
+       schema=".metadirectives.IViewDirective"
+       handler=".metaconfigure.view">
 
-</directives>
+     <meta:subdirective 
+         name="method" 
+         schema=".metadirectives.IMethodDirective" /> 
 
-</zopeConfigure>
+  </meta:complexDirective>
+
+</configure>
