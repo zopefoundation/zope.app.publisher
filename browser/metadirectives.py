@@ -267,7 +267,7 @@ class IResourceDirective(IBasicResourceInformation):
     template = Path(
         title=u"Template",
         description=u"""
-        If the image attribute is used, then a page template resource,
+        If the template attribute is used, then a page template resource,
         rather than a file resource will be created.""",
         required=False
         )
