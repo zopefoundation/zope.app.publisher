@@ -15,17 +15,15 @@
 
 $Id$
 """
-
+import zope.interface
+from zope.security.checker import CheckerPublic, Checker
 from zope.component.servicenames import Presentation
 from zope.configuration.exceptions import ConfigurationError
-from zope.app.component.metaconfigure import handler
-import zope.interface
-
 from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
-from zope.security.checker import CheckerPublic, Checker
-from zope.app.component.interface import provideInterface
 
-import zope.app.location
+from zope.app.location import Location
+from zope.app.component.interface import provideInterface
+from zope.app.component.metaconfigure import handler
 
 def view(_context, for_=None, interface=None, methods=None,
          class_=None,  permission=None, name=None):
@@ -77,14 +75,19 @@ def view(_context, for_=None, interface=None, methods=None,
             checker = Checker({'__call__': permission})
         else:
             checker = None
-            
+
         for name in require:
+            # create a new callable class with a security checker; mix
+            # in zope.app.location.Location so that the view inherits
+            # a security context
+            cdict = {'__Security_checker__': checker,
+                     '__call__': getattr(class_, name)}
+            new_class = type(class_.__name__, (class_, Location), cdict)
             _context.action(
                 discriminator = ('view', for_, name, IXMLRPCRequest),
                 callable = handler,
                 args = (Presentation, 'provideAdapter', IXMLRPCRequest,
-                        MethodFactory(class_, name, checker),
-                        name, (for_, )) )
+                        new_class, name, (for_, )) )
 
     # Register the used interfaces with the interface service
     if for_ is not None:
@@ -93,32 +96,3 @@ def view(_context, for_=None, interface=None, methods=None,
             callable = provideInterface,
             args = ('', for_)
             )
-        
-
-
-class MethodFactory:
-
-    def __init__(self, cls, name, checker):
-        self.cls, self.name, self.checker = cls, name, checker
-
-    def __call__(self, context, request):
-        ob = self.cls(context, request)
-        ob = getattr(ob, self.name)
-        if self.checker is not None:
-            ob = ProtectedMethod(ob, self.checker)
-        return ob
-
-
-class ProtectedMethod:
-
-    zope.interface.implements(zope.app.location.ILocation)
-
-    __parent__ = __name__ = None
-
-    def __init__(self, ob, checker):
-        self.ob = ob
-        self.__Security_checker__ = checker
-
-    def __call__(self, *args):
-        return self.ob(*args)
-    
