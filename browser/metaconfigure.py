@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: metaconfigure.py,v 1.16 2003/12/07 10:04:53 gotcha Exp $
+$Id: metaconfigure.py,v 1.17 2004/03/03 10:38:49 philikon Exp $
 """
 
 from zope.app import zapi
@@ -22,7 +22,7 @@ from zope.app.services.servicenames import Interfaces
 
 from zope.app.component.metaconfigure import skin, layer, usage
 from zope.app.component.metaconfigure import handler
-from zope.app.interfaces.container import IAdding
+from zope.app.container.interfaces import IAdding
 from zope.app.publisher.browser.globalbrowsermenuservice \
      import menuItemDirective
 from zope.app.component.contentdirective import ContentDirective

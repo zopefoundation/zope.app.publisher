@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.38 2004/03/02 14:24:31 srichter Exp $
+$Id: viewmeta.py,v 1.39 2004/03/03 10:38:49 philikon Exp $
 """
 import os
 
@@ -384,7 +384,7 @@ def addview(_context, name, permission,
             menu=None, title=None, usage=u'',
             ):
     return view(_context, name,
-                'zope.app.interfaces.container.IAdding',
+                'zope.app.container.interfaces.IAdding',
                 permission,
                 layer, class_,
                 allowed_interface, allowed_attributes,

@@ -27,13 +27,13 @@
    '')),
  (('browser:menuItem',
    'zope.app.container.add',
-   <InterfaceClass zope.app.interfaces.container.IAdding>,
+   <InterfaceClass zope.app.container.interfaces.IAdding>,
    'Add an X'),
   <bound method GlobalBrowserMenuService.menuItem of ''' \
        '''<zope.app.publisher.browser.globalbrowsermenuservice.''' \
        '''GlobalBrowserMenuService object>>,
   ('zope.app.container.add',
-   <InterfaceClass zope.app.interfaces.container.IAdding>,
+   <InterfaceClass zope.app.container.interfaces.IAdding>,
    'zope.app.browser.add.X.f1',
    'Add an X',
    '',
@@ -41,7 +41,7 @@
    'zope.ManageContent',
    {'factory': 'zope.app.browser.add.X.f1'})))
 
-$Id: test_addMenuItem.py,v 1.2 2004/01/09 00:40:25 garrett Exp $
+$Id: test_addMenuItem.py,v 1.3 2004/03/03 10:38:49 philikon Exp $
 '''
 
 import unittest
@@ -79,13 +79,13 @@ def test_w_factory():
     >>> context
     ((('browser:menuItem',
        'zope.app.container.add',
-       <InterfaceClass zope.app.interfaces.container.IAdding>,
+       <InterfaceClass zope.app.container.interfaces.IAdding>,
        'Add an X'),
       <bound method GlobalBrowserMenuService.menuItem of """ \
             """<zope.app.publisher.browser.globalbrowsermenuservice.""" \
             """GlobalBrowserMenuService object>>,
       ('zope.app.container.add',
-       <InterfaceClass zope.app.interfaces.container.IAdding>,
+       <InterfaceClass zope.app.container.interfaces.IAdding>,
        'x.y.z',
        'Add an X',
        'blah blah',
@@ -103,13 +103,13 @@ def test_w_factory_and_view():
     >>> context
     ((('browser:menuItem',
        'zope.app.container.add',
-       <InterfaceClass zope.app.interfaces.container.IAdding>,
+       <InterfaceClass zope.app.container.interfaces.IAdding>,
        'Add an X'),
       <bound method GlobalBrowserMenuService.menuItem of """ \
             """<zope.app.publisher.browser.globalbrowsermenuservice.""" \
             """GlobalBrowserMenuService object>>,
       ('zope.app.container.add',
-       <InterfaceClass zope.app.interfaces.container.IAdding>,
+       <InterfaceClass zope.app.container.interfaces.IAdding>,
        'AddX',
        'Add an X',
        'blah blah',
@@ -135,13 +135,13 @@ def test_w_factory_class_view():
        '')),
      (('browser:menuItem',
        'zope.app.container.add',
-       <InterfaceClass zope.app.interfaces.container.IAdding>,
+       <InterfaceClass zope.app.container.interfaces.IAdding>,
        'Add an X'),
       <bound method GlobalBrowserMenuService.menuItem of """ \
            """<zope.app.publisher.browser.globalbrowsermenuservice.""" \
            """GlobalBrowserMenuService object>>,
       ('zope.app.container.add',
-       <InterfaceClass zope.app.interfaces.container.IAdding>,
+       <InterfaceClass zope.app.container.interfaces.IAdding>,
        'AddX',
        'Add an X',
        'blah blah',
