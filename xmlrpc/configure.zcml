@@ -4,7 +4,11 @@
     >
 
   <class class="xmlrpclib.Fault">
-    <require permission="zope.Public" attributes="faultCode faultString" />
+    <allow attributes="faultCode faultString" />
+  </class>
+
+  <class class="xmlrpclib.DateTime">
+    <allow attributes="value" />
   </class>
 
   <view 
