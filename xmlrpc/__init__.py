@@ -20,6 +20,7 @@ $Id$
 import zope.interface
 import zope.app.location
 import zope.app.publisher.interfaces.xmlrpc
+import zope.publisher.interfaces.xmlrpc
 
 class XMLRPCView(object):
     """A base XML-RPC view that can be used as mix-in for XML-RPC views.""" 
@@ -46,6 +47,8 @@ class MethodPublisher(XMLRPCView, zope.app.location.Location):
     zope.interface.implements(IMethodPublisher)
 
 class MethodTraverser(object):
+    zope.interface.implements(
+        zope.publisher.interfaces.xmlrpc.IXMLRPCPublisher)
 
     __used_for__ = IMethodPublisher
 
