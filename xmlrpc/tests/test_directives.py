@@ -13,7 +13,7 @@
 ##############################################################################
 """
 
-$Id: test_directives.py,v 1.4 2003/05/01 19:35:29 faassen Exp $
+$Id: test_directives.py,v 1.5 2003/06/06 20:25:31 stevea Exp $
 """
 
 import unittest
@@ -31,6 +31,7 @@ from zope.component.tests.request import Request
 from zope.publisher.interfaces.xmlrpc import IXMLRPCPresentation
 
 import zope.app.publisher.xmlrpc
+from zope.interface import implements
 
 template = """<zopeConfigure
    xmlns='http://namespaces.zope.org/zope'
@@ -41,7 +42,7 @@ template = """<zopeConfigure
 request = Request(IXMLRPCPresentation)
 
 class Ob:
-    __implements__ = IC
+    implements(IC)
 
 ob = Ob()
 
