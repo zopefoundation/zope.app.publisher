@@ -357,23 +357,6 @@ def addview(_context, name, permission,
                 menu, title
                 )
 
-def defaultView(_context, name, for_=None):
-
-    _context.action(
-        discriminator = ('defaultViewName', for_, IBrowserRequest, name),
-        callable = handler,
-        args = ('provideAdapter',
-                (for_, IBrowserRequest), IDefaultViewName, '', name,
-                _context.info)
-        )
-
-    if for_ is not None:
-        _context.action(
-            discriminator = None,
-            callable = provideInterface,
-            args = ('', for_)
-            )
-
 # transient _handle_menu registry
 _registeredMenus = {}
 

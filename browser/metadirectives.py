@@ -175,6 +175,13 @@ class IDefaultViewDirective(Interface):
         required=False
         )
 
+    layer = LayerField(
+        title=u"The layer the default view is declared for",
+        description=u"The default layer for which the default view is "
+                    u"applicable. By default it is applied to all layers.",
+        required=False
+        )
+
 #
 # browser pages
 #

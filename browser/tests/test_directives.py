@@ -22,6 +22,7 @@ from cStringIO import StringIO
 from zope.interface import Interface, implements, directlyProvides, providedBy
 
 import zope.security.management
+from zope.component.interfaces import IDefaultViewName
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.configuration.exceptions import ConfigurationError
 from zope.publisher.browser import TestRequest
@@ -253,8 +254,9 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         self.assertEqual(v(), "<html><body><p>test</p></body></html>\n")
 
     def testDefaultView(self):
-        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
-                         None)
+        self.assertEqual(
+            zapi.queryMultiAdapter((ob, request), IDefaultViewName),
+            None)
 
         xmlconfig(StringIO(template % (
             '''
@@ -265,6 +267,34 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             )))
 
         self.assertEqual(zapi.getDefaultViewName(ob, request), 'test')
+
+    def testDefaultViewWithLayer(self):
+        class FakeRequest(TestRequest):
+            implements(ITestLayer)
+        request2 = FakeRequest()
+
+        self.assertEqual(
+            zapi.queryMultiAdapter((ob, request2), IDefaultViewName),
+            None)
+
+        xmlconfig(StringIO(template % (
+            '''
+            <browser:defaultView
+                name="test"
+                for="zope.app.component.tests.views.IC" />
+
+            <browser:defaultView
+                name="test2"
+                for="zope.app.component.tests.views.IC"
+                layer="
+                  zope.app.publisher.browser.tests.test_directives.ITestLayer"
+                />
+            '''
+            )))
+
+        self.assertEqual(zapi.getDefaultViewName(ob, request2), 'test2')
+        self.assertEqual(zapi.getDefaultViewName(ob, request), 'test')
+
 
     def testSkinResource(self):
         self.assertEqual(
