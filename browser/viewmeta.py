@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.22 2003/05/01 19:35:27 faassen Exp $
+$Id: viewmeta.py,v 1.23 2003/05/02 18:27:07 jim Exp $
 """
 
 from zope.interface import classProvides, directlyProvides
@@ -128,7 +128,7 @@ def page(_context, name, permission, for_,
                 "A class must be provided if attribute is used")
 
     if template:
-        template = str(_context.path(template))
+        template = os.path.abspath(str(_context.path(template)))
         if not os.path.isfile(template):
             raise ConfigurationError("No such file", template)
         required['__getitem__'] = permission
@@ -143,7 +143,6 @@ def page(_context, name, permission, for_,
                     )
         if template:
             # class and template
-            template = str(_context.path(template))
             new_class = SimpleViewClass(
                 template, bases=(original_class, ), usage=usage
                 )
@@ -274,7 +273,7 @@ class view:
 
     def page(self, _context, name, attribute=None, template=None, usage=None):
         if template:
-            template = _context.path(template)
+            template = os.path.abspath(_context.path(template))
             if not os.path.isfile(template):
                 raise ConfigurationError("No such file", template)
         else:
