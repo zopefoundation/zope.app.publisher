@@ -170,6 +170,7 @@ def getMenu(menuItemType, object, request):
          'submenu': (IBrowserSubMenuItem.providedBy(item) and
                      getMenu(item.submenuType, object, request)) or None}
         for index, order, title, item in result]
+
     return result
 
 

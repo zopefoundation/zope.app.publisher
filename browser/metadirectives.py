@@ -436,6 +436,12 @@ class IMenuItem(Interface):
         required=False
         )
 
+    icon = TextLine(
+        title=u"Icon Path",
+        description=u"Path to the icon resource representing this menu item.",
+        required=False
+        )
+
     permission = Permission(
         title=u"The permission needed access the item",
         description=u"""
