@@ -243,9 +243,7 @@ class GlobalBrowserMenuServiceTest(PlacelessSetup, unittest.TestCase):
         r.menuItem('test_id', C1, 'a1', 'a2', 'a3')
 
 def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(GlobalBrowserMenuServiceTest),
-        ))
+    return unittest.makeSuite(GlobalBrowserMenuServiceTest)
 
 if __name__ == '__main__':
     unittest.main()
