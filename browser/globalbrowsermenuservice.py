@@ -36,7 +36,7 @@ from zope.app.component.interface import provideInterface
 from zope.app.servicenames import BrowserMenu
 
 
-# XXX This was copied and trimmed down from zope.interface.
+# TODO: This was copied and trimmed down from zope.interface.
 # Eventually, this will be eliminated when the browser menu
 # service is changed to use adapters.
 from zope.interface.interfaces import IInterface
@@ -190,7 +190,7 @@ class BaseBrowserMenuService:
                 try:
                     v = traverser.traverseRelativeURL(
                         request, object, path)
-                    # XXX
+                    # TODO:
                     # tickle the security proxy's checker
                     # we're assuming that view pages are callable
                     # this is a pretty sound assumption
@@ -243,8 +243,6 @@ class GlobalBrowserMenuService(BaseBrowserMenuService):
     _clear = __init__
 
     def menu(self, menu_id, title, description=u''):
-        # XXX we have nothing to do with the title and description. ;)
-
         s = zapi.getGlobalService(zapi.servicenames.Presentation)
         if menu_id in self._registry:
             raise DuplicationError("Menu %s is already defined." % menu_id)
