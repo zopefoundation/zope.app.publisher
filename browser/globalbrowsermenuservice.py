@@ -19,7 +19,7 @@ __metaclass__ = type
 
 import sys
 from zope.exceptions import DuplicationError, Unauthorized, Forbidden
-from zope.interface import implements
+from zope.interface import implements, implementedBy
 from zope.security.checker import CheckerPublic
 from zope.security import checkPermission
 from zope.app.component.metaconfigure import handler
@@ -48,12 +48,12 @@ class TypeRegistry:
         self._reg = {}
 
     def register(self, interface, object):
-        if not (interface is None or IInterface.providedBy(interface)):
+        if interface is not None and not IInterface.providedBy(interface):
             if isinstance(interface, (type, types.ClassType)):
-                interface = zope.interface.implementedBy(interface)
+                interface = implementedBy(interface)
             else:
                 raise TypeError(
-                    "The interface argument must be an interface (or None)")
+                    "The interface argument must be an interface (or None) or a class.")
         
         self._reg[interface] = object
 
