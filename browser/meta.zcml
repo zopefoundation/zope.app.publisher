@@ -648,7 +648,7 @@
 
     <directive
         name="i18n-resource"
-        attributes="name default_language"
+        attributes="name defaultLanguage"
         handler="zope.app.publisher.browser.metaconfigure.I18nResource">
       <attribute
           name="name" />
@@ -690,7 +690,7 @@
         description="Define a new browser menu"
         >
 
-      <attribute name="name">
+      <attribute name="id">
         <description>
               The name of the menu.
 
@@ -822,6 +822,8 @@
           name="description" />
       <attribute
           name="filter" />
+      <attribute
+          name="permission" />
       </directive>
 
     <directive name="icon" handler=".icon.IconDirective">
