@@ -43,31 +43,31 @@ class DirectivesTest(PlacelessSetup, unittest.TestCase):
 
     def testView(self):
         self.assertEqual(queryView(ob, 'test', request), None)
-        context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
+        xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
         self.assertEqual(queryView(ob, 'test', request).__class__, V1)
 
     def testInterfaceProtectedView(self):
-        context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
+        xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
         v = getView(ob, 'test2', request)
         v = ProxyFactory(v)
         self.assertEqual(v.index(), 'V1 here')
         self.assertRaises(Exception, getattr, v, 'action')
 
     def testAttributeProtectedView(self):
-        context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
+        xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
         v = getView(ob, 'test3', request)
         v = ProxyFactory(v)
         self.assertEqual(v.action(), 'done')
         self.assertRaises(Exception, getattr, v, 'index')
 
     def testInterfaceAndAttributeProtectedView(self):
-        context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
+        xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
         v = getView(ob, 'test4', request)
         self.assertEqual(v.index(), 'V1 here')
         self.assertEqual(v.action(), 'done')
 
     def testDuplicatedInterfaceAndAttributeProtectedView(self):
-        context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
+        xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
         v = getView(ob, 'test5', request)
         self.assertEqual(v.index(), 'V1 here')
         self.assertEqual(v.action(), 'done')
@@ -76,9 +76,14 @@ class DirectivesTest(PlacelessSetup, unittest.TestCase):
         self.assertRaises(ConfigurationError, xmlconfig.file,
                           "xmlrpc_error.zcml", xmlrpc.tests)
 
-    def testDefaultView(self):
-        context = xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
-        self.assertEqual(getDefaultViewName(ob, request), 'test')
+    def test_no_name(self):
+        xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
+        v = getView(ob, 'index', request)
+        self.assertEqual(v(), 'V1 here')
+        v = getView(ob, 'action', request)
+        self.assertEqual(v(), 'done')
+
+        
 
 
 def test_suite():

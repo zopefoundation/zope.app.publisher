@@ -8,6 +8,6 @@
         name="test"
         factory="zope.component.tests.views.V1"
         for="zope.component.tests.views.IC"
-        allowed_attributes="action index" />
+        methods="action index" />
 
 </configure>

@@ -8,10 +8,4 @@
        schema=".metadirectives.IViewDirective"
        handler=".metaconfigure.view" />
 
-  <meta:directive
-      namespace="http://namespaces.zope.org/xmlrpc"
-      name="defaultView"
-      schema=".metadirectives.IDefaultViewDirective"
-      handler=".metaconfigure.defaultView" />
-
 </configure>

@@ -1,0 +1,3597 @@
+
+
+  >>> print http(r"""
+  ... GET /manage HTTP/1.1
+  ... Authorization: Basic Z2xvYmFsbWdyOmdsb2JhbG1ncnB3
+  ... """)
+  HTTP/1.1 303 See Other
+  Connection: close
+  Content-Length: 0
+  Content-Type: text/plain;charset=utf-8
+  Location: @@contents.html
+  <BLANKLINE>
+
+
+  >>> print http(r"""
+  ... GET /@@contents.html HTTP/1.1
+  ... Authorization: Basic Z2xvYmFsbWdyOmdsb2JhbG1ncnB3
+  ... """)
+  HTTP/1.1 200 Ok
+  Connection: close
+  Content-Length: 6948
+  Content-Type: text/html;charset=utf-8
+  <BLANKLINE>
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <BLANKLINE>
+  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+        lang="en">
+  <BLANKLINE>
+    <head>
+      <title>Z3: </title>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/zope3.css);</style>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Popup script for the OnlineHelp -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/onlinehelp.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/xmltree.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <link rel="icon" type="image/png"
+            href="http://localhost:8081/@@/favicon.png" />
+    </head>
+  <BLANKLINE>
+    <body onload="loadtree('http://localhost:8081/', 'http://localhost:8081/')">
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="global">
+        <div id="userDetails">
+  <BLANKLINE>
+            User:
+            Sample Manager
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@logout.html?nextURL=http%3A//localhost%3A8081/%40%40contents.html">[Logout]</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+        <img src="http://localhost:8081/@@/zope3logo.gif" />
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="navigators">
+  <BLANKLINE>
+        <!-- Navigation tree box -->
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+        <div class="box" id="navigationTree">
+          <h4>Navigation</h4>
+          <div xmlns="http://www.zope.org/zope3xmltree"
+               id="navtreecontents" class="body"
+               onclick="treeclicked(event);">Loading...</div>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div class="box" id="commonTasks">
+  <BLANKLINE>
+  <BLANKLINE>
+            <h4>Add:</h4>
+            <div class="body">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div class="content even">
+  <BLANKLINE>
+  <BLANKLINE>
+        <a href="http://localhost:8081/@@+/action.html?type_name=zope.app.dtmlpage.DTMLPage"
+           class="">DTML Page</a>
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div class="content odd">
+  <BLANKLINE>
+  <BLANKLINE>
+        <a href="http://localhost:8081/@@+/action.html?type_name=zope.app.file.File"
+           class="">File</a>
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div class="content even">
+        <a href="http://localhost:8081/@@contents.html?type_name=zope.app.browser.add.zope.app.folder.folder.Folder"
+           class="">Folder</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div class="content odd">
+        <a href="http://localhost:8081/@@contents.html?type_name=zope.app.browser.add.zope.app.i18nfile.i18nfile.I18nFile"
+           class="">I18n File</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div class="content even">
+        <a href="http://localhost:8081/@@contents.html?type_name=zope.app.browser.add.zope.app.i18nfile.i18nimage.I18nImage"
+           class="">I18n Image</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div class="content odd">
+  <BLANKLINE>
+  <BLANKLINE>
+        <a href="http://localhost:8081/@@+/action.html?type_name=zope.app.file.Image"
+           class="">Image</a>
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div class="content even">
+  <BLANKLINE>
+  <BLANKLINE>
+        <a href="http://localhost:8081/@@+/action.html?type_name=zope.app.sqlscript.SQLScript"
+           class="">SQL Script</a>
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div class="content odd">
+  <BLANKLINE>
+  <BLANKLINE>
+        <a href="http://localhost:8081/@@+/action.html?type_name=zope.app.zptpage.ZPTPage"
+           class="">ZPT Page</a>
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+        <!-- Tree of the help topics that appears on the help namespace -->
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="workspace">
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="breadcrumbs"> Location:&nbsp;<a
+      href="http://localhost:8081/@@SelectedManagementView.html">[top]</a>
+             /
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div class="itemViews">
+  <BLANKLINE>
+            <a href="@@contents.html" class="selected">Contents</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@preview.html" class="">Preview</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@EditMetaData.html" class="">Metadata</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@classBrowser.html" class="">Introspector</a>
+  <BLANKLINE>
+        </div>
+  <BLANKLINE>
+        <!-- OnlineHelp with popup support -->
+        <!-- note, we reverse the actions list 'cos they're packed to the
+             screen from the right -->
+        <div id="actions">
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="javascript:popup('contents.html/++help++/@@contexthelp.html','OnlineHelp','height=400
+                                             ,width=700
+                                             ,resizable=1
+                                             ,scrollbars=yes
+                                             ,location=no
+                                             ,status=no
+                                             ,toolbar=no
+                                             ,menubar=no')">Help</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@undoAll.html">Undo all</a>
+            <a href="@@undoMore.html">Undo more</a>
+            <a href="@@undo.html">Undo!</a>
+            <a href="@@errorRedirect.html">Errors</a>
+            <a href="@@grant.html">Grant</a>
+            <a href="@@+">Add</a>
+            <a href="@@find.html">Find</a>
+            <a href="++etc++process/index.html">Manage Process</a>
+            <a href="++etc++site/@@SelectedManagementView.html">Manage Site</a>
+  <BLANKLINE>
+          &nbsp;
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="viewspace">
+  <BLANKLINE>
+          <div id="message">
+          </div>
+  <BLANKLINE>
+          <div id="content">
+            <div>
+    <div>
+  <BLANKLINE>
+      <form name="containerContentsForm" method="POST"
+            action="http://localhost:8081/@@contents.html">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <table id="sortable" class="listing"
+               summary="Content listing">
+  <BLANKLINE>
+          <thead>
+            <tr>
+              <th>&nbsp;</th>
+              <th>Name</th>
+              <th>Title</th>
+              <th>Size</th>
+              <th>Created</th>
+              <th>Modified</th>
+            </tr>
+          </thead>
+  <BLANKLINE>
+          <tbody>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+          </tbody>
+        </table>
+  <BLANKLINE>
+        <div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      </form>
+  <BLANKLINE>
+      <script><!--
+          prettydump('focus', LG_INFO);
+          if (document.containerContentsForm.new_value)
+  	        document.containerContentsForm.new_value.focus();
+          //-->
+      </script>
+  <BLANKLINE>
+    </div>
+  <BLANKLINE>
+  </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div id="context_information">
+  <BLANKLINE>
+            <div id="helpers">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+  <BLANKLINE>
+  <!--
+            <div id="inspectors">
+  <BLANKLINE>
+              <div class="box" id="metadata"
+                  tal:define="view context/@@MetaDataBox|nothing"
+                  tal:condition="view/strip|nothing">
+  <BLANKLINE>
+                <h4 i18n:translate="">Metadata</h4>
+  <BLANKLINE>
+                <div class="body">
+  <BLANKLINE>
+                  <div class="content" tal:content="structure view">
+                    Some metadata
+                  </div>
+  <BLANKLINE>
+                </div>
+              </div>
+            </div>
+  -->
+  <BLANKLINE>
+          </div>
+  <BLANKLINE>
+          <div class="spacer">
+            &nbsp;
+          </div>
+  <BLANKLINE>
+        </div>
+      </div>
+  <BLANKLINE>
+      <div id="footer" />
+  <BLANKLINE>
+      <div id="logger" />
+  <BLANKLINE>
+    </body>
+  <BLANKLINE>
+  </html>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+
+
+  >>> print http(r"""
+  ... GET /++etc++site/@@manage HTTP/1.1
+  ... Authorization: Basic Z2xvYmFsbWdyOmdsb2JhbG1ncnB3
+  ... Referer: http://localhost:8081/@@contents.html
+  ... """)
+  HTTP/1.1 303 See Other
+  Connection: close
+  Content-Length: 0
+  Content-Type: text/plain;charset=utf-8
+  Location: @@tasks.html
+  <BLANKLINE>
+
+
+  >>> print http(r"""
+  ... GET /++etc++site/@@tasks.html HTTP/1.1
+  ... Authorization: Basic Z2xvYmFsbWdyOmdsb2JhbG1ncnB3
+  ... Referer: http://localhost:8081/@@contents.html
+  ... """)
+  HTTP/1.1 200 Ok
+  Connection: close
+  Content-Length: 7224
+  Content-Type: text/html;charset=utf-8
+  <BLANKLINE>
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <BLANKLINE>
+  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+        lang="en">
+  <BLANKLINE>
+    <head>
+      <title>Z3: ++etc++site</title>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/zope3.css);</style>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/site_management.css);</style>
+  <BLANKLINE>
+      <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Popup script for the OnlineHelp -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/onlinehelp.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/xmltree.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <link rel="icon" type="image/png"
+            href="http://localhost:8081/@@/favicon.png" />
+    </head>
+  <BLANKLINE>
+    <body onload="loadtree('http://localhost:8081/', 'http://localhost:8081/++etc++site/')">
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="global">
+        <div id="userDetails">
+  <BLANKLINE>
+            User:
+            Sample Manager
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@logout.html?nextURL=http%3A//localhost%3A8081/%2B%2Betc%2B%2Bsite/%40%40tasks.html">[Logout]</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+        <img src="http://localhost:8081/@@/zope3logo.gif" />
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="navigators">
+  <BLANKLINE>
+        <!-- Navigation tree box -->
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+        <div class="box" id="navigationTree">
+          <h4>Navigation</h4>
+          <div xmlns="http://www.zope.org/zope3xmltree"
+               id="navtreecontents" class="body"
+               onclick="treeclicked(event);">Loading...</div>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div class="box" id="commonTasks">
+  <BLANKLINE>
+  <BLANKLINE>
+            <h4>Add:</h4>
+            <div class="body">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div class="content even">
+        <a href="http://localhost:8081/++etc++site/@@contents.html?type_name=zope.app.browser.add.zope.app.site.folder.SiteManagementFolder"
+           class="">Site-Management Folder</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+        <!-- Tree of the help topics that appears on the help namespace -->
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="workspace">
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="breadcrumbs"> Location:&nbsp;<a
+      href="http://localhost:8081/@@SelectedManagementView.html">[top]</a>
+             /
+            <a href="http://localhost:8081/++etc++site/@@SelectedManagementView.html">++etc++site</a> /
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div class="itemViews">
+  <BLANKLINE>
+            <a href="@@tasks.html" class="selected">Tasks</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@services.html" class="">Services</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@interfacebrowse.html" class="">Interface Browse</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@contents.html" class="">Software</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@tools.html" class="">Tools</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@EditMetaData.html" class="">Metadata</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@classBrowser.html" class="">Introspector</a>
+  <BLANKLINE>
+        </div>
+  <BLANKLINE>
+        <!-- OnlineHelp with popup support -->
+        <!-- note, we reverse the actions list 'cos they're packed to the
+             screen from the right -->
+        <div id="actions">
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="javascript:popup('tasks.html/++help++/@@contexthelp.html','OnlineHelp','height=400
+                                             ,width=700
+                                             ,resizable=1
+                                             ,scrollbars=yes
+                                             ,location=no
+                                             ,status=no
+                                             ,toolbar=no
+                                             ,menubar=no')">Help</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@undoAll.html">Undo all</a>
+            <a href="@@undoMore.html">Undo more</a>
+            <a href="@@undo.html">Undo!</a>
+            <a href="@@errorRedirect.html">Errors</a>
+            <a href="@@find.html">Find</a>
+            <a href="@@grant.html">Grant</a>
+            <a href="@@+">Add Site Management Folder</a>
+            <a href="default/AddService">Add service</a>
+            <a href="default/@@SelectedManagementView.html">Visit default folder</a>
+  <BLANKLINE>
+          &nbsp;
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="viewspace">
+  <BLANKLINE>
+          <div id="message">
+          </div>
+  <BLANKLINE>
+          <div id="content">
+            <div>
+  <BLANKLINE>
+    <h2>
+      Common Site Management Tasks
+    </h2>
+  <BLANKLINE>
+    <p>
+      The site management interface allows you to setup and configure
+      software for this site.
+    </p>
+  <BLANKLINE>
+    <dl>
+      <dt>Tools:</dt>
+      <dd>
+  <BLANKLINE>
+  <BLANKLINE>
+          Tools consist of Services and Utilities. Services register
+          themselves with the Service Service while utilities register
+          themselves with the Utility Service. They perform tasks like
+          error logging, translation, authentication and so on. You may
+          configure the services and utilities already present in this
+          site or provide new serivces and utilities (which may override
+          existing tools).
+  <BLANKLINE>
+  <BLANKLINE>
+        <ul>
+          <li>
+            <a href="@@tools.html">
+              Tools Management
+            </a>
+          </li>
+          <li>
+            <a href="@@services.html">
+              Services Overview
+            </a>
+          </li>
+  <BLANKLINE>
+          <li>
+            <a href="default/Utilities/@@utilities.html">
+              Utilities Overview (<b>default</b> Site Manager)
+            </a>
+          </li>
+        </ul>
+      </dd>
+  <BLANKLINE>
+      <dt>Software:</dt>
+  <BLANKLINE>
+      <dd>
+  <BLANKLINE>
+          The site may customize the behavior of existing software or
+          define its own. The first step in creating a new software
+          package is to create a new Site Management Folder to contain
+          the software.
+  <BLANKLINE>
+  <BLANKLINE>
+        <ul>
+          <li>
+            <a href="@@contents.html">
+              Customize the behavior of existing software
+            </a>
+          </li>
+  <BLANKLINE>
+          <li>
+            <a href="@@+">
+              Create a new Site Management Folder
+            </a>
+          </li>
+        </ul>
+      </dd>
+  <BLANKLINE>
+      <!-- When software bundles are more than a wiki page, revisit this.
+       <dt>
+         <tal:text i18n:translate="label-software-bundles">
+           Software Bundles
+         </tal:text>:
+       </dt>
+       <dd i18n:translate="">
+        Installing,
+        Removing,
+        etc.
+       </dd>
+      -->
+  <BLANKLINE>
+  </dl></div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div id="context_information">
+  <BLANKLINE>
+            <div id="helpers">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+  <BLANKLINE>
+  <!--
+            <div id="inspectors">
+  <BLANKLINE>
+              <div class="box" id="metadata"
+                  tal:define="view context/@@MetaDataBox|nothing"
+                  tal:condition="view/strip|nothing">
+  <BLANKLINE>
+                <h4 i18n:translate="">Metadata</h4>
+  <BLANKLINE>
+                <div class="body">
+  <BLANKLINE>
+                  <div class="content" tal:content="structure view">
+                    Some metadata
+                  </div>
+  <BLANKLINE>
+                </div>
+              </div>
+            </div>
+  -->
+  <BLANKLINE>
+          </div>
+  <BLANKLINE>
+          <div class="spacer">
+            &nbsp;
+          </div>
+  <BLANKLINE>
+        </div>
+      </div>
+  <BLANKLINE>
+      <div id="footer" />
+  <BLANKLINE>
+      <div id="logger" />
+  <BLANKLINE>
+    </body>
+  <BLANKLINE>
+  </html>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+
+
+  >>> print http(r"""
+  ... GET /++etc++site/default/AddService HTTP/1.1
+  ... Authorization: Basic Z2xvYmFsbWdyOmdsb2JhbG1ncnB3
+  ... Referer: http://localhost:8081/++etc++site/@@tasks.html
+  ... """)
+  HTTP/1.1 200 Ok
+  Connection: close
+  Content-Length: 7153
+  Content-Type: text/html;charset=utf-8
+  <BLANKLINE>
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <BLANKLINE>
+  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+        lang="en">
+  <BLANKLINE>
+    <head>
+  <base href="http://localhost:8081/++etc++site/default/AddService/index.html" />
+  <BLANKLINE>
+      <title>Z3: default</title>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/zope3.css);</style>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/site_management.css);</style>
+  <BLANKLINE>
+      <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Popup script for the OnlineHelp -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/onlinehelp.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/xmltree.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <link rel="icon" type="image/png"
+            href="http://localhost:8081/@@/favicon.png" />
+    </head>
+  <BLANKLINE>
+    <body onload="loadtree('http://localhost:8081/', 'http://localhost:8081/++etc++site/default/AddService/')">
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="global">
+        <div id="userDetails">
+  <BLANKLINE>
+            User:
+            Sample Manager
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@logout.html?nextURL=http%3A//localhost%3A8081/%2B%2Betc%2B%2Bsite/default/AddService/index.html">[Logout]</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+        <img src="http://localhost:8081/@@/zope3logo.gif" />
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="navigators">
+  <BLANKLINE>
+        <!-- Navigation tree box -->
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+        <div class="box" id="navigationTree">
+          <h4>Navigation</h4>
+          <div xmlns="http://www.zope.org/zope3xmltree"
+               id="navtreecontents" class="body"
+               onclick="treeclicked(event);">Loading...</div>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <!-- Tree of the help topics that appears on the help namespace -->
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="workspace">
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="breadcrumbs"> Location:&nbsp;<a
+      href="http://localhost:8081/@@SelectedManagementView.html">[top]</a>
+             /
+            <a href="http://localhost:8081/++etc++site/@@SelectedManagementView.html">++etc++site</a> /
+            <a href="http://localhost:8081/++etc++site/default/@@SelectedManagementView.html">default</a> /
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <!-- OnlineHelp with popup support -->
+        <!-- note, we reverse the actions list 'cos they're packed to the
+             screen from the right -->
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="viewspace">
+  <BLANKLINE>
+          <div id="message">
+          </div>
+  <BLANKLINE>
+          <div id="content">
+            <div>
+  <BLANKLINE>
+    <form method="post" action="action.html">
+      <table class="TypeListing" cellpadding="3">
+  <BLANKLINE>
+        <caption>Add Service</caption>
+  <BLANKLINE>
+        <tbody>
+  <BLANKLINE>
+          <tr>
+  <BLANKLINE>
+            <td class="Selector">
+              <input type="radio" name="type_name"
+                     id="zope.app.browser.add.zope.app.adapter.adapter.LocalAdapterService"
+                     value="zope.app.browser.add.zope.app.adapter.adapter.LocalAdapterService" />
+            </td>
+  <BLANKLINE>
+            <td class="TypeName">
+              <label style="font-weight: bold;"
+                     for="zope.app.browser.add.zope.app.adapter.adapter.LocalAdapterService">
+                Adapter Service
+              </label>
+              <div class="TypeDescription">Allows the registration of Adapters in this site</div>
+            </td>
+          </tr>
+          <tr>
+  <BLANKLINE>
+            <td class="Selector">
+              <input type="radio" name="type_name"
+                     id="zope.app.browser.add.zope.app.pluggableauth.PluggableAuthenticationService"
+                     value="zope.app.browser.add.zope.app.pluggableauth.PluggableAuthenticationService" />
+            </td>
+  <BLANKLINE>
+            <td class="TypeName">
+              <label style="font-weight: bold;"
+                     for="zope.app.browser.add.zope.app.pluggableauth.PluggableAuthenticationService">
+                Authentication Service
+              </label>
+              <div class="TypeDescription">A Pluggable Authentication uses plug-in principal sources.</div>
+            </td>
+          </tr>
+          <tr>
+  <BLANKLINE>
+            <td class="Selector">
+              <input type="radio" name="type_name"
+                     id="zope.app.browser.add.zope.app.errorservice.ErrorReportingService"
+                     value="zope.app.browser.add.zope.app.errorservice.ErrorReportingService" />
+            </td>
+  <BLANKLINE>
+            <td class="TypeName">
+              <label style="font-weight: bold;"
+                     for="zope.app.browser.add.zope.app.errorservice.ErrorReportingService">
+                Error Logging Service
+              </label>
+              <div class="TypeDescription">Error Reporting Service for Logging Errors</div>
+            </td>
+          </tr>
+          <tr>
+  <BLANKLINE>
+            <td class="Selector">
+              <input type="radio" name="type_name"
+                     id="zope.app.browser.add.zope.app.principalannotation.PrincipalAnnotationService"
+                     value="zope.app.browser.add.zope.app.principalannotation.PrincipalAnnotationService" />
+            </td>
+  <BLANKLINE>
+            <td class="TypeName">
+              <label style="font-weight: bold;"
+                     for="zope.app.browser.add.zope.app.principalannotation.PrincipalAnnotationService">
+                Principal Annotation Service
+              </label>
+              <div class="TypeDescription">Stores Annotations for Principals</div>
+            </td>
+          </tr>
+          <tr>
+  <BLANKLINE>
+            <td class="Selector">
+              <input type="radio" name="type_name"
+                     id="zope.app.browser.add.zope.app.utility.utility.LocalUtilityService"
+                     value="zope.app.browser.add.zope.app.utility.utility.LocalUtilityService" />
+            </td>
+  <BLANKLINE>
+            <td class="TypeName">
+              <label style="font-weight: bold;"
+                     for="zope.app.browser.add.zope.app.utility.utility.LocalUtilityService">
+                Utility Service
+              </label>
+              <div class="TypeDescription">A Local Utility Service allows you to register Utilities in this site</div>
+            </td>
+          </tr>
+  <BLANKLINE>
+        <tr>
+          <td><br /></td>
+          <td><input type="text" name="id" />
+              <input type="submit" name="add" value=" Add " />
+          </td>
+        </tr>
+  <BLANKLINE>
+        </tbody>
+  <BLANKLINE>
+      </table>
+  <BLANKLINE>
+    </form>
+  <BLANKLINE>
+  </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div id="context_information">
+  <BLANKLINE>
+            <div id="helpers">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+  <BLANKLINE>
+  <!--
+            <div id="inspectors">
+  <BLANKLINE>
+              <div class="box" id="metadata"
+                  tal:define="view context/@@MetaDataBox|nothing"
+                  tal:condition="view/strip|nothing">
+  <BLANKLINE>
+                <h4 i18n:translate="">Metadata</h4>
+  <BLANKLINE>
+                <div class="body">
+  <BLANKLINE>
+                  <div class="content" tal:content="structure view">
+                    Some metadata
+                  </div>
+  <BLANKLINE>
+                </div>
+              </div>
+            </div>
+  -->
+  <BLANKLINE>
+          </div>
+  <BLANKLINE>
+          <div class="spacer">
+            &nbsp;
+          </div>
+  <BLANKLINE>
+        </div>
+      </div>
+  <BLANKLINE>
+      <div id="footer" />
+  <BLANKLINE>
+      <div id="logger" />
+  <BLANKLINE>
+    </body>
+  <BLANKLINE>
+  </html>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+
+
+  >>> print http(r"""
+  ... POST /++etc++site/default/AddService/action.html HTTP/1.1
+  ... Authorization: Basic Z2xvYmFsbWdyOmdsb2JhbG1ncnB3
+  ... Content-Length: 98
+  ... Content-Type: application/x-www-form-urlencoded
+  ... Referer: http://localhost:8081/++etc++site/default/AddService
+  ... 
+  ... type_name=zope.app.browser.add.zope.app.pluggableauth.PluggableAuthenticationService&id=&add=+Add+""")
+  HTTP/1.1 303 See Other
+  Connection: close
+  Content-Length: 4
+  Content-Type: text/plain;charset=utf-8
+  Location: http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@registration.html
+  <BLANKLINE>
+  None
+
+
+  >>> print http(r"""
+  ... GET /++etc++site/default/PluggableAuthenticationService/@@registration.html HTTP/1.1
+  ... Authorization: Basic Z2xvYmFsbWdyOmdsb2JhbG1ncnB3
+  ... Referer: http://localhost:8081/++etc++site/default/AddService
+  ... """)
+  HTTP/1.1 200 Ok
+  Connection: close
+  Content-Length: 6208
+  Content-Type: text/html;charset=utf-8
+  <BLANKLINE>
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <BLANKLINE>
+  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+        lang="en">
+  <BLANKLINE>
+    <head>
+      <title>Z3: PluggableAuthenticationService</title>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/zope3.css);</style>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/site_management.css);</style>
+  <BLANKLINE>
+      <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Popup script for the OnlineHelp -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/onlinehelp.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/xmltree.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <link rel="icon" type="image/png"
+            href="http://localhost:8081/@@/favicon.png" />
+    </head>
+  <BLANKLINE>
+    <body onload="loadtree('http://localhost:8081/', 'http://localhost:8081/++etc++site/default/PluggableAuthenticationService/')">
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="global">
+        <div id="userDetails">
+  <BLANKLINE>
+            User:
+            Sample Manager
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@logout.html?nextURL=http%3A//localhost%3A8081/%2B%2Betc%2B%2Bsite/default/PluggableAuthenticationService/%40%40registration.html">[Logout]</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+        <img src="http://localhost:8081/@@/zope3logo.gif" />
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="navigators">
+  <BLANKLINE>
+        <!-- Navigation tree box -->
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+        <div class="box" id="navigationTree">
+          <h4>Navigation</h4>
+          <div xmlns="http://www.zope.org/zope3xmltree"
+               id="navtreecontents" class="body"
+               onclick="treeclicked(event);">Loading...</div>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div class="box" id="commonTasks">
+  <BLANKLINE>
+  <BLANKLINE>
+            <h4>Add:</h4>
+            <div class="body">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div class="content even">
+        <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@contents.html?type_name=zope.app.browser.add.zope.app.pluggableauth.BTreePrincipalSource"
+           class="">Add Principal Source</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+        <!-- Tree of the help topics that appears on the help namespace -->
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="workspace">
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="breadcrumbs"> Location:&nbsp;<a
+      href="http://localhost:8081/@@SelectedManagementView.html">[top]</a>
+             /
+            <a href="http://localhost:8081/++etc++site/@@SelectedManagementView.html">++etc++site</a> /
+            <a href="http://localhost:8081/++etc++site/default/@@SelectedManagementView.html">default</a> /
+            <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@SelectedManagementView.html">PluggableAuthenticationService</a> /
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div class="itemViews">
+  <BLANKLINE>
+            <a href="@@contents.html" class="">Contents</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@registration.html" class="selected">Registration</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@EditMetaData.html" class="">Metadata</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@classBrowser.html" class="">Introspector</a>
+  <BLANKLINE>
+        </div>
+  <BLANKLINE>
+        <!-- OnlineHelp with popup support -->
+        <!-- note, we reverse the actions list 'cos they're packed to the
+             screen from the right -->
+        <div id="actions">
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="javascript:popup('registration.html/++help++/@@contexthelp.html','OnlineHelp','height=400
+                                             ,width=700
+                                             ,resizable=1
+                                             ,scrollbars=yes
+                                             ,location=no
+                                             ,status=no
+                                             ,toolbar=no
+                                             ,menubar=no')">Help</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@undoAll.html">Undo all</a>
+            <a href="@@undoMore.html">Undo more</a>
+            <a href="@@undo.html">Undo!</a>
+            <a href="@@errorRedirect.html">Errors</a>
+            <a href="@@find.html">Find</a>
+            <a href="@@grant.html">Grant</a>
+            <a href="@@tools.html">Tools</a>
+            <a href="@@+">Add</a>
+  <BLANKLINE>
+          &nbsp;
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="viewspace">
+  <BLANKLINE>
+          <div id="message">
+          </div>
+  <BLANKLINE>
+          <div id="content">
+            <div>
+  <BLANKLINE>
+  <form method="POST"
+        action="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@registration.html">
+  <BLANKLINE>
+    <div>
+      <div>
+        <p>This object is registered as:</p>
+  <BLANKLINE>
+        <div class="registrationSummary">
+          <div class="usageSummary">Authentication Service</div>
+          <div class="implementationSummary">PluggableAuthenticationService</div>
+          <div class="modificationLink">
+            <a href="http://localhost:8081/++etc++site/default/RegistrationManager/Authentication">(modify)</a>
+          </div>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+          <p>This object is currently active.</p>
+          <input type="submit" value="Deactivate"
+                 name="deactivate" />
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+      <hr />
+      <a href="registrations.html">
+        Advanced Options
+      </a>
+  <BLANKLINE>
+    </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  </form>
+  <BLANKLINE>
+  </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div id="context_information">
+  <BLANKLINE>
+            <div id="helpers">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+  <BLANKLINE>
+  <!--
+            <div id="inspectors">
+  <BLANKLINE>
+              <div class="box" id="metadata"
+                  tal:define="view context/@@MetaDataBox|nothing"
+                  tal:condition="view/strip|nothing">
+  <BLANKLINE>
+                <h4 i18n:translate="">Metadata</h4>
+  <BLANKLINE>
+                <div class="body">
+  <BLANKLINE>
+                  <div class="content" tal:content="structure view">
+                    Some metadata
+                  </div>
+  <BLANKLINE>
+                </div>
+              </div>
+            </div>
+  -->
+  <BLANKLINE>
+          </div>
+  <BLANKLINE>
+          <div class="spacer">
+            &nbsp;
+          </div>
+  <BLANKLINE>
+        </div>
+      </div>
+  <BLANKLINE>
+      <div id="footer" />
+  <BLANKLINE>
+      <div id="logger" />
+  <BLANKLINE>
+    </body>
+  <BLANKLINE>
+  </html>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+
+
+  >>> print http(r"""
+  ... GET /++etc++site/default/PluggableAuthenticationService/@@contents.html HTTP/1.1
+  ... Authorization: Basic Z2xvYmFsbWdyOmdsb2JhbG1ncnB3
+  ... Referer: http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@registration.html
+  ... """)
+  HTTP/1.1 200 Ok
+  Connection: close
+  Content-Length: 6583
+  Content-Type: text/html;charset=utf-8
+  <BLANKLINE>
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <BLANKLINE>
+  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+        lang="en">
+  <BLANKLINE>
+    <head>
+      <title>Z3: PluggableAuthenticationService</title>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/zope3.css);</style>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/site_management.css);</style>
+  <BLANKLINE>
+      <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Popup script for the OnlineHelp -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/onlinehelp.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/xmltree.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <link rel="icon" type="image/png"
+            href="http://localhost:8081/@@/favicon.png" />
+    </head>
+  <BLANKLINE>
+    <body onload="loadtree('http://localhost:8081/', 'http://localhost:8081/++etc++site/default/PluggableAuthenticationService/')">
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="global">
+        <div id="userDetails">
+  <BLANKLINE>
+            User:
+            Sample Manager
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@logout.html?nextURL=http%3A//localhost%3A8081/%2B%2Betc%2B%2Bsite/default/PluggableAuthenticationService/%40%40contents.html">[Logout]</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+        <img src="http://localhost:8081/@@/zope3logo.gif" />
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="navigators">
+  <BLANKLINE>
+        <!-- Navigation tree box -->
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+        <div class="box" id="navigationTree">
+          <h4>Navigation</h4>
+          <div xmlns="http://www.zope.org/zope3xmltree"
+               id="navtreecontents" class="body"
+               onclick="treeclicked(event);">Loading...</div>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div class="box" id="commonTasks">
+  <BLANKLINE>
+  <BLANKLINE>
+            <h4>Add:</h4>
+            <div class="body">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div class="content even">
+        <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@contents.html?type_name=zope.app.browser.add.zope.app.pluggableauth.BTreePrincipalSource"
+           class="">Add Principal Source</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+        <!-- Tree of the help topics that appears on the help namespace -->
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="workspace">
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="breadcrumbs"> Location:&nbsp;<a
+      href="http://localhost:8081/@@SelectedManagementView.html">[top]</a>
+             /
+            <a href="http://localhost:8081/++etc++site/@@SelectedManagementView.html">++etc++site</a> /
+            <a href="http://localhost:8081/++etc++site/default/@@SelectedManagementView.html">default</a> /
+            <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@SelectedManagementView.html">PluggableAuthenticationService</a> /
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div class="itemViews">
+  <BLANKLINE>
+            <a href="@@contents.html" class="selected">Contents</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@registration.html" class="">Registration</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@EditMetaData.html" class="">Metadata</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@classBrowser.html" class="">Introspector</a>
+  <BLANKLINE>
+        </div>
+  <BLANKLINE>
+        <!-- OnlineHelp with popup support -->
+        <!-- note, we reverse the actions list 'cos they're packed to the
+             screen from the right -->
+        <div id="actions">
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="javascript:popup('contents.html/++help++/@@contexthelp.html','OnlineHelp','height=400
+                                             ,width=700
+                                             ,resizable=1
+                                             ,scrollbars=yes
+                                             ,location=no
+                                             ,status=no
+                                             ,toolbar=no
+                                             ,menubar=no')">Help</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@undoAll.html">Undo all</a>
+            <a href="@@undoMore.html">Undo more</a>
+            <a href="@@undo.html">Undo!</a>
+            <a href="@@errorRedirect.html">Errors</a>
+            <a href="@@find.html">Find</a>
+            <a href="@@grant.html">Grant</a>
+            <a href="@@tools.html">Tools</a>
+            <a href="@@+">Add</a>
+  <BLANKLINE>
+          &nbsp;
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="viewspace">
+  <BLANKLINE>
+          <div id="message">
+          </div>
+  <BLANKLINE>
+          <div id="content">
+            <div>
+    <div>
+  <BLANKLINE>
+      <form name="containerContentsForm" method="POST"
+            action="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@contents.html">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <table id="sortable" class="listing"
+               summary="Content listing">
+  <BLANKLINE>
+          <thead>
+            <tr>
+              <th>&nbsp;</th>
+              <th>Name</th>
+              <th>Title</th>
+              <th>Size</th>
+              <th>Created</th>
+              <th>Modified</th>
+            </tr>
+          </thead>
+  <BLANKLINE>
+          <tbody>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+          </tbody>
+        </table>
+  <BLANKLINE>
+        <div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            <input type="submit" name="container_add_button"
+                   value="Add" />
+            <input type="text" name="single_new_value"
+                   id="focusid" />
+            <input type="hidden" name="single_type_name"
+                   value="zope.app.browser.add.zope.app.pluggableauth.BTreePrincipalSource" />
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      </form>
+  <BLANKLINE>
+      <script><!--
+          prettydump('focus', LG_INFO);
+          if (document.containerContentsForm.new_value)
+  	        document.containerContentsForm.new_value.focus();
+          //-->
+      </script>
+  <BLANKLINE>
+    </div>
+  <BLANKLINE>
+  </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div id="context_information">
+  <BLANKLINE>
+            <div id="helpers">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+  <BLANKLINE>
+  <!--
+            <div id="inspectors">
+  <BLANKLINE>
+              <div class="box" id="metadata"
+                  tal:define="view context/@@MetaDataBox|nothing"
+                  tal:condition="view/strip|nothing">
+  <BLANKLINE>
+                <h4 i18n:translate="">Metadata</h4>
+  <BLANKLINE>
+                <div class="body">
+  <BLANKLINE>
+                  <div class="content" tal:content="structure view">
+                    Some metadata
+                  </div>
+  <BLANKLINE>
+                </div>
+              </div>
+            </div>
+  -->
+  <BLANKLINE>
+          </div>
+  <BLANKLINE>
+          <div class="spacer">
+            &nbsp;
+          </div>
+  <BLANKLINE>
+        </div>
+      </div>
+  <BLANKLINE>
+      <div id="footer" />
+  <BLANKLINE>
+      <div id="logger" />
+  <BLANKLINE>
+    </body>
+  <BLANKLINE>
+  </html>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+
+
+  >>> print http(r"""
+  ... POST /++etc++site/default/PluggableAuthenticationService/@@contents.html HTTP/1.1
+  ... Authorization: Basic Z2xvYmFsbWdyOmdsb2JhbG1ncnB3
+  ... Content-Length: 124
+  ... Content-Type: application/x-www-form-urlencoded
+  ... Referer: http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@contents.html
+  ... 
+  ... container_add_button=Add&single_new_value=&single_type_name=zope.app.browser.add.zope.app.pluggableauth.BTreePrincipalSource""")
+  HTTP/1.1 303 See Other
+  Connection: close
+  Content-Length: 6479
+  Content-Type: text/html;charset=utf-8
+  Location: http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@contents.html
+  <BLANKLINE>
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <BLANKLINE>
+  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+        lang="en">
+  <BLANKLINE>
+    <head>
+      <title>Z3: PluggableAuthenticationService</title>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/zope3.css);</style>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/site_management.css);</style>
+  <BLANKLINE>
+      <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Popup script for the OnlineHelp -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/onlinehelp.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/xmltree.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <link rel="icon" type="image/png"
+            href="http://localhost:8081/@@/favicon.png" />
+    </head>
+  <BLANKLINE>
+    <body onload="loadtree('http://localhost:8081/', 'http://localhost:8081/++etc++site/default/PluggableAuthenticationService/')">
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="global">
+        <div id="userDetails">
+  <BLANKLINE>
+            User:
+            Sample Manager
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@logout.html?nextURL=http%3A//localhost%3A8081/%2B%2Betc%2B%2Bsite/default/PluggableAuthenticationService/%40%40contents.html">[Logout]</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+        <img src="http://localhost:8081/@@/zope3logo.gif" />
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="navigators">
+  <BLANKLINE>
+        <!-- Navigation tree box -->
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+        <div class="box" id="navigationTree">
+          <h4>Navigation</h4>
+          <div xmlns="http://www.zope.org/zope3xmltree"
+               id="navtreecontents" class="body"
+               onclick="treeclicked(event);">Loading...</div>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div class="box" id="commonTasks">
+  <BLANKLINE>
+  <BLANKLINE>
+            <h4>Add:</h4>
+            <div class="body">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div class="content even">
+        <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@contents.html?type_name=zope.app.browser.add.zope.app.pluggableauth.BTreePrincipalSource"
+           class="">Add Principal Source</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+        <!-- Tree of the help topics that appears on the help namespace -->
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="workspace">
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="breadcrumbs"> Location:&nbsp;<a
+      href="http://localhost:8081/@@SelectedManagementView.html">[top]</a>
+             /
+            <a href="http://localhost:8081/++etc++site/@@SelectedManagementView.html">++etc++site</a> /
+            <a href="http://localhost:8081/++etc++site/default/@@SelectedManagementView.html">default</a> /
+            <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@SelectedManagementView.html">PluggableAuthenticationService</a> /
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div class="itemViews">
+  <BLANKLINE>
+            <a href="@@contents.html" class="selected">Contents</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@registration.html" class="">Registration</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@EditMetaData.html" class="">Metadata</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@classBrowser.html" class="">Introspector</a>
+  <BLANKLINE>
+        </div>
+  <BLANKLINE>
+        <!-- OnlineHelp with popup support -->
+        <!-- note, we reverse the actions list 'cos they're packed to the
+             screen from the right -->
+        <div id="actions">
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="javascript:popup('contents.html/++help++/@@contexthelp.html','OnlineHelp','height=400
+                                             ,width=700
+                                             ,resizable=1
+                                             ,scrollbars=yes
+                                             ,location=no
+                                             ,status=no
+                                             ,toolbar=no
+                                             ,menubar=no')">Help</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@undoAll.html">Undo all</a>
+            <a href="@@undoMore.html">Undo more</a>
+            <a href="@@undo.html">Undo!</a>
+            <a href="@@errorRedirect.html">Errors</a>
+            <a href="@@find.html">Find</a>
+            <a href="@@grant.html">Grant</a>
+            <a href="@@tools.html">Tools</a>
+            <a href="@@+">Add</a>
+  <BLANKLINE>
+          &nbsp;
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="viewspace">
+  <BLANKLINE>
+          <div id="message">
+          </div>
+  <BLANKLINE>
+          <div id="content">
+            <div>
+    <div>
+  <BLANKLINE>
+      <form name="containerContentsForm" method="POST"
+            action="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@contents.html">
+  <BLANKLINE>
+        <input type="hidden" name="type_name"
+               value="zope.app.browser.add.zope.app.pluggableauth.BTreePrincipalSource" />
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <table id="sortable" class="listing"
+               summary="Content listing">
+  <BLANKLINE>
+          <thead>
+            <tr>
+              <th>&nbsp;</th>
+              <th>Name</th>
+              <th>Title</th>
+              <th>Size</th>
+              <th>Created</th>
+              <th>Modified</th>
+            </tr>
+          </thead>
+  <BLANKLINE>
+          <tbody>
+  <BLANKLINE>
+          <tr>
+            <td></td>
+            <td><input name="new_value" id="focusid" value="" /></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+  <BLANKLINE>
+  <BLANKLINE>
+          </tbody>
+        </table>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      </form>
+  <BLANKLINE>
+      <script><!--
+          prettydump('focus', LG_INFO);
+          if (document.containerContentsForm.new_value)
+  	        document.containerContentsForm.new_value.focus();
+          //-->
+      </script>
+  <BLANKLINE>
+    </div>
+  <BLANKLINE>
+  </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div id="context_information">
+  <BLANKLINE>
+            <div id="helpers">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+  <BLANKLINE>
+  <!--
+            <div id="inspectors">
+  <BLANKLINE>
+              <div class="box" id="metadata"
+                  tal:define="view context/@@MetaDataBox|nothing"
+                  tal:condition="view/strip|nothing">
+  <BLANKLINE>
+                <h4 i18n:translate="">Metadata</h4>
+  <BLANKLINE>
+                <div class="body">
+  <BLANKLINE>
+                  <div class="content" tal:content="structure view">
+                    Some metadata
+                  </div>
+  <BLANKLINE>
+                </div>
+              </div>
+            </div>
+  -->
+  <BLANKLINE>
+          </div>
+  <BLANKLINE>
+          <div class="spacer">
+            &nbsp;
+          </div>
+  <BLANKLINE>
+        </div>
+      </div>
+  <BLANKLINE>
+      <div id="footer" />
+  <BLANKLINE>
+      <div id="logger" />
+  <BLANKLINE>
+    </body>
+  <BLANKLINE>
+  </html>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+
+
+  >>> print http(r"""
+  ... GET /++etc++site/default/PluggableAuthenticationService/@@contents.html HTTP/1.1
+  ... Authorization: Basic Z2xvYmFsbWdyOmdsb2JhbG1ncnB3
+  ... Referer: http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@contents.html
+  ... """)
+  HTTP/1.1 200 Ok
+  Connection: close
+  Content-Length: 7799
+  Content-Type: text/html;charset=utf-8
+  <BLANKLINE>
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <BLANKLINE>
+  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+        lang="en">
+  <BLANKLINE>
+    <head>
+      <title>Z3: PluggableAuthenticationService</title>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/zope3.css);</style>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/site_management.css);</style>
+  <BLANKLINE>
+      <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Popup script for the OnlineHelp -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/onlinehelp.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/xmltree.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <link rel="icon" type="image/png"
+            href="http://localhost:8081/@@/favicon.png" />
+    </head>
+  <BLANKLINE>
+    <body onload="loadtree('http://localhost:8081/', 'http://localhost:8081/++etc++site/default/PluggableAuthenticationService/')">
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="global">
+        <div id="userDetails">
+  <BLANKLINE>
+            User:
+            Sample Manager
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@logout.html?nextURL=http%3A//localhost%3A8081/%2B%2Betc%2B%2Bsite/default/PluggableAuthenticationService/%40%40contents.html">[Logout]</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+        <img src="http://localhost:8081/@@/zope3logo.gif" />
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="navigators">
+  <BLANKLINE>
+        <!-- Navigation tree box -->
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+        <div class="box" id="navigationTree">
+          <h4>Navigation</h4>
+          <div xmlns="http://www.zope.org/zope3xmltree"
+               id="navtreecontents" class="body"
+               onclick="treeclicked(event);">Loading...</div>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div class="box" id="commonTasks">
+  <BLANKLINE>
+  <BLANKLINE>
+            <h4>Add:</h4>
+            <div class="body">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div class="content even">
+        <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@contents.html?type_name=zope.app.browser.add.zope.app.pluggableauth.BTreePrincipalSource"
+           class="">Add Principal Source</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+        <!-- Tree of the help topics that appears on the help namespace -->
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="workspace">
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="breadcrumbs"> Location:&nbsp;<a
+      href="http://localhost:8081/@@SelectedManagementView.html">[top]</a>
+             /
+            <a href="http://localhost:8081/++etc++site/@@SelectedManagementView.html">++etc++site</a> /
+            <a href="http://localhost:8081/++etc++site/default/@@SelectedManagementView.html">default</a> /
+            <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@SelectedManagementView.html">PluggableAuthenticationService</a> /
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div class="itemViews">
+  <BLANKLINE>
+            <a href="@@contents.html" class="selected">Contents</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@registration.html" class="">Registration</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@EditMetaData.html" class="">Metadata</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@classBrowser.html" class="">Introspector</a>
+  <BLANKLINE>
+        </div>
+  <BLANKLINE>
+        <!-- OnlineHelp with popup support -->
+        <!-- note, we reverse the actions list 'cos they're packed to the
+             screen from the right -->
+        <div id="actions">
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="javascript:popup('contents.html/++help++/@@contexthelp.html','OnlineHelp','height=400
+                                             ,width=700
+                                             ,resizable=1
+                                             ,scrollbars=yes
+                                             ,location=no
+                                             ,status=no
+                                             ,toolbar=no
+                                             ,menubar=no')">Help</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@undoAll.html">Undo all</a>
+            <a href="@@undoMore.html">Undo more</a>
+            <a href="@@undo.html">Undo!</a>
+            <a href="@@errorRedirect.html">Errors</a>
+            <a href="@@find.html">Find</a>
+            <a href="@@grant.html">Grant</a>
+            <a href="@@tools.html">Tools</a>
+            <a href="@@+">Add</a>
+  <BLANKLINE>
+          &nbsp;
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="viewspace">
+  <BLANKLINE>
+          <div id="message">
+          </div>
+  <BLANKLINE>
+          <div id="content">
+            <div>
+    <div>
+  <BLANKLINE>
+      <form name="containerContentsForm" method="POST"
+            action="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@contents.html">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <table id="sortable" class="listing"
+               summary="Content listing">
+  <BLANKLINE>
+          <thead>
+            <tr>
+              <th>&nbsp;</th>
+              <th>Name</th>
+              <th>Title</th>
+              <th>Size</th>
+              <th>Created</th>
+              <th>Modified</th>
+            </tr>
+          </thead>
+  <BLANKLINE>
+          <tbody>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            <tr class="even">
+              <td>
+                <input type="checkbox" class="noborder"
+                       name="ids:list"
+                       id="BTreePrincipalSource"
+                       value="BTreePrincipalSource" />
+              </td>
+              <td><a href="BTreePrincipalSource/@@SelectedManagementView.html"></a><span>
+                    <a href="BTreePrincipalSource/@@SelectedManagementView.html">BTreePrincipalSource</a><a
+      href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@contents.html?rename_ids:list=BTreePrincipalSource">&nbsp;&nbsp;</a></span></td>
+              <td>
+  <BLANKLINE>
+  <BLANKLINE>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              </td>
+  <BLANKLINE>
+              <td><span>0 items</span></td>
+              <td><span>&nbsp;</span></td>
+              <td><span>&nbsp;</span></td>
+            </tr>
+  <BLANKLINE>
+  <BLANKLINE>
+          </tbody>
+        </table>
+  <BLANKLINE>
+        <div>
+  <BLANKLINE>
+          <input type="submit" name="container_rename_button"
+                 value="Rename" />
+          <input type="submit" name="container_cut_button"
+                 value="Cut" />
+          <input type="submit" name="container_copy_button"
+                 value="Copy" />
+  <BLANKLINE>
+          <input type="submit" name="container_delete_button"
+                 value="Delete" />
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            <input type="submit" name="container_add_button"
+                   value="Add" />
+            <input type="text" name="single_new_value"
+                   id="focusid" />
+            <input type="hidden" name="single_type_name"
+                   value="zope.app.browser.add.zope.app.pluggableauth.BTreePrincipalSource" />
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      </form>
+  <BLANKLINE>
+      <script><!--
+          prettydump('focus', LG_INFO);
+          if (document.containerContentsForm.new_value)
+  	        document.containerContentsForm.new_value.focus();
+          //-->
+      </script>
+  <BLANKLINE>
+    </div>
+  <BLANKLINE>
+  </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div id="context_information">
+  <BLANKLINE>
+            <div id="helpers">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+  <BLANKLINE>
+  <!--
+            <div id="inspectors">
+  <BLANKLINE>
+              <div class="box" id="metadata"
+                  tal:define="view context/@@MetaDataBox|nothing"
+                  tal:condition="view/strip|nothing">
+  <BLANKLINE>
+                <h4 i18n:translate="">Metadata</h4>
+  <BLANKLINE>
+                <div class="body">
+  <BLANKLINE>
+                  <div class="content" tal:content="structure view">
+                    Some metadata
+                  </div>
+  <BLANKLINE>
+                </div>
+              </div>
+            </div>
+  -->
+  <BLANKLINE>
+          </div>
+  <BLANKLINE>
+          <div class="spacer">
+            &nbsp;
+          </div>
+  <BLANKLINE>
+        </div>
+      </div>
+  <BLANKLINE>
+      <div id="footer" />
+  <BLANKLINE>
+      <div id="logger" />
+  <BLANKLINE>
+    </body>
+  <BLANKLINE>
+  </html>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+
+
+  >>> print http(r"""
+  ... GET /++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/@@SelectedManagementView.html HTTP/1.1
+  ... Authorization: Basic Z2xvYmFsbWdyOmdsb2JhbG1ncnB3
+  ... Referer: http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@contents.html
+  ... """)
+  HTTP/1.1 303 See Other
+  Connection: close
+  Content-Length: 0
+  Content-Type: text/plain;charset=utf-8
+  Location: @@contents.html
+  <BLANKLINE>
+
+
+  >>> print http(r"""
+  ... GET /++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/@@contents.html HTTP/1.1
+  ... Authorization: Basic Z2xvYmFsbWdyOmdsb2JhbG1ncnB3
+  ... Referer: http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@contents.html
+  ... """)
+  HTTP/1.1 200 Ok
+  Connection: close
+  Content-Length: 6407
+  Content-Type: text/html;charset=utf-8
+  <BLANKLINE>
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <BLANKLINE>
+  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+        lang="en">
+  <BLANKLINE>
+    <head>
+      <title>Z3: BTreePrincipalSource</title>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/zope3.css);</style>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/site_management.css);</style>
+  <BLANKLINE>
+      <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Popup script for the OnlineHelp -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/onlinehelp.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/xmltree.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <link rel="icon" type="image/png"
+            href="http://localhost:8081/@@/favicon.png" />
+    </head>
+  <BLANKLINE>
+    <body onload="loadtree('http://localhost:8081/', 'http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/')">
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="global">
+        <div id="userDetails">
+  <BLANKLINE>
+            User:
+            Sample Manager
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@logout.html?nextURL=http%3A//localhost%3A8081/%2B%2Betc%2B%2Bsite/default/PluggableAuthenticationService/BTreePrincipalSource/%40%40contents.html">[Logout]</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+        <img src="http://localhost:8081/@@/zope3logo.gif" />
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="navigators">
+  <BLANKLINE>
+        <!-- Navigation tree box -->
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+        <div class="box" id="navigationTree">
+          <h4>Navigation</h4>
+          <div xmlns="http://www.zope.org/zope3xmltree"
+               id="navtreecontents" class="body"
+               onclick="treeclicked(event);">Loading...</div>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div class="box" id="commonTasks">
+  <BLANKLINE>
+  <BLANKLINE>
+            <h4>Add:</h4>
+            <div class="body">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div class="content even">
+  <BLANKLINE>
+  <BLANKLINE>
+        <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/@@+/action.html?type_name=AddPrincipalForm.html"
+           class="">Principal</a>
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+        <!-- Tree of the help topics that appears on the help namespace -->
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="workspace">
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="breadcrumbs"> Location:&nbsp;<a
+      href="http://localhost:8081/@@SelectedManagementView.html">[top]</a>
+             /
+            <a href="http://localhost:8081/++etc++site/@@SelectedManagementView.html">++etc++site</a> /
+            <a href="http://localhost:8081/++etc++site/default/@@SelectedManagementView.html">default</a> /
+            <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@SelectedManagementView.html">PluggableAuthenticationService</a> /
+            <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/@@SelectedManagementView.html">BTreePrincipalSource</a> /
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div class="itemViews">
+  <BLANKLINE>
+            <a href="@@contents.html" class="selected">Contents</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@classBrowser.html" class="">Introspector</a>
+  <BLANKLINE>
+        </div>
+  <BLANKLINE>
+        <!-- OnlineHelp with popup support -->
+        <!-- note, we reverse the actions list 'cos they're packed to the
+             screen from the right -->
+        <div id="actions">
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="javascript:popup('contents.html/++help++/@@contexthelp.html','OnlineHelp','height=400
+                                             ,width=700
+                                             ,resizable=1
+                                             ,scrollbars=yes
+                                             ,location=no
+                                             ,status=no
+                                             ,toolbar=no
+                                             ,menubar=no')">Help</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@undoAll.html">Undo all</a>
+            <a href="@@undoMore.html">Undo more</a>
+            <a href="@@undo.html">Undo!</a>
+            <a href="@@errorRedirect.html">Errors</a>
+            <a href="@@find.html">Find</a>
+            <a href="@@+">Add</a>
+  <BLANKLINE>
+          &nbsp;
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="viewspace">
+  <BLANKLINE>
+          <div id="message">
+          </div>
+  <BLANKLINE>
+          <div id="content">
+            <div>
+    <div>
+  <BLANKLINE>
+      <form name="containerContentsForm" method="POST"
+            action="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/@@contents.html">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <table id="sortable" class="listing"
+               summary="Content listing">
+  <BLANKLINE>
+          <thead>
+            <tr>
+              <th>&nbsp;</th>
+              <th>Name</th>
+              <th>Title</th>
+              <th>Size</th>
+              <th>Created</th>
+              <th>Modified</th>
+            </tr>
+          </thead>
+  <BLANKLINE>
+          <tbody>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+          </tbody>
+        </table>
+  <BLANKLINE>
+        <div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            <input type="submit" name="container_add_button"
+                   value="Add" />
+  <BLANKLINE>
+            <input type="hidden" name="single_type_name"
+                   value="AddPrincipalForm.html" />
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      </form>
+  <BLANKLINE>
+      <script><!--
+          prettydump('focus', LG_INFO);
+          if (document.containerContentsForm.new_value)
+  	        document.containerContentsForm.new_value.focus();
+          //-->
+      </script>
+  <BLANKLINE>
+    </div>
+  <BLANKLINE>
+  </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div id="context_information">
+  <BLANKLINE>
+            <div id="helpers">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+  <BLANKLINE>
+  <!--
+            <div id="inspectors">
+  <BLANKLINE>
+              <div class="box" id="metadata"
+                  tal:define="view context/@@MetaDataBox|nothing"
+                  tal:condition="view/strip|nothing">
+  <BLANKLINE>
+                <h4 i18n:translate="">Metadata</h4>
+  <BLANKLINE>
+                <div class="body">
+  <BLANKLINE>
+                  <div class="content" tal:content="structure view">
+                    Some metadata
+                  </div>
+  <BLANKLINE>
+                </div>
+              </div>
+            </div>
+  -->
+  <BLANKLINE>
+          </div>
+  <BLANKLINE>
+          <div class="spacer">
+            &nbsp;
+          </div>
+  <BLANKLINE>
+        </div>
+      </div>
+  <BLANKLINE>
+      <div id="footer" />
+  <BLANKLINE>
+      <div id="logger" />
+  <BLANKLINE>
+    </body>
+  <BLANKLINE>
+  </html>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+
+
+  >>> print http(r"""
+  ... POST /++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/@@contents.html HTTP/1.1
+  ... Authorization: Basic Z2xvYmFsbWdyOmdsb2JhbG1ncnB3
+  ... Content-Length: 63
+  ... Content-Type: application/x-www-form-urlencoded
+  ... Referer: http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/@@contents.html
+  ... 
+  ... container_add_button=Add&single_type_name=AddPrincipalForm.html""")
+  HTTP/1.1 303 See Other
+  Connection: close
+  Content-Length: 6212
+  Content-Type: text/html;charset=utf-8
+  Location: http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/+/AddPrincipalForm.html=
+  <BLANKLINE>
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <BLANKLINE>
+  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+        lang="en">
+  <BLANKLINE>
+    <head>
+      <title>Z3: BTreePrincipalSource</title>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/zope3.css);</style>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/site_management.css);</style>
+  <BLANKLINE>
+      <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Popup script for the OnlineHelp -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/onlinehelp.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/xmltree.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <link rel="icon" type="image/png"
+            href="http://localhost:8081/@@/favicon.png" />
+    </head>
+  <BLANKLINE>
+    <body onload="loadtree('http://localhost:8081/', 'http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/')">
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="global">
+        <div id="userDetails">
+  <BLANKLINE>
+            User:
+            Sample Manager
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@logout.html?nextURL=http%3A//localhost%3A8081/%2B%2Betc%2B%2Bsite/default/PluggableAuthenticationService/BTreePrincipalSource/%40%40contents.html">[Logout]</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+        <img src="http://localhost:8081/@@/zope3logo.gif" />
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="navigators">
+  <BLANKLINE>
+        <!-- Navigation tree box -->
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+        <div class="box" id="navigationTree">
+          <h4>Navigation</h4>
+          <div xmlns="http://www.zope.org/zope3xmltree"
+               id="navtreecontents" class="body"
+               onclick="treeclicked(event);">Loading...</div>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div class="box" id="commonTasks">
+  <BLANKLINE>
+  <BLANKLINE>
+            <h4>Add:</h4>
+            <div class="body">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div class="content even">
+  <BLANKLINE>
+  <BLANKLINE>
+        <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/@@+/action.html?type_name=AddPrincipalForm.html"
+           class="">Principal</a>
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+        <!-- Tree of the help topics that appears on the help namespace -->
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="workspace">
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="breadcrumbs"> Location:&nbsp;<a
+      href="http://localhost:8081/@@SelectedManagementView.html">[top]</a>
+             /
+            <a href="http://localhost:8081/++etc++site/@@SelectedManagementView.html">++etc++site</a> /
+            <a href="http://localhost:8081/++etc++site/default/@@SelectedManagementView.html">default</a> /
+            <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@SelectedManagementView.html">PluggableAuthenticationService</a> /
+            <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/@@SelectedManagementView.html">BTreePrincipalSource</a> /
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div class="itemViews">
+  <BLANKLINE>
+            <a href="@@contents.html" class="selected">Contents</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@classBrowser.html" class="">Introspector</a>
+  <BLANKLINE>
+        </div>
+  <BLANKLINE>
+        <!-- OnlineHelp with popup support -->
+        <!-- note, we reverse the actions list 'cos they're packed to the
+             screen from the right -->
+        <div id="actions">
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="javascript:popup('contents.html/++help++/@@contexthelp.html','OnlineHelp','height=400
+                                             ,width=700
+                                             ,resizable=1
+                                             ,scrollbars=yes
+                                             ,location=no
+                                             ,status=no
+                                             ,toolbar=no
+                                             ,menubar=no')">Help</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@undoAll.html">Undo all</a>
+            <a href="@@undoMore.html">Undo more</a>
+            <a href="@@undo.html">Undo!</a>
+            <a href="@@errorRedirect.html">Errors</a>
+            <a href="@@find.html">Find</a>
+            <a href="@@+">Add</a>
+  <BLANKLINE>
+          &nbsp;
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="viewspace">
+  <BLANKLINE>
+          <div id="message">
+          </div>
+  <BLANKLINE>
+          <div id="content">
+            <div>
+    <div>
+  <BLANKLINE>
+      <form name="containerContentsForm" method="POST"
+            action="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/@@contents.html">
+  <BLANKLINE>
+        <input type="hidden" name="type_name"
+               value="AddPrincipalForm.html" />
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <table id="sortable" class="listing"
+               summary="Content listing">
+  <BLANKLINE>
+          <thead>
+            <tr>
+              <th>&nbsp;</th>
+              <th>Name</th>
+              <th>Title</th>
+              <th>Size</th>
+              <th>Created</th>
+              <th>Modified</th>
+            </tr>
+          </thead>
+  <BLANKLINE>
+          <tbody>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+          </tbody>
+        </table>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      </form>
+  <BLANKLINE>
+      <script><!--
+          prettydump('focus', LG_INFO);
+          if (document.containerContentsForm.new_value)
+  	        document.containerContentsForm.new_value.focus();
+          //-->
+      </script>
+  <BLANKLINE>
+    </div>
+  <BLANKLINE>
+  </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div id="context_information">
+  <BLANKLINE>
+            <div id="helpers">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+  <BLANKLINE>
+  <!--
+            <div id="inspectors">
+  <BLANKLINE>
+              <div class="box" id="metadata"
+                  tal:define="view context/@@MetaDataBox|nothing"
+                  tal:condition="view/strip|nothing">
+  <BLANKLINE>
+                <h4 i18n:translate="">Metadata</h4>
+  <BLANKLINE>
+                <div class="body">
+  <BLANKLINE>
+                  <div class="content" tal:content="structure view">
+                    Some metadata
+                  </div>
+  <BLANKLINE>
+                </div>
+              </div>
+            </div>
+  -->
+  <BLANKLINE>
+          </div>
+  <BLANKLINE>
+          <div class="spacer">
+            &nbsp;
+          </div>
+  <BLANKLINE>
+        </div>
+      </div>
+  <BLANKLINE>
+      <div id="footer" />
+  <BLANKLINE>
+      <div id="logger" />
+  <BLANKLINE>
+    </body>
+  <BLANKLINE>
+  </html>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+
+
+  >>> print http(r"""
+  ... GET /++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/+/AddPrincipalForm.html= HTTP/1.1
+  ... Authorization: Basic Z2xvYmFsbWdyOmdsb2JhbG1ncnB3
+  ... Referer: http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/@@contents.html
+  ... """)
+  HTTP/1.1 200 Ok
+  Connection: close
+  Content-Length: 6224
+  Content-Type: text/html;charset=utf-8
+  <BLANKLINE>
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <BLANKLINE>
+  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+        lang="en">
+  <BLANKLINE>
+    <head>
+      <title>Z3: +</title>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/zope3.css);</style>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/site_management.css);</style>
+  <BLANKLINE>
+      <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Popup script for the OnlineHelp -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/onlinehelp.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/xmltree.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <link rel="icon" type="image/png"
+            href="http://localhost:8081/@@/favicon.png" />
+    </head>
+  <BLANKLINE>
+    <body onload="loadtree('http://localhost:8081/', 'http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/+/')">
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="global">
+        <div id="userDetails">
+  <BLANKLINE>
+            User:
+            Sample Manager
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@logout.html?nextURL=http%3A//localhost%3A8081/%2B%2Betc%2B%2Bsite/default/PluggableAuthenticationService/BTreePrincipalSource/%2B/AddPrincipalForm.html%253D">[Logout]</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+        <img src="http://localhost:8081/@@/zope3logo.gif" />
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="navigators">
+  <BLANKLINE>
+        <!-- Navigation tree box -->
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+        <div class="box" id="navigationTree">
+          <h4>Navigation</h4>
+          <div xmlns="http://www.zope.org/zope3xmltree"
+               id="navtreecontents" class="body"
+               onclick="treeclicked(event);">Loading...</div>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <!-- Tree of the help topics that appears on the help namespace -->
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="workspace">
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="breadcrumbs"> Location:&nbsp;<a
+      href="http://localhost:8081/@@SelectedManagementView.html">[top]</a>
+             /
+            <a href="http://localhost:8081/++etc++site/@@SelectedManagementView.html">++etc++site</a> /
+            <a href="http://localhost:8081/++etc++site/default/@@SelectedManagementView.html">default</a> /
+            <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@SelectedManagementView.html">PluggableAuthenticationService</a> /
+            <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/@@SelectedManagementView.html">BTreePrincipalSource</a> /
+            <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/+/@@SelectedManagementView.html">+</a> /
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <!-- OnlineHelp with popup support -->
+        <!-- note, we reverse the actions list 'cos they're packed to the
+             screen from the right -->
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="viewspace">
+  <BLANKLINE>
+          <div id="message">
+          </div>
+  <BLANKLINE>
+          <div id="content">
+            <div>
+  <BLANKLINE>
+    <div>
+  <BLANKLINE>
+      <form action="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/+/AddPrincipalForm.html%3D"
+            method="post" enctype="multipart/form-data">
+  <BLANKLINE>
+        <div>
+  <BLANKLINE>
+          <h3>Add Simple User with details</h3>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div class="row">
+  <BLANKLINE>
+            <div class="label">
+              <label for="field.login"
+                     title="The Login/Username of the user. This value can change.">Login</label>
+            </div>
+            <div class="field"><input class="textType" id="field.login" name="field.login" size="20" type="text" value=""  /></div>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+        <div class="row">
+  <BLANKLINE>
+            <div class="label">
+              <label for="field.password"
+                     title="The password for the user.">Password</label>
+            </div>
+            <div class="field"><input class="passwordType" id="field.password" name="field.password" size="20" type="password" value=""  /></div>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+        <div class="row">
+  <BLANKLINE>
+            <div class="label">
+              <label for="field.title"
+                     title="The title of the principal. This is usually used in the UI.">Title</label>
+            </div>
+            <div class="field"><input class="textType" id="field.title" name="field.title" size="20" type="text" value=""  /></div>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+        <div class="row">
+  <BLANKLINE>
+            <div class="label">
+              <label for="field.description"
+                     title="A detailed description of the principal.">Description</label>
+            </div>
+            <div class="field"><textarea cols="60" id="field.description" name="field.description" rows="15" ></textarea></div>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div class="separator"></div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div class="separator"></div>
+  <BLANKLINE>
+        </div>
+        <br /><br />
+        <div class="row">
+          <div class="controls"><hr />
+            <input type="submit" value="Refresh" />
+            <input type="submit" value="Add"
+                   name="UPDATE_SUBMIT" />
+  <BLANKLINE>
+          </div>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div class="separator"></div>
+      </form>
+    </div>
+  <BLANKLINE>
+    </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div id="context_information">
+  <BLANKLINE>
+            <div id="helpers">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+  <BLANKLINE>
+  <!--
+            <div id="inspectors">
+  <BLANKLINE>
+              <div class="box" id="metadata"
+                  tal:define="view context/@@MetaDataBox|nothing"
+                  tal:condition="view/strip|nothing">
+  <BLANKLINE>
+                <h4 i18n:translate="">Metadata</h4>
+  <BLANKLINE>
+                <div class="body">
+  <BLANKLINE>
+                  <div class="content" tal:content="structure view">
+                    Some metadata
+                  </div>
+  <BLANKLINE>
+                </div>
+              </div>
+            </div>
+  -->
+  <BLANKLINE>
+          </div>
+  <BLANKLINE>
+          <div class="spacer">
+            &nbsp;
+          </div>
+  <BLANKLINE>
+        </div>
+      </div>
+  <BLANKLINE>
+      <div id="footer" />
+  <BLANKLINE>
+      <div id="logger" />
+  <BLANKLINE>
+    </body>
+  <BLANKLINE>
+  </html>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+
+
+  >>> print http(r"""
+  ... POST /++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/+/AddPrincipalForm.html%3D HTTP/1.1
+  ... Authorization: Basic Z2xvYmFsbWdyOmdsb2JhbG1ncnB3
+  ... Content-Length: 670
+  ... Content-Type: multipart/form-data; boundary=---------------------------1667868105456130284903308969
+  ... Referer: http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/+/AddPrincipalForm.html=
+  ... 
+  ... -----------------------------1667868105456130284903308969
+  ... Content-Disposition: form-data; name="field.login"
+  ... 
+  ... mgr
+  ... -----------------------------1667868105456130284903308969
+  ... Content-Disposition: form-data; name="field.password"
+  ... 
+  ... mgrpw
+  ... -----------------------------1667868105456130284903308969
+  ... Content-Disposition: form-data; name="field.title"
+  ... 
+  ... Test Manager
+  ... -----------------------------1667868105456130284903308969
+  ... Content-Disposition: form-data; name="field.description"
+  ... 
+  ... 
+  ... -----------------------------1667868105456130284903308969
+  ... Content-Disposition: form-data; name="UPDATE_SUBMIT"
+  ... 
+  ... Add
+  ... -----------------------------1667868105456130284903308969--
+  ... """)
+  HTTP/1.1 303 See Other
+  Connection: close
+  Content-Length: 6239
+  Content-Type: text/html;charset=utf-8
+  Location: http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/@@contents.html
+  <BLANKLINE>
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <BLANKLINE>
+  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+        lang="en">
+  <BLANKLINE>
+    <head>
+      <title>Z3: +</title>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/zope3.css);</style>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/site_management.css);</style>
+  <BLANKLINE>
+      <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Popup script for the OnlineHelp -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/onlinehelp.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/xmltree.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <link rel="icon" type="image/png"
+            href="http://localhost:8081/@@/favicon.png" />
+    </head>
+  <BLANKLINE>
+    <body onload="loadtree('http://localhost:8081/', 'http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/+/')">
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="global">
+        <div id="userDetails">
+  <BLANKLINE>
+            User:
+            Sample Manager
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@logout.html?nextURL=http%3A//localhost%3A8081/%2B%2Betc%2B%2Bsite/default/PluggableAuthenticationService/BTreePrincipalSource/%2B/AddPrincipalForm.html%253D">[Logout]</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+        <img src="http://localhost:8081/@@/zope3logo.gif" />
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="navigators">
+  <BLANKLINE>
+        <!-- Navigation tree box -->
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+        <div class="box" id="navigationTree">
+          <h4>Navigation</h4>
+          <div xmlns="http://www.zope.org/zope3xmltree"
+               id="navtreecontents" class="body"
+               onclick="treeclicked(event);">Loading...</div>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <!-- Tree of the help topics that appears on the help namespace -->
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="workspace">
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="breadcrumbs"> Location:&nbsp;<a
+      href="http://localhost:8081/@@SelectedManagementView.html">[top]</a>
+             /
+            <a href="http://localhost:8081/++etc++site/@@SelectedManagementView.html">++etc++site</a> /
+            <a href="http://localhost:8081/++etc++site/default/@@SelectedManagementView.html">default</a> /
+            <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@SelectedManagementView.html">PluggableAuthenticationService</a> /
+            <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/@@SelectedManagementView.html">BTreePrincipalSource</a> /
+            <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/+/@@SelectedManagementView.html">+</a> /
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <!-- OnlineHelp with popup support -->
+        <!-- note, we reverse the actions list 'cos they're packed to the
+             screen from the right -->
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="viewspace">
+  <BLANKLINE>
+          <div id="message">
+          </div>
+  <BLANKLINE>
+          <div id="content">
+            <div>
+  <BLANKLINE>
+    <div>
+  <BLANKLINE>
+      <form action="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/+/AddPrincipalForm.html%3D"
+            method="post" enctype="multipart/form-data">
+  <BLANKLINE>
+        <div>
+  <BLANKLINE>
+          <h3>Add Simple User with details</h3>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div class="row">
+  <BLANKLINE>
+            <div class="label">
+              <label for="field.login"
+                     title="The Login/Username of the user. This value can change.">Login</label>
+            </div>
+            <div class="field"><input class="textType" id="field.login" name="field.login" size="20" type="text" value="mgr"  /></div>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+        <div class="row">
+  <BLANKLINE>
+            <div class="label">
+              <label for="field.password"
+                     title="The password for the user.">Password</label>
+            </div>
+            <div class="field"><input class="passwordType" id="field.password" name="field.password" size="20" type="password" value=""  /></div>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+        <div class="row">
+  <BLANKLINE>
+            <div class="label">
+              <label for="field.title"
+                     title="The title of the principal. This is usually used in the UI.">Title</label>
+            </div>
+            <div class="field"><input class="textType" id="field.title" name="field.title" size="20" type="text" value="Test Manager"  /></div>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+        <div class="row">
+  <BLANKLINE>
+            <div class="label">
+              <label for="field.description"
+                     title="A detailed description of the principal.">Description</label>
+            </div>
+            <div class="field"><textarea cols="60" id="field.description" name="field.description" rows="15" ></textarea></div>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div class="separator"></div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div class="separator"></div>
+  <BLANKLINE>
+        </div>
+        <br /><br />
+        <div class="row">
+          <div class="controls"><hr />
+            <input type="submit" value="Refresh" />
+            <input type="submit" value="Add"
+                   name="UPDATE_SUBMIT" />
+  <BLANKLINE>
+          </div>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div class="separator"></div>
+      </form>
+    </div>
+  <BLANKLINE>
+    </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div id="context_information">
+  <BLANKLINE>
+            <div id="helpers">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+  <BLANKLINE>
+  <!--
+            <div id="inspectors">
+  <BLANKLINE>
+              <div class="box" id="metadata"
+                  tal:define="view context/@@MetaDataBox|nothing"
+                  tal:condition="view/strip|nothing">
+  <BLANKLINE>
+                <h4 i18n:translate="">Metadata</h4>
+  <BLANKLINE>
+                <div class="body">
+  <BLANKLINE>
+                  <div class="content" tal:content="structure view">
+                    Some metadata
+                  </div>
+  <BLANKLINE>
+                </div>
+              </div>
+            </div>
+  -->
+  <BLANKLINE>
+          </div>
+  <BLANKLINE>
+          <div class="spacer">
+            &nbsp;
+          </div>
+  <BLANKLINE>
+        </div>
+      </div>
+  <BLANKLINE>
+      <div id="footer" />
+  <BLANKLINE>
+      <div id="logger" />
+  <BLANKLINE>
+    </body>
+  <BLANKLINE>
+  </html>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+
+
+  >>> print http(r"""
+  ... GET /++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/@@contents.html HTTP/1.1
+  ... Authorization: Basic Z2xvYmFsbWdyOmdsb2JhbG1ncnB3
+  ... Referer: http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/+/AddPrincipalForm.html=
+  ... """)
+  HTTP/1.1 200 Ok
+  Connection: close
+  Content-Length: 7252
+  Content-Type: text/html;charset=utf-8
+  <BLANKLINE>
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <BLANKLINE>
+  <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+        lang="en">
+  <BLANKLINE>
+    <head>
+      <title>Z3: BTreePrincipalSource</title>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/zope3.css);</style>
+  <BLANKLINE>
+      <style type="text/css" media="all">@import url(http://localhost:8081/@@/site_management.css);</style>
+  <BLANKLINE>
+      <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Popup script for the OnlineHelp -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/onlinehelp.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+      <script type="text/javascript"
+              src="http://localhost:8081/@@/xmltree.js">
+      </script>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <link rel="icon" type="image/png"
+            href="http://localhost:8081/@@/favicon.png" />
+    </head>
+  <BLANKLINE>
+    <body onload="loadtree('http://localhost:8081/', 'http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/')">
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="global">
+        <div id="userDetails">
+  <BLANKLINE>
+            User:
+            Sample Manager
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@logout.html?nextURL=http%3A//localhost%3A8081/%2B%2Betc%2B%2Bsite/default/PluggableAuthenticationService/BTreePrincipalSource/%40%40contents.html">[Logout]</a>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+        <img src="http://localhost:8081/@@/zope3logo.gif" />
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="navigators">
+  <BLANKLINE>
+        <!-- Navigation tree box -->
+  <BLANKLINE>
+      <!-- Ugly is better than lobotomized. -->
+        <div class="box" id="navigationTree">
+          <h4>Navigation</h4>
+          <div xmlns="http://www.zope.org/zope3xmltree"
+               id="navtreecontents" class="body"
+               onclick="treeclicked(event);">Loading...</div>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div class="box" id="commonTasks">
+  <BLANKLINE>
+  <BLANKLINE>
+            <h4>Add:</h4>
+            <div class="body">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div class="content even">
+  <BLANKLINE>
+  <BLANKLINE>
+        <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/@@+/action.html?type_name=AddPrincipalForm.html"
+           class="">Principal</a>
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+        <!-- Tree of the help topics that appears on the help namespace -->
+  <BLANKLINE>
+  <BLANKLINE>
+      </div>
+  <BLANKLINE>
+  <BLANKLINE>
+      <div id="workspace">
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="breadcrumbs"> Location:&nbsp;<a
+      href="http://localhost:8081/@@SelectedManagementView.html">[top]</a>
+             /
+            <a href="http://localhost:8081/++etc++site/@@SelectedManagementView.html">++etc++site</a> /
+            <a href="http://localhost:8081/++etc++site/default/@@SelectedManagementView.html">default</a> /
+            <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/@@SelectedManagementView.html">PluggableAuthenticationService</a> /
+            <a href="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/@@SelectedManagementView.html">BTreePrincipalSource</a> /
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div class="itemViews">
+  <BLANKLINE>
+            <a href="@@contents.html" class="selected">Contents</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@classBrowser.html" class="">Introspector</a>
+  <BLANKLINE>
+        </div>
+  <BLANKLINE>
+        <!-- OnlineHelp with popup support -->
+        <!-- note, we reverse the actions list 'cos they're packed to the
+             screen from the right -->
+        <div id="actions">
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="javascript:popup('contents.html/++help++/@@contexthelp.html','OnlineHelp','height=400
+                                             ,width=700
+                                             ,resizable=1
+                                             ,scrollbars=yes
+                                             ,location=no
+                                             ,status=no
+                                             ,toolbar=no
+                                             ,menubar=no')">Help</a>
+  <BLANKLINE>
+  <BLANKLINE>
+            <a href="@@undoAll.html">Undo all</a>
+            <a href="@@undoMore.html">Undo more</a>
+            <a href="@@undo.html">Undo!</a>
+            <a href="@@errorRedirect.html">Errors</a>
+            <a href="@@find.html">Find</a>
+            <a href="@@+">Add</a>
+  <BLANKLINE>
+          &nbsp;
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+        <div id="viewspace">
+  <BLANKLINE>
+          <div id="message">
+          </div>
+  <BLANKLINE>
+          <div id="content">
+            <div>
+    <div>
+  <BLANKLINE>
+      <form name="containerContentsForm" method="POST"
+            action="http://localhost:8081/++etc++site/default/PluggableAuthenticationService/BTreePrincipalSource/@@contents.html">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+        <table id="sortable" class="listing"
+               summary="Content listing">
+  <BLANKLINE>
+          <thead>
+            <tr>
+              <th>&nbsp;</th>
+              <th>Name</th>
+              <th>Title</th>
+              <th>Size</th>
+              <th>Created</th>
+              <th>Modified</th>
+            </tr>
+          </thead>
+  <BLANKLINE>
+          <tbody>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            <tr class="even">
+              <td>
+                <input type="checkbox" class="noborder"
+                       name="ids:list" id="mgr" value="mgr" />
+              </td>
+              <td><a href="mgr/@@SelectedManagementView.html"></a><span>
+                    <a href="mgr/@@SelectedManagementView.html">mgr</a></span></td>
+              <td>
+  <BLANKLINE>
+  <BLANKLINE>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              </td>
+  <BLANKLINE>
+              <td><span>n/a</span></td>
+              <td><span>&nbsp;</span></td>
+              <td><span>&nbsp;</span></td>
+            </tr>
+  <BLANKLINE>
+  <BLANKLINE>
+          </tbody>
+        </table>
+  <BLANKLINE>
+        <div>
+  <BLANKLINE>
+  <BLANKLINE>
+          <input type="submit" name="container_cut_button"
+                 value="Cut" />
+          <input type="submit" name="container_copy_button"
+                 value="Copy" />
+  <BLANKLINE>
+          <input type="submit" name="container_delete_button"
+                 value="Delete" />
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            <input type="submit" name="container_add_button"
+                   value="Add" />
+  <BLANKLINE>
+            <input type="hidden" name="single_type_name"
+                   value="AddPrincipalForm.html" />
+  <BLANKLINE>
+  <BLANKLINE>
+        </div>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+      </form>
+  <BLANKLINE>
+      <script><!--
+          prettydump('focus', LG_INFO);
+          if (document.containerContentsForm.new_value)
+  	        document.containerContentsForm.new_value.focus();
+          //-->
+      </script>
+  <BLANKLINE>
+    </div>
+  <BLANKLINE>
+  </div>
+          </div>
+  <BLANKLINE>
+  <BLANKLINE>
+          <div id="context_information">
+  <BLANKLINE>
+            <div id="helpers">
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
+            </div>
+  <BLANKLINE>
+  <!--
+            <div id="inspectors">
+  <BLANKLINE>
+              <div class="box" id="metadata"
+                  tal:define="view context/@@MetaDataBox|nothing"
+                  tal:condition="view/strip|nothing">
+  <BLANKLINE>
+                <h4 i18n:translate="">Metadata</h4>
+  <BLANKLINE>
+                <div class="body">
+  <BLANKLINE>
+                  <div class="content" tal:content="structure view">
+                    Some metadata
+                  </div>
+  <BLANKLINE>
+                </div>
+              </div>
+            </div>
+  -->
+  <BLANKLINE>
+          </div>
+  <BLANKLINE>
+          <div class="spacer">
+            &nbsp;
+          </div>
+  <BLANKLINE>
+        </div>
+      </div>
+  <BLANKLINE>
+      <div id="footer" />
+  <BLANKLINE>
+      <div id="logger" />
+  <BLANKLINE>
+    </body>
+  <BLANKLINE>
+  </html>
+  <BLANKLINE>
+  <BLANKLINE>
+  <BLANKLINE>
