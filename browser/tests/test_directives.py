@@ -245,10 +245,57 @@ class Test(PlacelessSetup, unittest.TestCase):
         self.assertEqual(getDefaultViewName(ob, request
                                  ), 'test')
 
+    def testSkinResource(self):
+        self.assertEqual(
+            zapi.queryResource('test', Request(IV), None), None)
+
+        xmlconfig(StringIO(template % (
+            '''
+            <browser:layer name="zmi" />
+            <browser:skin name="zmi" layers="zmi default" />
+            <browser:resource
+                  name="test"
+                  factory="zope.app.component.tests.views.RZMI"
+                  layer="zmi" />
+            <browser:resource
+                  name="test"
+                  factory="zope.app.component.tests.views.R1" />
+            '''
+            )))
+
+        self.assertEqual(
+            zapi.queryResource('test', request, None).__class__, R1)
+        self.assertEqual(
+            zapi.queryResource('test', TestRequest(skin='zmi'), None).__class__,
+            RZMI)
+
+    def testDefaultSkin(self):
+        self.assertEqual(queryView(ob, 'test', request, None), None)
+        xmlconfig(StringIO(template % (
+            '''
+            <browser:layer name="zmi" />
+            <browser:skin name="zmi" layers="zmi default" />
+            <browser:defaultSkin name="zmi" />
+            <browser:page name="test"
+                  class="zope.app.component.tests.views.VZMI"
+                  layer="zmi"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public"
+                  attribute="index"
+                  />
+            <browser:page name="test"
+                  class="zope.app.component.tests.views.V1"
+                  for="zope.app.component.tests.views.IC"
+                  permission="zope.Public"
+                  attribute="index"
+                  />
+            '''
+            )))
+        v = queryView(ob, 'test', TestRequest(skin=''))
+        self.assert_(issubclass(v.__class__, VZMI))
 
     def testSkinPage(self):
-        self.assertEqual(queryView(ob, 'test', request,
-                                   None), None)
+        self.assertEqual(queryView(ob, 'test', request, None), None)
 
         xmlconfig(StringIO(template % (
             """

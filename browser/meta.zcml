@@ -141,6 +141,12 @@
         />
 
     <meta:directive
+        name="defaultSkin"
+        schema=".metadirectives.IDefaultSkinDirective"
+        handler=".metaconfigure.defaultSkin"
+        />
+
+    <meta:directive
         name="icon"
         schema=".metadirectives.IIconDirective"
         handler=".icon.IconDirective"
