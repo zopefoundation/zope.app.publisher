@@ -18,8 +18,8 @@ This module defines the schemas for browser directives.
 $Id$
 """
 from zope.interface import Interface
-from zope.configuration.fields import GlobalObject, Tokens, Path, \
-     PythonIdentifier, MessageID
+from zope.configuration.fields import GlobalObject, GlobalInterface
+from zope.configuration.fields import Tokens, Path, PythonIdentifier, MessageID
 from zope.schema import TextLine, Text, Id, Int
 
 from zope.app.component.metadirectives import IBasicViewInformation
@@ -41,7 +41,7 @@ class IPagesDirective(IBasicViewInformation):
     """
 
     for_ = GlobalObject(
-        title=u"The interface this view is for.",
+        title=u"The interface or class this view is for.",
         required=False
         )
 
@@ -59,7 +59,7 @@ class IViewDirective(IPagesDirective):
     traversing to the view name and then traversing to the page name.
     """
 
-    for_ = GlobalObject(
+    for_ = GlobalInterface(
         title=u"The interface this view is for.",
         required=False
         )
@@ -91,7 +91,7 @@ class IViewDirective(IPagesDirective):
         required=False
         )
 
-    provides = GlobalObject(
+    provides = GlobalInterface(
         title=u"The interface this view provides.",
         description=u"""
         A view can provide an interface.  This would be used for
@@ -165,7 +165,7 @@ class IDefaultViewDirective(Interface):
         required=True
         )
 
-    for_ = GlobalObject(
+    for_ = GlobalInterface(
         title=u"The interface this view is the default for.",
         description=u"""Specifies the interface for which the view is
         registered. All objects implementing this interface can make use of
@@ -370,7 +370,7 @@ class IMenuDirective(Interface):
         required=False
         )
 
-    interface = GlobalObject(
+    interface = GlobalInterface(
         title=u"The menu's interface.",
         required=False
         )
@@ -390,7 +390,7 @@ class IMenuItemsDirective(Interface):
         required=True,
         )
 
-    for_ = GlobalObject(
+    for_ = GlobalInterface(
         title=u"Interface",
         description=u"The interface the menu items are defined for",
         required=False
@@ -517,7 +517,7 @@ class ILayerDirective(Interface):
         required=False
         )
 
-    interface = GlobalObject(
+    interface = GlobalInterface(
         title=u"The layer's interface.",
         required=False
         )
@@ -546,7 +546,7 @@ class ISkinDirective(Interface):
         required=False
         )
 
-    interface = GlobalObject(
+    interface = GlobalInterface(
         title=u"The skin's interface.",
         required=False
         )
@@ -584,7 +584,7 @@ class IIconDirective(Interface):
         required=True
         )
 
-    for_ = GlobalObject(
+    for_ = GlobalInterface(
         title=u"The interface this icon is for.",
         description=u"""
         The icon will be for all objects that implement this

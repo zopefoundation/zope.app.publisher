@@ -36,7 +36,7 @@ class IViewDirective(zope.interface.Interface):
     interface = zope.configuration.fields.Tokens(
         title=u"Interface to be published.",
         required=False,
-        value_type=zope.configuration.fields.GlobalObject()
+        value_type=zope.configuration.fields.GlobalInterface()
         )
 
     methods = zope.configuration.fields.Tokens(
