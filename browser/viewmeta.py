@@ -13,7 +13,7 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: viewmeta.py,v 1.34 2003/11/21 17:10:30 jim Exp $
+$Id: viewmeta.py,v 1.35 2003/12/07 10:04:53 gotcha Exp $
 """
 
 import os
@@ -103,6 +103,11 @@ def page(_context, name, permission, for_,
          attribute='__call__', menu=None, title=None, 
          usage=u''
          ):
+
+    s = zapi.queryService(None, zapi.servicenames.Presentation)
+    if s is not None:
+        # on startup the service is not immediately there...
+        s.useUsage(usage)
 
     _handle_menu(_context, menu, title, for_, name, permission)
 
@@ -278,6 +283,10 @@ class view:
                 # If no usage is declared explicitly for this page, use the
                 # usage given for the whole view.
                 usage = self.usage
+            s = zapi.queryService(None, zapi.servicenames.Presentation)
+            if s is not None:
+                # on startup the service is not immediately there...
+                s.useUsage(usage)
             if template:
                 cdict[pname] = ViewPageTemplateFile(template, usage=usage)
                 if attribute and attribute != name:

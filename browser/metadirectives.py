@@ -15,7 +15,7 @@
 
 This module defines the schemas for browser directives.
 
-$Id: metadirectives.py,v 1.9 2003/12/03 05:40:29 jim Exp $
+$Id: metadirectives.py,v 1.10 2003/12/07 10:04:53 gotcha Exp $
 """
 from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, Tokens, Path, \
@@ -23,12 +23,13 @@ from zope.configuration.fields import GlobalObject, Tokens, Path, \
 from zope.schema import TextLine, Text, Id
 
 from zope.app.component.metadirectives import IBasicViewInformation
+from zope.app.interfaces.publisher.browser import IUsage
 
 #
 # browser views
 #
 
-class IViewDirective(IBasicViewInformation):
+class IViewDirective(IBasicViewInformation, IUsage):
     """
     The view directive defines a view that has subpages.
 
@@ -199,7 +200,7 @@ class IPagesPageSubdirective(Interface):
         required=False
         )
 
-class IPageDirective(IPagesDirective, IPagesPageSubdirective):
+class IPageDirective(IPagesDirective, IPagesPageSubdirective, IUsage):
     """
     The page directive is used to create views that provide a single
     url or page.
@@ -208,19 +209,6 @@ class IPageDirective(IPagesDirective, IPagesPageSubdirective):
     and/or class and registers it.
     """
 
-    usage = TextLine(
-        title=u"The template usage top-level variable",
-        description=u"""
-          See the usage documentation in the README.txt in the
-          zope/app/browser/skins directory.
-          If this view is associated with a menu item, this attribute should
-          not be supplied as the view will get its usage from the menu the
-          menu item is registered to.
-          This attribute is available for views not associated with a menu
-          item.
-          """,
-        required=False
-        )
 
 #
 # browser resources
@@ -361,7 +349,7 @@ class IResourceDirectoryDirective(IBasicResourceInformation):
 # browser menus
 #
 
-class IMenuDirective(Interface):
+class IMenuDirective(IUsage):
     """
     Define a browser menu
     """
@@ -376,16 +364,6 @@ class IMenuDirective(Interface):
         title=u"Title",
         description=u"A descriptive title for documentation purposes",
         required=True
-        )
-
-    usage = TextLine(
-        title=u"The templates usage top-level variable",
-        description=u"""
-        See the usage documentation in the README.txt in the
-        zope/app/browser/skins directory. If a view is associated with
-        a menu item, the view will get its usage from the menu the
-        menu item is registered to.""",
-        required=False
         )
 
 class IMenuItemsDirective(Interface):
@@ -479,6 +457,16 @@ class ILayerDirective(Interface):
     name = TextLine(
         title=u"Name",
         description=u"The name of the skin.",
+        required=True
+        )
+
+class IUsageDirective(Interface):
+    """Defines a view usage
+    """
+
+    name = TextLine(
+        title=u"Name",
+        description=u"The name of the usage.",
         required=True
         )
 

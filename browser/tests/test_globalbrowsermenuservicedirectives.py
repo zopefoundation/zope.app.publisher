@@ -15,7 +15,7 @@
 
 XXX longer description goes here.
 
-$Id: test_globalbrowsermenuservicedirectives.py,v 1.10 2003/12/03 05:41:34 jim Exp $
+$Id: test_globalbrowsermenuservicedirectives.py,v 1.11 2003/12/07 10:04:53 gotcha Exp $
 """
 
 from StringIO import StringIO
@@ -110,6 +110,7 @@ class Test(PlacelessSetup, TestCase):
 
         xmlconfig(StringIO(template % (
             """
+            <browser:usage name="objectview" />
             <browser:menu id="test_id" title="test menu" usage="objectview" />
 
             <browser:menu id="test_id2" title="test menu" />

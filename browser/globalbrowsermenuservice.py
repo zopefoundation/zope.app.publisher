@@ -13,7 +13,7 @@
 ##############################################################################
 """Global Browser Menu Service
 
-$Id: globalbrowsermenuservice.py,v 1.27 2003/12/03 05:41:34 jim Exp $
+$Id: globalbrowsermenuservice.py,v 1.28 2003/12/07 10:04:53 gotcha Exp $
 """
 __metaclass__ = type 
 
@@ -32,6 +32,7 @@ from zope.app.interfaces.publisher.browser import IBrowserMenu
 from zope.app.pagetemplate.engine import Engine
 from zope.app.publication.browser import PublicationTraverser
 from zope.security.proxy import ProxyFactory
+from zope.app import zapi
 
 class Menu:
     """Browser menu"""
@@ -198,6 +199,11 @@ class GlobalBrowserMenuService(BaseBrowserMenuService):
     def menu(self, menu_id, title, description=u'', usage=u''):
         # XXX we have nothing to do with the title and description. ;)
 
+        s = zapi.getService(None, zapi.servicenames.Presentation)
+        if not usage:
+            # usage could be None
+            usage = u''
+        s.useUsage(usage)
         if menu_id in self._registry:
             raise DuplicationError("Menu %s is already defined." % menu_id)
 

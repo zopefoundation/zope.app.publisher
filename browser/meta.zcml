@@ -151,6 +151,12 @@
         schema=".metadirectives.IAddMenuItem"
         handler=".metaconfigure.addMenuItem"
         />
+    
+    <meta:directive
+        name="usage"
+        schema=".metadirectives.IUsageDirective"
+        handler=".metaconfigure.usage"
+        />
 
   </meta:directives>
 

@@ -13,7 +13,7 @@
 ##############################################################################
 """Global Browser Menu Tests
 
-$Id: test_globalbrowsermenuservice.py,v 1.14 2003/12/03 05:41:34 jim Exp $
+$Id: test_globalbrowsermenuservice.py,v 1.15 2003/12/07 10:04:53 gotcha Exp $
 """
 import unittest
 from zope.app.tests.placelesssetup import PlacelessSetup
@@ -28,6 +28,7 @@ from zope.interface import Interface, implements
 from zope.publisher.browser import TestRequest
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.security.management import newSecurityManager, system_user
+from zope.app import zapi
 
 class I1(Interface): pass
 class I11(I1): pass
@@ -199,6 +200,8 @@ class GlobalBrowserMenuServiceTest(PlacelessSetup, unittest.TestCase):
         self.assertEqual(list(menu), [])
 
     def testUsage(self):
+        ps = zapi.getService(None, zapi.servicenames.Presentation)
+        ps.defineUsage(u'objectview')
         r = self.__reg()
         r.menu('test_id', 'test menu', usage=u'objectview')
         self.assertEqual(r.getMenuUsage('test_id'), u'objectview')

@@ -13,14 +13,14 @@
 ##############################################################################
 """Browser configuration code
 
-$Id: metaconfigure.py,v 1.15 2003/12/03 05:40:29 jim Exp $
+$Id: metaconfigure.py,v 1.16 2003/12/07 10:04:53 gotcha Exp $
 """
 
 from zope.app import zapi
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.app.services.servicenames import Interfaces
 
-from zope.app.component.metaconfigure import skin, layer
+from zope.app.component.metaconfigure import skin, layer, usage
 from zope.app.component.metaconfigure import handler
 from zope.app.interfaces.container import IAdding
 from zope.app.publisher.browser.globalbrowsermenuservice \

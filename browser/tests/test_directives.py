@@ -44,6 +44,7 @@ from zope.app.security.registries.permissionregistry import permissionRegistry
 from zope.app.interfaces.security import IPermissionService
 
 from zope.publisher.interfaces.browser import IBrowserPublisher
+from zope.app import zapi
 
 tests_path = os.path.join(
     os.path.split(zope.app.publisher.browser.__file__)[0],
@@ -94,6 +95,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
     def setUp(self):
         super(Test, self).setUp()
+        
         XMLConfig('meta.zcml', zope.app.publisher.browser)()
 
         from zope.app.tests import ztapi
@@ -101,6 +103,10 @@ class Test(PlacelessSetup, unittest.TestCase):
         from zope.app.interfaces.traversing import ITraversable
 
         ztapi.provideAdapter(None, ITraversable, DefaultTraversable)
+
+        ps =  zapi.getService(None, zapi.servicenames.Presentation)
+        ps.defineUsage("objectview")
+        ps.defineUsage("overridden")
 
     def testPage(self):
         self.assertEqual(queryView(ob, 'test', request),
