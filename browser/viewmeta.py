@@ -49,7 +49,7 @@ from zope.app.publisher.browser.menu import menuItemDirective
 #         permission="zope.View"
 #         />
 #
-# Unamed view with pages (multi-page view)
+# Unnamed view with pages (multi-page view)
 #
 #     <browser:pages
 #         for=".IContact."
