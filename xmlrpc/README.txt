@@ -4,7 +4,7 @@ XML-RPC views
 XML-RPC Methods
 ---------------
 
-There are two ways to write XML-RPV views. You can write views that
+There are two ways to write XML-RPC views. You can write views that
 provide "methods" for other objects, and you can write views that have
 their own methods.  Let's look at the former case first, since it's a
 little bit simpler.
@@ -125,7 +125,7 @@ credentials:
   </methodResponse>
   <BLANKLINE>
 
-Named XM-RPC Views
+Named XML-RPC Views
 ------------------
 
 Now let's look at views that have their own methods or other
@@ -135,7 +135,7 @@ in URLs and they get traversed to get to their methods, as in::
    .../somefolder/listing/contents
 
 To make this possible, the view has to support traversal, so that,
-when it is traversed, it traverses to it's attributes.  To supplot
+when it is traversed, it traverses to its attributes.  To support
 traversal, you can implement or provide an adapter to
 `zope.publisher.interfaces.IPublishTraverse`. It's actually better to
 provide an adapter so that accesses to attributes during traversal are
