@@ -13,7 +13,7 @@
 ##############################################################################
 """Global Browser Menu Tests
 
-$Id: test_globalbrowsermenuservice.py,v 1.12 2003/08/16 00:43:51 srichter Exp $
+$Id: test_globalbrowsermenuservice.py,v 1.13 2003/09/24 01:52:33 garrett Exp $
 """
 import unittest
 from zope.app.tests.placelesssetup import PlacelessSetup
@@ -167,6 +167,27 @@ class GlobalBrowserMenuServiceTest(PlacelessSetup, unittest.TestCase):
             TestRequest(SERVER_URL='http://127.0.0.1/++view++a12',
             PATH_INFO='/++view++a12'))
         self.assertEqual(list(menu), [d(2), d(12, 'selected'), d(1)])
+
+
+    def test_identify_similar_action(self):
+        r = self.__reg()
+        r.menu('test_id', 'test menu')
+        r.menuItem('test_id', I11, 'aA', 'tA', 'dA')
+        r.menuItem('test_id', I111, 'aAaA', 'tAaA', 'dAaA')
+
+        def d(s, selected=''):
+            return {'action': "a%s" % s,
+                    'title':  "t%s" % s,
+                    'description':  "d%s" % s,
+                    'selected': selected}
+
+        menu = r.getMenu('test_id', TestObject(),
+            TestRequest(SERVER_URL='http://127.0.0.1/aA', PATH_INFO='/aA'))
+        self.assertEqual(list(menu), [d('AaA'), d('A', 'selected')])
+        menu = r.getMenu('test_id', TestObject(), 
+            TestRequest(SERVER_URL='http://127.0.0.1/aAaA', PATH_INFO='/aAaA'))
+        self.assertEqual(list(menu), [d('AaA', 'selected'), d('A')])
+
 
     def testEmpty(self):
         r = self.__reg()

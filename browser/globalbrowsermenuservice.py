@@ -13,7 +13,7 @@
 ##############################################################################
 """Global Browser Menu Service
 
-$Id: globalbrowsermenuservice.py,v 1.25 2003/09/02 20:46:57 jim Exp $
+$Id: globalbrowsermenuservice.py,v 1.26 2003/09/24 01:52:33 garrett Exp $
 """
 __metaclass__ = type 
 
@@ -127,11 +127,11 @@ class BaseBrowserMenuService:
             if action.startswith('@@'):
                 normalized_action = action[2:]
 
-            if request_url.endswith(action):
+            if request_url.endswith('/'+normalized_action):
                 selected='selected'
-            elif request_url.endswith('/'+normalized_action):
+            elif request_url.endswith('/++view++'+normalized_action):
                 selected='selected'
-            elif request_url.endswith('++view++'+normalized_action):
+            elif request_url.endswith('/@@'+normalized_action):
                 selected='selected'
             else:
                 selected=''
