@@ -415,7 +415,7 @@ class IMenuItemsDirective(Interface):
     for_ = GlobalInterface(
         title=u"Interface",
         description=u"The interface the menu items are defined for",
-        required=False
+        required=True
         )
 
     layer = LayerField(
