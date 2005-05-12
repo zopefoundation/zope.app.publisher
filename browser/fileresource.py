@@ -15,6 +15,9 @@
 
 $Id$
 """
+
+import time
+
 from zope.publisher.interfaces import NotFound
 
 from zope.app.publisher.browser import BrowserView
@@ -89,10 +92,9 @@ class FileResource(BrowserView, Resource):
         response.setHeader('Content-Type', file.content_type)
         response.setHeader('Last-Modified', file.lmh)
 
-        # Cache for one day
-        response.setHeader('Cache-Control', 'public,max-age=86400')
-        f=open(file.path,'rb')
-        data=f.read()
+        setCacheControl(response)
+        f = open(file.path,'rb')
+        data = f.read()
         f.close()
 
         return data
@@ -102,9 +104,17 @@ class FileResource(BrowserView, Resource):
         response = self.request.response
         response.setHeader('Content-Type', file.content_type)
         response.setHeader('Last-Modified', file.lmh)
-        # Cache for one day
-        response.setHeader('Cache-Control', 'public,max-age=86400')
+        setCacheControl(response)
         return ''
+
+
+def setCacheControl(response, secs=86400):
+    # Cache for one day by default
+    response.setHeader('Cache-Control', 'public,max-age=%s' % secs)
+    t = time.time() + secs
+    response.setHeader('Expires',
+                       time.strftime("%a, %d %b %Y %H:%M:%S GMT",
+                                     time.gmtime(t)))
 
 
 class FileResourceFactory(object):
