@@ -233,8 +233,7 @@ def addMenuItem(_context, title, description='', menu=None, for_=None,
                 "A permission must be specified when a class is used")
         factory = "BrowserAdd%s__%s.%s" % (
             forname, class_.__module__, class_.__name__) 
-        ContentDirective(_context, class_).factory(
-            _context, id=factory)
+        ContentDirective(_context, class_).factory(_context, id=factory)
 
     extra = {'factory': factory}
 
