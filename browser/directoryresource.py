@@ -80,12 +80,20 @@ class DirectoryResource(BrowserView, Resource):
     def get(self, name, default=_marker):
         path = self.context.path
         filename = os.path.join(path, name)
-        if not os.path.isfile(filename):
+        isfile = os.path.isfile(filename)
+        isdir = os.path.isdir(filename)
+          
+        if not (isfile or isdir):
             if default is _marker:
                 raise NotFound(None, name)
             return default
-        ext = os.path.splitext(os.path.normcase(name))[1]
-        factory = self.resource_factories.get(ext, self.default_factory)
+
+        if isfile:
+            ext = os.path.splitext(os.path.normcase(name))[1]
+            factory = self.resource_factories.get(ext, self.default_factory)
+        else:
+            factory = DirectoryResourceFactory
+
         rname = posixpath.join(self.__name__, name)
         resource = factory(filename, self.context.checker, rname)(self.request)
         resource.__parent__ = self
