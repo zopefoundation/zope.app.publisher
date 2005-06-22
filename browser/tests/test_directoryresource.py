@@ -28,7 +28,7 @@ from zope.interface import implements
 from zope.app import zapi
 from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.publisher.browser.directoryresource import \
-     DirectoryResourceFactory
+     DirectoryResourceFactory, DirectoryResource
 from zope.app.container.contained import Contained
 from zope.app.publisher.browser.fileresource import FileResource
 from zope.app.publisher.browser.pagetemplateresource import \
@@ -92,6 +92,22 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
         files.__parent__ = ob
         file = files['test.gif']
         self.assertEquals(file(), 'http://127.0.0.1/@@/test_files/test.gif')
+
+    def testURL3Level(self):
+        request = TestRequest()
+        request._vh_root = support.site
+        ob.__parent__ = support.site
+        ob.__name__ = 'ob'
+        path = os.path.join(test_directory, 'testfiles')
+        files = DirectoryResourceFactory(path, checker, 'test_files')(request)
+        files.__parent__ = ob
+        file = files['test.gif']
+        self.assertEquals(file(), 'http://127.0.0.1/@@/test_files/test.gif')
+        subdir = files['subdir']
+        self.assert_(zapi.isinstance(subdir, DirectoryResource))
+        file = subdir['test.gif']
+        self.assertEquals(file(),
+                          'http://127.0.0.1/@@/test_files/subdir/test.gif')
 
     def testCorrectFactories(self):
         path = os.path.join(test_directory, 'testfiles')
