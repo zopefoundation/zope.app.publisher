@@ -84,8 +84,8 @@ class MenuStub(object):
 class Context(object):
     actions = ()
     info = ''
-    
-    def action(self, discriminator, callable, args):
+
+    def action(self, discriminator, callable, args, order=0):
         self.actions += ((discriminator, callable, args), )
 
     def __repr__(self):
@@ -137,7 +137,12 @@ def test_w_factory_and_view():
     ...             permission="zope.ManageContent", description="blah blah",
     ...             filter="context/foo", view="AddX")
     >>> context
-    ((('adapter',
+    ((None,
+      <function _checkViewFor>,
+      (<InterfaceClass zope.app.container.interfaces.IAdding>,
+       <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>,
+       'AddX')),
+     (('adapter',
        (<InterfaceClass zope.app.container.interfaces.IAdding>,
         <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>),
        <InterfaceClass zope.app.publisher.interfaces.browser.AddMenu>,
@@ -184,6 +189,11 @@ def test_w_factory_class_view():
       <function provideInterface>,
       ('zope.component.interfaces.IFactory',
        <InterfaceClass zope.component.interfaces.IFactory>)),
+     (None,
+      <function _checkViewFor>,
+      (<InterfaceClass zope.app.container.interfaces.IAdding>,
+       <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>,
+       'AddX')),
      (('adapter',
        (<InterfaceClass zope.app.container.interfaces.IAdding>,
         <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>),
@@ -326,7 +336,7 @@ def test_w_factory_icon_extra_order():
     >>> context = Context()
     >>> addMenuItem(context, factory="x.y.z", title="Add an X",
     ...             permission="zope.ManageContent", description="blah blah",
-    ...             filter="context/foo", icon=u'/@@/icon.png', extra='Extra', 
+    ...             filter="context/foo", icon=u'/@@/icon.png', extra='Extra',
     ...             order=99)
     >>> context
     ((('adapter',
