@@ -237,7 +237,8 @@ def addMenuItem(_context, title, description='', menu=None, for_=None,
 
     extra = {'factory': factory}
 
-    if view: 
+    if view:
+        # XXX : (#307) Here we don't know if it's a valid view or not
         action = view
     else:
         action = factory
