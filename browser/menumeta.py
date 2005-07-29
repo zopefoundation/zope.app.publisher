@@ -193,27 +193,28 @@ class menuItemsDirective(object):
         # Nothing to do.
         pass
 
-def _checkViewFor(class_=None, factory=None, for_=None, view=''):
+def _checkViewFor(for_=None, layer=None, view_name=None):
+    """Check if there is a view of that name registered for IAdding
+    and IBrowserRequest. If not raise a ConfigurationError
 
-    if not view:
-        # XXX verbose error
+    It will raise a ConfigurationError if :
+        o view=""
+        o if view_name is not registred
+    """
+
+    if view_name is None:
         raise ConfigurationError(
             "Within a addMenuItem directive the view attribut"
-            " is optional but can\'t be empty")
-    
-    # Check if there is a view of that name registered for IAdding and
-    # IBrowserRequest. If not raise a ConfigurationError
+            " is optional but can\'t be empty"
+            )
 
     gsm = zapi.getGlobalSiteManager()
+    if gsm.adapters.lookup((for_, layer),
+                           Interface, view_name) is None:
+        raise ConfigurationError(
+            "view name %s not found " %view_name
+            )
 
-    # XXX returns None all the time
-    ##if gsm.adapters.lookup((IBrowserRequest, IAdding),
-    ##                       Interface, view) is None:
-    ##    print "view name %s not found " %view
-    ##    raise ConfigurationError(
-    ##        "view name %s not found " %view
-    ##        )
-        
 def addMenuItem(_context, title, description='', menu=None, for_=None,
                 class_=None, factory=None, view=None, icon=None, filter=None,
                 permission=None, layer=IDefaultBrowserLayer, extra=None,
@@ -264,7 +265,7 @@ def addMenuItem(_context, title, description='', menu=None, for_=None,
         _context.action(
             discriminator = None,
             callable = _checkViewFor,
-            args = (class_, factory, for_, view),
+            args = (for_, layer, view),
             order=999999
             )
     else:
