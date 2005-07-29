@@ -17,6 +17,7 @@ $Id$
 """
 from zope.configuration.exceptions import ConfigurationError
 from zope.interface.interface import InterfaceClass
+from zope.interface import Interface
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.security.checker import InterfaceChecker, CheckerPublic
 
@@ -50,7 +51,7 @@ _order_counter = {}
 def menuDirective(_context, id=None, class_=BrowserMenu, interface=None,
                   title=u'', description=u''):
     """Registers a new browser menu."""
-    if id is None and interface is None: 
+    if id is None and interface is None:
         raise ConfigurationError(
             "You must specify the 'id' or 'interface' attribute.")
 
@@ -129,7 +130,7 @@ class MenuItemFactory(object):
         if 'permission' in kwargs and kwargs['permission'] == 'zope.Public':
             kwargs['permission'] = CheckerPublic
         self.kwargs = kwargs
-    
+
     def __call__(self, context, request):
         item = self.factory(context, request)
 
@@ -187,15 +188,35 @@ class menuItemsDirective(object):
             _for=self.for_, submenuId=submenu)
         adapter(_context, (factory,), self.menuItemType,
                 (self.for_, self.layer), name=title)
-        
+
     def __call__(self, _context):
         # Nothing to do.
         pass
 
+def _checkViewFor(class_=None, factory=None, for_=None, view=''):
 
-def addMenuItem(_context, title, description='', menu=None, for_=None, 
-                class_=None, factory=None, view=None, icon=None, filter=None, 
-                permission=None, layer=IDefaultBrowserLayer, extra=None, 
+    if not view:
+        # XXX verbose error
+        raise ConfigurationError(
+            "Within a addMenuItem directive the view attribut"
+            " is optional but can\'t be empty")
+    
+    # Check if there is a view of that name registered for IAdding and
+    # IBrowserRequest. If not raise a ConfigurationError
+
+    gsm = zapi.getGlobalSiteManager()
+
+    # XXX returns None all the time
+    ##if gsm.adapters.lookup((IBrowserRequest, IAdding),
+    ##                       Interface, view) is None:
+    ##    print "view name %s not found " %view
+    ##    raise ConfigurationError(
+    ##        "view name %s not found " %view
+    ##        )
+        
+def addMenuItem(_context, title, description='', menu=None, for_=None,
+                class_=None, factory=None, view=None, icon=None, filter=None,
+                permission=None, layer=IDefaultBrowserLayer, extra=None,
                 order=0):
     """Create an add menu item for a given class or factory
 
@@ -221,7 +242,7 @@ def addMenuItem(_context, title, description='', menu=None, for_=None,
             menu = zapi.getUtility(IMenuItemType, menu)
             if menu is None:
                 raise ValueError("Missing menu id '%s'" % menu)
-    
+
     if class_ is None:
         if factory is None:
             raise ValueError("Must specify either class or factory")
@@ -232,14 +253,20 @@ def addMenuItem(_context, title, description='', menu=None, for_=None,
             raise ValueError(
                 "A permission must be specified when a class is used")
         factory = "BrowserAdd%s__%s.%s" % (
-            forname, class_.__module__, class_.__name__) 
+            forname, class_.__module__, class_.__name__)
         ContentDirective(_context, class_).factory(_context, id=factory)
 
     extra = {'factory': factory}
 
     if view:
-        # XXX : (#307) Here we don't know if it's a valid view or not
         action = view
+        # This action will check if the view exists
+        _context.action(
+            discriminator = None,
+            callable = _checkViewFor,
+            args = (class_, factory, for_, view),
+            order=999999
+            )
     else:
         action = factory
 
