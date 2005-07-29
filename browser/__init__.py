@@ -24,7 +24,7 @@ from zope.app.location import Location
 from zope.app.publisher.interfaces.browser import IBrowserView
 from zope.publisher.interfaces.browser import ISkin
 
-# XXX: needs testing of __parent__ property
+# TODO: needs testing of __parent__ property
 class BrowserView(Location):
     implements(IBrowserView)
 
@@ -67,7 +67,7 @@ class IDefaultViewNameAPI(zope.interface.Interface):
         a context.
         """
 
-# XXX: needs tests
+# TODO: needs tests
 def getDefaultViewName(object, request, context=None):
     name = queryDefaultViewName(object, request, context=context)
     if name is not None:

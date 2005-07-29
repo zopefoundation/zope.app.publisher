@@ -117,7 +117,7 @@ def page(_context, name, permission, for_,
             raise ConfigurationError("No such file", template)
         required['__getitem__'] = permission
 
-    # XXX: new __name__ attribute must be tested
+    # TODO: new __name__ attribute must be tested
     if class_:
         if attribute != '__call__':
             if not hasattr(class_, attribute):
