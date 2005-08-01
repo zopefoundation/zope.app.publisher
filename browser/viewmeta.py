@@ -94,6 +94,18 @@ def page(_context, name, permission, for_,
          attribute='__call__', menu=None, title=None, 
          ):
 
+    # BBB: Goes away in 3.3.
+    # Handle old default layer code. Code that reused the page directive will
+    # send a string.
+    if layer == 'default':
+        import warnings
+        warnings.warn(
+            'Strings as layer names are not supported anymore. In the case '
+            'of the `default` layer, please use the `IDefaultBrowserLayer` '
+            'instead. This support goes away in Zope 3.3.',
+            DeprecationWarning, 2)
+        layer = IDefaultBrowserLayer
+
     _handle_menu(_context, menu, title, [for_], name, permission, layer)
     required = {}
 
