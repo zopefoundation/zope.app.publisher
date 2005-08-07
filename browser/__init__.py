@@ -128,6 +128,7 @@ class ModifiableBrowserLanguages(BrowserLanguages):
     def setPreferredLanguages(self, languages):
         languages_data = self._getLanguagesData()
         languages_data["overridden"] = languages
+        self.request.setupLocale()
 
     def getPreferredLanguages(self):
         languages_data = self._getLanguagesData()
