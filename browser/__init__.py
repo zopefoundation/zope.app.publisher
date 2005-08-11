@@ -31,8 +31,22 @@ from zope.publisher.interfaces.browser import ISkin
 
 key = "zope.app.publisher.browser.IUserPreferredLanguages"
 
-# TODO: needs testing of __parent__ property
 class BrowserView(Location):
+    """Browser View.
+
+    >>> view = BrowserView("context", "request")
+    >>> view.context
+    'context'
+    >>> view.request
+    'request'
+
+    >>> view.__parent__
+    'context'
+    >>> view.__parent__ = "parent"
+    >>> view.__parent__
+    'parent'
+    """
+
     implements(IBrowserView)
 
     def __init__(self, context, request):
