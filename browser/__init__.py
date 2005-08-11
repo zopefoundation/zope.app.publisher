@@ -24,8 +24,23 @@ from zope.app.location import Location
 from zope.app.publisher.interfaces.browser import IBrowserView
 from zope.publisher.interfaces.browser import ISkin
 
-# TODO: needs testing of __parent__ property
+
 class BrowserView(Location):
+    """Browser View.
+
+    >>> view = BrowserView("context", "request")
+    >>> view.context
+    'context'
+    >>> view.request
+    'request'
+
+    >>> view.__parent__
+    'context'
+    >>> view.__parent__ = "parent"
+    >>> view.__parent__
+    'parent'
+    """
+
     implements(IBrowserView)
 
     def __init__(self, context, request):
@@ -33,7 +48,7 @@ class BrowserView(Location):
         self.request = request
 
     def __getParent(self):
-        return hasattr(self, '_parent') and self._parent or self.context
+        return getattr(self, '_parent', self.context)
 
     def __setParent(self, parent):
         self._parent = parent
@@ -90,10 +105,10 @@ def applySkin(request, skin):
     >>> class SkinB(Interface): pass
     >>> directlyProvides(SkinB, ISkin)
     >>> class IRequest(Interface): pass
-    
+
     >>> class Request(object):
     ...     implements(IRequest)
-    
+
     >>> req = Request()
 
     >>> applySkin(req, SkinA)
