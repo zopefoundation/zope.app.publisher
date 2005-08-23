@@ -49,7 +49,7 @@ class IBrowserMenu(Interface):
 
     id = TextLine(
         title=_("Menu Id"),
-        description=_("The id uniquly identifies this menu."),
+        description=_("The id uniquely identifies this menu."),
         required=True
         )
 
