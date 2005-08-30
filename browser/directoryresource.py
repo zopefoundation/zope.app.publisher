@@ -74,7 +74,7 @@ class DirectoryResource(BrowserView, Resource):
     def __getitem__(self, name):
         res = self.get(name, None)
         if res is None:
-            raise KeyError, name
+            raise KeyError(name)
         return res
 
     def get(self, name, default=_marker):

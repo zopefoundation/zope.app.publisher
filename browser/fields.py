@@ -48,7 +48,7 @@ class MenuField(GlobalObject):
     ...             hasattr(menus, 'menu1') or \
     ...             path == 'zope.app.component.menus.menu1':
     ...             return menu1
-    ...         raise ConfigurationError, 'menu1'
+    ...         raise ConfigurationError('menu1')
 
     >>> field = MenuField()
     >>> field = field.bind(Resolver())

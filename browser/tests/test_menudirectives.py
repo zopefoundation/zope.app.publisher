@@ -54,9 +54,9 @@ class TestObject(object):
 
     def publishTraverse(self, request, name):
         if name[:1] == 'f':
-            raise Forbidden, name
+            raise Forbidden(name)
         if name[:1] == 'u':
-            raise Unauthorized, name
+            raise Unauthorized(name)
         return self.f
 
 class IMyLayer(Interface):
