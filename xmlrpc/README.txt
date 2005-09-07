@@ -19,11 +19,11 @@ Now we'll register it as a view:
 
   >>> from zope.configuration import xmlconfig
   >>> ignored = xmlconfig.string("""
-  ... <configure 
+  ... <configure
   ...     xmlns="http://namespaces.zope.org/zope"
   ...     xmlns:xmlrpc="http://namespaces.zope.org/xmlrpc"
   ...     >
-  ...   <!-- We only need to do this include in this example, 
+  ...   <!-- We only need to do this include in this example,
   ...        Normally the include has already been done for us. -->
   ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
   ...
@@ -43,7 +43,7 @@ Now, we'll add some items to the root folder:
   ... Authorization: Basic bWdyOm1ncnB3
   ... Content-Length: 73
   ... Content-Type: application/x-www-form-urlencoded
-  ... 
+  ...
   ... type_name=BrowserAdd__zope.app.folder.folder.Folder&new_value=f1""")
   HTTP/1.1 303 See Other
   ...
@@ -53,7 +53,7 @@ Now, we'll add some items to the root folder:
   ... Authorization: Basic bWdyOm1ncnB3
   ... Content-Length: 73
   ... Content-Type: application/x-www-form-urlencoded
-  ... 
+  ...
   ... type_name=BrowserAdd__zope.app.folder.folder.Folder&new_value=f2""")
   HTTP/1.1 303 See Other
   ...
@@ -65,7 +65,7 @@ And call our xmlrpc method:
   ... Authorization: Basic bWdyOm1ncnB3
   ... Content-Length: 102
   ... Content-Type: text/xml
-  ... 
+  ...
   ... <?xml version='1.0'?>
   ... <methodCall>
   ... <methodName>contents</methodName>
@@ -98,7 +98,7 @@ credentials:
   ... POST / HTTP/1.0
   ... Content-Length: 102
   ... Content-Type: text/xml
-  ... 
+  ...
   ... <?xml version='1.0'?>
   ... <methodCall>
   ... <methodName>contents</methodName>
@@ -109,7 +109,7 @@ credentials:
   HTTP/1.0 401 Unauthorized
   Content-Length: 126
   Content-Type: text/xml;charset=utf-8
-  Www-Authenticate: basic realm='Zope'
+  WWW-Authenticate: basic realm='Zope'
   <BLANKLINE>
   <?xml version='1.0'?>
   <methodResponse>
@@ -141,7 +141,7 @@ they are trusted adapters.)
 
 The 'zope.app.publisher.xmlrpc' package provides a base class,
 `MethodPublisher`,  that provides the necessary traversal support.  In
-particulat, it has an adapter that simply traverses to attributes. 
+particulat, it has an adapter that simply traverses to attributes.
 
 If an XML-RPC view isn't going to be public, then it also has to
 implement 'zope.app.location.ILocation' so that security grants can be
@@ -162,11 +162,11 @@ method, so we don't need one any more.  This time, we'll register it
 as as a named view:
 
   >>> ignored = xmlconfig.string("""
-  ... <configure 
+  ... <configure
   ...     xmlns="http://namespaces.zope.org/zope"
   ...     xmlns:xmlrpc="http://namespaces.zope.org/xmlrpc"
   ...     >
-  ...   <!-- We only need to do this include in this example, 
+  ...   <!-- We only need to do this include in this example,
   ...        Normally the include has already been done for us. -->
   ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
   ...
@@ -187,7 +187,7 @@ Now, when we access the `contents`, we do so through the listing view:
   ... Authorization: Basic bWdyOm1ncnB3
   ... Content-Length: 102
   ... Content-Type: text/xml
-  ... 
+  ...
   ... <?xml version='1.0'?>
   ... <methodCall>
   ... <methodName>contents</methodName>
@@ -218,7 +218,7 @@ as before, we will get an error if we don't supply credentials:
   ... POST /listing/ HTTP/1.0
   ... Content-Length: 102
   ... Content-Type: text/xml
-  ... 
+  ...
   ... <?xml version='1.0'?>
   ... <methodCall>
   ... <methodName>contents</methodName>
@@ -229,7 +229,7 @@ as before, we will get an error if we don't supply credentials:
   HTTP/1.0 401 Unauthorized
   Content-Length: 126
   Content-Type: text/xml;charset=utf-8
-  Www-Authenticate: basic realm='Zope'
+  WWW-Authenticate: basic realm='Zope'
   <BLANKLINE>
   <?xml version='1.0'?>
   <methodResponse>
@@ -258,11 +258,11 @@ Now we'll register it as a view:
 
   >>> from zope.configuration import xmlconfig
   >>> ignored = xmlconfig.string("""
-  ... <configure 
+  ... <configure
   ...     xmlns="http://namespaces.zope.org/zope"
   ...     xmlns:xmlrpc="http://namespaces.zope.org/xmlrpc"
   ...     >
-  ...   <!-- We only need to do this include in this example, 
+  ...   <!-- We only need to do this include in this example,
   ...        Normally the include has already been done for us. -->
   ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
   ...
@@ -283,7 +283,7 @@ back, surprise!, the sum:
   ... Authorization: Basic bWdyOm1ncnB3
   ... Content-Length: 159
   ... Content-Type: text/xml
-  ... 
+  ...
   ... <?xml version='1.0'?>
   ... <methodCall>
   ... <methodName>add</methodName>
@@ -327,11 +327,11 @@ Now we'll register it as a view:
 
   >>> from zope.configuration import xmlconfig
   >>> ignored = xmlconfig.string("""
-  ... <configure 
+  ... <configure
   ...     xmlns="http://namespaces.zope.org/zope"
   ...     xmlns:xmlrpc="http://namespaces.zope.org/xmlrpc"
   ...     >
-  ...   <!-- We only need to do this include in this example, 
+  ...   <!-- We only need to do this include in this example,
   ...        Normally the include has already been done for us. -->
   ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
   ...
@@ -351,7 +351,7 @@ Now, when we call it, we get a proper XML-RPC fault:
   ... Authorization: Basic bWdyOm1ncnB3
   ... Content-Length: 104
   ... Content-Type: text/xml
-  ... 
+  ...
   ... <?xml version='1.0'?>
   ... <methodCall>
   ... <methodName>your_fault</methodName>
@@ -386,7 +386,7 @@ DateTime values
 Unfortunately, `xmlrpclib` does not support Python 2.3's new
 `datetime.datetime` class (it should be made to, really).  DateTime
 values need to be encoded as `xmlrpclib.DateTime` instances:
-  
+
   >>> import xmlrpclib
 
   >>> class DateTimeDemo:
@@ -401,11 +401,11 @@ Now we'll register it as a view:
 
   >>> from zope.configuration import xmlconfig
   >>> ignored = xmlconfig.string("""
-  ... <configure 
+  ... <configure
   ...     xmlns="http://namespaces.zope.org/zope"
   ...     xmlns:xmlrpc="http://namespaces.zope.org/xmlrpc"
   ...     >
-  ...   <!-- We only need to do this include in this example, 
+  ...   <!-- We only need to do this include in this example,
   ...        Normally the include has already been done for us. -->
   ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
   ...
@@ -425,7 +425,7 @@ Now, when we call it, we get a DateTime value
   ... Authorization: Basic bWdyOm1ncnB3
   ... Content-Length: 100
   ... Content-Type: text/xml
-  ... 
+  ...
   ... <?xml version='1.0'?>
   ... <methodCall>
   ... <methodName>epoch</methodName>
