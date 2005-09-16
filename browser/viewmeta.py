@@ -378,7 +378,7 @@ def _handle_menu(_context, menu, title, for_, name, permission, layer=IDefaultBr
         if not (menu and title):
             raise ConfigurationError(
                 "If either menu or title are specified, they must "
-                "both be specified.")   
+                "both be specified.")
             if len(for_) != 1:
                 raise ConfigurationError(
                     "Menus can be specified only for single-view, not for "
@@ -411,7 +411,7 @@ def _handle_allowed_interface(_context, allowed_interface, permission,
                 callable = provideInterface,
                 args = (None, i)
                 )
-            
+
             for name in i:
                 required[name] = permission
 
@@ -428,7 +428,7 @@ def _handle_for(_context, for_):
             discriminator = None,
             callable = provideInterface,
             args = ('', for_)
-            )        
+            )
 
 class simple(BrowserView):
     implements(IBrowserPublisher)
