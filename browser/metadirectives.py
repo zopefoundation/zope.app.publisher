@@ -555,6 +555,13 @@ class IAddMenuItemDirective(IMenuItem):
         required=False,
         )
 
+    layer = LayerField(
+        title=u"The layer the custom view is declared for",
+        description=u"The default layer for which the custom view is "
+                    u"applicable. By default it is applied to all layers.",
+        required=False
+        )
+
 #
 # misc. directives
 #

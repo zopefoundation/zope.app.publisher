@@ -366,9 +366,28 @@ def test_w_factory_icon_extra_order():
        <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>)))
     """
 
+from zope.configuration.xmlconfig import XMLConfig
+
+import zope.app
+import zope.app.form.browser
+
+from zope.app.testing import placelesssetup
+
+class TestAddMenuItem(placelesssetup.PlacelessSetup, unittest.TestCase):
+
+    def setUp(self):
+        super(TestAddMenuItem, self).setUp()
+        XMLConfig('meta.zcml', zope.app.form.browser)()
+        XMLConfig('meta.zcml', zope.app.publisher.browser)()
+
+    def test_addMenuItemDirectives(self):
+        XMLConfig('tests/addmenuitems.zcml', zope.app.publisher.browser)()
+
 def test_suite():
     return unittest.TestSuite((
         DocTestSuite(),
+        unittest.makeSuite(TestAddMenuItem),
         ))
 
-if __name__ == '__main__': unittest.main()
+if __name__ == '__main__':
+    unittest.main()
