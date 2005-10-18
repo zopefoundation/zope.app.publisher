@@ -21,6 +21,7 @@ from zope.component import getSiteManager
 import zope.interface
 from zope.interface import implements, directlyProvidedBy, directlyProvides
 from zope.publisher.browser import BrowserLanguages
+from zope.i18n.interfaces import IUserPreferredLanguages
 from zope.i18n.interfaces import IModifiableUserPreferredLanguages
 
 from zope.app.annotation import IAnnotations
@@ -135,22 +136,22 @@ def applySkin(request, skin):
     ifaces.append(skin)
     directlyProvides(request, *ifaces)
 
-class ModifiableBrowserLanguages(BrowserLanguages):
+class NotCompatibleAdapterError(Exception):
+    """Adapter not compatible with ModifiableBrowserLanguages
+       adapter has been used.
+    """
 
-    implements(IModifiableUserPreferredLanguages)
+class CacheableBrowserLanguages(BrowserLanguages):
 
-    def setPreferredLanguages(self, languages):
-        languages_data = self._getLanguagesData()
-        languages_data["overridden"] = languages
-        self.request.setupLocale()
+    implements(IUserPreferredLanguages)
 
     def getPreferredLanguages(self):
         languages_data = self._getLanguagesData()
         if "overridden" in languages_data:
             return languages_data["overridden"]
         elif "cached" not in languages_data:
-            languages_data["cached"] = super(ModifiableBrowserLanguages,
-                self).getPreferredLanguages()
+            languages_data["cached"] = super(
+                CacheableBrowserLanguages, self).getPreferredLanguages()
         return languages_data["cached"]
 
     def _getLanguagesData(self):
@@ -159,3 +160,16 @@ class ModifiableBrowserLanguages(BrowserLanguages):
         if languages_data is None:
             annotations[key] = languages_data = {}
         return languages_data
+
+class ModifiableBrowserLanguages(CacheableBrowserLanguages):
+
+    implements(IModifiableUserPreferredLanguages)
+
+    def setPreferredLanguages(self, languages):
+        annotations = IAnnotations(self.request)
+        languages_data = annotations.get(key)
+        if languages_data is None:
+            raise NotCompatibleAdapterError("Adapter not compatible with "
+                "ModifiableBrowserLanguages adapter has been used.")
+        languages_data["overridden"] = languages
+        self.request.setupLocale()
