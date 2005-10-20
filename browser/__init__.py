@@ -137,8 +137,8 @@ def applySkin(request, skin):
     directlyProvides(request, *ifaces)
 
 class NotCompatibleAdapterError(Exception):
-    """Adapter not compatible with ModifiableBrowserLanguages
-       adapter has been used.
+    """Adapter not compatible with
+       zope.i18n.interfaces.IModifiableBrowserLanguages has been used.
     """
 
 class CacheableBrowserLanguages(BrowserLanguages):
@@ -169,7 +169,11 @@ class ModifiableBrowserLanguages(CacheableBrowserLanguages):
         annotations = IAnnotations(self.request)
         languages_data = annotations.get(key)
         if languages_data is None:
+            # Better way to create a compatible with
+            # IModifiableUserPreferredLanguages adapter is to use
+            # CacheableBrowserLanguages as base class or as example.
             raise NotCompatibleAdapterError("Adapter not compatible with "
-                "ModifiableBrowserLanguages adapter has been used.")
+                "zope.i18n.interfaces.IModifiableBrowserLanguages "
+                "has been used.")
         languages_data["overridden"] = languages
         self.request.setupLocale()
