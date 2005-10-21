@@ -19,6 +19,7 @@ import unittest
 
 from zope.interface import directlyProvides
 from zope.publisher.browser import BrowserLanguages
+from zope.publisher.tests.test_browserlanguages import TestRequest
 from zope.publisher.tests.test_browserlanguages import BrowserLanguagesTest
 
 from zope.app.testing import ztapi
@@ -30,15 +31,6 @@ from zope.app.publisher.browser import CacheableBrowserLanguages
 from zope.app.publisher.browser import ModifiableBrowserLanguages
 from zope.app.publisher.browser import NotCompatibleAdapterError
 
-
-class TestRequest(dict):
-
-    def __init__(self, languages):
-        self.localized = False
-        self["HTTP_ACCEPT_LANGUAGE"] = languages
-
-    def setupLocale(self):
-        self.localized = True
 
 class CacheableBrowserLanguagesTests(PlacelessSetup, BrowserLanguagesTest):
 
