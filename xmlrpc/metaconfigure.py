@@ -28,7 +28,7 @@ from zope.app.publisher.xmlrpc import MethodPublisher
 
 def view(_context, for_=None, interface=None, methods=None,
          class_=None,  permission=None, name=None):
-    
+
     interface = interface or []
     methods = methods or []
 
@@ -53,24 +53,26 @@ def view(_context, for_=None, interface=None, methods=None,
     # Make sure that the class inherits MethodPublisher, so that the views
     # have a location
     if class_ is None:
-        class_ = MethodPublisher
+        class_ = original_class = MethodPublisher
     else:
+        original_class = class_
         class_ = type(class_.__name__, (class_, MethodPublisher), {})
 
     if name:
         # Register a single view
-        
+
         if permission:
             checker = Checker(require)
 
-            def proxyView(context, request, class_=class_, checker=checker):
+            def proxyView(context, request):
                 view = class_(context, request)
                 # We need this in case the resource gets unwrapped and
                 # needs to be rewrapped
                 view.__Security_checker__ = checker
                 return view
 
-            class_ =  proxyView
+            class_ = proxyView
+            class_.factory = original_class
 
         # Register the new view.
         _context.action(
