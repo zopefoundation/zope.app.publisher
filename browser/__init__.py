@@ -20,10 +20,17 @@ from zope.component import getSiteManager
 
 import zope.interface
 from zope.interface import implements, directlyProvidedBy, directlyProvides
+from zope.publisher.browser import BrowserLanguages
+from zope.i18n.interfaces import IUserPreferredLanguages
+from zope.i18n.interfaces import IModifiableUserPreferredLanguages
+
+from zope.app.annotation import IAnnotations
 from zope.app.location import Location
 from zope.app.publisher.interfaces.browser import IBrowserView
 from zope.publisher.interfaces.browser import ISkin
 
+
+key = "zope.app.publisher.browser.IUserPreferredLanguages"
 
 class BrowserView(Location):
     """Browser View.
@@ -128,3 +135,45 @@ def applySkin(request, skin):
     # Add the new skin.
     ifaces.append(skin)
     directlyProvides(request, *ifaces)
+
+class NotCompatibleAdapterError(Exception):
+    """Adapter not compatible with
+       zope.i18n.interfaces.IModifiableBrowserLanguages has been used.
+    """
+
+class CacheableBrowserLanguages(BrowserLanguages):
+
+    implements(IUserPreferredLanguages)
+
+    def getPreferredLanguages(self):
+        languages_data = self._getLanguagesData()
+        if "overridden" in languages_data:
+            return languages_data["overridden"]
+        elif "cached" not in languages_data:
+            languages_data["cached"] = super(
+                CacheableBrowserLanguages, self).getPreferredLanguages()
+        return languages_data["cached"]
+
+    def _getLanguagesData(self):
+        annotations = IAnnotations(self.request)
+        languages_data = annotations.get(key)
+        if languages_data is None:
+            annotations[key] = languages_data = {}
+        return languages_data
+
+class ModifiableBrowserLanguages(CacheableBrowserLanguages):
+
+    implements(IModifiableUserPreferredLanguages)
+
+    def setPreferredLanguages(self, languages):
+        annotations = IAnnotations(self.request)
+        languages_data = annotations.get(key)
+        if languages_data is None:
+            # Better way to create a compatible with
+            # IModifiableUserPreferredLanguages adapter is to use
+            # CacheableBrowserLanguages as base class or as example.
+            raise NotCompatibleAdapterError("Adapter not compatible with "
+                "zope.i18n.interfaces.IModifiableBrowserLanguages "
+                "has been used.")
+        languages_data["overridden"] = languages
+        self.request.setupLocale()
