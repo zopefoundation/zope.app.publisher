@@ -64,7 +64,7 @@ def view(_context, for_=None, interface=None, methods=None,
         if permission:
             checker = Checker(require)
 
-            def proxyView(context, request):
+            def proxyView(context, request, class_=class_, checker=checker):
                 view = class_(context, request)
                 # We need this in case the resource gets unwrapped and
                 # needs to be rewrapped
