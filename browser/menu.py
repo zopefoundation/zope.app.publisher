@@ -18,7 +18,7 @@ $Id$
 __docformat__ = "reStructuredText"
 import sys
 
-from zope.interface import Interface, implements, classImplements
+from zope.interface import Interface, implements
 from zope.interface import providedBy
 from zope.security import checkPermission, canAccess
 from zope.security.interfaces import Unauthorized, Forbidden
@@ -38,7 +38,7 @@ from zope.app.publisher.interfaces.browser import IMenuItemType
 class BrowserMenu(object):
     """Browser Menu"""
     implements(IBrowserMenu)
-    
+
     def __init__(self, id, title=u'', description=u''):
         self.id = id
         self.title = title
@@ -54,18 +54,17 @@ class BrowserMenu(object):
                                            self.getMenuItemType()):
             if item.available():
                 result.append(item)
-            
+
         # Now order the result. This is not as easy as it seems.
         #
         # (1) Look at the interfaces and put the more specific menu entries
         #     to the front.
         # (2) Sort unabigious entries by order and then by title.
         ifaces = list(providedBy(removeSecurityProxy(object)).__iro__)
-        result = [
-            (ifaces.index(item._for or Interface), item.order, item.title, item)
-            for item in result]
+        result = [(ifaces.index(item._for or Interface),
+            item.order, item.title, item) for item in result]
         result.sort()
-        
+
         result = [
             {'title': item.title,
              'description': item.description,
@@ -76,7 +75,7 @@ class BrowserMenu(object):
              'submenu': (IBrowserSubMenuItem.providedBy(item) and
                          getMenu(item.submenuId, object, request)) or None}
             for index, order, title, item in result]
-    
+
         return result
 
 
@@ -140,7 +139,6 @@ class BrowserMenuItem(BrowserView):
                     return False
 
         return True
-        
 
     def selected(self):
         """See zope.app.publisher.interfaces.browser.IBrowserMenuItem"""
