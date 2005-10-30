@@ -122,7 +122,7 @@ credentials:
   <BLANKLINE>
 
 Named XML-RPC Views
-------------------
+-------------------
 
 Now let's look at views that have their own methods or other
 subobjects.  Views that have their own methods have names that appear
