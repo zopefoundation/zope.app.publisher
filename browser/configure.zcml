@@ -17,11 +17,11 @@
 
 <browser:layer name="default"
   interface="zope.publisher.interfaces.browser.IDefaultBrowserLayer" />
-  
+
 <content class="zope.publisher.browser.BrowserRequest">
   <allow
     interface="zope.publisher.interfaces.browser.IBrowserApplicationRequest"
-    attributes="response locale __str__"
+    attributes="response locale __str__ __annotations__"
     />
   <allow
     interface="zope.component.interfaces.IPresentationRequest" />
@@ -62,7 +62,7 @@
   <allow attributes="get __getitem__" />
 </content>
 
-<browser:page 
+<browser:page
     name=""
     for="zope.app.component.interfaces.ISite"
     class="zope.app.publisher.browser.resources.Resources"
