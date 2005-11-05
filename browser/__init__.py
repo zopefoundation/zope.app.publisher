@@ -24,7 +24,6 @@ from zope.publisher.browser import BrowserLanguages
 from zope.i18n.interfaces import IUserPreferredLanguages
 from zope.i18n.interfaces import IModifiableUserPreferredLanguages
 
-from zope.app.annotation import IAnnotations
 from zope.app.location import Location
 from zope.app.publisher.interfaces.browser import IBrowserView
 from zope.publisher.interfaces.browser import ISkin
@@ -155,7 +154,7 @@ class CacheableBrowserLanguages(BrowserLanguages):
         return languages_data["cached"]
 
     def _getLanguagesData(self):
-        annotations = IAnnotations(self.request)
+        annotations = self.request.annotations
         languages_data = annotations.get(key)
         if languages_data is None:
             annotations[key] = languages_data = {}
@@ -166,8 +165,7 @@ class ModifiableBrowserLanguages(CacheableBrowserLanguages):
     implements(IModifiableUserPreferredLanguages)
 
     def setPreferredLanguages(self, languages):
-        annotations = IAnnotations(self.request)
-        languages_data = annotations.get(key)
+        languages_data = self.request.annotations.get(key)
         if languages_data is None:
             # Better way to create a compatible with
             # IModifiableUserPreferredLanguages adapter is to use
