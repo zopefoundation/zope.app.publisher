@@ -1,0 +1,22 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    package="zope.app.publisher.browser.tests"
+    >
+
+  <!-- This is a functional testing layer that adds the `sampleview`
+       package from a ZIP file to test that browser view defined by
+       products in zipped packages (such as eggs).
+       -->
+
+  <include package="zope.app"/>
+  <include package="sampleview"/>
+
+  <unauthenticatedPrincipal
+      id="zope.anybody"
+      title="Unauthenticated User" />
+
+  <securityPolicy
+      component="zope.security.simplepolicies.PermissiveSecurityPolicy"
+      />
+
+</configure>

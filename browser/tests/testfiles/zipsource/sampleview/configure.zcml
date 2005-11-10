@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    >
+
+  <browser:page
+      name="sometext.html"
+      permission="zope.Public"
+      for="zope.interface.Interface"
+      template="myview.pt"
+      class=".MyView"
+      />
+
+</configure>
