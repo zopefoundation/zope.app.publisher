@@ -94,7 +94,7 @@ class FileResource(BrowserView, Resource):
         response.setHeader('Last-Modified', file.lmh)
 
         setCacheControl(response)
-        f = filereference.open(file.path,'rb')
+        f = filereference.open(file.path, 'rb')
         data = f.read()
         f.close()
 
