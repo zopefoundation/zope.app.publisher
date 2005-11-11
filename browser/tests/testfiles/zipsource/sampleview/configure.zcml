@@ -12,4 +12,9 @@
       class=".MyView"
       />
 
+  <browser:resource
+      name="sometext.txt"
+      file="mytext.txt"
+      />
+
 </configure>

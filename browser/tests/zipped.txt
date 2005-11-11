@@ -23,3 +23,12 @@ available::
 This is the text provided by the view class in in the `sampleview`
 package's __init__.py, wrapped in the <div> element from the myview.pt
 template also contained in that package.
+
+We can also provide file resources from ZIP archives::
+
+  >>> print http("""
+  ... GET /@@/sometext.txt HTTP/1.1
+  ... """)
+  HTTP/1.1 200 ...
+  This is a simple text file provided as a resource.
+  <BLANKLINE>
