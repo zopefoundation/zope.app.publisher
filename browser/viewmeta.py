@@ -15,11 +15,7 @@
 
 $Id$
 """
-import os
-
 from zope import filereference
-from zope.component.exceptions import ComponentLookupError
-from zope.component.interfaces import IDefaultViewName
 from zope.interface import implements, classImplements, Interface
 from zope.publisher.interfaces import NotFound
 from zope.security.checker import CheckerPublic, Checker
