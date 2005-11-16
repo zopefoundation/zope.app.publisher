@@ -51,18 +51,20 @@ content component first:
 
   >>> class Content(object):
   ...     zope.interface.implements(IContent, IBrowserPublisher)
-  ... 
+  ...
   ...     def foo(self):
   ...         pass
-  ... 
+  ...
   ...     def browserDefault(self, r):
   ...         return self, ()
-  ... 
+  ...
   ...     def publishTraverse(self, request, name):
   ...         if name.startswith('fb'):
   ...             raise Forbidden, name
   ...         if name.startswith('ua'):
   ...             raise Unauthorized, name
+  ...         if name.startswith('le'):
+  ...             raise LookupError, name
   ...         return self.foo
 
 We also implemented the ``IBrowserPublisher`` interface, because we want to
@@ -134,7 +136,7 @@ item available.
 
 Now, we are not setting any user. This means that the menu item should be
 available.
-  
+
   >>> from zope.security.management import newInteraction, endInteraction
   >>> endInteraction()
   >>> newInteraction()
@@ -154,7 +156,7 @@ action.
 
   >>> item.permission = None
 
-  All views starting with 'f' are forbidden, the ones with 'u' are
+  All views starting with 'fb' are forbidden, the ones with 'ua' are
   unauthorized and all others are allowed.
 
   >>> item.action = u'fb'
@@ -167,10 +169,20 @@ action.
   >>> item.available()
   True
 
+Also, sometimes a menu item might be registered for a view that does not
+exist. In those cases the traversal mechanism raises a `TraversalError`, which
+is a special type of `LookupError`. All actions starting with `le` should
+raise this error:
+
+  >>> item.action = u'le'
+  >>> item.available()
+  False
+
 Now let's test filtering. If the filter is specified, it is assumed to be
 a TALES obejct.
 
   >>> from zope.app.pagetemplate.engine import Engine
+  >>> item.action = u'a'
   >>> item.filter = Engine.compile('not:context')
   >>> item.available()
   False

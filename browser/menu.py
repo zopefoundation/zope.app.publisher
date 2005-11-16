@@ -34,7 +34,6 @@ from zope.app.publisher.interfaces.browser import IBrowserMenuItem
 from zope.app.publisher.interfaces.browser import IBrowserSubMenuItem
 from zope.app.publisher.interfaces.browser import IMenuItemType
 
-
 class BrowserMenu(object):
     """Browser Menu"""
     implements(IBrowserMenu)
@@ -114,7 +113,7 @@ class BrowserMenuItem(BrowserView):
             try:
                 view = traverser.traverseRelativeURL(
                     self.request, self.context, path)
-            except (Unauthorized, Forbidden):
+            except (Unauthorized, Forbidden, LookupError):
                 return False
             else:
                 # we're assuming that view pages are callable
