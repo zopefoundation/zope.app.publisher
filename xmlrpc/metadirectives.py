@@ -23,7 +23,7 @@ import zope.app.security.fields
 
 class IViewDirective(zope.interface.Interface):
     """View Directive for XML-RPC methods."""
-    
+
     for_ = zope.configuration.fields.GlobalObject(
         title=u"Published Object Type",
         description=u"""The types of objects to be published via XML-RPC
@@ -68,12 +68,12 @@ class IViewDirective(zope.interface.Interface):
         If no permission is given, then permissions should be declared
         for the view using other means, such as the class directive.
         """,
-        required=False, )
+        required=True)
 
     name = zope.schema.TextLine(
         title=u"The name of the view.",
         description=u"""
-        
+
         If a name is given, then rpc methods are accessed by
         traversing the name and then accessing the methods.  In this
         case, the class should implement

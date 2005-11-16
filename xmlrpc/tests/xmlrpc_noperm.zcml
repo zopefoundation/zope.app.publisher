@@ -5,10 +5,9 @@
   <include package="zope.app.publisher.xmlrpc" file="meta.zcml"/>
 
   <xmlrpc:view
-        name="test"
-        factory="zope.component.tests.views.V1"
-        for="zope.component.tests.views.IC"
-        methods="action index"
-        permission="zope.Public" />
+      name="test"
+      class="zope.app.component.tests.views.V1"
+      for="zope.app.component.tests.views.IC"
+      />
 
 </configure>

@@ -75,9 +75,13 @@ class DirectivesTest(PlacelessSetup, unittest.TestCase):
         self.assertEqual(v.index(), 'V1 here')
         self.assertEqual(v.action(), 'done')
 
-    def testIncompleteProtectedViewNoPermission(self):
+    def testIncompleteProtectedView(self):
         self.assertRaises(ConfigurationError, xmlconfig.file,
                           "xmlrpc_error.zcml", xmlrpc.tests)
+
+    def testNoPermission(self):
+        self.assertRaises(ConfigurationError, xmlconfig.file,
+                          "xmlrpc_noperm.zcml", xmlrpc.tests)
 
     def test_no_name(self):
         xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
@@ -85,8 +89,6 @@ class DirectivesTest(PlacelessSetup, unittest.TestCase):
         self.assertEqual(v(), 'V1 here')
         v = zapi.getMultiAdapter((ob, request), name='action')
         self.assertEqual(v(), 'done')
-
-        
 
 
 def test_suite():
