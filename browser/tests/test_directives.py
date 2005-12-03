@@ -61,6 +61,14 @@ template = """<configure
 
 request = TestRequest()
 
+class V2(V1, object):
+
+    def action(self):
+        return self.action2()
+
+    def action2(self):
+        return "done"
+
 class VT(V1, object):
     def publishTraverse(self, request, name):
         try:
@@ -469,11 +477,11 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         xmlconfig(StringIO(template %
             '''
             <browser:page name="test"
-                class="zope.app.component.tests.views.V1"
+                class="zope.app.publisher.browser.tests.test_directives.V2"
                 for="zope.app.component.tests.views.IC"
                 attribute="action"
                 permission="zope.Public"
-                allowed_attributes="action"
+                allowed_attributes="action2"
                 />
             '''
             ))
@@ -481,7 +489,29 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         v = zapi.getMultiAdapter((ob, request), name='test')
         v = ProxyFactory(v)
         self.assertEqual(v.action(), 'done')
+        self.assertEqual(v.action2(), 'done')
         self.assertRaises(Exception, getattr, v, 'index')
+
+    def testAttributeProtectedView(self):
+        xmlconfig(StringIO(template %
+            '''
+            <browser:view name="test"
+                class="zope.app.publisher.browser.tests.test_directives.V2"
+                for="zope.app.component.tests.views.IC"
+                permission="zope.Public"
+                allowed_attributes="action2"
+                >
+              <browser:page name="index.html" attribute="action" />
+           </browser:view>
+            '''
+            ))
+
+        v = zapi.getMultiAdapter((ob, request), name='test')
+        v = ProxyFactory(v)
+        page = v.publishTraverse(request, 'index.html')
+        self.assertEqual(page(), 'done')
+        self.assertEqual(v.action2(), 'done')
+        self.assertRaises(Exception, getattr, page, 'index')
 
     def testInterfaceAndAttributeProtectedPage(self):
         xmlconfig(StringIO(template %

@@ -164,7 +164,7 @@ def page(_context, name, permission, for_,
 
     _handle_allowed_interface(_context, allowed_interface, permission,
                               required)
-    _handle_allowed_attributes(_context, allowed_interface, permission,
+    _handle_allowed_attributes(_context, allowed_attributes, permission,
                                required)
 
     _handle_for(_context, for_)
@@ -335,7 +335,7 @@ class view(object):
 
         _handle_allowed_interface(_context, allowed_interface, permission,
                                   required)
-        _handle_allowed_attributes(_context, allowed_interface, permission,
+        _handle_allowed_attributes(_context, allowed_attributes, permission,
                                    required)
         _handle_for(_context, for_)
 
