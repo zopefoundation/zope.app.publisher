@@ -11,10 +11,6 @@
 <interface
   interface="zope.app.publisher.interfaces.browser.IMenuItemType" />
 
-<defaultLayer
-  type="zope.publisher.interfaces.browser.IBrowserRequest"
-  layer="zope.publisher.interfaces.browser.IDefaultBrowserLayer" />
-
 <browser:layer name="default"
   interface="zope.publisher.interfaces.browser.IDefaultBrowserLayer" />
 
