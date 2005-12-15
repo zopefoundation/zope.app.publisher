@@ -20,7 +20,7 @@ import posixpath
 
 from time import time
 
-from zope.app.content_types import guess_content_type
+from zope.app.contenttypes import guess_content_type
 from zope.app.datetimeutils import rfc1123_date
 
 
