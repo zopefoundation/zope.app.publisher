@@ -1,0 +1,27 @@
+<configure 
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:apidoc="http://namespaces.zope.org/apidoc"
+    >
+
+  <include package=".browser" />
+  <include package=".xmlrpc" />
+  <include file="http.zcml" />
+
+  <interface interface="zope.publisher.interfaces.xmlrpc.IXMLRPCRequest" />
+
+  <configure 
+      xmlns:zcml="http://namespaces.zope.org/zcml"
+      zcml:condition="have apidoc" 
+      xmlns="http://namespaces.zope.org/apidoc"
+      >
+
+    <bookchapter
+        id="zopepublisherhttpresults.txt"
+        title="Creating HTTP Results"
+        doc_path="../../publisher/httpresults.txt"
+        />
+
+  </configure>
+
+</configure>
+
