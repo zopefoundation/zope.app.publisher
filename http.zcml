@@ -14,4 +14,8 @@
         attributes="get __getitem__ __str__" />
   </content>
 
+  <class class="zope.publisher.http.DirectResult">
+    <allow interface="zope.publisher.interfaces.http.IResult" />
+  </class>
+
 </configure>
