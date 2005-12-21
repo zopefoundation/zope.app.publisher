@@ -22,7 +22,7 @@ from zope.interface import Interface, implements
 from zope.interface import providedBy
 from zope.security import checkPermission, canAccess
 from zope.security.interfaces import Unauthorized, Forbidden
-from zope.security.proxy import ProxyFactory, removeSecurityProxy
+from zope.security.proxy import removeSecurityProxy
 
 from zope.app import zapi
 from zope.app.pagetemplate.engine import Engine
@@ -129,7 +129,7 @@ class BrowserMenuItem(BrowserView):
                     context = self.context,
                     nothing = None,
                     request = self.request,
-                    modules = ProxyFactory(sys.modules),
+                    modules = sys.modules,
                     ))
             except Unauthorized:
                 return False
