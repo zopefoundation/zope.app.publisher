@@ -15,7 +15,7 @@
   </content>
 
   <class class="zope.publisher.http.DirectResult">
-    <allow interface="zope.publisher.interfaces.http.IResult" />
+    <allow interface="zope.publisher.http.IResult" />
   </class>
 
 </configure>
