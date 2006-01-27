@@ -626,7 +626,7 @@ class ISkinDirective(Interface):
         title=u"A list of layers",
         description=u"""
         This should be in order of lookup. Usually one of the layers
-        has the same name as the skin, and the last skin should be
+        has the same name as the skin, and the last layer should be
         'default', unless you want to completely override all views.
         """,
         required=False,
