@@ -23,7 +23,11 @@ from zope.app.publisher.browser import BrowserView
 from zope.app.publisher.browser.menu import getFirstMenuItem
 
 class ManagementViewSelector(BrowserView):
-    """View that selects the first available management view."""
+    """View that selects the first available management view.
+
+    Support 'zmi_views' actions like: 'javascript:alert("hello")', 
+    '../view_on_parent.html' or '++rollover++'.
+    """
     implements(IBrowserPublisher)
 
     def browserDefault(self, request):
@@ -33,8 +37,12 @@ class ManagementViewSelector(BrowserView):
         item = getFirstMenuItem('zmi_views', self.context, self.request)
 
         if item:
-            self.request.response.redirect(item['action'])
-            return u''
+            redirect_url = item['action']
+            if not (redirect_url.startswith('../') or \
+                    redirect_url.lower().startswith('javascript:') or \
+                    redirect_url.lower().startswith('++')):
+                self.request.response.redirect(redirect_url)
+                return u''
 
         self.request.response.redirect('.') # Redirect to content/
         return u''

@@ -571,3 +571,65 @@ Register several menu items for a particular menu.
      <InterfaceClass zope.publisher.interfaces.browser.IDefaultBrowserLayer>),
     <InterfaceClass __builtin__.TestMenuItemType>,
     'View')]
+
+
+``ManagementViewSelector``
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Test the action (redirect url) of the first menu item and ensure that we don't
+redirect to the parent before we reach the item if we use actions like: '../'
+'javascript:popup()' or '++namespace++'.
+
+First setup the 'zmi_views' menu.
+
+  >>> class ZMIViews(zope.interface.Interface):
+  ...     """This is the zmi_views menu."""
+  >>> zope.interface.directlyProvides(ZMIViews, IMenuItemType)
+  >>> ztapi.provideUtility(IMenuItemType, ZMIViews, 'zmi_views')
+  >>> from zope.app.publisher.interfaces.browser import IBrowserMenu
+  >>> ztapi.provideUtility(
+  ...     IBrowserMenu, menu.BrowserMenu('zmi_views', u'ZMIViews', 
+  ...     u'ZMI Views'), 'zmi_views')
+
+Register some 'zmi_views' menu items.
+
+  >>> first = menumeta.MenuItemFactory(menu.BrowserMenuItem, title="First", 
+  ...     action="../")
+  >>> ztapi.provideAdapter((IContent, IBrowserRequest), ZMIViews, first, 
+  ...    'first')
+
+  >>> second = menumeta.MenuItemFactory(menu.BrowserMenuItem, title="Second", 
+  ...     action="second.html")
+  >>> ztapi.provideAdapter((IContent, IBrowserRequest), ZMIViews, second, 
+  ...    'second')
+
+Now create a new content object.
+
+  >>> content = Content()
+  >>> request = TestRequest(SERVER_URL='http://127.0.0.1/',
+  ...     PATH_INFO='/')
+
+Test the actions. Remember that this action get redirected before we traverse 
+to the content. This means actions like ``../`` will make it impossible to 
+access the view because the ``../`` will redirect us before we traverse.
+
+  >>> menus = menu.getMenu('zmi_views', content, request)
+  >>> [menu['action'] for menu in menus]
+  ['../', 'second.html']
+
+Now call the ManagementViewSelector view and we get a empty string as result.
+
+  >>> from zope.app.publisher.browser.managementviewselector import \
+  ...     ManagementViewSelector
+  >>> view = ManagementViewSelector(content, request)
+  >>> view()
+  u''
+
+Now check the more interesting redirect in the request. The redirect location
+is not like excpected '../'. We get '.' as the redirect location. This is 
+important otherwise we get redirected to the parent if we call the
+first menu item with actions like '../parentview.html' instead of traverse
+to the item.
+
+  >>> request.response.getHeader('Location')
+  '.'
