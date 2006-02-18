@@ -165,8 +165,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
             'Creating layers via ZCML has been deprecated.  The browser:layer '
             'directive will be removed in Zope 3.5.  Layers are now interfaces '
             'extending zope.publisher.interfaces.browser.IBrowserRequest. '
-            'They do not need further registration.',
-            DeprecationWarning, stacklevel=2)
+            'They do not need further registration.', DeprecationWarning)
         interface = InterfaceClass(str(name), (base, ),
                                    __doc__='Layer: %s' %str(name),
                                    __module__='zope.app.layers')
@@ -179,7 +178,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
         warnings.warn(
             'Layer interfaces do not require registration anymore.  The '
             'browser:layer directive will be removed in Zope 3.5.',
-            DeprecationWarning, stacklevel=2)
+            DeprecationWarning)
         path = interface.__module__ + '.' + interface.getName()
 
         # If a name was specified, make this layer available under this name.
@@ -285,7 +284,7 @@ def skin(_context, name=None, interface=None, layers=None):
             'directive will be removed in Zope 3.5.  Skins are now interfaces '
             'extending zope.publisher.interfaces.browser.IBrowserRequest. '
             'They are registered using the \'interface\' directive.',
-            DeprecationWarning, stacklevel=2)
+            DeprecationWarning)
         interface = InterfaceClass(str(name), layers,
                                    __doc__='Skin: %s' %str(name),
                                    __module__='zope.app.skins')
@@ -314,8 +313,7 @@ def skin(_context, name=None, interface=None, layers=None):
             '      interface="%s"\n'
             '      type="zope.publisher.interfaces.browser.IBrowserSkinType"\n'
             '      name="%s"\n'
-            '      />' % (path, name),
-            DeprecationWarning, stacklevel=2)
+            '      />' % (path, name), DeprecationWarning)
 
         # Register the skin interface as a skin using the passed name.
         if name is not None:
