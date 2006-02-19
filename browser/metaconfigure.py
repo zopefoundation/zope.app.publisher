@@ -161,11 +161,12 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
             "You cannot specify the 'interface' and 'base' together.")
 
     if interface is None:
-        warnings.warn(
+        warnings.warn_explicit(
             'Creating layers via ZCML has been deprecated.  The browser:layer '
             'directive will be removed in Zope 3.5.  Layers are now interfaces '
             'extending zope.publisher.interfaces.browser.IBrowserRequest. '
-            'They do not need further registration.', DeprecationWarning)
+            'They do not need further registration.',
+            DeprecationWarning, _context.info.file, _context.info.line)
         interface = InterfaceClass(str(name), (base, ),
                                    __doc__='Layer: %s' %str(name),
                                    __module__='zope.app.layers')
@@ -175,10 +176,10 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
         setattr(zope.app.layers, name, interface)
         path = 'zope.app.layers.'+name
     else:
-        warnings.warn(
+        warnings.warn_explicit(
             'Layer interfaces do not require registration anymore.  The '
             'browser:layer directive will be removed in Zope 3.5.',
-            DeprecationWarning)
+            DeprecationWarning, _context.info.file, _context.info.line)
         path = interface.__module__ + '.' + interface.getName()
 
         # If a name was specified, make this layer available under this name.
@@ -279,12 +280,12 @@ def skin(_context, name=None, interface=None, layers=None):
             "You must specify the 'name' or 'interface' attribute.")
 
     if name is not None and layers is not None:
-        warnings.warn(
+        warnings.warn_explicit(
             'Creating skins via ZCML has been deprecated.  The browser:skin '
             'directive will be removed in Zope 3.5.  Skins are now interfaces '
             'extending zope.publisher.interfaces.browser.IBrowserRequest. '
             'They are registered using the \'interface\' directive.',
-            DeprecationWarning)
+            DeprecationWarning, _context.info.file, _context.info.line)
         interface = InterfaceClass(str(name), layers,
                                    __doc__='Skin: %s' %str(name),
                                    __module__='zope.app.skins')
@@ -305,7 +306,7 @@ def skin(_context, name=None, interface=None, layers=None):
 
     else:
         path = interface.__module__ + '.' + interface.getName()
-        warnings.warn(
+        warnings.warn_explicit(
             'The browser:skin directive has been deprecated and will be '
             'removed in Zope 3.5.  Skins are now simply registered using '
             'the \'interface\' directive:\n'
@@ -313,7 +314,8 @@ def skin(_context, name=None, interface=None, layers=None):
             '      interface="%s"\n'
             '      type="zope.publisher.interfaces.browser.IBrowserSkinType"\n'
             '      name="%s"\n'
-            '      />' % (path, name), DeprecationWarning)
+            '      />' % (path, name),
+            DeprecationWarning, _context.info.file, _context.info.line)
 
         # Register the skin interface as a skin using the passed name.
         if name is not None:
