@@ -566,6 +566,7 @@ class IAddMenuItemDirective(IMenuItem):
 # misc. directives
 #
 
+# BBB 2006/02/18, to be removed after 12 months
 class ILayerDirective(Interface):
     """Defines a browser layer
 
@@ -605,6 +606,7 @@ class ILayerDirective(Interface):
         required=False
         )
 
+# BBB 2006/02/18, to be removed after 12 months
 class ISkinDirective(Interface):
     """Defines a browser skin
 
