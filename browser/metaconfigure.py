@@ -23,6 +23,8 @@ from zope.interface.interface import InterfaceClass
 from zope.publisher.interfaces.browser import IBrowserRequest, IDefaultSkin
 from zope.publisher.interfaces.browser import IBrowserSkinType
 
+import zope.app.layers
+import zope.app.skins
 from zope.app import zapi
 from zope.app.component.metaconfigure import handler
 
@@ -33,32 +35,15 @@ from zope.app.publisher.browser.i18nresourcemeta import I18nResource
 from zope.app.publisher.browser.viewmeta import view
 from zope.app.component.interface import provideInterface
 
-##############################################################################
-#
 # BBB 2006/02/18, to be removed after 12 months
-#
-
 import zope.deprecation
 zope.deprecation.__show__.off()
 from zope.publisher.interfaces.browser import ILayer
 zope.deprecation.__show__.on()
 
-# Create special modules that contain all layers and skins
-# TODO need deprecation warnings for those modules
-from types import ModuleType as module
-import sys
-import zope.app
-zope.app.layers = module('layers')
-sys.modules['zope.app.layers'] = zope.app.layers
-
-zope.app.skins = module('skins')
-sys.modules['zope.app.skins'] = zope.app.skins
-#
-##############################################################################
-
-
 # BBB 2006/02/18, to be removed after 12 months
-def layer(_context, name=None, interface=None, base=IBrowserRequest):
+def layer(_context, name=None, interface=None, base=IBrowserRequest,
+          bbb_aware=False):
     """Provides a new layer.
 
     >>> class Context(object):
@@ -68,7 +53,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
 
     Possibility 1: The Old Way
     --------------------------
-    
+
     >>> context = Context()
     >>> layer(context, u'layer1')
     >>> iface = context.actions[0]['args'][1]
@@ -76,6 +61,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
     'layer1'
     >>> ILayer.providedBy(iface)
     True
+    >>> import sys
     >>> hasattr(sys.modules['zope.app.layers'], 'layer1')
     True
 
@@ -161,25 +147,27 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
             "You cannot specify the 'interface' and 'base' together.")
 
     if interface is None:
-        warnings.warn_explicit(
-            'Creating layers via ZCML has been deprecated.  The browser:layer '
-            'directive will be removed in Zope 3.5.  Layers are now interfaces '
-            'extending zope.publisher.interfaces.browser.IBrowserRequest. '
-            'They do not need further registration.',
-            DeprecationWarning, _context.info.file, _context.info.line)
+        if not bbb_aware:
+            warnings.warn_explicit(
+                'Creating layers via ZCML has been deprecated.  The '
+                'browser:layer directive will be removed in Zope 3.5.  Layers '
+                'are now interfaces extending zope.publisher.interfaces.browser'
+                '.IBrowserRequest. They do not need further registration.',
+                DeprecationWarning, _context.info.file, _context.info.line)
         interface = InterfaceClass(str(name), (base, ),
                                    __doc__='Layer: %s' %str(name),
                                    __module__='zope.app.layers')
         # Add the layer to the layers module.
         # Note: We have to do this immediately, so that directives using the
         # InterfaceField can find the layer.
-        setattr(zope.app.layers, name, interface)
+        zope.app.layers.set(name, interface)
         path = 'zope.app.layers.'+name
     else:
-        warnings.warn_explicit(
-            'Layer interfaces do not require registration anymore.  The '
-            'browser:layer directive will be removed in Zope 3.5.',
-            DeprecationWarning, _context.info.file, _context.info.line)
+        if not bbb_aware:
+            warnings.warn_explicit(
+                'Layer interfaces do not require registration anymore.  The '
+                'browser:layer directive will be removed in Zope 3.5.',
+                DeprecationWarning, _context.info.file, _context.info.line)
         path = interface.__module__ + '.' + interface.getName()
 
         # If a name was specified, make this layer available under this name.
@@ -191,7 +179,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest):
             # Make the interface available in the `zope.app.layers` module, so
             # that other directives can find the interface under the name
             # before the CA is setup.
-            setattr(zope.app.layers, name, interface)
+            zope.app.layers.set(name, interface)
 
     # Register the layer interface as an interface
     _context.action(
@@ -293,7 +281,7 @@ def skin(_context, name=None, interface=None, layers=None):
         # Add the layer to the skins module.
         # Note: We have to do this immediately, so that directives using the
         # InterfaceField can find the layer.
-        setattr(zope.app.skins, name, interface)
+        zope.app.skins.set(name, interface)
         path = 'zope.app.skins'+name
 
         # Register the layers

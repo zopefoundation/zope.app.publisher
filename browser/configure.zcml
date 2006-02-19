@@ -8,8 +8,12 @@
 <interface
   interface="zope.app.publisher.interfaces.browser.IMenuItemType" />
 
-<browser:layer name="default"
-  interface="zope.publisher.interfaces.browser.IDefaultBrowserLayer" />
+<!-- BBB 2006/02/18, to be removed after 12 months -->
+<browser:layer
+    name="default"
+    interface="zope.publisher.interfaces.browser.IDefaultBrowserLayer"
+    bbb_aware="true"
+    />
 
 <content class="zope.publisher.browser.BrowserRequest">
   <allow
