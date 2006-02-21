@@ -46,6 +46,9 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest,
           bbb_aware=False):
     """Provides a new layer.
 
+    First, let's ignore the warnigns:
+    >>> warnings.filterwarnings('ignore', category=DeprecationWarning)
+
     >>> class Info(object):
     ...     file = u'doctest'
     ...     line = 1
@@ -134,6 +137,9 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest,
     Traceback (most recent call last):
     ...
     ConfigurationError: You cannot specify the 'interface' and 'base' together.
+
+    Enabling the warnings again:
+    >>> warnings.resetwarnings()
     """
     if name is not None and ',' in name:
         raise TypeError("Commas are not allowed in layer names.")
@@ -206,6 +212,9 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest,
 def skin(_context, name=None, interface=None, layers=None):
     """Provides a new skin.
 
+    First, let's ignore the warnigns:
+    >>> warnings.filterwarnings('ignore', category=DeprecationWarning)
+
     >>> import pprint
     >>> class Info(object):
     ...     file = u'doctest'
@@ -271,6 +280,9 @@ def skin(_context, name=None, interface=None, layers=None):
     Traceback (most recent call last):
     ...
     ConfigurationError: You must specify the 'name' or 'interface' attribute.
+
+    Enabling the warnings again:
+    >>> warnings.resetwarnings()
     """
     if name is None and interface is None: 
         raise ConfigurationError(
