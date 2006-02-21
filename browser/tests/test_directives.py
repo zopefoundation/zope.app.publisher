@@ -104,19 +104,11 @@ class ITestMenu(Interface):
 directlyProvides(ITestMenu, IMenuItemType)
 
 
-##############################################################################
-# BBB 2006/02/18, to be removed after 12 months
-#
 class ITestLayer(IBrowserRequest):
     """Test Layer."""
 
-import zope.deprecation
-zope.deprecation.__show__.off()
-from zope.publisher.interfaces import ILayer
-zope.deprecation.__show__.on()
-directlyProvides(ITestLayer, ILayer)
-#
-##############################################################################
+class ITestSkin(ITestLayer):
+    """Test Skin."""
 
 
 class MyResource(object):
@@ -131,36 +123,6 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         super(Test, self).setUp()
         XMLConfig('meta.zcml', zope.app.publisher.browser)()
         ztapi.provideAdapter(None, ITraversable, DefaultTraversable)
-
-    ##########################################################################
-    #
-    # BBB 2006/02/18, to be removed after 12 months
-
-    def testLayer(self):
-        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
-                         None)
-        xmlconfig(StringIO(
-            template % '<browser:layer name="testlayer" />'
-            ))
-        testlayer = zapi.getUtility(ILayer, "testlayer")
-        import zope.app.layers
-        self.assert_(zope.app.layers.testlayer is testlayer)
-
-    def testSkin(self):
-        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
-                         None)
-        xmlconfig(StringIO(template % (
-            '''
-            <browser:layer name="default" />
-            <browser:skin name="testskin" layers="default" />
-            '''
-            )))
-        testskin = zapi.getUtility(IBrowserSkinType, "testskin")
-        import zope.app.skins
-        self.assert_(zope.app.skins.testskin is testskin)
-
-    #
-    ##########################################################################
 
     def testPage(self):
         self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
@@ -344,38 +306,45 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
 
         xmlconfig(StringIO(template % (
             '''
-            <browser:layer name="zmi" />
-            <browser:skin name="zmi" layers="zmi" />
             <browser:resource
                 name="test"
                 factory="zope.app.component.tests.views.RZMI"
-                layer="zmi" />
+                layer="
+                  zope.app.publisher.browser.tests.test_directives.ITestLayer"
+                />
             <browser:resource
                 name="test"
-                factory="zope.app.component.tests.views.R1" />
+                factory="zope.app.component.tests.views.R1"
+                />
             '''
             )))
 
         self.assertEqual(
             zapi.queryAdapter(request, name='test').__class__, R1)
-        zmi = zapi.getUtility(IBrowserSkinType, 'zmi')
         self.assertEqual(
-            zapi.queryAdapter(TestRequest(skin=zmi), name='test').__class__,
+            zapi.queryAdapter(TestRequest(skin=ITestSkin), name='test').__class__,
             RZMI)
 
     def testDefaultSkin(self):
         request = TestRequest()
-
         self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
                          None)
+
+        XMLConfig('meta.zcml', zope.app.component)()        
         xmlconfig(StringIO(template % (
             '''
-            <browser:layer name="zmi" />
-            <browser:skin name="zmi" layers="zmi" />
-            <browser:defaultSkin name="zmi" />
-            <browser:page name="test"
+            <interface
+                interface="
+                  zope.app.publisher.browser.tests.test_directives.ITestSkin"
+                type="zope.publisher.interfaces.browser.IBrowserSkinType"
+                name="Test Skin"
+                />
+            <browser:defaultSkin name="Test Skin" />
+            <browser:page
+                name="test"
                 class="zope.app.component.tests.views.VZMI"
-                layer="zmi"
+                layer="
+                  zope.app.publisher.browser.tests.test_directives.ITestLayer"
                 for="zope.app.component.tests.views.IC"
                 permission="zope.Public"
                 attribute="index"
@@ -403,11 +372,10 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
 
         xmlconfig(StringIO(template % (
             '''
-            <browser:layer name="zmi" />
-            <browser:skin name="zmi" layers="zmi" />
             <browser:page name="test"
                 class="zope.app.component.tests.views.VZMI"
-                layer="zmi"
+                layer="
+                  zope.app.publisher.browser.tests.test_directives.ITestLayer"
                 for="zope.app.component.tests.views.IC"
                 permission="zope.Public"
                 attribute="index"
@@ -423,8 +391,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
 
         v = zapi.queryMultiAdapter((ob, request), name='test')
         self.assert_(issubclass(v.__class__, V1))
-        zmi = zapi.getUtility(IBrowserSkinType, 'zmi')
-        v = zapi.queryMultiAdapter((ob, TestRequest(skin=zmi)), name='test')
+        v = zapi.queryMultiAdapter((ob, TestRequest(skin=ITestSkin)), name='test')
         self.assert_(issubclass(v.__class__, VZMI))
 
     def testI18nResource(self):
@@ -886,23 +853,21 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
 
         xmlconfig(StringIO(template %
             '''
-            <browser:layer name="layer" />
-            <browser:skin name="skinny" layers="layer" />
             <browser:pages
                 for="*"
                 class="zope.app.component.tests.views.V1"
                 permission="zope.Public"
-                >
-             
+                >             
               <browser:page name="index.html" attribute="index" />
             </browser:pages>
+
             <browser:pages
                 for="*"
                 class="zope.app.component.tests.views.V1"
-                layer="layer"
+                layer="
+                  zope.app.publisher.browser.tests.test_directives.ITestLayer"
                 permission="zope.Public"
                 >
-            
               <browser:page name="index.html" attribute="action" />
             </browser:pages>
             '''
@@ -910,8 +875,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
 
         v = zapi.getMultiAdapter((ob, request), name='index.html')
         self.assertEqual(v(), 'V1 here')
-        skinny = zapi.getUtility(IBrowserSkinType, 'skinny')
-        v = zapi.getMultiAdapter((ob, TestRequest(skin=skinny)),
+        v = zapi.getMultiAdapter((ob, TestRequest(skin=ITestSkin)),
                                  name='index.html')
         self.assertEqual(v(), 'done')
 
@@ -968,20 +932,20 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         self.assertEqual(zapi.queryAdapter(request, name='test'), None)
 
         path = os.path.join(tests_path, 'testfiles', 'test.pt')
-
         xmlconfig(StringIO(template % (
             '''
-            <browser:layer name="zmi" />
-            <browser:skin name="zmi" layers="zmi" />
-            <browser:resource name="test" file="%s" 
-                  layer="zmi" />
+            <browser:resource
+                name="test"
+                file="%s" 
+                layer="
+                  zope.app.publisher.browser.tests.test_directives.ITestLayer"
+                />
             ''' % path
             )))
 
         self.assertEqual(zapi.queryAdapter(request, name='test'), None)
 
-        zmi = zapi.getUtility(IBrowserSkinType, 'zmi')
-        r = zapi.getAdapter(TestRequest(skin=zmi), name='test')
+        r = zapi.getAdapter(TestRequest(skin=ITestSkin), name='test')
         r = removeSecurityProxy(r)
         self.assertEqual(r._testData(), open(path, 'rb').read())
 
@@ -1016,11 +980,6 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 id="test_menu"
                 title="Test menu"
                 interface="zope.app.publisher.browser.tests.test_directives.ITestMenu"/>
-
-            <browser:layer 
-                name="test_layer"
-                interface="zope.app.publisher.browser.tests.test_directives.ITestLayer"
-                />
 
             <browser:page
                 name="index.html"
