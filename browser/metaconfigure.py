@@ -46,8 +46,12 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest,
           bbb_aware=False):
     """Provides a new layer.
 
+    >>> class Info(object):
+    ...     file = u'doctest'
+    ...     line = 1
+    ... 
     >>> class Context(object):
-    ...     info = u'doc'
+    ...     info = Info()
     ...     def __init__(self): self.actions = []
     ...     def action(self, **kw): self.actions.append(kw)
 
@@ -203,8 +207,12 @@ def skin(_context, name=None, interface=None, layers=None):
     """Provides a new skin.
 
     >>> import pprint
+    >>> class Info(object):
+    ...     file = u'doctest'
+    ...     line = 1
+    ... 
     >>> class Context(object):
-    ...     info = u'doc'
+    ...     info = Info()
     ...     def __init__(self): self.actions = []
     ...     def action(self, **kw): self.actions.append(kw)
 
@@ -222,6 +230,7 @@ def skin(_context, name=None, interface=None, layers=None):
     >>> pprint.pprint(iface.__bases__)
     (<InterfaceClass zope.app.publisher.browser.metaconfigure.Layer1>,
      <InterfaceClass zope.app.publisher.browser.metaconfigure.Layer2>)
+    >>> import sys
     >>> hasattr(sys.modules['zope.app.skins'], 'skin1')
     True
 
