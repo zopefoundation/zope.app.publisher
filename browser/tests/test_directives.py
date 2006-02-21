@@ -26,7 +26,6 @@ from zope.component.interfaces import IDefaultViewName
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.configuration.exceptions import ConfigurationError
 from zope.publisher.browser import TestRequest
-from zope.publisher.interfaces import ILayer
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IBrowserSkinType, IDefaultSkin
@@ -104,10 +103,20 @@ class ITestMenu(Interface):
 
 directlyProvides(ITestMenu, IMenuItemType)
 
+
+##############################################################################
+# BBB 2006/02/18, to be removed after 12 months
+#
 class ITestLayer(IBrowserRequest):
     """Test Layer."""
 
+import zope.deprecation
+zope.deprecation.__show__.off()
+from zope.publisher.interfaces import ILayer
+zope.deprecation.__show__.on()
 directlyProvides(ITestLayer, ILayer)
+#
+##############################################################################
 
 
 class MyResource(object):
@@ -122,6 +131,10 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         super(Test, self).setUp()
         XMLConfig('meta.zcml', zope.app.publisher.browser)()
         ztapi.provideAdapter(None, ITraversable, DefaultTraversable)
+
+    ##########################################################################
+    #
+    # BBB 2006/02/18, to be removed after 12 months
 
     def testLayer(self):
         self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
@@ -145,6 +158,9 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         testskin = zapi.getUtility(IBrowserSkinType, "testskin")
         import zope.app.skins
         self.assert_(zope.app.skins.testskin is testskin)
+
+    #
+    ##########################################################################
 
     def testPage(self):
         self.assertEqual(zapi.queryMultiAdapter((ob, request), name='test'),
