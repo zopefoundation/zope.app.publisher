@@ -23,9 +23,7 @@ from zope.interface.interface import InterfaceClass
 from zope.publisher.interfaces.browser import IBrowserRequest, IDefaultSkin
 from zope.publisher.interfaces.browser import IBrowserSkinType
 
-import zope.app.layers
-import zope.app.skins
-from zope.app import zapi
+from zope.app import zapi, layers, skins
 from zope.app.component.metaconfigure import handler
 
 # referred to through ZCML
@@ -170,7 +168,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest,
         # Add the layer to the layers module.
         # Note: We have to do this immediately, so that directives using the
         # InterfaceField can find the layer.
-        zope.app.layers.set(name, interface)
+        layers.set(name, interface)
         path = 'zope.app.layers.'+name
     else:
         if not bbb_aware:
@@ -189,7 +187,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest,
             # Make the interface available in the `zope.app.layers` module, so
             # that other directives can find the interface under the name
             # before the CA is setup.
-            zope.app.layers.set(name, interface)
+            layers.set(name, interface)
 
     # Register the layer interface as an interface
     _context.action(
@@ -302,7 +300,7 @@ def skin(_context, name=None, interface=None, layers=None):
         # Add the layer to the skins module.
         # Note: We have to do this immediately, so that directives using the
         # InterfaceField can find the layer.
-        zope.app.skins.set(name, interface)
+        skins.set(name, interface)
         path = 'zope.app.skins'+name
 
         # Register the layers
