@@ -26,7 +26,7 @@ from zope.i18n.interfaces import IModifiableUserPreferredLanguages
 
 from zope.app.location import Location
 from zope.app.publisher.interfaces.browser import IBrowserView
-from zope.publisher.interfaces.browser import ISkin
+from zope.publisher.interfaces.browser import IBrowserSkinType
 
 
 key = "zope.app.publisher.browser.IUserPreferredLanguages"
@@ -107,9 +107,9 @@ def applySkin(request, skin):
     >>> import pprint
     >>> from zope.interface import Interface, providedBy
     >>> class SkinA(Interface): pass
-    >>> directlyProvides(SkinA, ISkin)
+    >>> directlyProvides(SkinA, IBrowserSkinType)
     >>> class SkinB(Interface): pass
-    >>> directlyProvides(SkinB, ISkin)
+    >>> directlyProvides(SkinB, IBrowserSkinType)
     >>> class IRequest(Interface): pass
 
     >>> class Request(object):
@@ -130,7 +130,7 @@ def applySkin(request, skin):
     # Remove all existing skin declarations (commonly the default skin).
     ifaces = [iface
               for iface in directlyProvidedBy(request)
-              if not ISkin.providedBy(iface)]
+              if not IBrowserSkinType.providedBy(iface)]
     # Add the new skin.
     ifaces.append(skin)
     directlyProvides(request, *ifaces)

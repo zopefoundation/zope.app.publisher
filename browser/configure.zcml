@@ -3,16 +3,23 @@
    xmlns:browser="http://namespaces.zope.org/browser">
 
 <interface
-  interface="zope.publisher.interfaces.browser.ILayer" />
-
-<interface
-  interface="zope.publisher.interfaces.browser.ISkin" />
-
-<interface
   interface="zope.app.publisher.interfaces.browser.IMenuItemType" />
 
-<browser:layer name="default"
-  interface="zope.publisher.interfaces.browser.IDefaultBrowserLayer" />
+<interface
+  interface="zope.publisher.interfaces.browser.IBrowserSkinType" />
+
+<vocabulary
+    name="Browser Skins"
+    factory="zope.app.component.vocabulary.UtilityVocabulary"
+    interface="zope.publisher.interfaces.browser.IBrowserSkinType"
+    />
+
+<!-- BBB 2006/02/18, to be removed after 12 months -->
+<browser:layer
+    name="default"
+    interface="zope.publisher.interfaces.browser.IDefaultBrowserLayer"
+    bbb_aware="true"
+    />
 
 <content class="zope.publisher.browser.BrowserRequest">
   <allow

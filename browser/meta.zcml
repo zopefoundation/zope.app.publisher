@@ -145,12 +145,14 @@
 
     <!-- misc. directives -->
 
+    <!-- BBB 2006/02/18, to be removed after 12 months -->
     <meta:directive
         name="layer"
         schema=".metadirectives.ILayerDirective"
         handler=".metaconfigure.layer"
         />
 
+    <!-- BBB 2006/02/18, to be removed after 12 months -->
     <meta:directive
         name="skin"
         schema=".metadirectives.ISkinDirective"

@@ -64,6 +64,7 @@ import re
 import pprint
 import cStringIO
 from zope.interface import Interface
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.app.publisher.browser.menumeta import addMenuItem
 
 atre = re.compile(' at [0-9a-fA-Fx]+')
@@ -74,7 +75,7 @@ class IX(Interface):
 class X(object):
     pass
 
-class ILayerStub(Interface):
+class ILayerStub(IBrowserRequest):
     pass
 
 class MenuStub(object):
