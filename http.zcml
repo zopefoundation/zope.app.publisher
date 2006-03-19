@@ -2,17 +2,17 @@
    xmlns="http://namespaces.zope.org/zope"
    package="zope.publisher.http">
 
-  <content class="zope.publisher.http.HTTPRequest">
+  <class class="zope.publisher.http.HTTPRequest">
     <require
         permission="zope.View"
         interface="zope.publisher.interfaces.http.IHTTPApplicationRequest"/>
-  </content>
+  </class>
 
-  <content class="zope.publisher.http.URLGetter">
+  <class class="zope.publisher.http.URLGetter">
     <require
         permission="zope.View" 
         attributes="get __getitem__ __str__" />
-  </content>
+  </class>
 
   <class class="zope.publisher.http.DirectResult">
     <allow interface="zope.publisher.http.IResult" />

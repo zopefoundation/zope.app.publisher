@@ -356,19 +356,6 @@ class view(object):
                     _context.info),
             )
 
-def addview(_context, name, permission,
-            layer=IDefaultBrowserLayer, class_=None,
-            allowed_interface=None, allowed_attributes=None,
-            menu=None, title=None
-            ):
-    return view(_context, name,
-                'zope.app.container.interfaces.IAdding',
-                permission,
-                layer, class_,
-                allowed_interface, allowed_attributes,
-                menu, title
-                )
-
 # transient _handle_menu registry
 _registeredMenus = {}
 

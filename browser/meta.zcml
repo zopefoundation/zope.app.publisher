@@ -69,24 +69,6 @@
 
     </meta:complexDirective>
 
-    <meta:complexDirective
-        name="addview"
-        schema=".metadirectives.IViewDirective"
-        handler=".viewmeta.addview"
-        >
-
-      <meta:subdirective
-          name="page"
-          schema=".metadirectives.IViewPageSubdirective"
-          />
-
-      <meta:subdirective
-          name="defaultPage"
-          schema=".metadirectives.IViewDefaultPageSubdirective"
-          />
-
-    </meta:complexDirective>
-
     <meta:directive
         name="defaultView"
         schema=".metadirectives.IDefaultViewDirective"

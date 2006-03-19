@@ -34,7 +34,7 @@ from zope.app.publisher.interfaces.browser import IMenuItemType
 
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.app.container.interfaces import IAdding
-from zope.app.component.contentdirective import ContentDirective
+from zope.app.component.contentdirective import ClassDirective
 from zope.app.publisher.interfaces.browser import AddMenu
 
 
@@ -255,7 +255,7 @@ def addMenuItem(_context, title, description='', menu=None, for_=None,
                 "A permission must be specified when a class is used")
         factory = "BrowserAdd%s__%s.%s" % (
             forname, class_.__module__, class_.__name__)
-        ContentDirective(_context, class_).factory(_context, id=factory)
+        ClassDirective(_context, class_).factory(_context, id=factory)
 
     extra = {'factory': factory}
 

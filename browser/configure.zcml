@@ -8,10 +8,9 @@
 <interface
   interface="zope.publisher.interfaces.browser.IBrowserSkinType" />
 
-<vocabulary
+<utility
     name="Browser Skins"
-    factory="zope.app.component.vocabulary.UtilityVocabulary"
-    interface="zope.publisher.interfaces.browser.IBrowserSkinType"
+    component=".vocabulary.BrowserSkinsVocabulary"
     />
 
 <!-- BBB 2006/02/18, to be removed after 12 months -->
@@ -21,49 +20,49 @@
     bbb_aware="true"
     />
 
-<content class="zope.publisher.browser.BrowserRequest">
+<class class="zope.publisher.browser.BrowserRequest">
   <allow
     interface="zope.publisher.interfaces.browser.IBrowserApplicationRequest"
     attributes="response locale __str__"
     />
   <allow
     interface="zope.component.interfaces.IPresentationRequest" />
-</content>
+</class>
 
-<content class="zope.publisher.browser.TestRequest">
+<class class="zope.publisher.browser.TestRequest">
   <allow
     interface="zope.publisher.interfaces.browser.IBrowserApplicationRequest"
     attributes="response"
     />
   <allow
     interface="zope.component.interfaces.IPresentationRequest" />
-</content>
+</class>
 
-<content class="zope.publisher.browser.BrowserResponse">
+<class class="zope.publisher.browser.BrowserResponse">
   <allow
     interface="zope.publisher.interfaces.http.IHTTPResponse"
     />
-</content>
+</class>
 
-<content class="zope.app.publisher.browser.fileresource.FileResource">
+<class class="zope.app.publisher.browser.fileresource.FileResource">
   <allow interface="zope.publisher.interfaces.browser.IBrowserPublisher" />
   <allow attributes="GET HEAD __call__" />
-</content>
+</class>
 
-<content class="zope.app.publisher.browser.i18nfileresource.I18nFileResource">
+<class class="zope.app.publisher.browser.i18nfileresource.I18nFileResource">
   <allow interface="zope.publisher.interfaces.browser.IBrowserPublisher" />
   <allow attributes="GET HEAD __call__" />
-</content>
+</class>
 
-<content class=".pagetemplateresource.PageTemplateResource">
+<class class=".pagetemplateresource.PageTemplateResource">
   <allow interface="zope.publisher.interfaces.browser.IBrowserPublisher" />
   <allow attributes="__call__" />
-</content>
+</class>
 
-<content class=".directoryresource.DirectoryResource">
+<class class=".directoryresource.DirectoryResource">
   <allow interface="zope.publisher.interfaces.browser.IBrowserPublisher" />
   <allow attributes="get __getitem__" />
-</content>
+</class>
 
 <browser:page
     name=""
