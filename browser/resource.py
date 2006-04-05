@@ -19,9 +19,9 @@ from zope.component import getMultiAdapter
 from zope.component.interfaces import IResource
 from zope.interface import implements
 from zope.traversing.browser.interfaces import IAbsoluteURL
+from zope.location import Location
 
 from zope.app.component.hooks import getSite
-from zope.app.location import Location
 
 class Resource(Location):
     implements(IResource)

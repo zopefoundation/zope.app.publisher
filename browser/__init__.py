@@ -23,8 +23,8 @@ from zope.interface import implements
 from zope.publisher.browser import BrowserLanguages
 from zope.i18n.interfaces import IUserPreferredLanguages
 from zope.i18n.interfaces import IModifiableUserPreferredLanguages
+from zope.location import Location
 
-from zope.app.location import Location
 from zope.app.publisher.interfaces.browser import IBrowserView
 
 key = "zope.app.publisher.browser.IUserPreferredLanguages"
