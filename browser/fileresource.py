@@ -22,8 +22,8 @@ from zope.interface import implements
 from zope.datetime import time as timeFromDateTimeString
 from zope.publisher.interfaces import NotFound
 from zope.publisher.interfaces.browser import IBrowserPublisher
+from zope.publisher.browser import BrowserView
 
-from zope.app.publisher.browser import BrowserView
 from zope.app.publisher.fileresource import File, Image
 from zope.app.publisher.browser.resource import Resource
 

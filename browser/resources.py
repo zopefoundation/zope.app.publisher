@@ -18,10 +18,9 @@ $Id$
 import zope.component
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces import NotFound
+from zope.publisher.browser import BrowserView
 from zope.interface import implements
 from zope.location import locate
-
-from zope.app.publisher.browser import BrowserView
 
 class Resources(BrowserView):
     """Provide a URL-accessible resource namespace

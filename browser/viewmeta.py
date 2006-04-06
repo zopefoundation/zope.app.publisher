@@ -20,21 +20,19 @@ import os
 from zope.component.interfaces import ComponentLookupError, IDefaultViewName
 from zope.interface import implements, classImplements, Interface
 from zope.publisher.interfaces import NotFound
-from zope.security.checker import CheckerPublic, Checker
-from zope.security.checker import defineChecker
+from zope.security.checker import CheckerPublic, Checker, defineChecker
 from zope.configuration.exceptions import ConfigurationError
-from zope.app.component.interface import provideInterface
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserPublisher
+from zope.publisher.browser import BrowserView
+
 from zope.app import zapi
+from zope.app.component.interface import provideInterface
 from zope.app.component.metaconfigure import handler
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
-from zope.app.publisher.browser import BrowserView
 from zope.app.publisher.browser.menumeta import menuItemDirective
-
-
 
 # There are three cases we want to suport:
 #
