@@ -23,55 +23,20 @@ from zope.interface import implements
 from zope.publisher.browser import BrowserLanguages
 from zope.i18n.interfaces import IUserPreferredLanguages
 from zope.i18n.interfaces import IModifiableUserPreferredLanguages
-from zope.location import Location
-
-from zope.app.publisher.interfaces.browser import IBrowserView
-
-key = "zope.app.publisher.browser.IUserPreferredLanguages"
 
 ##############################################################################
 # BBB 2006/04/03 - to be removed after 12 months
 
 import zope.deferredimport
 zope.deferredimport.deprecated(
-    "applySkin has been moved to zope.publisher.browser. This "
-    "reference will be removed in Zope 3.5.",
+    "It has been moved to zope.publisher.browser. This reference will "
+    "be removed in Zope 3.5.",
+    BrowserView = 'zope.publisher.browser:BrowserView',
     applySkin = 'zope.publisher.browser:applySkin',
     )
 
 #
 ##############################################################################
-
-class BrowserView(Location):
-    """Browser View.
-
-    >>> view = BrowserView("context", "request")
-    >>> view.context
-    'context'
-    >>> view.request
-    'request'
-
-    >>> view.__parent__
-    'context'
-    >>> view.__parent__ = "parent"
-    >>> view.__parent__
-    'parent'
-    """
-
-    implements(IBrowserView)
-
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
-
-    def __getParent(self):
-        return getattr(self, '_parent', self.context)
-
-    def __setParent(self, parent):
-        self._parent = parent
-
-    __parent__ = property(__getParent, __setParent)
-
 
 class IDefaultViewNameAPI(zope.interface.Interface):
 
@@ -116,6 +81,8 @@ class NotCompatibleAdapterError(Exception):
     """Adapter not compatible with
        zope.i18n.interfaces.IModifiableBrowserLanguages has been used.
     """
+
+key = "zope.app.publisher.browser.IUserPreferredLanguages"
 
 class CacheableBrowserLanguages(BrowserLanguages):
 
