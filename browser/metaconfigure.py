@@ -45,7 +45,9 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest,
     """Provides a new layer.
 
     First, let's ignore the warnigns:
-    >>> warnings.filterwarnings('ignore', category=DeprecationWarning)
+
+    >>> showwarning = warnings.showwarning
+    >>> warnings.showwarning = lambda *a, **k: None
 
     >>> class Info(object):
     ...     file = u'doctest'
@@ -137,7 +139,8 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest,
     ConfigurationError: You cannot specify the 'interface' and 'base' together.
 
     Enabling the warnings again:
-    >>> warnings.resetwarnings()
+
+    >>> warnings.showwarning = showwarning
     """
     if name is not None and ',' in name:
         raise TypeError("Commas are not allowed in layer names.")
