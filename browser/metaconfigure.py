@@ -17,6 +17,7 @@ $Id$
 """
 import warnings
 from zope.component.interfaces import IDefaultViewName
+from zope.component.interface import provideInterface
 from zope.configuration.exceptions import ConfigurationError
 from zope.interface import directlyProvides
 from zope.interface.interface import InterfaceClass
@@ -31,7 +32,6 @@ from zope.app.publisher.browser.resourcemeta import resource
 from zope.app.publisher.browser.resourcemeta import resourceDirectory
 from zope.app.publisher.browser.i18nresourcemeta import I18nResource
 from zope.app.publisher.browser.viewmeta import view
-from zope.app.component.interface import provideInterface
 
 # BBB 2006/02/18, to be removed after 12 months
 import zope.deprecation
