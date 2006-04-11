@@ -20,6 +20,7 @@ import os
 from zope.component import queryMultiAdapter
 from zope.component.interfaces import ComponentLookupError, IDefaultViewName
 from zope.component.interface import provideInterface
+from zope.component.zcml import handler
 from zope.interface import implements, classImplements, Interface
 from zope.publisher.interfaces import NotFound
 from zope.security.checker import CheckerPublic, Checker, defineChecker
@@ -29,7 +30,6 @@ from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.browser import BrowserView
 
-from zope.app.component.metaconfigure import handler
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
 from zope.app.publisher.browser.menumeta import menuItemDirective

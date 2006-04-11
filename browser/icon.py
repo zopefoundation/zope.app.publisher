@@ -23,8 +23,8 @@ from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.configuration.exceptions import ConfigurationError
 from zope.traversing.namespace import getResource
 from zope.component.interface import provideInterface
+from zope.component.zcml import handler
 
-from zope.app.component.metaconfigure import handler
 from zope.app.publisher.browser import metaconfigure
 
 IName = re.compile('I[A-Z][a-z]')

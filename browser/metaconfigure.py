@@ -18,6 +18,7 @@ $Id$
 import warnings
 from zope.component.interfaces import IDefaultViewName
 from zope.component.interface import provideInterface
+from zope.component.zcml import handler
 from zope.configuration.exceptions import ConfigurationError
 from zope.interface import directlyProvides
 from zope.interface.interface import InterfaceClass
@@ -25,7 +26,6 @@ from zope.publisher.interfaces.browser import IBrowserRequest, IDefaultSkin
 from zope.publisher.interfaces.browser import IBrowserSkinType
 
 from zope.app import zapi, layers, skins
-from zope.app.component.metaconfigure import handler
 
 # referred to through ZCML
 from zope.app.publisher.browser.resourcemeta import resource

@@ -21,8 +21,8 @@ from zope.security.checker import CheckerPublic, Checker
 from zope.configuration.exceptions import ConfigurationError
 from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
 from zope.component.interface import provideInterface
+from zope.component.zcml import handler
 
-from zope.app.component.metaconfigure import handler
 from zope.app.publisher.xmlrpc import MethodPublisher
 
 def view(_context, for_=None, interface=None, methods=None,

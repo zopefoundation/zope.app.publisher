@@ -23,9 +23,8 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.security.checker import InterfaceChecker, CheckerPublic
 from zope.component.interface import provideInterface
+from zope.component.zcml import adapter, proxify, utility
 
-from zope.app.component.metaconfigure import adapter, proxify
-from zope.app.component.metaconfigure import utility
 from zope.app.component.contentdirective import ClassDirective
 from zope.app.pagetemplate.engine import Engine
 from zope.app.container.interfaces import IAdding
