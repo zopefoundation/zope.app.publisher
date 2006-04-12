@@ -17,10 +17,9 @@ $Id$
 """
 import os
 import posixpath
-
 from time import time
 
-from zope.app.contenttypes import guess_content_type
+from zope.contenttype import guess_content_type
 from zope.datetime import rfc1123_date
 
 
