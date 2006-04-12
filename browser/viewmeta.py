@@ -171,8 +171,8 @@ def page(_context, name, permission, for_,
     _context.action(
         discriminator = ('view', for_, name, IBrowserRequest, layer),
         callable = handler,
-        args = ('provideAdapter',
-                (for_, layer), Interface, name, new_class, _context.info),
+        args = ('registerAdapter',
+                new_class, (for_, layer), Interface, name, _context.info),
         )
 
 
@@ -348,8 +348,8 @@ class view(object):
         _context.action(
             discriminator = ('view', (for_, layer), name, self.provides),
             callable = handler,
-            args = ('provideAdapter',
-                    (for_, layer), self.provides, name, newclass,
+            args = ('registerAdapter',
+                    newclass, (for_, layer), self.provides, name,
                     _context.info),
             )
 

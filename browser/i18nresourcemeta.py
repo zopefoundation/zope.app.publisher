@@ -102,8 +102,8 @@ class I18nResource(object):
         self._context.action(
             discriminator = ('i18n-resource', self.name, self.type, self.layer),
             callable = handler,
-            args = ('provideAdapter',
-                    (self.layer,), Interface, self.name, factory,
+            args = ('registerAdapter',
+                    factory, (self.layer,), Interface, self.name,
                     self._context.info)
             )
 

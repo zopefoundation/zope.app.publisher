@@ -371,8 +371,8 @@ def setDefaultSkin(name, info=''):
     True
     """
     skin = zapi.getUtility(IBrowserSkinType, name)
-    handler('provideAdapter',
-            (IBrowserRequest,), IDefaultSkin, '', skin, info),
+    handler('registerAdapter',
+            skin, (IBrowserRequest,), IDefaultSkin, '', info),
 
 def defaultSkin(_context, name):
 
@@ -387,8 +387,8 @@ def defaultView(_context, name, for_=None, layer=IBrowserRequest):
     _context.action(
         discriminator = ('defaultViewName', for_, layer, name),
         callable = handler,
-        args = ('provideAdapter',
-                (for_, layer), IDefaultViewName, '', name, _context.info)
+        args = ('registerAdapter',
+                name, (for_, layer), IDefaultViewName, '', _context.info)
         )
 
     if for_ is not None:

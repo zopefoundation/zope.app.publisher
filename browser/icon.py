@@ -94,8 +94,8 @@ def IconDirective(_context, name, for_, file=None, resource=None,
     _context.action(
         discriminator = ('view', name, vfactory, layer),
         callable = handler,
-        args = ('provideAdapter',
-                (for_, layer), Interface, name, vfactory, _context.info)
+        args = ('registerAdapter',
+                vfactory, (for_, layer), Interface, name, _context.info)
         )
 
     _context.action(
