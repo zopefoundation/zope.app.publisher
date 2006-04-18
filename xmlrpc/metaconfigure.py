@@ -77,8 +77,8 @@ def view(_context, for_=None, interface=None, methods=None,
         _context.action(
             discriminator = ('view', for_, name, IXMLRPCRequest),
             callable = handler,
-            args = ('provideAdapter',
-                    (for_, IXMLRPCRequest), Interface, name, class_,
+            args = ('registerAdapter',
+                    class_, (for_, IXMLRPCRequest), Interface, name,
                     _context.info)
             )
     else:
@@ -95,8 +95,8 @@ def view(_context, for_=None, interface=None, methods=None,
             _context.action(
                 discriminator = ('view', for_, name, IXMLRPCRequest),
                 callable = handler,
-                args = ('provideAdapter',
-                        (for_, IXMLRPCRequest), Interface, name, new_class,
+                args = ('registerAdapter',
+                        new_class, (for_, IXMLRPCRequest), Interface, name,
                         _context.info)
                 )
 
