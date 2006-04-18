@@ -214,7 +214,8 @@ def skin(_context, name=None, interface=None, layers=None):
     """Provides a new skin.
 
     First, let's ignore the warnigns:
-    >>> warnings.filterwarnings('ignore', category=DeprecationWarning)
+    >>> showwarning = warnings.showwarning
+    >>> warnings.showwarning = lambda *a, **k: None
 
     >>> import pprint
     >>> class Info(object):
@@ -283,7 +284,7 @@ def skin(_context, name=None, interface=None, layers=None):
     ConfigurationError: You must specify the 'name' or 'interface' attribute.
 
     Enabling the warnings again:
-    >>> warnings.resetwarnings()
+    >>> warnings.showwarning = showwarning
     """
     if name is None and interface is None: 
         raise ConfigurationError(
