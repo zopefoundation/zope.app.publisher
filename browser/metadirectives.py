@@ -24,7 +24,7 @@ from zope.schema import TextLine, Text, Id, Int, Bool
 from zope.security.zcml import Permission
 
 from zope.app.component.metadirectives import IBasicViewInformation
-from zope.app.component.fields import LayerField
+from zope.app.component.back35 import LayerField
 from zope.app.publisher.browser.fields import MenuField
 
 #
