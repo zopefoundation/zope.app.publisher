@@ -26,6 +26,7 @@ from zope.publisher.browser import TestRequest
 from zope.security.checker import ProxyFactory, CheckerPublic
 from zope.security.interfaces import Forbidden
 from zope.security.proxy import removeSecurityProxy
+from zope.traversing.interfaces import IContainmentRoot
 
 import zope.app.publisher.browser
 from zope.app import zapi
@@ -33,7 +34,6 @@ from zope.app.component.tests.views import IC
 from zope.app.component.interfaces import ISite
 from zope.app.publisher.browser.tests import support
 from zope.app.testing.placelesssetup import PlacelessSetup
-from zope.app.traversing.interfaces import IContainmentRoot
 
 
 template = """<configure

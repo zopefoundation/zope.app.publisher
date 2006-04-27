@@ -117,9 +117,9 @@ user does not have the correct permission to access the action or the menu
 item itself, or (2) the filter returns ``False``, in which case the menu
 item should also not be shown. 
 
+  >>> from zope.security.interfaces import IPermission
+  >>> from zope.security.permission import Permission
   >>> from zope.app.testing import ztapi
-  >>> from zope.app.security.interfaces import IPermission
-  >>> from zope.app.security.permission import Permission
   >>> perm = Permission('perm', 'Permission')
   >>> ztapi.provideUtility(IPermission, perm, 'perm')
 

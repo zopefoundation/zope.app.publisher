@@ -20,10 +20,9 @@ from zope.interface import Interface
 from zope.security.checker import CheckerPublic, Checker
 from zope.configuration.exceptions import ConfigurationError
 from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
+from zope.component.interface import provideInterface
+from zope.component.zcml import handler
 
-from zope.app import zapi
-from zope.app.component.interface import provideInterface
-from zope.app.component.metaconfigure import handler
 from zope.app.publisher.xmlrpc import MethodPublisher
 
 def view(_context, for_=None, interface=None, methods=None,
@@ -78,8 +77,8 @@ def view(_context, for_=None, interface=None, methods=None,
         _context.action(
             discriminator = ('view', for_, name, IXMLRPCRequest),
             callable = handler,
-            args = ('provideAdapter',
-                    (for_, IXMLRPCRequest), Interface, name, class_,
+            args = ('registerAdapter',
+                    class_, (for_, IXMLRPCRequest), Interface, name,
                     _context.info)
             )
     else:
@@ -96,8 +95,8 @@ def view(_context, for_=None, interface=None, methods=None,
             _context.action(
                 discriminator = ('view', for_, name, IXMLRPCRequest),
                 callable = handler,
-                args = ('provideAdapter',
-                        (for_, IXMLRPCRequest), Interface, name, new_class,
+                args = ('registerAdapter',
+                        new_class, (for_, IXMLRPCRequest), Interface, name,
                         _context.info)
                 )
 

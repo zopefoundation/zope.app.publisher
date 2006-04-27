@@ -15,28 +15,25 @@
 
 $Id$
 """
+import zope.component
 from zope.configuration.exceptions import ConfigurationError
 from zope.interface.interface import InterfaceClass
 from zope.interface import Interface
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.security.checker import InterfaceChecker, CheckerPublic
+from zope.component.interface import provideInterface
+from zope.component.zcml import adapter, proxify, utility
 
-from zope.app import zapi
-from zope.app.component.interface import provideInterface
-from zope.app.component.metaconfigure import adapter, proxify
-from zope.app.component.metaconfigure import utility
+from zope.app.component.contentdirective import ClassDirective
 from zope.app.pagetemplate.engine import Engine
+from zope.app.container.interfaces import IAdding
 from zope.app.publisher.browser.menu import BrowserMenu
 from zope.app.publisher.browser.menu import BrowserMenuItem, BrowserSubMenuItem
 from zope.app.publisher.interfaces.browser import IBrowserMenu
 from zope.app.publisher.interfaces.browser import IBrowserMenuItem
 from zope.app.publisher.interfaces.browser import IMenuItemType
-
-from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.app.container.interfaces import IAdding
-from zope.app.component.contentdirective import ClassDirective
 from zope.app.publisher.interfaces.browser import AddMenu
-
 
 # Create special modules that contain all menu item types
 from types import ModuleType as module
@@ -208,7 +205,7 @@ def _checkViewFor(for_=None, layer=None, view_name=None):
             " is optional but can\'t be empty"
             )
 
-    gsm = zapi.getGlobalSiteManager()
+    gsm = zope.component.getGlobalSiteManager()
     if gsm.adapters.lookup((for_, layer),
                            Interface, view_name) is None:
         raise ConfigurationError(
@@ -240,7 +237,7 @@ def addMenuItem(_context, title, description='', menu=None, for_=None,
 
     if menu is not None:
         if isinstance(menu, (str, unicode)):
-            menu = zapi.getUtility(IMenuItemType, menu)
+            menu = zope.component.getUtility(IMenuItemType, menu)
             if menu is None:
                 raise ValueError("Missing menu id '%s'" % menu)
 

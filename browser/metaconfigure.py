@@ -17,6 +17,8 @@ $Id$
 """
 import warnings
 from zope.component.interfaces import IDefaultViewName
+from zope.component.interface import provideInterface
+from zope.component.zcml import handler
 from zope.configuration.exceptions import ConfigurationError
 from zope.interface import directlyProvides
 from zope.interface.interface import InterfaceClass
@@ -24,14 +26,12 @@ from zope.publisher.interfaces.browser import IBrowserRequest, IDefaultSkin
 from zope.publisher.interfaces.browser import IBrowserSkinType
 
 from zope.app import zapi, layers, skins
-from zope.app.component.metaconfigure import handler
 
 # referred to through ZCML
 from zope.app.publisher.browser.resourcemeta import resource
 from zope.app.publisher.browser.resourcemeta import resourceDirectory
 from zope.app.publisher.browser.i18nresourcemeta import I18nResource
 from zope.app.publisher.browser.viewmeta import view
-from zope.app.component.interface import provideInterface
 
 # BBB 2006/02/18, to be removed after 12 months
 import zope.deprecation
@@ -214,7 +214,8 @@ def skin(_context, name=None, interface=None, layers=None):
     """Provides a new skin.
 
     First, let's ignore the warnigns:
-    >>> warnings.filterwarnings('ignore', category=DeprecationWarning)
+    >>> showwarning = warnings.showwarning
+    >>> warnings.showwarning = lambda *a, **k: None
 
     >>> import pprint
     >>> class Info(object):
@@ -283,7 +284,7 @@ def skin(_context, name=None, interface=None, layers=None):
     ConfigurationError: You must specify the 'name' or 'interface' attribute.
 
     Enabling the warnings again:
-    >>> warnings.resetwarnings()
+    >>> warnings.showwarning = showwarning
     """
     if name is None and interface is None: 
         raise ConfigurationError(
@@ -371,8 +372,8 @@ def setDefaultSkin(name, info=''):
     True
     """
     skin = zapi.getUtility(IBrowserSkinType, name)
-    handler('provideAdapter',
-            (IBrowserRequest,), IDefaultSkin, '', skin, info),
+    handler('registerAdapter',
+            skin, (IBrowserRequest,), IDefaultSkin, '', info),
 
 def defaultSkin(_context, name):
 
@@ -387,8 +388,8 @@ def defaultView(_context, name, for_=None, layer=IBrowserRequest):
     _context.action(
         discriminator = ('defaultViewName', for_, layer, name),
         callable = handler,
-        args = ('provideAdapter',
-                (for_, layer), IDefaultViewName, '', name, _context.info)
+        args = ('registerAdapter',
+                name, (for_, layer), IDefaultViewName, '', _context.info)
         )
 
     if for_ is not None:

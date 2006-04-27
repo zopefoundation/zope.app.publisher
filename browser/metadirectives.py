@@ -21,11 +21,11 @@ from zope.interface import Interface
 from zope.configuration.fields import GlobalObject, GlobalInterface
 from zope.configuration.fields import Tokens, Path, PythonIdentifier, MessageID
 from zope.schema import TextLine, Text, Id, Int, Bool
+from zope.security.zcml import Permission
 
 from zope.app.component.metadirectives import IBasicViewInformation
-from zope.app.component.fields import LayerField
+from zope.app.component.back35 import LayerField
 from zope.app.publisher.browser.fields import MenuField
-from zope.app.security.fields import Permission
 
 #
 # browser views

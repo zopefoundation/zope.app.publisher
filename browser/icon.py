@@ -21,12 +21,11 @@ import re
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.configuration.exceptions import ConfigurationError
+from zope.traversing.namespace import getResource
+from zope.component.interface import provideInterface
+from zope.component.zcml import handler
 
-from zope.app import zapi
-from zope.app.component.interface import provideInterface
-from zope.app.component.metaconfigure import handler
 from zope.app.publisher.browser import metaconfigure
-from zope.app.traversing.namespace import getResource
 
 IName = re.compile('I[A-Z][a-z]')
 
@@ -95,8 +94,8 @@ def IconDirective(_context, name, for_, file=None, resource=None,
     _context.action(
         discriminator = ('view', name, vfactory, layer),
         callable = handler,
-        args = ('provideAdapter',
-                (for_, layer), Interface, name, vfactory, _context.info)
+        args = ('registerAdapter',
+                vfactory, (for_, layer), Interface, name, _context.info)
         )
 
     _context.action(

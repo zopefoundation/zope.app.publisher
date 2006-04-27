@@ -21,12 +21,10 @@ from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.security.proxy import Proxy
 from zope.security.checker import CheckerPublic, Checker
+from zope.component.zcml import handler
 
-from zope.app import zapi
-from zope.app.component.metaconfigure import handler
 from zope.app.publisher.fileresource import File, Image
-
-from i18nfileresource import I18nFileResourceFactory
+from zope.app.publisher.browser.i18nfileresource import I18nFileResourceFactory
 
 
 class I18nResource(object):
@@ -104,8 +102,8 @@ class I18nResource(object):
         self._context.action(
             discriminator = ('i18n-resource', self.name, self.type, self.layer),
             callable = handler,
-            args = ('provideAdapter',
-                    (self.layer,), Interface, self.name, factory,
+            args = ('registerAdapter',
+                    factory, (self.layer,), Interface, self.name,
                     self._context.info)
             )
 

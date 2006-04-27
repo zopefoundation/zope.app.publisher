@@ -18,16 +18,16 @@ $Id$
 import os
 from unittest import TestCase, main, makeSuite
 
+import zope.component
 from zope.publisher.interfaces import NotFound
-from zope.app.testing import ztapi
 from zope.security.checker import NamesChecker
 from zope.publisher.browser import TestRequest
+from zope.traversing.interfaces import ITraversable
+from zope.traversing.adapters import DefaultTraversable
 
 from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.publisher.browser.pagetemplateresource import \
      PageTemplateResourceFactory
-from zope.app.traversing.interfaces import ITraversable
-from zope.app.traversing.adapters import DefaultTraversable
 import zope.app.publisher.browser.tests as p
 
 test_directory = os.path.dirname(p.__file__)
@@ -40,7 +40,7 @@ class Test(PlacelessSetup, TestCase):
 
     def setUp(self):
         super(Test, self).setUp()
-        ztapi.provideAdapter(None, ITraversable, DefaultTraversable)
+        zope.component.provideAdapter(DefaultTraversable, (None,), ITraversable)
 
     def testNoTraversal(self):
         path = os.path.join(test_directory, 'testfiles', 'test.pt')

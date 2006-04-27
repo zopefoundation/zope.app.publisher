@@ -15,14 +15,13 @@
 
 $Id$
 """
+from zope.component import getMultiAdapter
 from zope.component.interfaces import IResource
 from zope.interface import implements
+from zope.traversing.browser.interfaces import IAbsoluteURL
+from zope.location import Location
 
-from zope.app import zapi
 from zope.app.component.hooks import getSite
-from zope.app.location import Location
-from zope.app.traversing.browser.interfaces import IAbsoluteURL
-
 
 class Resource(Location):
     implements(IResource)
@@ -36,5 +35,5 @@ class Resource(Location):
             name = name[12:]
 
         site = getSite()
-        url = str(zapi.getMultiAdapter((site, self.request), IAbsoluteURL))
+        url = str(getMultiAdapter((site, self.request), IAbsoluteURL))
         return "%s/@@/%s" % (url, name)

@@ -29,7 +29,7 @@ import posixpath
 from zope.interface import implements
 from zope.publisher.interfaces import NotFound
 from zope.security.proxy import Proxy
-from zope.app.publisher.browser import BrowserView
+from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher
 
 from zope.app.publisher.browser.resource import Resource

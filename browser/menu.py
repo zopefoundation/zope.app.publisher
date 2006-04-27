@@ -18,16 +18,15 @@ $Id$
 __docformat__ = "reStructuredText"
 import sys
 
-from zope.interface import Interface, implements
-from zope.interface import providedBy
+import zope.component
+from zope.interface import Interface, implements, providedBy
 from zope.security import checkPermission, canAccess
 from zope.security.interfaces import Unauthorized, Forbidden
 from zope.security.proxy import removeSecurityProxy
+from zope.publisher.browser import BrowserView
 
-from zope.app import zapi
 from zope.app.pagetemplate.engine import Engine
 from zope.app.publication.browser import PublicationTraverser
-from zope.app.publisher.browser import BrowserView
 from zope.app.publisher.interfaces.browser import IMenuAccessView
 from zope.app.publisher.interfaces.browser import IBrowserMenu
 from zope.app.publisher.interfaces.browser import IBrowserMenuItem
@@ -44,13 +43,13 @@ class BrowserMenu(object):
         self.description = description
 
     def getMenuItemType(self):
-        return zapi.getUtility(IMenuItemType, self.id)
+        return zope.component.getUtility(IMenuItemType, self.id)
 
     def getMenuItems(self, object, request):
         """Return menu item entries in a TAL-friendly form."""
         result = []
-        for name, item in zapi.getAdapters((object, request),
-                                           self.getMenuItemType()):
+        for name, item in zope.component.getAdapters((object, request),
+                                                     self.getMenuItemType()):
             if item.available():
                 result.append(item)
 
@@ -173,7 +172,7 @@ class BrowserSubMenuItem(BrowserMenuItem):
 
 def getMenu(id, object, request):
     """Return menu item entries in a TAL-friendly form."""
-    menu = zapi.getUtility(IBrowserMenu, id)
+    menu = zope.component.getUtility(IBrowserMenu, id)
     return menu.getMenuItems(object, request)
 
 

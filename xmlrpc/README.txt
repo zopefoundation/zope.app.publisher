@@ -144,7 +144,7 @@ The 'zope.app.publisher.xmlrpc' package provides a base class,
 particulat, it has an adapter that simply traverses to attributes.
 
 If an XML-RPC view isn't going to be public, then it also has to
-implement 'zope.app.location.ILocation' so that security grants can be
+implement 'zope.location.ILocation' so that security grants can be
 acquired for it, at least with Zope's default security policy. The
 `MethodPublisher` class does that too.
 

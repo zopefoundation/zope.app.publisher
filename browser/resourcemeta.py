@@ -22,9 +22,9 @@ from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.security.checker import CheckerPublic, NamesChecker
+from zope.component.zcml import handler
 
 from zope.app import zapi
-from zope.app.component.metaconfigure import handler
 
 from fileresource import FileResourceFactory, ImageResourceFactory
 from pagetemplateresource import PageTemplateResourceFactory
@@ -77,8 +77,8 @@ def resource(_context, name, layer=IDefaultBrowserLayer,
     _context.action(
         discriminator = ('resource', name, IBrowserRequest, layer),
         callable = handler,
-        args = ('provideAdapter',
-                (layer,), Interface, name, factory, _context.info),
+        args = ('registerAdapter',
+                factory, (layer,), Interface, name, _context.info),
         )
 
 def resourceDirectory(_context, name, directory, layer=IDefaultBrowserLayer,
@@ -98,6 +98,6 @@ def resourceDirectory(_context, name, directory, layer=IDefaultBrowserLayer,
     _context.action(
         discriminator = ('resource', name, IBrowserRequest, layer),
         callable = handler,
-        args = ('provideAdapter',
-                (layer,), Interface, name, factory, _context.info),
+        args = ('registerAdapter',
+                factory, (layer,), Interface, name, _context.info),
         )

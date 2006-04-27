@@ -18,13 +18,13 @@ $Id$
 from datetime import datetime
 
 from zope.publisher.browser import registerTypeConverter
-from zope.app.datetimeutils import parse as parseDateTime
+from zope.datetime import parse as parseDateTime
 
 def field2date_via_datetimeutils(v):
     """Converter for request fields marshalled as ':date'.
 
     o TODO: Uses the non-localized and non-tzinfo-aware 'parseDateTime'
-            utility from zope.app.datetimeutils;  a better alternative
+            utility from zope.datetime;  a better alternative
             would be more I18N / L10N aware, perhaps even adapting to
             the expressed preferences of the user.
     """

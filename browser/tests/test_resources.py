@@ -16,15 +16,15 @@
 $Id$
 """
 from unittest import TestCase, main, makeSuite
-from zope.app.testing import ztapi
-from zope.app.testing.placelesssetup import PlacelessSetup
 
 from zope.i18n.interfaces import IUserPreferredCharsets
-
 from zope.publisher.http import IHTTPRequest
 from zope.publisher.http import HTTPCharsets
 from zope.publisher.browser import TestRequest
-from zope.app.publisher.interfaces.browser import IBrowserView
+from zope.publisher.interfaces.browser import IBrowserView
+
+from zope.app.testing import ztapi
+from zope.app.testing.placelesssetup import PlacelessSetup
 
 class Test(PlacelessSetup, TestCase):
 

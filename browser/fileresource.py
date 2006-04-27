@@ -17,19 +17,15 @@ $Id$
 """
 
 import time
-
+from zope.security.proxy import Proxy
+from zope.interface import implements
+from zope.datetime import time as timeFromDateTimeString
 from zope.publisher.interfaces import NotFound
-
-from zope.app.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher
+from zope.publisher.browser import BrowserView
 
 from zope.app.publisher.fileresource import File, Image
 from zope.app.publisher.browser.resource import Resource
-from zope.app.datetimeutils import time as timeFromDateTimeString
-
-from zope.security.proxy import Proxy
-
-from zope.interface import implements
 
 class FileResource(BrowserView, Resource):
 

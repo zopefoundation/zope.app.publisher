@@ -15,16 +15,23 @@
 
 $Id$
 """
-from zope.component.interfaces import IView
 from zope.app.i18n import ZopeMessageFactory as _
 from zope.interface import Interface, directlyProvides
 from zope.interface.interfaces import IInterface
 from zope.schema import TextLine, Text, Choice, URI, Int, InterfaceField
 
+##############################################################################
+# BBB 2006/04/03 - to be removed after 12 months
 
-class IBrowserView(IView):
-    """Browser View"""
+import zope.deferredimport
+zope.deferredimport.deprecated(
+    "IBrowserView has been moved to zope.publisher.interfaces.browser. "
+    "This reference will be removed in Zope 3.5.",
+    IBrowserView = 'zope.publisher.interfaces.browser:IBrowserView',
+    )
 
+#
+##############################################################################
 
 class IMenuItemType(IInterface):
     """Menu item type

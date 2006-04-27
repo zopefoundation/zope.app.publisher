@@ -18,8 +18,7 @@ $Id$
 import zope.configuration.fields
 import zope.interface
 import zope.schema
-
-import zope.app.security.fields
+import zope.security.zcml
 
 class IViewDirective(zope.interface.Interface):
     """View Directive for XML-RPC methods."""
@@ -51,7 +50,7 @@ class IViewDirective(zope.interface.Interface):
         required=False
         )
 
-    permission = zope.app.security.fields.Permission(
+    permission = zope.security.zcml.Permission(
         title=u"Permission",
         description=u"""The permission needed to use the view.
 

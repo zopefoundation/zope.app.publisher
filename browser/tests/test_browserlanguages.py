@@ -17,16 +17,15 @@ $Id$
 """
 import unittest
 
+import zope.component
 from zope.interface import directlyProvides
 from zope.publisher.browser import BrowserLanguages
 from zope.publisher.tests.test_browserlanguages import TestRequest
 from zope.publisher.tests.test_browserlanguages import BrowserLanguagesTest
+from zope.annotation.interfaces import IAttributeAnnotatable
+from zope.annotation.attribute import AttributeAnnotations
 
-from zope.app.testing import ztapi
 from zope.app.testing.placelesssetup import PlacelessSetup
-from zope.app.annotation import IAttributeAnnotatable, IAnnotations
-from zope.app.annotation.attribute import AttributeAnnotations
-
 from zope.app.publisher.browser import CacheableBrowserLanguages
 from zope.app.publisher.browser import ModifiableBrowserLanguages
 from zope.app.publisher.browser import NotCompatibleAdapterError
@@ -36,8 +35,7 @@ class CacheableBrowserLanguagesTests(PlacelessSetup, BrowserLanguagesTest):
 
     def setUp(self):
         super(CacheableBrowserLanguagesTests, self).setUp()
-        ztapi.provideAdapter(IAttributeAnnotatable, IAnnotations,
-            AttributeAnnotations)
+        zope.component.provideAdapter(AttributeAnnotations)
 
     def factory(self, request):
         directlyProvides(request, IAttributeAnnotatable)

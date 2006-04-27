@@ -17,25 +17,22 @@ $Id$
 """
 import os
 
-from zope.component.exceptions import ComponentLookupError
-from zope.component.interfaces import IDefaultViewName
+from zope.component import queryMultiAdapter
+from zope.component.interfaces import ComponentLookupError, IDefaultViewName
+from zope.component.interface import provideInterface
+from zope.component.zcml import handler
 from zope.interface import implements, classImplements, Interface
 from zope.publisher.interfaces import NotFound
-from zope.security.checker import CheckerPublic, Checker
-from zope.security.checker import defineChecker
+from zope.security.checker import CheckerPublic, Checker, defineChecker
 from zope.configuration.exceptions import ConfigurationError
-from zope.app.component.interface import provideInterface
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.publisher.interfaces.browser import IBrowserPublisher
-from zope.app import zapi
-from zope.app.component.metaconfigure import handler
+from zope.publisher.browser import BrowserView
+
 from zope.app.pagetemplate.simpleviewclass import SimpleViewClass
 from zope.app.pagetemplate.viewpagetemplatefile import ViewPageTemplateFile
-from zope.app.publisher.browser import BrowserView
 from zope.app.publisher.browser.menumeta import menuItemDirective
-
-
 
 # There are three cases we want to suport:
 #
@@ -93,19 +90,6 @@ def page(_context, name, permission, for_,
          allowed_interface=None, allowed_attributes=None,
          attribute='__call__', menu=None, title=None, 
          ):
-
-    # BBB: Goes away in 3.3.
-    # Handle old default layer code. Code that reused the page directive will
-    # send a string.
-    if layer == 'default':
-        import warnings
-        warnings.warn(
-            'Strings as layer names are not supported anymore. In the case '
-            'of the `default` layer, please use the `IDefaultBrowserLayer` '
-            'instead. This support goes away in Zope 3.3.',
-            DeprecationWarning, 2)
-        layer = IDefaultBrowserLayer
-
     _handle_menu(_context, menu, title, [for_], name, permission, layer)
     required = {}
 
@@ -174,8 +158,8 @@ def page(_context, name, permission, for_,
     _context.action(
         discriminator = ('view', for_, name, IBrowserRequest, layer),
         callable = handler,
-        args = ('provideAdapter',
-                (for_, layer), Interface, name, new_class, _context.info),
+        args = ('registerAdapter',
+                new_class, (for_, layer), Interface, name, _context.info),
         )
 
 
@@ -284,7 +268,7 @@ class view(object):
 
                 if name in pages:
                     return getattr(self, pages[name])
-                view = zapi.queryMultiAdapter((self, request), name=name)
+                view = queryMultiAdapter((self, request), name=name)
                 if view is not None:
                     return view
 
@@ -297,7 +281,7 @@ class view(object):
 
                 if name in pages:
                     return getattr(self, pages[name])
-                view = zapi.queryMultiAdapter((self, request), name=name)
+                view = queryMultiAdapter((self, request), name=name)
                 if view is not None:
                     return view
 
@@ -351,8 +335,8 @@ class view(object):
         _context.action(
             discriminator = ('view', (for_, layer), name, self.provides),
             callable = handler,
-            args = ('provideAdapter',
-                    (for_, layer), self.provides, name, newclass,
+            args = ('registerAdapter',
+                    newclass, (for_, layer), self.provides, name,
                     _context.info),
             )
 

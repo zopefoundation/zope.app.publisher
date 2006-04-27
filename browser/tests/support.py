@@ -15,19 +15,18 @@
 
 $Id$
 """
+import zope.component
 from zope.interface import implements
+from zope.traversing.interfaces import IContainmentRoot
 
-from zope.app import zapi
 from zope.app.component.hooks import setSite
 from zope.app.component.interfaces import ISite
-from zope.app.traversing.interfaces import IContainmentRoot
-
 
 class Site:
     implements(ISite, IContainmentRoot)
 
     def getSiteManager(self):
-        return zapi.getGlobalSiteManager()
+        return zope.component.getGlobalSiteManager()
 
 site = Site()
 

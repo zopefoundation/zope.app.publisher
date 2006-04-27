@@ -18,9 +18,9 @@ This module contains the XMLRPCView.
 $Id$
 """
 import zope.interface
-import zope.app.location
-import zope.app.publisher.interfaces.xmlrpc
+import zope.location
 import zope.publisher.interfaces.xmlrpc
+import zope.app.publisher.interfaces.xmlrpc
 
 class XMLRPCView(object):
     """A base XML-RPC view that can be used as mix-in for XML-RPC views.""" 
@@ -35,7 +35,7 @@ class IMethodPublisher(zope.interface.Interface):
     """
 
 # Need to test new __parent__ attribute
-class MethodPublisher(XMLRPCView, zope.app.location.Location):
+class MethodPublisher(XMLRPCView, zope.location.Location):
     """Base class for very simple XML-RPC views that publish methods
 
     This class is meant to be more of an example than a standard base class. 
