@@ -5,9 +5,6 @@
 <interface
   interface="zope.app.publisher.interfaces.browser.IMenuItemType" />
 
-<interface
-  interface="zope.publisher.interfaces.browser.IBrowserSkinType" />
-
 <utility
     name="Browser Skins"
     component=".vocabulary.BrowserSkinsVocabulary"
