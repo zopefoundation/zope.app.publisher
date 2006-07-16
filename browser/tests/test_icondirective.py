@@ -68,13 +68,15 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
         defineCheckers()
         
     def test(self):
-        self.assertEqual(zapi.queryMultiAdapter((ob, request), name='zmi_icon'),
-                         None)
+        self.assertEqual(
+            zapi.queryMultiAdapter((ob, request), name='zmi_icon'),
+            None)
 
         import zope.app.publisher.browser.tests as p
         path = os.path.dirname(p.__file__)
         path = os.path.join(path, 'testfiles', 'test.gif')
 
+        # Configure the icon and make sure we can render the resulting view:
         xmlconfig(StringIO(template % (
             '''
             <browser:icon name="zmi_icon"
@@ -91,6 +93,25 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
             'width="16" height="16" border="0" />'
             % rname)
 
+        # Make sure that the title attribute works
+        xmlconfig(StringIO(template % (
+            '''
+            <browser:icon name="zmi_icon_w_title"
+                      for="zope.app.component.tests.views.IC"
+                      file="%s" title="click this!" />
+            ''' % path
+            )))
+
+        view = zapi.getMultiAdapter((ob, request), name='zmi_icon_w_title')
+        rname = 'zope-app-component-tests-views-IC-zmi_icon_w_title.gif'
+        self.assertEqual(
+            view(),
+            '<img src="http://127.0.0.1/@@/%s" alt="click this!" '
+            'width="16" height="16" border="0" />'
+            % rname)
+
+
+        # Make sure that the image was installed as a resource:
         resource = ProxyFactory(zapi.getAdapter(request, name=rname))
         self.assertRaises(Forbidden, getattr, resource, '_testData')
         resource = removeSecurityProxy(resource)

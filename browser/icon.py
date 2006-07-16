@@ -61,14 +61,14 @@ class IconViewFactory(object):
         return IconView(context, request, self.rname, self.alt)
 
 def IconDirective(_context, name, for_, file=None, resource=None,
-                  layer=IDefaultBrowserLayer, alt=None):
+                  layer=IDefaultBrowserLayer, title=None):
 
     iname = for_.getName()
 
-    if alt is None:
-        alt = iname
-        if IName.match(alt):
-            alt = alt[1:] # Remove leading 'I'
+    if title is None:
+        title = iname
+        if IName.match(title):
+            title = title[1:] # Remove leading 'I'
 
     if file is not None and resource is not None:
         raise ConfigurationError(
@@ -89,7 +89,7 @@ def IconDirective(_context, name, for_, file=None, resource=None,
             "attributes for resource directives must be specified"
             )
 
-    vfactory = IconViewFactory(resource, alt)
+    vfactory = IconViewFactory(resource, title)
 
     _context.action(
         discriminator = ('view', name, vfactory, layer),
