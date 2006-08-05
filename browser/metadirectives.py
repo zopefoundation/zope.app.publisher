@@ -568,7 +568,17 @@ class IAddMenuItemDirective(IMenuItem):
 
 # BBB 2006/02/18, to be removed after 12 months
 class ILayerDirective(Interface):
-    """Defines a browser layer
+    """ *BBB: DEPRECATED*
+
+    Creating layers via ZCML has been deprecated.  The
+    'browser:layer' directive will be removed in Zope 3.5.  Layers
+    are now interfaces extending
+    'zope.publisher.interfaces.browser.IBrowserRequest'.
+    They do not need further registration.
+
+    **Previous documentation**
+
+    Defines a browser layer
 
     You must either specify a `name` or an `interface`. If you specify the
     name, then a layer interface will be created for you based on the name and
@@ -608,7 +618,16 @@ class ILayerDirective(Interface):
 
 # BBB 2006/02/18, to be removed after 12 months
 class ISkinDirective(Interface):
-    """Defines a browser skin
+    """ *BBB: DEPRECATED*
+
+    Creating skins via ZCML has been deprecated.  The 'browser:skin'
+    directive will be removed in Zope 3.5.  Skins are now interfaces
+    extending 'zope.publisher.interfaces.browser.IBrowserRequest'.
+    They are registered using the 'interface' directive.
+
+    **Previous documentation**
+
+    Defines a browser skin
 
     If you do not specify an `interface`, then one will be automatically
     created for you based on the name using the layers as base interfaces.
