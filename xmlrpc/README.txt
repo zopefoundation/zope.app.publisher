@@ -109,7 +109,7 @@ credentials:
   HTTP/1.0 401 Unauthorized
   Content-Length: 126
   Content-Type: text/xml;charset=utf-8
-  WWW-Authenticate: basic realm='Zope'
+  WWW-Authenticate: basic realm="Zope"
   <BLANKLINE>
   <?xml version='1.0'?>
   <methodResponse>
@@ -229,7 +229,7 @@ as before, we will get an error if we don't supply credentials:
   HTTP/1.0 401 Unauthorized
   Content-Length: 126
   Content-Type: text/xml;charset=utf-8
-  WWW-Authenticate: basic realm='Zope'
+  WWW-Authenticate: basic realm="Zope"
   <BLANKLINE>
   <?xml version='1.0'?>
   <methodResponse>
