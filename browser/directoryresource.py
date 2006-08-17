@@ -58,7 +58,6 @@ class DirectoryResource(BrowserView, Resource):
         '.jpg':  ImageResourceFactory,
         '.pt':   PageTemplateResourceFactory,
         '.zpt':  PageTemplateResourceFactory,
-        '.html': PageTemplateResourceFactory,
         }
 
     default_factory = FileResourceFactory
