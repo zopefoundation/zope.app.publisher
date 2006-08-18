@@ -118,8 +118,6 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
         self.assert_(zapi.isinstance(image, FileResource))
         template = resource['test.pt']
         self.assert_(zapi.isinstance(template, PageTemplateResource))
-        file = resource['test.html']
-        self.assert_(zapi.isinstance(file, FileResource))
         file = resource['test.txt']
         self.assert_(zapi.isinstance(file, FileResource))
         file = resource['png']
