@@ -1,7 +1,6 @@
 <configure
    xmlns="http://namespaces.zope.org/zope"
-   xmlns:browser="http://namespaces.zope.org/browser"
-   xmlns:zcml="http://namespaces.zope.org/zcml">
+   xmlns:browser="http://namespaces.zope.org/browser">
 
 <interface
   interface="zope.app.publisher.interfaces.browser.IMenuItemType" />
@@ -13,7 +12,6 @@
 
 <!-- BBB 2006/02/18, to be removed after 12 months -->
 <browser:layer
-    zcml:condition="have deprecatedlayers"
     name="default"
     interface="zope.publisher.interfaces.browser.IDefaultBrowserLayer"
     bbb_aware="true"
