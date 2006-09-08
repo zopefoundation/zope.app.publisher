@@ -11,15 +11,11 @@
     />
 
 <!-- BBB 2006/02/18, to be removed after 12 months -->
-<configure
-    xmlns:zcml="http://namespaces.zope.org/zcml"
-    zcml:condition="have deprecatedlayers">
-  <browser:layer
-      name="default"
-      interface="zope.publisher.interfaces.browser.IDefaultBrowserLayer"
-      bbb_aware="true"
-      />
-</configure>
+<browser:layer
+    name="default"
+    interface="zope.publisher.interfaces.browser.IDefaultBrowserLayer"
+    bbb_aware="true"
+    />
 
 <class class="zope.publisher.browser.BrowserRequest">
   <allow

@@ -1,7 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:meta="http://namespaces.zope.org/meta"
-    xmlns:zcml="http://namespaces.zope.org/zcml">
+    xmlns:meta="http://namespaces.zope.org/meta">
 
   <meta:directives namespace="http://namespaces.zope.org/browser">
 
@@ -130,7 +129,6 @@
 
     <!-- BBB 2006/02/18, to be removed after 12 months -->
     <meta:directive
-        zcml:condition="have deprecatedlayers"
         name="layer"
         schema=".metadirectives.ILayerDirective"
         handler=".metaconfigure.layer"
@@ -138,7 +136,6 @@
 
     <!-- BBB 2006/02/18, to be removed after 12 months -->
     <meta:directive
-        zcml:condition="have deprecatedlayers"
         name="skin"
         schema=".metadirectives.ISkinDirective"
         handler=".metaconfigure.skin"

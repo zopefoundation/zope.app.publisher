@@ -25,7 +25,7 @@ from zope.interface.interface import InterfaceClass
 from zope.publisher.interfaces.browser import IBrowserRequest, IDefaultSkin
 from zope.publisher.interfaces.browser import IBrowserSkinType
 
-from zope.app import zapi
+from zope.app import zapi, layers, skins
 
 # referred to through ZCML
 from zope.app.publisher.browser.resourcemeta import resource
@@ -142,7 +142,6 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest,
 
     >>> warnings.showwarning = showwarning
     """
-    from zope.app import layers
     if name is not None and ',' in name:
         raise TypeError("Commas are not allowed in layer names.")
     if name is None and interface is None: 
@@ -287,7 +286,6 @@ def skin(_context, name=None, interface=None, layers=None):
     Enabling the warnings again:
     >>> warnings.showwarning = showwarning
     """
-    from zope.app import skins
     if name is None and interface is None: 
         raise ConfigurationError(
             "You must specify the 'name' or 'interface' attribute.")
