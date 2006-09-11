@@ -144,16 +144,20 @@ class MenuItemFactory(object):
 class menuItemsDirective(object):
     """Register several menu items for a particular menu."""
 
-    def __init__(self, _context, menu, for_, layer=IDefaultBrowserLayer):
+    def __init__(self, _context, menu, for_, layer=IDefaultBrowserLayer, permission=None):
         self.for_ = for_
         self.menuItemType = menu
         self.layer = layer
+        self.permission = permission
 
     def menuItem(self, _context, action, title, description=u'',
                  icon=None, filter=None, permission=None, extra=None, order=0):
 
         if filter is not None:
             filter = Engine.compile(filter)
+
+        if permission is None:
+            permission = self.permission
 
         if order == 0:
             order = _order_counter.get(self.for_, 1)
@@ -173,6 +177,9 @@ class menuItemsDirective(object):
 
         if filter is not None:
             filter = Engine.compile(filter)
+
+        if permission is None:
+            permission = self.permission
 
         if order == 0:
             order = _order_counter.get(self.for_, 1)
@@ -271,6 +278,6 @@ def addMenuItem(_context, title, description='', menu=None, for_=None,
     if menu == None:
         menu = AddMenu
 
-    return menuItemsDirective(_context, menu, for_, layer).menuItem(
+    return menuItemsDirective(_context, menu, for_, layer=layer).menuItem(
         _context, action, title, description, icon, filter,
         permission, extra, order)

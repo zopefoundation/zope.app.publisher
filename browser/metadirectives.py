@@ -424,6 +424,18 @@ class IMenuItemsDirective(Interface):
         required=False
         )
 
+    permission = Permission(
+        title=u"The permission needed access the item",
+        description=u"""
+        This can usually be inferred by the system, however, doing so
+        may be expensive. When displaying a menu, the system tries to
+        traverse to the URLs given in each action to determine whether
+        the url is accessible to the current user. This can be
+        avoided if the permission is given explicitly.""",
+        required=False
+        )
+
+
 class IMenuItem(Interface):
     """Common menu item configuration
     """

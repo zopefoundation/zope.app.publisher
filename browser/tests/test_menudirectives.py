@@ -22,11 +22,16 @@ from zope.interface import Interface, implements
 from zope.publisher.browser import TestRequest
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
+from zope.app.publisher.interfaces.browser import IBrowserMenu
 from zope.security.interfaces import Unauthorized, Forbidden
+import zope.component
+
+import zope.security
 
 from zope.app.testing.placelesssetup import PlacelessSetup
 
 import zope.app.publisher.browser
+
 
 template = """<configure
    xmlns='http://namespaces.zope.org/zope'
@@ -40,9 +45,15 @@ class I11(I1): pass
 class I12(I1): pass
 class I111(I11): pass
 
+
 class C1(object):
     implements(I1)
-            
+
+class I2(Interface): pass
+
+class C2(object):
+    implements(I2)
+
 class TestObject(object):
     implements(IBrowserPublisher, I111)
 
@@ -64,6 +75,25 @@ class IMyLayer(Interface):
 
 class IMySkin(IMyLayer, IDefaultBrowserLayer):
     pass
+
+
+class TestPermissions(PlacelessSetup, unittest.TestCase):
+
+    def setUp(self):
+        super(TestPermissions, self).setUp()
+        XMLConfig('meta.zcml', zope.app.publisher.browser)()
+        XMLConfig('meta.zcml', zope.security)()
+
+    def testMenuItemsPermission(self):
+        XMLConfig('tests/menus-permissions.zcml', zope.app.publisher.browser)()
+
+        menu = zope.component.getUtility(IBrowserMenu, 'test_id')
+        # This is a bit icky, but the menu hides too much stuff from us.
+        items = zope.component.getAdapters((C2(), TestRequest()),
+                                           menu.getMenuItemType())
+        item = list(items)[0][1]
+        self.assertEquals("zope.View", item.permission)
+
 
 class Test(PlacelessSetup, unittest.TestCase):
 
@@ -110,7 +140,7 @@ class Test(PlacelessSetup, unittest.TestCase):
 
     def testMenuItemWithLayer(self):
         XMLConfig('tests/menus.zcml', zope.app.publisher.browser)()
-        
+
         menu = zope.app.publisher.browser.menu.getMenu(
             'test_id', TestObject(), TestRequest())
         self.assertEqual(len(menu), 6)
@@ -123,10 +153,10 @@ class Test(PlacelessSetup, unittest.TestCase):
             'test_id', TestObject(), TestRequest(skin=IMySkin))
         self.assertEqual(len(menu), 8)
 
-
 def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(Test),
+        unittest.makeSuite(TestPermissions),
         ))
 
 if __name__=='__main__':
