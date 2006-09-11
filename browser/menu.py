@@ -57,7 +57,7 @@ class BrowserMenu(object):
         #
         # (1) Look at the interfaces and put the more specific menu entries
         #     to the front.
-        # (2) Sort unabigious entries by order and then by title.
+        # (2) Sort unambigious entries by order and then by title.
         ifaces = list(providedBy(removeSecurityProxy(object)).__iro__)
         result = [(ifaces.index(item._for or Interface),
             item.order, item.title, item) for item in result]
