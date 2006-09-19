@@ -278,3 +278,54 @@ Now, when we call it, we get a DateTime value
   >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
   >>> proxy.epoch()
   <DateTime u'19700101T01:00:01' at ...>
+
+Handling errors with the ServerProxy
+------------------------------------
+
+Our server proxy for functional testing also supports getting the original
+errors from Zope by not handling the errors in the publisher:
+
+
+  >>> class ExceptionDemo:
+  ...     def __init__(self, context, request):
+  ...         self.context = context
+  ...         self.request = request
+  ...
+  ...     def your_exception(self):
+  ...         raise Exception("Something went wrong!")
+
+Now we'll register it as a view:
+
+  >>> from zope.configuration import xmlconfig
+  >>> ignored = xmlconfig.string("""
+  ... <configure
+  ...     xmlns="http://namespaces.zope.org/zope"
+  ...     xmlns:xmlrpc="http://namespaces.zope.org/xmlrpc"
+  ...     >
+  ...   <!-- We only need to do this include in this example,
+  ...        Normally the include has already been done for us. -->
+  ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
+  ...
+  ...   <xmlrpc:view
+  ...       for="zope.app.folder.folder.IFolder"
+  ...       methods="your_exception"
+  ...       class="zope.app.publisher.xmlrpc.README.ExceptionDemo"
+  ...       permission="zope.ManageContent"
+  ...       />
+  ... </configure>
+  ... """)
+
+Now, when we call it, we get an XML-RPC fault:
+
+  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
+  >>> proxy.your_exception()
+  Traceback (most recent call last):
+  Fault: <Fault -1: 'Unexpected Zope exception: Exception: Something went wrong!'>
+
+We can also give the parameter `handleErrors` to have the errors not be
+handled:
+
+  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/", handleErrors=False)
+  >>> proxy.your_exception()
+  Traceback (most recent call last):
+  Exception: Something went wrong!
