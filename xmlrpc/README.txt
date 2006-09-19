@@ -60,66 +60,19 @@ Now, we'll add some items to the root folder:
 
 And call our xmlrpc method:
 
-  >>> print http(r"""
-  ... POST / HTTP/1.0
-  ... Authorization: Basic bWdyOm1ncnB3
-  ... Content-Length: 102
-  ... Content-Type: text/xml
-  ...
-  ... <?xml version='1.0'?>
-  ... <methodCall>
-  ... <methodName>contents</methodName>
-  ... <params>
-  ... </params>
-  ... </methodCall>
-  ... """)
-  HTTP/1.0 200 Ok
-  Content-Length: 208
-  Content-Type: text/xml;charset=utf-8
-  <BLANKLINE>
-  <?xml version='1.0'?>
-  <methodResponse>
-  <params>
-  <param>
-  <value><array><data>
-  <value><string>f1</string></value>
-  <value><string>f2</string></value>
-  </data></array></value>
-  </param>
-  </params>
-  </methodResponse>
-  <BLANKLINE>
-
+  >>> from zope.app.testing.xmlrpc import ServerProxy
+  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
+  >>> proxy.contents()
+  ['f1', 'f2']
 
 Note that we get an unauthorized error if we don't supply authentication
 credentials:
 
-  >>> print http(r"""
-  ... POST / HTTP/1.0
-  ... Content-Length: 102
-  ... Content-Type: text/xml
-  ...
-  ... <?xml version='1.0'?>
-  ... <methodCall>
-  ... <methodName>contents</methodName>
-  ... <params>
-  ... </params>
-  ... </methodCall>
-  ... """)
-  HTTP/1.0 401 Unauthorized
-  Content-Length: 126
-  Content-Type: text/xml;charset=utf-8
-  WWW-Authenticate: basic realm="Zope"
-  <BLANKLINE>
-  <?xml version='1.0'?>
-  <methodResponse>
-  <params>
-  <param>
-  <value><string></string></value>
-  </param>
-  </params>
-  </methodResponse>
-  <BLANKLINE>
+  >>> proxy = ServerProxy("http://localhost/")
+  >>> proxy.contents()
+  Traceback (most recent call last):
+  ProtocolError: <ProtocolError for localhost/: 401 401 Unauthorized>
+
 
 Named XML-RPC Views
 -------------------
@@ -182,64 +135,19 @@ as as a named view:
 
 Now, when we access the `contents`, we do so through the listing view:
 
-  >>> print http(r"""
-  ... POST /listing/ HTTP/1.0
-  ... Authorization: Basic bWdyOm1ncnB3
-  ... Content-Length: 102
-  ... Content-Type: text/xml
-  ...
-  ... <?xml version='1.0'?>
-  ... <methodCall>
-  ... <methodName>contents</methodName>
-  ... <params>
-  ... </params>
-  ... </methodCall>
-  ... """)
-  HTTP/1.0 200 Ok
-  Content-Length: 208
-  Content-Type: text/xml;charset=utf-8
-  <BLANKLINE>
-  <?xml version='1.0'?>
-  <methodResponse>
-  <params>
-  <param>
-  <value><array><data>
-  <value><string>f1</string></value>
-  <value><string>f2</string></value>
-  </data></array></value>
-  </param>
-  </params>
-  </methodResponse>
-  <BLANKLINE>
+  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/listing/")
+  >>> proxy.contents()
+  ['f1', 'f2']
+  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
+  >>> proxy.listing.contents()
+  ['f1', 'f2']
 
 as before, we will get an error if we don't supply credentials:
 
-  >>> print http(r"""
-  ... POST /listing/ HTTP/1.0
-  ... Content-Length: 102
-  ... Content-Type: text/xml
-  ...
-  ... <?xml version='1.0'?>
-  ... <methodCall>
-  ... <methodName>contents</methodName>
-  ... <params>
-  ... </params>
-  ... </methodCall>
-  ... """)
-  HTTP/1.0 401 Unauthorized
-  Content-Length: 126
-  Content-Type: text/xml;charset=utf-8
-  WWW-Authenticate: basic realm="Zope"
-  <BLANKLINE>
-  <?xml version='1.0'?>
-  <methodResponse>
-  <params>
-  <param>
-  <value><string></string></value>
-  </param>
-  </params>
-  </methodResponse>
-  <BLANKLINE>
+  >>> proxy = ServerProxy("http://localhost/listing/")
+  >>> proxy.contents()
+  Traceback (most recent call last):
+  ProtocolError: <ProtocolError for localhost/listing/: 401 401 Unauthorized>
 
 Parameters
 ----------
@@ -278,34 +186,9 @@ Now we'll register it as a view:
 Then we can issue a remote procedure call with a parameter and get
 back, surprise!, the sum:
 
-  >>> print http(r"""
-  ... POST / HTTP/1.0
-  ... Authorization: Basic bWdyOm1ncnB3
-  ... Content-Length: 159
-  ... Content-Type: text/xml
-  ...
-  ... <?xml version='1.0'?>
-  ... <methodCall>
-  ... <methodName>add</methodName>
-  ... <params>
-  ... <param><int>20</int></param>
-  ... <param><int>22</int></param>
-  ... </params>
-  ... </methodCall>
-  ... """, handle_errors=False)
-  HTTP/1.0 200 Ok
-  Content-Length: 122
-  Content-Type: text/xml;charset=utf-8
-  <BLANKLINE>
-  <?xml version='1.0'?>
-  <methodResponse>
-  <params>
-  <param>
-  <value><int>42</int></value>
-  </param>
-  </params>
-  </methodResponse>
-  <BLANKLINE>
+  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
+  >>> proxy.add(20, 22)
+  42
 
 Faults
 ------
@@ -346,39 +229,11 @@ Now we'll register it as a view:
 
 Now, when we call it, we get a proper XML-RPC fault:
 
-  >>> print http(r"""
-  ... POST / HTTP/1.0
-  ... Authorization: Basic bWdyOm1ncnB3
-  ... Content-Length: 104
-  ... Content-Type: text/xml
-  ...
-  ... <?xml version='1.0'?>
-  ... <methodCall>
-  ... <methodName>your_fault</methodName>
-  ... <params>
-  ... </params>
-  ... </methodCall>
-  ... """, handle_errors=False)
-  HTTP/1.0 200 Ok
-  Content-Length: 272
-  Content-Type: text/xml;charset=utf-8
-  <BLANKLINE>
-  <?xml version='1.0'?>
-  <methodResponse>
-  <fault>
-  <value><struct>
-  <member>
-  <name>faultCode</name>
-  <value><int>42</int></value>
-  </member>
-  <member>
-  <name>faultString</name>
-  <value><string>It's your fault!</string></value>
-  </member>
-  </struct></value>
-  </fault>
-  </methodResponse>
-  <BLANKLINE>
+  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
+  >>> proxy.your_fault()
+  Traceback (most recent call last):
+  Fault: <Fault 42: "It's your fault!">
+
 
 DateTime values
 ---------------
@@ -420,29 +275,57 @@ Now we'll register it as a view:
 
 Now, when we call it, we get a DateTime value
 
-  >>> print http(r"""
-  ... POST / HTTP/1.0
-  ... Authorization: Basic bWdyOm1ncnB3
-  ... Content-Length: 100
-  ... Content-Type: text/xml
+  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
+  >>> proxy.epoch()
+  <DateTime u'19700101T01:00:01' at ...>
+
+Handling errors with the ServerProxy
+------------------------------------
+
+Our server proxy for functional testing also supports getting the original
+errors from Zope by not handling the errors in the publisher:
+
+
+  >>> class ExceptionDemo:
+  ...     def __init__(self, context, request):
+  ...         self.context = context
+  ...         self.request = request
   ...
-  ... <?xml version='1.0'?>
-  ... <methodCall>
-  ... <methodName>epoch</methodName>
-  ... <params>
-  ... </params>
-  ... </methodCall>
-  ... """, handle_errors=False)
-  HTTP/1.0 200 Ok
-  Content-Length: 163
-  Content-Type: text/xml;charset=utf-8
-  <BLANKLINE>
-  <?xml version='1.0'?>
-  <methodResponse>
-  <params>
-  <param>
-  <value><dateTime.iso8601>19700101T01:00:01</dateTime.iso8601></value>
-  </param>
-  </params>
-  </methodResponse>
-  <BLANKLINE>
+  ...     def your_exception(self):
+  ...         raise Exception("Something went wrong!")
+
+Now we'll register it as a view:
+
+  >>> from zope.configuration import xmlconfig
+  >>> ignored = xmlconfig.string("""
+  ... <configure
+  ...     xmlns="http://namespaces.zope.org/zope"
+  ...     xmlns:xmlrpc="http://namespaces.zope.org/xmlrpc"
+  ...     >
+  ...   <!-- We only need to do this include in this example,
+  ...        Normally the include has already been done for us. -->
+  ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
+  ...
+  ...   <xmlrpc:view
+  ...       for="zope.app.folder.folder.IFolder"
+  ...       methods="your_exception"
+  ...       class="zope.app.publisher.xmlrpc.README.ExceptionDemo"
+  ...       permission="zope.ManageContent"
+  ...       />
+  ... </configure>
+  ... """)
+
+Now, when we call it, we get an XML-RPC fault:
+
+  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
+  >>> proxy.your_exception()
+  Traceback (most recent call last):
+  Fault: <Fault -1: 'Unexpected Zope exception: Exception: Something went wrong!'>
+
+We can also give the parameter `handleErrors` to have the errors not be
+handled:
+
+  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/", handleErrors=False)
+  >>> proxy.your_exception()
+  Traceback (most recent call last):
+  Exception: Something went wrong!
