@@ -277,7 +277,7 @@ Now, when we call it, we get a DateTime value
 
   >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
   >>> proxy.epoch()
-  <DateTime ...'19700101T01:00:01' at ...>
+  <DateTime u'19700101T01:00:01' at <SOME ADDRESS>>
 
 Handling errors with the ServerProxy
 ------------------------------------

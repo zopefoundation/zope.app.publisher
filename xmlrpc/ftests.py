@@ -15,10 +15,15 @@
 
 $Id$
 """
+import re
+
+import zope.component
 import zope.interface
-import zope.app.folder.folder
 import zope.publisher.interfaces.xmlrpc
-from zope.app.testing import ztapi, functional, setup
+from zope.testing import renormalizing
+
+import zope.app.folder.folder
+from zope.app.testing import functional, setup
 
 def setUp(test):
     setup.setUpTestAsModule(test, 'zope.app.publisher.xmlrpc.README')
@@ -31,24 +36,22 @@ def tearDown(test):
     # requires the object that was registered and we don't have that handy.
     # (OK, we could get it if we want. Maybe later.)
 
-    ztapi.provideView(zope.app.folder.folder.IFolder,
-                        zope.publisher.interfaces.xmlrpc.IXMLRPCRequest,
-                        zope.interface,
-                        'contents',
-                        None,
-                        )
-    ztapi.provideView(zope.app.folder.folder.IFolder,
-                        zope.publisher.interfaces.xmlrpc.IXMLRPCRequest,
-                        zope.interface,
-                        'contents',
-                        None,
-                        )
-    
+    zope.component.provideAdapter(None, (
+        zope.app.folder.folder.IFolder,
+        zope.publisher.interfaces.xmlrpc.IXMLRPCRequest
+        ), zope.interface, 'contents')
+
     setup.tearDownTestAsModule(test)
 
 def test_suite():
+    checker = renormalizing.RENormalizing((
+        (re.compile('<DateTime \''), '<DateTime u\''),
+        (re.compile('at [-0-9a-fA-F]+'), 'at <SOME ADDRESS>'),
+        ))
     return functional.FunctionalDocFileSuite(
-        'README.txt', setUp=setUp, tearDown=tearDown)
+        'README.txt', setUp=setUp, tearDown=tearDown,
+        checker=checker
+        )
 
 if __name__ == '__main__':
     import unittest
