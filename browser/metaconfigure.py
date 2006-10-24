@@ -15,6 +15,8 @@
 
 $Id$
 """
+__docformat__ = 'restructuredtext'
+
 import warnings
 from zope.component.interfaces import IDefaultViewName
 from zope.component.interface import provideInterface
@@ -52,7 +54,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest,
     >>> class Info(object):
     ...     file = u'doctest'
     ...     line = 1
-    ... 
+    ...
     >>> class Context(object):
     ...     info = Info()
     ...     def __init__(self): self.actions = []
@@ -76,7 +78,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest,
 
     Possibility 2: Providing a custom base interface
     ------------------------------------------------
-    
+
     >>> class BaseLayer(IBrowserRequest):
     ...     pass
     >>> context = Context()
@@ -145,7 +147,7 @@ def layer(_context, name=None, interface=None, base=IBrowserRequest,
     from zope.app import layers
     if name is not None and ',' in name:
         raise TypeError("Commas are not allowed in layer names.")
-    if name is None and interface is None: 
+    if name is None and interface is None:
         raise ConfigurationError(
             "You must specify the 'name' or 'interface' attribute.")
     if interface and not interface.extends(IBrowserRequest):
@@ -222,7 +224,7 @@ def skin(_context, name=None, interface=None, layers=None):
     >>> class Info(object):
     ...     file = u'doctest'
     ...     line = 1
-    ... 
+    ...
     >>> class Context(object):
     ...     info = Info()
     ...     def __init__(self): self.actions = []
@@ -233,7 +235,7 @@ def skin(_context, name=None, interface=None, layers=None):
 
     Possibility 1: The Old Way
     --------------------------
-    
+
     >>> context = Context()
     >>> skin(context, u'skin1', layers=[Layer1, Layer2])
     >>> iface = context.actions[3]['args'][1]
@@ -288,7 +290,7 @@ def skin(_context, name=None, interface=None, layers=None):
     >>> warnings.showwarning = showwarning
     """
     from zope.app import skins
-    if name is None and interface is None: 
+    if name is None and interface is None:
         raise ConfigurationError(
             "You must specify the 'name' or 'interface' attribute.")
 
@@ -315,7 +317,7 @@ def skin(_context, name=None, interface=None, layers=None):
                 discriminator = None,
                 callable = provideInterface,
                 args = (layer.getName(), layer, ILayer, _context.info)
-            )    
+            )
 
     else:
         path = interface.__module__ + '.' + interface.getName()
@@ -337,7 +339,7 @@ def skin(_context, name=None, interface=None, layers=None):
                 callable = provideInterface,
                 args = (name, interface, IBrowserSkinType, _context.info)
                 )
-        
+
         name = path
 
     # Register the skin interface as an interface
@@ -368,7 +370,7 @@ def setDefaultSkin(name, info=''):
     >>> setDefaultSkin('Skin1')
     >>> adapters = zapi.getSiteManager().adapters
 
-	Lookup the default skin for a request that has the 
+	Lookup the default skin for a request that has the
 
     >>> adapters.lookup((IBrowserRequest,), IDefaultSkin, '') is Skin1
     True
