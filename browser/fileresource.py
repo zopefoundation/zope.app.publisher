@@ -62,6 +62,8 @@ class FileResource(BrowserView, Resource):
         request = self.request
         response = request.response
 
+        setCacheControl(response)
+
         # HTTP If-Modified-Since header handling. This is duplicated
         # from OFS.Image.Image - it really should be consolidated
         # somewhere...
@@ -88,7 +90,6 @@ class FileResource(BrowserView, Resource):
         response.setHeader('Content-Type', file.content_type)
         response.setHeader('Last-Modified', file.lmh)
 
-        setCacheControl(response)
         f = open(file.path,'rb')
         data = f.read()
         f.close()
