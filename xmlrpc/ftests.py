@@ -24,6 +24,7 @@ from zope.testing import renormalizing
 
 import zope.app.folder.folder
 from zope.app.testing import functional, setup
+from zope.app.publisher.testing import AppPublisherLayer
 
 def setUp(test):
     setup.setUpTestAsModule(test, 'zope.app.publisher.xmlrpc.README')
@@ -48,10 +49,12 @@ def test_suite():
         (re.compile('<DateTime \''), '<DateTime u\''),
         (re.compile('at [-0-9a-fA-F]+'), 'at <SOME ADDRESS>'),
         ))
-    return functional.FunctionalDocFileSuite(
+    suite = functional.FunctionalDocFileSuite(
         'README.txt', setUp=setUp, tearDown=tearDown,
         checker=checker
         )
+    suite.layer = AppPublisherLayer
+    return suite
 
 if __name__ == '__main__':
     import unittest
