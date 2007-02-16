@@ -31,11 +31,13 @@ IName = re.compile('I[A-Z][a-z]')
 
 class IconView(object):
 
-    def __init__(self, context, request, rname, alt):
+    def __init__(self, context, request, rname, alt, width, height):
         self.context = context
         self.request = request
         self.rname = rname
         self.alt = alt
+        self.width = width
+        self.height = height
 
     def __call__(self):
         # The context is important here, since it becomes the parent of the
@@ -43,8 +45,8 @@ class IconView(object):
         resource = getResource(self.context, self.rname, self.request)
         src = resource()
 
-        return ('<img src="%s" alt="%s" width="16" height="16" border="0" />'
-                % (src, self.alt))
+        return ('<img src="%s" alt="%s" width="%s" height="%s" border="0" />'
+                % (src, self.alt, self.width, self.height))
 
     def url(self):
         resource = getResource(self.context, self.rname, self.request)
@@ -53,15 +55,19 @@ class IconView(object):
 
 class IconViewFactory(object):
 
-    def __init__(self, rname, alt):
+    def __init__(self, rname, alt, width, height):
         self.rname = rname
         self.alt = alt
+        self.width = width
+        self.height = height
 
     def __call__(self, context, request):
-        return IconView(context, request, self.rname, self.alt)
+        return IconView(context, request, self.rname, self.alt,
+                       self.width, self.height)
 
 def IconDirective(_context, name, for_, file=None, resource=None,
-                  layer=IDefaultBrowserLayer, title=None):
+                  layer=IDefaultBrowserLayer, title=None,
+                  width=16, height=16):
 
     iname = for_.getName()
 
@@ -89,7 +95,7 @@ def IconDirective(_context, name, for_, file=None, resource=None,
             "attributes for resource directives must be specified"
             )
 
-    vfactory = IconViewFactory(resource, title)
+    vfactory = IconViewFactory(resource, title, width, height)
 
     _context.action(
         discriminator = ('view', name, vfactory, layer),

@@ -727,3 +727,21 @@ class IIconDirective(Interface):
         directive. Defaults to "default".""",
         required=False
         )
+
+    width = Int(
+        title=u"The width of the icon.",
+        description=u"""
+        The width will be used for the <img width="..." />
+        attribute. Defaults to 16.""",
+        required=False,
+        default=16
+        )
+    
+    height = Int(
+        title=u"The height of the icon.",
+        description=u"""
+        The height will be used for the <img height="..." />
+        attribute. Defaults to 16.""",
+        required=False,
+        default=16
+        )

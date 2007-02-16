@@ -110,6 +110,25 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
             'width="16" height="16" border="0" />'
             % rname)
 
+        # Make sure that the width and height attributes work
+        xmlconfig(StringIO(template % (
+            '''
+            <browser:icon name="zmi_icon_w_width_and_height"
+                      for="zope.app.component.tests.views.IC"
+                      file="%s"
+                      width="20" height="12" />
+            ''' % path
+            )))
+
+        view = zapi.getMultiAdapter((ob, request),
+                                    name='zmi_icon_w_width_and_height')
+        rname = ('zope-app-component-tests-views-IC-'
+                 'zmi_icon_w_width_and_height.gif')
+        self.assertEqual(
+            view(),
+            '<img src="http://127.0.0.1/@@/%s" alt="IC" '
+            'width="20" height="12" border="0" />'
+            % rname)
 
         # Make sure that the image was installed as a resource:
         resource = ProxyFactory(zapi.getAdapter(request, name=rname))
