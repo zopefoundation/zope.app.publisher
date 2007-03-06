@@ -144,7 +144,11 @@ class MenuItemFactory(object):
 class menuItemsDirective(object):
     """Register several menu items for a particular menu."""
 
-    def __init__(self, _context, menu, for_, layer=IDefaultBrowserLayer, permission=None):
+    menuItemClass = BrowserMenuItem
+    subMenuItemClass = BrowserSubMenuItem
+
+    def __init__(self, _context, menu, for_, layer=IDefaultBrowserLayer,
+                 permission=None):
         self.for_ = for_
         self.menuItemType = menu
         self.layer = layer
@@ -164,7 +168,7 @@ class menuItemsDirective(object):
             _order_counter[self.for_] = order + 1
 
         factory = MenuItemFactory(
-            BrowserMenuItem,
+            self.menuItemClass,
             title=title, description=description, icon=icon, action=action,
             filter=filter, permission=permission, extra=extra, order=order,
             _for=self.for_)
@@ -186,7 +190,7 @@ class menuItemsDirective(object):
             _order_counter[self.for_] = order + 1
 
         factory = MenuItemFactory(
-            BrowserSubMenuItem,
+            self.subMenuItemClass,
             title=title, description=description, icon=icon, action=action,
             filter=filter, permission=permission, extra=extra, order=order,
             _for=self.for_, submenuId=submenu)
