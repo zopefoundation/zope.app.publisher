@@ -39,6 +39,9 @@ class PageTemplateResource(BrowserView, Resource):
 
     def __call__(self):
         pt = self.context
+        response = self.request.response
+        if not response.getHeader("Content-Type"):
+            response.setHeader("Content-Type", pt.content_type)
         return pt(self.request)
 
 class PageTemplateResourceFactory(object):

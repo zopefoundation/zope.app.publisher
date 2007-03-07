@@ -30,11 +30,14 @@ from zope.app.publisher.browser.pagetemplateresource import \
      PageTemplateResourceFactory
 import zope.app.publisher.browser.tests as p
 
+
 test_directory = os.path.dirname(p.__file__)
+
 
 checker = NamesChecker(
     ('__call__', 'request', 'publishTraverse')
     )
+
 
 class Test(PlacelessSetup, TestCase):
 
@@ -56,10 +59,14 @@ class Test(PlacelessSetup, TestCase):
         request = TestRequest(test_data=test_data)
         factory = PageTemplateResourceFactory(path, checker, 'testresource.pt')
         resource = factory(request)
-        self.assert_(resource(), test_data)        
+        self.assert_(resource(), test_data)
+        self.assertEquals('text/html',
+                          request.response.getHeader('Content-Type'))
+
 
 def test_suite():
     return makeSuite(Test)
+
 
 if __name__=='__main__':
     main(defaultTest='test_suite')
