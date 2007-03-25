@@ -17,14 +17,13 @@ $Id$
 """
 __docformat__ = 'restructuredtext'
 
+import zope.component
 import zope.schema
 from zope.component.interfaces import ComponentLookupError
 from zope.configuration.exceptions import ConfigurationError
 from zope.configuration.fields import GlobalObject
 from zope.interface.interfaces import IInterface
 from zope.app.publisher.interfaces.browser import IMenuItemType
-
-from zope.app import zapi
 
 
 class MenuField(GlobalObject):
@@ -89,7 +88,7 @@ class MenuField(GlobalObject):
         name = str(u.strip())
 
         try:
-            value = zapi.queryUtility(IMenuItemType, name)
+            value = zope.component.queryUtility(IMenuItemType, name)
         except ComponentLookupError:
             # The component architecture is not up and running.
             pass

@@ -18,6 +18,7 @@ $Id$
 __docformat__ = 'restructuredtext'
 
 import warnings
+from zope import component
 from zope.component.interfaces import IDefaultViewName
 from zope.component.interface import provideInterface
 from zope.component.zcml import handler
@@ -26,8 +27,6 @@ from zope.interface import directlyProvides
 from zope.interface.interface import InterfaceClass
 from zope.publisher.interfaces.browser import IBrowserRequest, IDefaultSkin
 from zope.publisher.interfaces.browser import IBrowserSkinType
-
-from zope.app import zapi
 
 # referred to through ZCML
 from zope.app.publisher.browser.resourcemeta import resource
@@ -368,14 +367,14 @@ def setDefaultSkin(name, info=''):
 
     >>> ztapi.provideUtility(IBrowserSkinType, Skin1, 'Skin1')
     >>> setDefaultSkin('Skin1')
-    >>> adapters = zapi.getSiteManager().adapters
+    >>> adapters = component.getSiteManager().adapters
 
 	Lookup the default skin for a request that has the
 
     >>> adapters.lookup((IBrowserRequest,), IDefaultSkin, '') is Skin1
     True
     """
-    skin = zapi.getUtility(IBrowserSkinType, name)
+    skin = component.getUtility(IBrowserSkinType, name)
     handler('registerAdapter',
             skin, (IBrowserRequest,), IDefaultSkin, '', info),
 

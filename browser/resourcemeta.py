@@ -24,8 +24,6 @@ from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.security.checker import CheckerPublic, NamesChecker
 from zope.component.zcml import handler
 
-from zope.app import zapi
-
 from fileresource import FileResourceFactory, ImageResourceFactory
 from pagetemplateresource import PageTemplateResourceFactory
 from directoryresource import DirectoryResourceFactory

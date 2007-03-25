@@ -19,6 +19,7 @@ import os
 from StringIO import StringIO
 from unittest import TestCase, main, makeSuite
 
+from zope import component
 from zope.configuration.exceptions import ConfigurationError
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.interface import implements
@@ -29,7 +30,6 @@ from zope.security.proxy import removeSecurityProxy
 from zope.traversing.interfaces import IContainmentRoot
 
 import zope.app.publisher.browser
-from zope.app import zapi
 from zope.app.component.tests.views import IC
 from zope.app.component.interfaces import ISite
 from zope.app.publisher.browser.tests import support
@@ -69,7 +69,7 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
         
     def test(self):
         self.assertEqual(
-            zapi.queryMultiAdapter((ob, request), name='zmi_icon'),
+            component.queryMultiAdapter((ob, request), name='zmi_icon'),
             None)
 
         import zope.app.publisher.browser.tests as p
@@ -85,7 +85,7 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
             ''' % path
             )))
 
-        view = zapi.getMultiAdapter((ob, request), name='zmi_icon')
+        view = component.getMultiAdapter((ob, request), name='zmi_icon')
         rname = 'zope-app-component-tests-views-IC-zmi_icon.gif'
         self.assertEqual(
             view(),
@@ -102,7 +102,8 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
             ''' % path
             )))
 
-        view = zapi.getMultiAdapter((ob, request), name='zmi_icon_w_title')
+        view = component.getMultiAdapter(
+            (ob, request), name='zmi_icon_w_title')
         rname = 'zope-app-component-tests-views-IC-zmi_icon_w_title.gif'
         self.assertEqual(
             view(),
@@ -120,8 +121,8 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
             ''' % path
             )))
 
-        view = zapi.getMultiAdapter((ob, request),
-                                    name='zmi_icon_w_width_and_height')
+        view = component.getMultiAdapter((ob, request),
+                                         name='zmi_icon_w_width_and_height')
         rname = ('zope-app-component-tests-views-IC-'
                  'zmi_icon_w_width_and_height.gif')
         self.assertEqual(
@@ -131,14 +132,14 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
             % rname)
 
         # Make sure that the image was installed as a resource:
-        resource = ProxyFactory(zapi.getAdapter(request, name=rname))
+        resource = ProxyFactory(component.getAdapter(request, name=rname))
         self.assertRaises(Forbidden, getattr, resource, '_testData')
         resource = removeSecurityProxy(resource)
         self.assertEqual(resource._testData(), open(path, 'rb').read())
 
     def testResource(self):
         self.assertEqual(
-            zapi.queryMultiAdapter((ob, request), name='zmi_icon'), None)
+            component.queryMultiAdapter((ob, request), name='zmi_icon'), None)
 
         import zope.app.publisher.browser.tests as p
         path = os.path.dirname(p.__file__)
@@ -154,7 +155,7 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
             ''' % path
             )))
 
-        view = zapi.getMultiAdapter((ob, request), name='zmi_icon')
+        view = component.getMultiAdapter((ob, request), name='zmi_icon')
         rname = "zmi_icon_res"
         self.assertEqual(
             view(),
@@ -162,7 +163,7 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
             'height="16" border="0" />'
             % rname)
 
-        resource = ProxyFactory(zapi.getAdapter(request, name=rname))
+        resource = ProxyFactory(component.getAdapter(request, name=rname))
 
         self.assertRaises(Forbidden, getattr, resource, '_testData')
         resource = removeSecurityProxy(resource)
@@ -170,7 +171,7 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
 
     def testResourceErrors(self):
         self.assertEqual(
-            zapi.queryMultiAdapter((ob, request), name='zmi_icon'), None)
+            component.queryMultiAdapter((ob, request), name='zmi_icon'), None)
 
         import zope.app.publisher.browser.tests as p
         path = os.path.dirname(p.__file__)

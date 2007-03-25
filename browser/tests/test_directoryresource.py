@@ -20,12 +20,11 @@ from unittest import TestCase, main, makeSuite
 
 from zope.publisher.interfaces import NotFound
 from zope.proxy import isProxy
-from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import TestRequest
+from zope.security import proxy
 from zope.security.checker import NamesChecker, ProxyFactory
 from zope.interface import implements
 
-from zope.app import zapi
 from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.app.publisher.browser.directoryresource import \
      DirectoryResourceFactory, DirectoryResource
@@ -104,7 +103,7 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
         file = files['test.gif']
         self.assertEquals(file(), 'http://127.0.0.1/@@/test_files/test.gif')
         subdir = files['subdir']
-        self.assert_(zapi.isinstance(subdir, DirectoryResource))
+        self.assert_(proxy.isinstance(subdir, DirectoryResource))
         file = subdir['test.gif']
         self.assertEquals(file(),
                           'http://127.0.0.1/@@/test_files/subdir/test.gif')
@@ -115,13 +114,13 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
         resource = DirectoryResourceFactory(path, checker, 'files')(request)
 
         image = resource['test.gif']
-        self.assert_(zapi.isinstance(image, FileResource))
+        self.assert_(proxy.isinstance(image, FileResource))
         template = resource['test.pt']
-        self.assert_(zapi.isinstance(template, PageTemplateResource))
+        self.assert_(proxy.isinstance(template, PageTemplateResource))
         file = resource['test.txt']
-        self.assert_(zapi.isinstance(file, FileResource))
+        self.assert_(proxy.isinstance(file, FileResource))
         file = resource['png']
-        self.assert_(zapi.isinstance(file, FileResource))
+        self.assert_(proxy.isinstance(file, FileResource))
 
 def test_suite():
     return makeSuite(Test)
