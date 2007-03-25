@@ -50,7 +50,7 @@ def test_suite():
         (re.compile('at [-0-9a-fA-F]+'), 'at <SOME ADDRESS>'),
         ))
     suite = functional.FunctionalDocFileSuite(
-        'README.txt', setUp=setUp, tearDown=tearDown,
+        '../README.txt', setUp=setUp, tearDown=tearDown,
         checker=checker
         )
     suite.layer = AppPublisherLayer
