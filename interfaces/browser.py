@@ -15,7 +15,7 @@
 
 $Id$
 """
-from zope.app.i18n import ZopeMessageFactory as _
+from zope.app.publisher.i18n import ZopeMessageFactory as _
 from zope.interface import Interface, directlyProvides
 from zope.interface.interfaces import IInterface
 from zope.schema import TextLine, Text, URI, Int
