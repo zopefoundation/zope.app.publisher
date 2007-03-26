@@ -17,7 +17,6 @@ $Id$
 """
 
 from zope.interface import implements
-from zope.security.proxy import Proxy
 from zope.publisher.interfaces import NotFound
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IBrowserPublisher

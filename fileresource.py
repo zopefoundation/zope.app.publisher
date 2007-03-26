@@ -16,7 +16,6 @@
 $Id$
 """
 import os
-import posixpath
 from time import time
 
 from zope.contenttype import guess_content_type

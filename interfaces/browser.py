@@ -18,7 +18,7 @@ $Id$
 from zope.app.i18n import ZopeMessageFactory as _
 from zope.interface import Interface, directlyProvides
 from zope.interface.interfaces import IInterface
-from zope.schema import TextLine, Text, Choice, URI, Int, InterfaceField
+from zope.schema import TextLine, Text, URI, Int
 
 ##############################################################################
 # BBB 2006/04/03 - to be removed after 12 months

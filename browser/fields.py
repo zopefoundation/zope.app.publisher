@@ -22,7 +22,6 @@ import zope.schema
 from zope.component.interfaces import ComponentLookupError
 from zope.configuration.exceptions import ConfigurationError
 from zope.configuration.fields import GlobalObject
-from zope.interface.interfaces import IInterface
 from zope.app.publisher.interfaces.browser import IMenuItemType
 
 

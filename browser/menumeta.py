@@ -19,7 +19,6 @@ import zope.component
 from zope.configuration.exceptions import ConfigurationError
 from zope.interface.interface import InterfaceClass
 from zope.interface import Interface
-from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.security.checker import InterfaceChecker, CheckerPublic
 from zope.component.interface import provideInterface

@@ -18,7 +18,6 @@ $Id$
 import os
 
 from zope.component import queryMultiAdapter
-from zope.component.interfaces import ComponentLookupError, IDefaultViewName
 from zope.component.interface import provideInterface
 from zope.component.zcml import handler
 from zope.interface import implements, classImplements, Interface

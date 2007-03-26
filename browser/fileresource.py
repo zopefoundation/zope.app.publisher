@@ -17,7 +17,6 @@ $Id$
 """
 
 import time
-from zope.security.proxy import Proxy
 from zope.interface import implements
 from zope.datetime import time as timeFromDateTimeString
 from zope.publisher.interfaces import NotFound
