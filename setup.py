@@ -3,7 +3,7 @@ import os
 from setuptools import setup, find_packages, Extension
 
 setup(name='zope.app.publisher',
-      version='0.1',
+      version = '3.4.0b1',
       url='http://svn.zope.org/zope.app.publisher',
       author='Zope Corporation and Contributors',
       author_email='zope3-dev@zope.org',
