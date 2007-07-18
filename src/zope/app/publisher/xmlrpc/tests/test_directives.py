@@ -77,8 +77,13 @@ class DirectivesTest(PlacelessSetup, unittest.TestCase):
                           "xmlrpc_error.zcml", xmlrpc.tests)
 
     def testNoPermission(self):
+        xmlconfig.file("xmlrpc_noperm.zcml", xmlrpc.tests)
+        v = component.getMultiAdapter((ob, request), name='index')
+        self.assertEqual(v.index(), 'V1 here')
+
+    def test_no_name_no_permission(self):
         self.assertRaises(ConfigurationError, xmlconfig.file,
-                          "xmlrpc_noperm.zcml", xmlrpc.tests)
+                          "xmlrpc_nonamenoperm.zcml", xmlrpc.tests)
 
     def test_no_name(self):
         xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)

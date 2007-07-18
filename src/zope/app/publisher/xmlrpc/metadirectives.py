@@ -58,16 +58,16 @@ class IViewDirective(zope.interface.Interface):
         the names defined by the given methods or interfaces will be
         under the given permission.
 
-        If a name is not given for the view, then, this option is
-        required and the the given permission is required to call the
-        individual views defined by the given interface and methods.
+        If a name is not given for the view, then, this option is required and
+        the given permission is required to call the individual views defined
+        by the given interface and methods.
 
         (See the name attribute.)
 
         If no permission is given, then permissions should be declared
         for the view using other means, such as the class directive.
         """,
-        required=True)
+        required=False)
 
     name = zope.schema.TextLine(
         title=u"The name of the view.",

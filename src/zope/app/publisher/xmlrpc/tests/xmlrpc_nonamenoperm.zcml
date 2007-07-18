@@ -5,7 +5,6 @@
   <include package="zope.app.publisher.xmlrpc" file="meta.zcml"/>
 
   <xmlrpc:view
-      name="index"
       class="zope.app.component.tests.views.V1"
       for="zope.app.component.tests.views.IC"
       />

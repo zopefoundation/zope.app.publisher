@@ -28,6 +28,15 @@
       login="mgr"
       password="mgrpw" />
 
+  <!-- A user that only has zope.View -->
+  <principal 
+      id="zope.user"
+      title="User"
+      login="usr"
+      password="usrpw"
+      />
+  <grant permission="zope.View" principal="zope.user" />
+
   <!-- Bootstrap principal used to make local grant to the principal above -->
   <principal
       id="zope.globalmgr"

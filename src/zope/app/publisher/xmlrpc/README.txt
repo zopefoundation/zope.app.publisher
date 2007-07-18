@@ -279,6 +279,63 @@ Now, when we call it, we get a DateTime value
   >>> proxy.epoch()
   <DateTime u'19700101T01:00:01' at -4bcac114>
 
+Protecting XML/RPC views with class-based permissions
+-----------------------------------------------------
+
+When setting up an XML/RPC view with no permission, the permission check is
+deferred to the class that provides the view's implementation:
+
+  >>> class ProtectedView(object):
+  ...     def public(self):
+  ...         return u'foo'
+  ...     def protected(self):
+  ...         return u'bar'
+
+  >>> from zope.configuration import xmlconfig
+  >>> ignored = xmlconfig.string("""
+  ... <configure
+  ...     xmlns="http://namespaces.zope.org/zope"
+  ...     xmlns:xmlrpc="http://namespaces.zope.org/xmlrpc"
+  ...     >
+  ...   <!-- We only need to do this include in this example,
+  ...        Normally the include has already been done for us. -->
+  ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
+  ...   <include package="zope.app.component" file="meta.zcml" />
+  ...
+  ...   <class class="zope.app.publisher.xmlrpc.README.ProtectedView">
+  ...       <require permission="zope.ManageContent"
+  ...           attributes="protected" />
+  ...       <allow attributes="public" />
+  ...   </class>
+  ...
+  ...   <xmlrpc:view
+  ...       name="index"
+  ...       for="zope.app.folder.folder.IFolder"
+  ...       methods="public protected"
+  ...       class="zope.app.publisher.xmlrpc.README.ProtectedView"
+  ...       />
+  ... </configure>
+  ... """)
+
+An unauthenticated user can access the public method, but not the protected
+one:
+
+  >>> proxy = ServerProxy("http://usr:usrpw@localhost/index", handleErrors=False)
+  >>> proxy.public()
+  'foo'
+  >>> proxy.protected() # doctest: +NORMALIZE_WHITESPACE
+  Traceback (most recent call last):
+  Unauthorized: (<zope.app.publisher.xmlrpc.metaconfigure.ProtectedView
+   object at 0x...>, 'protected', 'zope.ManageContent')
+
+As a manager, we can access both:
+
+  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/index")
+  >>> proxy.public()
+  'foo'
+  >>> proxy.protected()
+  'bar'
+
 Handling errors with the ServerProxy
 ------------------------------------
 

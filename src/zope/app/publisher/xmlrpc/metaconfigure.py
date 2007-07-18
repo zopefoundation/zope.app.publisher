@@ -16,7 +16,9 @@
 $Id$
 """
 from zope.interface import Interface
+from zope.configuration.exceptions import ConfigurationError
 from zope.security.checker import CheckerPublic, Checker
+from zope.security.checker import defineChecker, getCheckerForInstancesOf
 from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
 from zope.component.interface import provideInterface
 from zope.component.zcml import handler
@@ -70,6 +72,15 @@ def view(_context, for_=None, interface=None, methods=None,
 
             class_ = proxyView
             class_.factory = original_class
+        else:
+            # No permission was defined, so we defer to the checker
+            # of the original class
+            def proxyView(context, request, class_=class_):
+                view = class_(context, request)
+                view.__Security_checker__ = getCheckerForInstancesOf(original_class)
+                return view
+            class_ = proxyView
+            class_.factory = original_class
 
         # Register the new view.
         _context.action(
@@ -83,7 +94,9 @@ def view(_context, for_=None, interface=None, methods=None,
         if permission:
             checker = Checker({'__call__': permission})
         else:
-            checker = None
+            raise ConfigurationError(
+              "XML/RPC view has neither a name nor a permission. "
+              "You have to specify at least one of the two.")
 
         for name in require:
             # create a new callable class with a security checker;
