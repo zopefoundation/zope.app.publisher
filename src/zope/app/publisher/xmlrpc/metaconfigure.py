@@ -26,7 +26,7 @@ from zope.component.zcml import handler
 from zope.app.publisher.xmlrpc import MethodPublisher
 
 def view(_context, for_=None, interface=None, methods=None,
-         class_=None,  permission=None, name=None):
+         class_=None,  permission=None, name=None, layer=IXMLRPCRequest):
 
     interface = interface or []
     methods = methods or []
@@ -84,10 +84,10 @@ def view(_context, for_=None, interface=None, methods=None,
 
         # Register the new view.
         _context.action(
-            discriminator = ('view', for_, name, IXMLRPCRequest),
+            discriminator = ('view', for_, name, layer),
             callable = handler,
             args = ('registerAdapter',
-                    class_, (for_, IXMLRPCRequest), Interface, name,
+                    class_, (for_, layer), Interface, name,
                     _context.info)
             )
     else:

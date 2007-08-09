@@ -2,6 +2,12 @@
 Changes
 =======
 
+3.5
+===
+
+- Added a `layer` attribute to `xmlrpc:view`. This works just like layers for
+  `browser:view` etc. but uses the `IXMLRPCSkinType`.
+
 After 3.4.0a1
 =============
 

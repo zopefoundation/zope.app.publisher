@@ -84,3 +84,10 @@ class IViewDirective(zope.interface.Interface):
         """,
         required=False,
         )
+
+    layer = zope.configuration.fields.GlobalInterface(
+        title=u"The layer the view is declared for",
+        description=u"The default layer for which the default view is "
+                    u"applicable. By default it is applied to all layers.",
+        required=False
+        )
