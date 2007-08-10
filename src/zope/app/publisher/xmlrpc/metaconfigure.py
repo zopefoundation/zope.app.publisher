@@ -77,7 +77,8 @@ def view(_context, for_=None, interface=None, methods=None,
             # of the original class
             def proxyView(context, request, class_=class_):
                 view = class_(context, request)
-                view.__Security_checker__ = getCheckerForInstancesOf(original_class)
+                view.__Security_checker__ = getCheckerForInstancesOf(
+                    original_class)
                 return view
             class_ = proxyView
             class_.factory = original_class
@@ -104,10 +105,10 @@ def view(_context, for_=None, interface=None, methods=None,
                      '__call__': getattr(class_, name)}
             new_class = type(class_.__name__, (class_,), cdict)
             _context.action(
-                discriminator = ('view', for_, name, IXMLRPCRequest),
+                discriminator = ('view', for_, name, layer),
                 callable = handler,
                 args = ('registerAdapter',
-                        new_class, (for_, IXMLRPCRequest), Interface, name,
+                        new_class, (for_, layer), Interface, name,
                         _context.info)
                 )
 
