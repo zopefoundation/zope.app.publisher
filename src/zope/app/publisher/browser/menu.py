@@ -19,6 +19,7 @@ __docformat__ = "reStructuredText"
 import sys
 
 import zope.component
+import zope.interface.interfaces
 from zope.interface import Interface, implements, providedBy
 from zope.security import checkPermission, canAccess
 from zope.security.interfaces import Unauthorized, Forbidden
@@ -47,6 +48,7 @@ class BrowserMenu(object):
 
     def getMenuItems(self, object, request):
         """Return menu item entries in a TAL-friendly form."""
+
         result = []
         for name, item in zope.component.getAdapters((object, request),
                                                      self.getMenuItemType()):
@@ -56,15 +58,27 @@ class BrowserMenu(object):
         # Now order the result. This is not as easy as it seems.
         #
         # (1) Look at the interfaces and put the more specific menu entries
-        #     to the front.
+        #     to the front. 
         # (2) Sort unambigious entries by order and then by title.
         ifaces = list(providedBy(removeSecurityProxy(object)).__iro__)
-        result = [(ifaces.index(item._for or Interface),
-            item.order, item.title, item) for item in result]
+        max_key = len(ifaces)
+        def iface_index(item):
+            iface = item._for
+            if not iface:
+                iface = Interface
+            if zope.interface.interfaces.IInterface.providedBy(iface):
+                return ifaces.index(iface)
+            if isinstance(removeSecurityProxy(object), item._for):
+                # directly specified for class, this goes first.
+                return -1
+            # no idea. This goes last.
+            return max_key
+        result = [(iface_index(item), item.order, item.title, item)
+                  for item in result]
         result.sort()
 
         result = [
-            {'title': item.title,
+            {'title': title,
              'description': item.description,
              'action': item.action,
              'selected': (item.selected() and u'selected') or u'',

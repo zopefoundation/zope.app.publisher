@@ -5,6 +5,8 @@ Changes
 3.5
 ===
 
+- <browser:menuItem> can now be registered for classes.
+
 - Added a `layer` attribute to `xmlrpc:view`. This works just like layers for
   `browser:view` etc. but uses the `IXMLRPCSkinType`.
 
