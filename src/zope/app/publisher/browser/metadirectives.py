@@ -412,7 +412,7 @@ class IMenuItemsDirective(Interface):
         required=True,
         )
 
-    for_ = GlobalInterface(
+    for_ = GlobalObject(
         title=u"Interface",
         description=u"The interface the menu items are defined for",
         required=True

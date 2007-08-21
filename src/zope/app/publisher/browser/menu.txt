@@ -281,6 +281,14 @@ And now the save options:
   >>> ztapi.provideAdapter((IContent, IBrowserRequest), 
   ...                      SaveOptions, saveall, 'saveall')
 
+Note that we can also register menu items for classes:
+
+
+  >>> new = menumeta.MenuItemFactory(menu.BrowserMenuItem, title="New",
+  ...                                 action="new.html", _for=Content)
+  >>> ztapi.provideAdapter((Content, IBrowserRequest), EditMenu, new, 'new')
+
+
 The utility that is used to generate the menu into a TAL-friendly
 data-structure is ``getMenu()``::
 
@@ -290,7 +298,14 @@ where ``menuId`` is the id originally specified for the menu. Let's look up the
 menu now:
 
   >>> pprint(menu.getMenu('edit', Content(), TestRequest()))
-  [{'action': 'redo.html',
+  [{'action': 'new.html',
+    'description': u'',
+    'extra': None,
+    'icon': None,
+    'selected': u'',
+    'submenu': None,
+    'title': 'New'},
+  {'action': 'redo.html',
     'description': u'',
     'extra': None,
     'icon': '/@@/redo.png',
