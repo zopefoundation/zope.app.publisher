@@ -2,8 +2,8 @@
 Changes
 =======
 
-3.5
-===
+3.5a1
+=====
 
 - <browser:menuItem> can now be registered for classes.
 
