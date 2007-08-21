@@ -105,10 +105,10 @@ def view(_context, for_=None, interface=None, methods=None,
                      '__call__': getattr(class_, name)}
             new_class = type(class_.__name__, (class_,), cdict)
             _context.action(
-                discriminator = ('view', for_, name, layer),
+                discriminator = ('view', for_, name, IXMLRPCRequest),
                 callable = handler,
                 args = ('registerAdapter',
-                        new_class, (for_, layer), Interface, name,
+                        new_class, (for_, IXMLRPCRequest), Interface, name,
                         _context.info)
                 )
 
