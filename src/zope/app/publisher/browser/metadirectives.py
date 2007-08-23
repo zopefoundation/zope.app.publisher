@@ -166,7 +166,7 @@ class IDefaultViewDirective(Interface):
         required=True
         )
 
-    for_ = GlobalInterface(
+    for_ = GlobalObject(
         title=u"The interface this view is the default for.",
         description=u"""Specifies the interface for which the view is
         registered. All objects implementing this interface can make use of

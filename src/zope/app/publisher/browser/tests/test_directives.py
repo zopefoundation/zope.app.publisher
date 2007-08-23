@@ -309,6 +309,24 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             zope.app.publisher.browser.getDefaultViewName(ob, request),
             'test')
 
+    def testDefaultViewForClass(self):
+        self.assertEqual(
+            component.queryMultiAdapter((ob, request), IDefaultViewName),
+            None)
+
+        xmlconfig(StringIO(template % (
+            '''
+            <browser:defaultView
+                for="zope.app.publisher.browser.tests.test_directives.Ob"
+                name="test"
+                />
+            '''
+            )))
+
+        self.assertEqual(
+            zope.app.publisher.browser.getDefaultViewName(ob, request),
+            'test')
+
 
     def testSkinResource(self):
         self.assertEqual(
