@@ -2,22 +2,26 @@
 Changes
 =======
 
-3.5a1
-=====
-
-- <browser:menuItem> can now be registered for classes.
+3.5.0a1 (unreleased)
+====================
 
 - Added a `layer` attribute to `xmlrpc:view`. This works just like layers for
   `browser:view` etc. but uses the `IXMLRPCSkinType`.
 
-After 3.4.0a1
-=============
+3.4.0b2 (2007-08-23)
+====================
+
+- <browser:defaultView> now accepts classes as well as interfaces.
+
+3.4.0b1 (2007-08-21)
+====================
+
+ - <browser:menuItem> can now be registered for classes (backport from 3.5)
 
  - Fixed a bug about xmlrpc:view: Omitting a permission was (widely)
    documented to be allowed when a name is given and should incorporate the
    original security settings of the view class. This did not work at all and
    the permission was always required. It now works as described.
-
 
 Before 3.4
 ==========
