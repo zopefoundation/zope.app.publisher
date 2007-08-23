@@ -15,11 +15,17 @@
 """
 from setuptools import setup, find_packages, Extension
 
+long_description = (open('README.txt').read() + '\n\n' +
+                    open('CHANGES.txt').read())
+
 setup(name='zope.app.publisher',
       version = '3.5.0a1',
       url='http://pypi.python.org/pypi/zope.app.publisher/',
       author='Zope Corporation and Contributors',
       author_email='zope3-dev@zope.org',
+      description='Implementations and means for configuration of Zope 3-'
+                  'style views and resources.',
+      long_description=long_description,
 
       packages=find_packages('src'),
       package_dir={'': 'src'},
