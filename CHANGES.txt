@@ -5,6 +5,12 @@ Changes
 3.5.0 (???)
 ===========
 
+3.5.0a3 (2007-11-27)
+====================
+
+- make it possible to override menus: this was not possible because new
+  interfaces where created any time a menu with the same name was created.
+
 - Resolve ``ZopeSecurityPolicy`` deprecation warning.
 
 3.5.0a2 (2007-08-23)

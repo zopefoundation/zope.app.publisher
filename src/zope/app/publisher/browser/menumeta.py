@@ -52,13 +52,18 @@ def menuDirective(_context, id=None, class_=BrowserMenu, interface=None,
             "You must specify the 'id' or 'interface' attribute.")
 
     if interface is None:
-        interface = InterfaceClass(id, (),
-                                   __doc__='Menu Item Type: %s' %id,
-                                   __module__='zope.app.menus')
-        # Add the menu item type to the `menus` module.
-        # Note: We have to do this immediately, so that directives using the
-        # MenuField can find the menu item type.
-        setattr(menus, id, interface)
+        if id in dir(menus):
+            # reuse existing interfaces for the id, without this we are not
+            # able to override menus.
+            interface = getattr(menus, id)
+        else:
+            interface = InterfaceClass(id, (),
+                                       __doc__='Menu Item Type: %s' %id,
+                                       __module__='zope.app.menus')
+            # Add the menu item type to the `menus` module.
+            # Note: We have to do this immediately, so that directives using the
+            # MenuField can find the menu item type.
+            setattr(menus, id, interface)
         path = 'zope.app.menus.' + id
     else:
         path = interface.__module__ + '.' + interface.getName()

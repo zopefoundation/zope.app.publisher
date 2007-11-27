@@ -22,6 +22,8 @@ from zope.traversing.interfaces import IContainmentRoot
 from zope.app.component.hooks import setSite
 from zope.app.component.interfaces import ISite
 
+from zope.app.publisher.browser.menu import BrowserMenu
+
 class Site:
     implements(ISite, IContainmentRoot)
 
@@ -40,3 +42,7 @@ class SiteHandler(object):
     def tearDown(self):
         setSite()
         super(SiteHandler, self).tearDown()
+
+class M1(BrowserMenu):
+    pass
+

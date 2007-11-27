@@ -15,6 +15,8 @@
 
 $Id$
 """
+
+import sys
 import os
 import unittest
 from cStringIO import StringIO
@@ -31,8 +33,8 @@ from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IBrowserSkinType, IDefaultSkin
 from zope.security.proxy import removeSecurityProxy, ProxyFactory
-from zope.security.permission import Permission 
-from zope.security.interfaces import IPermission 
+from zope.security.permission import Permission
+from zope.security.interfaces import IPermission
 from zope.testing.doctestunit import DocTestSuite
 from zope.traversing.adapters import DefaultTraversable
 from zope.traversing.interfaces import ITraversable
@@ -42,7 +44,7 @@ from zope.app.component.tests.views import IC, V1, VZMI, R1, IV
 from zope.app.publisher.browser.fileresource import FileResource
 from zope.app.publisher.browser.i18nfileresource import I18nFileResource
 from zope.app.publisher.browser.menu import getFirstMenuItem
-from zope.app.publisher.interfaces.browser import IMenuItemType
+from zope.app.publisher.interfaces.browser import IMenuItemType, IBrowserMenu
 from zope.app.testing import placelesssetup, ztapi
 
 tests_path = os.path.join(
@@ -123,6 +125,11 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         XMLConfig('meta.zcml', zope.app.publisher.browser)()
         ztapi.provideAdapter(None, ITraversable, DefaultTraversable)
 
+    def tearDown(self):
+        if 'test_menu' in dir(sys.modules['zope.app.menus']):
+            delattr(sys.modules['zope.app.menus'], 'test_menu')
+        super(Test, self).tearDown()
+
     def testPage(self):
         self.assertEqual(
             component.queryMultiAdapter((ob, request), name='test'),
@@ -143,12 +150,11 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         v = component.queryMultiAdapter((ob, request), name='test')
         self.assert_(issubclass(v.__class__, V1))
 
-    def testPageWithClassWithMenu(self):
+    def testMenuOverride(self):
         self.assertEqual(
             component.queryMultiAdapter((ob, request), name='test'),
             None)
         testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
-                         
 
         xmlconfig(StringIO(template % (
             '''
@@ -159,7 +165,43 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 class="zope.app.component.tests.views.V1"
                 for="zope.app.component.tests.views.IC"
                 permission="zope.Public"
-                template="%s" 
+                template="%s"
+                menu="test_menu"
+                title="Test View"
+                />
+            ''' % testtemplate
+            )))
+        menu1 = component.getUtility(IBrowserMenu, 'test_menu')
+        menuItem1 = getFirstMenuItem('test_menu', ob, TestRequest())
+        xmlconfig(StringIO(template % (
+            '''
+            <browser:menu
+                id="test_menu" title="Test menu"
+                class="zope.app.publisher.browser.tests.support.M1" />
+            '''
+            )))
+        menu2 = component.getUtility(IBrowserMenu, 'test_menu')
+        menuItem2 = getFirstMenuItem('test_menu', ob, TestRequest())
+        self.assert_(menu1 != menu2)
+        self.assert_(menuItem1 == menuItem2)
+
+    def testPageWithClassWithMenu(self):
+        self.assertEqual(
+            component.queryMultiAdapter((ob, request), name='test'),
+            None)
+        testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
+
+
+        xmlconfig(StringIO(template % (
+            '''
+            <browser:menu
+                id="test_menu" title="Test menu" />
+            <browser:page
+                name="test"
+                class="zope.app.component.tests.views.V1"
+                for="zope.app.component.tests.views.IC"
+                permission="zope.Public"
+                template="%s"
                 menu="test_menu"
                 title="Test View"
                 />
@@ -177,7 +219,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             component.queryMultiAdapter((ob, request), name='test'),
             None)
         testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
-                         
+
         xmlconfig(StringIO(template % (
             '''
             <browser:menu
@@ -186,7 +228,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 name="test"
                 for="zope.app.component.tests.views.IC"
                 permission="zope.Public"
-                template="%s" 
+                template="%s"
                 menu="test_menu"
                 title="Test View"
                 />
@@ -215,11 +257,11 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 permission="zope.Public">
               <browser:page
                   name="test"
-                  template="%s" 
+                  template="%s"
                   menu="test_menu"
                   title="Test View"
                   />
-            </browser:pages>                  
+            </browser:pages>
             ''' % testtemplate
             )))
 
@@ -235,7 +277,6 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             component.queryMultiAdapter((ob, request), name='test'),
             None)
         testtemplate = os.path.join(tests_path, 'testfiles', 'test.pt')
-                         
 
         xmlconfig(StringIO(template % (
             '''
@@ -247,11 +288,11 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 permission="zope.Public">
               <browser:page
                   name="test"
-                  template="%s" 
+                  template="%s"
                   menu="test_menu"
                   title="Test View"
                   />
-            </browser:pages>                  
+            </browser:pages>
             ''' % testtemplate
             )))
 
@@ -360,7 +401,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             component.queryMultiAdapter((ob, request), name='test'),
             None)
 
-        XMLConfig('meta.zcml', zope.app.component)()        
+        XMLConfig('meta.zcml', zope.app.component)()
         xmlconfig(StringIO(template % (
             '''
             <interface
@@ -750,7 +791,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 for="zope.app.component.tests.views.IC"
                 permission="zope.Public"
                 >
-            
+
               <browser:defaultPage name="test.html" />
               <browser:page name="index.html" attribute="index" />
               <browser:page name="action.html" attribute="action" />
@@ -776,7 +817,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
 
     def testTraversalOfPageForView(self):
         """Tests proper traversal of a page defined for a view."""
-        
+
         xmlconfig(StringIO(template %
             '''
             <browser:view
@@ -786,7 +827,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 permission="zope.Public" />
 
             <browser:page name="index.html"
-                for="zope.app.component.tests.views.IV" 
+                for="zope.app.component.tests.views.IV"
                 class="zope.app.publisher.browser.tests.test_directives.CV"
                 permission="zope.Public" />
             '''
@@ -795,10 +836,10 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         view = component.getMultiAdapter((ob, request), name='test')
         view = removeSecurityProxy(view)
         view.publishTraverse(request, 'index.html')
-        
+
     def testTraversalOfPageForViewWithPublishTraverse(self):
         """Tests proper traversal of a page defined for a view.
-        
+
         This test is different from testTraversalOfPageForView in that it
         tests the behavior on a view that has a publishTraverse method --
         the implementation of the lookup is slightly different in such a
@@ -813,7 +854,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 permission="zope.Public" />
 
             <browser:page name="index.html"
-                for="zope.app.component.tests.views.IV" 
+                for="zope.app.component.tests.views.IV"
                 class="zope.app.publisher.browser.tests.test_directives.CV"
                 permission="zope.Public" />
             '''
@@ -834,7 +875,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         xmlconfig(StringIO(template %
             '''
             <include package="zope.app.security" file="meta.zcml" />
-            
+
             <permission id="zope.TestPermission" title="Test permission" />
 
             <browser:pages
@@ -842,7 +883,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 for="zope.app.component.tests.views.IC"
                 permission="zope.TestPermission"
                 >
-             
+
               <browser:page name="index.html" attribute="index" />
               <browser:page name="action.html" attribute="action" />
             </browser:pages>
@@ -874,7 +915,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 for="zope.app.component.tests.views.IC"
                 permission="zope.Public"
                 >
-             
+
               <browser:page name="index.html" attribute="index" />
               <browser:page name="action.html" attribute="action" />
             </browser:view>
@@ -898,7 +939,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 for="*"
                 class="zope.app.component.tests.views.V1"
                 permission="zope.Public"
-                >             
+                >
               <browser:page name="index.html" attribute="index" />
             </browser:pages>
 
@@ -978,7 +1019,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             '''
             <browser:resource
                 name="test"
-                file="%s" 
+                file="%s"
                 layer="
                   zope.app.publisher.browser.tests.test_directives.ITestLayer"
                 />
@@ -1208,32 +1249,32 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         self.assert_(isinstance(v, V1))
 
     def testMenuItemNeedsFor(self):
-	# <browser:menuItem> directive fails if no 'for' argument was provided
-	from zope.configuration.exceptions import ConfigurationError
+        # <browser:menuItem> directive fails if no 'for' argument was provided
+        from zope.configuration.exceptions import ConfigurationError
         self.assertRaises(ConfigurationError, xmlconfig, StringIO(template %
             '''
             <browser:menu
                 id="test_menu" title="Test menu" />
-	    <browser:menuItem
-	        title="Test Entry"
-	        menu="test_menu"
-		action="@@test"
-		/>
+            <browser:menuItem
+                title="Test Entry"
+                menu="test_menu"
+                action="@@test"
+            />
             '''
             ))
 
 	# it works, when the argument is there and a valid interface
 	xmlconfig(StringIO(template %
             '''
-	    <browser:menuItem
+            <browser:menuItem
                 for="zope.app.component.tests.views.IC"
-	        title="Test Entry"
-	        menu="test_menu"
-		action="@@test"
-		/>
+                title="Test Entry"
+                menu="test_menu"
+               action="@@test"
+            />
             '''
-	    ))
-	
+            ))
+
 def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(Test),
@@ -1244,3 +1285,4 @@ def test_suite():
 
 if __name__=='__main__':
     unittest.main(defaultTest="test_suite")
+
