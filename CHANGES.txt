@@ -2,8 +2,12 @@
 Changes
 =======
 
-After 3.5.0a3
+After 3.5.0a4
 =============
+
+
+3.5.0a4 (2007-12-28)
+====================
 
 - Backed out the changes for the controversial XML-RPC skin support.
 
