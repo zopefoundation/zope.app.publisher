@@ -26,7 +26,7 @@ from zope.component.zcml import handler
 from zope.app.publisher.xmlrpc import MethodPublisher
 
 def view(_context, for_=None, interface=None, methods=None,
-         class_=None,  permission=None, name=None, layer=IXMLRPCRequest):
+         class_=None,  permission=None, name=None):
 
     interface = interface or []
     methods = methods or []
@@ -77,18 +77,17 @@ def view(_context, for_=None, interface=None, methods=None,
             # of the original class
             def proxyView(context, request, class_=class_):
                 view = class_(context, request)
-                view.__Security_checker__ = getCheckerForInstancesOf(
-                    original_class)
+                view.__Security_checker__ = getCheckerForInstancesOf(original_class)
                 return view
             class_ = proxyView
             class_.factory = original_class
 
         # Register the new view.
         _context.action(
-            discriminator = ('view', for_, name, layer),
+            discriminator = ('view', for_, name, IXMLRPCRequest),
             callable = handler,
             args = ('registerAdapter',
-                    class_, (for_, layer), Interface, name,
+                    class_, (for_, IXMLRPCRequest), Interface, name,
                     _context.info)
             )
     else:
@@ -105,10 +104,10 @@ def view(_context, for_=None, interface=None, methods=None,
                      '__call__': getattr(class_, name)}
             new_class = type(class_.__name__, (class_,), cdict)
             _context.action(
-                discriminator = ('view', for_, name, layer),
+                discriminator = ('view', for_, name, IXMLRPCRequest),
                 callable = handler,
                 args = ('registerAdapter',
-                        new_class, (for_, layer), Interface, name,
+                        new_class, (for_, IXMLRPCRequest), Interface, name,
                         _context.info)
                 )
 

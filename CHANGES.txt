@@ -2,8 +2,10 @@
 Changes
 =======
 
-3.5.0 (???)
-===========
+After 3.5.0a3
+=============
+
+- Backed out the changes for the controversial XML-RPC skin support.
 
 3.5.0a3 (2007-11-27)
 ====================
@@ -23,20 +25,3 @@ Changes
 
 - Added a `layer` attribute to `xmlrpc:view`. This works just like layers for
   `browser:view` etc. but uses the `IXMLRPCSkinType`.
-
-3.4.0b1 (2007-08-21)
-====================
-
-- <browser:menuItem> can now be registered for classes
-
-- Fixed a bug about xmlrpc:view: Omitting a permission was (widely)
-  documented to be allowed when a name is given and should incorporate the
-  original security settings of the view class. This did not work at all and
-  the permission was always required. It now works as described.
-
-Before 3.4
-==========
-
-This package was part of the Zope 3 distribution and did not have its own
-CHANGES.txt. For earlier changes please refer to either our subversion log or
-the CHANGES.txt of earlier Zope 3 releases.

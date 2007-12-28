@@ -19,7 +19,7 @@ long_description = (open('README.txt').read() + '\n\n' +
                     open('CHANGES.txt').read())
 
 setup(name='zope.app.publisher',
-      version = '3.5.0a4',
+      version = '3.5dev',
       url='http://pypi.python.org/pypi/zope.app.publisher/',
       author='Zope Corporation and Contributors',
       author_email='zope3-dev@zope.org',
@@ -55,10 +55,10 @@ setup(name='zope.app.publisher',
                         'zope.interface',
                         'zope.location',
                         'zope.pagetemplate',
-                        'zope.publisher>=3.5.0a1.dev-r78727',
+                        'zope.publisher',
                         'zope.schema',
                         'zope.security',
-                        'zope.traversing>=3.5.0a1.dev-r78730',
+                        'zope.traversing',
                         ],
       extras_require={
           'test': ['zope.testing',
