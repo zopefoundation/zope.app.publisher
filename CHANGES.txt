@@ -2,8 +2,8 @@
 Changes
 =======
 
-After 3.5.0a4
-=============
+3.5.0 (2008-08-05)
+==================
 
 - Refactored code to provide more hooks when deriving code from this pacakge.
 
