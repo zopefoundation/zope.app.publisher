@@ -61,6 +61,7 @@ class DirectoryResource(BrowserView, Resource):
         }
 
     default_factory = FileResourceFactory
+    directory_factory = None
 
     def publishTraverse(self, request, name):
         '''See interface IBrowserPublisher'''
@@ -81,7 +82,7 @@ class DirectoryResource(BrowserView, Resource):
         filename = os.path.join(path, name)
         isfile = os.path.isfile(filename)
         isdir = os.path.isdir(filename)
-          
+
         if not (isfile or isdir):
             if default is _marker:
                 raise NotFound(None, name)
@@ -91,14 +92,17 @@ class DirectoryResource(BrowserView, Resource):
             ext = os.path.splitext(os.path.normcase(name))[1]
             factory = self.resource_factories.get(ext, self.default_factory)
         else:
-            factory = DirectoryResourceFactory
+            factory = self.directory_factory
 
         rname = posixpath.join(self.__name__, name)
         resource = factory(filename, self.context.checker, rname)(self.request)
         resource.__parent__ = self
         return resource
 
+
 class DirectoryResourceFactory(object):
+
+    factoryClass = DirectoryResource
 
     def __init__(self, path, checker, name):
         self.__dir = Directory(path, checker, name)
@@ -106,7 +110,10 @@ class DirectoryResourceFactory(object):
         self.__name = name
 
     def __call__(self, request):
-        resource = DirectoryResource(self.__dir, request)
+        resource = self.factoryClass(self.__dir, request)
         resource.__Security_checker__ = self.__checker
         resource.__name__ = self.__name
         return resource
+
+
+DirectoryResource.directory_factory = DirectoryResourceFactory

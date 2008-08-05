@@ -30,6 +30,8 @@ class FileResource(BrowserView, Resource):
 
     implements(IBrowserPublisher)
 
+    cacheTimeout = 86400
+
     def publishTraverse(self, request, name):
         '''See interface IBrowserPublisher'''
         raise NotFound(None, name)
@@ -61,7 +63,7 @@ class FileResource(BrowserView, Resource):
         request = self.request
         response = request.response
 
-        setCacheControl(response)
+        setCacheControl(response, self.cacheTimeout)
 
         # HTTP If-Modified-Since header handling. This is duplicated
         # from OFS.Image.Image - it really should be consolidated
@@ -100,7 +102,7 @@ class FileResource(BrowserView, Resource):
         response = self.request.response
         response.setHeader('Content-Type', file.content_type)
         response.setHeader('Last-Modified', file.lmh)
-        setCacheControl(response)
+        setCacheControl(response, self.cacheTimeout)
         return ''
 
 
@@ -115,18 +117,23 @@ def setCacheControl(response, secs=86400):
 
 class FileResourceFactory(object):
 
+    resourceClass = FileResource
+
     def __init__(self, path, checker, name):
         self.__file = File(path, name)
         self.__checker = checker
         self.__name = name
 
     def __call__(self, request):
-        resource = FileResource(self.__file, request)
+        resource = self.resourceClass(self.__file, request)
         resource.__Security_checker__ = self.__checker
         resource.__name__ = self.__name
         return resource
 
+
 class ImageResourceFactory(object):
+
+    resourceClass = FileResource
 
     def __init__(self, path, checker, name):
         self.__file = Image(path, name)
@@ -134,7 +141,7 @@ class ImageResourceFactory(object):
         self.__name = name
 
     def __call__(self, request):
-        resource = FileResource(self.__file, request)
+        resource = self.resourceClass(self.__file, request)
         resource.__Security_checker__ = self.__checker
         resource.__name__ = self.__name
         return resource

@@ -5,6 +5,13 @@ Changes
 After 3.5.0a4
 =============
 
+- Refactored code to provide more hooks when deriving code from this pacakge.
+
+  * A resource's URL creation is now in its own method.
+
+  * The resource class of factories can be overwritten.
+
+  * The cache timeout value can now be set as a class or instance attribute.
 
 3.5.0a4 (2007-12-28)
 ====================

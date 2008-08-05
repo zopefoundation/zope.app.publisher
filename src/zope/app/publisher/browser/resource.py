@@ -29,6 +29,9 @@ class Resource(Location):
     def __init__(self, request):
         self.request = request
 
+    def _createUrl(self, baseUrl, name):
+        return "%s/@@/%s" % (baseUrl, name)
+
     def __call__(self):
         name = self.__name__
         if name.startswith('++resource++'):
@@ -36,4 +39,4 @@ class Resource(Location):
 
         site = getSite()
         url = str(getMultiAdapter((site, self.request), IAbsoluteURL))
-        return "%s/@@/%s" % (url, name)
+        return self._createUrl(url, name)
