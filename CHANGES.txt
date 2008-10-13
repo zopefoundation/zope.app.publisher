@@ -2,6 +2,11 @@
 Changes
 =======
 
+3.5.1 (2008-10-13)
+==================
+
+- Removed usage of deprecated LayerField from zope.app.component.back35.
+
 3.5.0 (2008-08-05)
 ==================
 
