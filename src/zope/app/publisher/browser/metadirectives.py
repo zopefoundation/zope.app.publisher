@@ -24,7 +24,6 @@ from zope.schema import TextLine, Id, Int, Bool
 from zope.security.zcml import Permission
 
 from zope.app.component.metadirectives import IBasicViewInformation
-from zope.app.component.back35 import LayerField
 from zope.app.publisher.browser.fields import MenuField
 
 #
@@ -175,7 +174,7 @@ class IDefaultViewDirective(Interface):
         required=False
         )
 
-    layer = LayerField(
+    layer = GlobalInterface(
         title=u"The layer the default view is declared for",
         description=u"The default layer for which the default view is "
                     u"applicable. By default it is applied to all layers.",
@@ -227,7 +226,7 @@ class IBasicResourceInformation(Interface):
     This is the basic information for all browser resources.
     """
 
-    layer = LayerField(
+    layer = GlobalInterface(
         title=u"The layer the resource should be found in",
         description=u"""
         For information on layers, see the documentation for the skin
@@ -418,7 +417,7 @@ class IMenuItemsDirective(Interface):
         required=True
         )
 
-    layer = LayerField(
+    layer = GlobalInterface(
         title=u"Layer",
         description=u"The Layer for which the item is declared.",
         required=False
@@ -567,7 +566,7 @@ class IAddMenuItemDirective(IMenuItem):
         required=False,
         )
 
-    layer = LayerField(
+    layer = GlobalInterface(
         title=u"The layer the custom view is declared for",
         description=u"The default layer for which the custom view is "
                     u"applicable. By default it is applied to all layers.",
@@ -669,7 +668,7 @@ class ISkinDirective(Interface):
         'default', unless you want to completely override all views.
         """,
         required=False,
-        value_type=LayerField()
+        value_type=GlobalInterface()
         )
 
 class IDefaultSkinDirective(Interface):
@@ -720,7 +719,7 @@ class IIconDirective(Interface):
         required=False
         )
 
-    layer = LayerField(
+    layer = GlobalInterface(
         title=u"The layer the icon should be found in",
         description=u"""
         For information on layers, see the documentation for the skin
