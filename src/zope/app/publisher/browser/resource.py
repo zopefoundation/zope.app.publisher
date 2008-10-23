@@ -16,6 +16,7 @@
 $Id$
 """
 from zope.component import getMultiAdapter
+from zope.component import queryMultiAdapter
 from zope.component.interfaces import IResource
 from zope.interface import implements
 from zope.traversing.browser.interfaces import IAbsoluteURL
@@ -38,5 +39,11 @@ class Resource(Location):
             name = name[12:]
 
         site = getSite()
-        url = str(getMultiAdapter((site, self.request), IAbsoluteURL))
+        base = queryMultiAdapter((site, self.request), IAbsoluteURL,
+            name="resource")
+        if base is None: 
+            url = str(getMultiAdapter((site, self.request), IAbsoluteURL))
+        else:
+            url = str(base)
+
         return self._createUrl(url, name)

@@ -17,11 +17,15 @@ $Id$
 """
 import unittest
 
+from zope import component
+
 from zope.publisher.browser import TestRequest
 
+from zope.app.component.interfaces import ISite
 from zope.app.publisher.browser.resource import Resource
 from zope.app.publisher.browser.tests import support
 from zope.app.testing.placelesssetup import PlacelessSetup
+from zope.traversing.browser.interfaces import IAbsoluteURL
 
 
 class TestResource(support.SiteHandler, PlacelessSetup, unittest.TestCase):
@@ -44,6 +48,20 @@ class TestResource(support.SiteHandler, PlacelessSetup, unittest.TestCase):
         r.__parent__ = support.site
         r.__name__ = 'foo'
         self.assertEquals(r(), 'http://127.0.0.1/x/y/@@/foo')
+
+    def testResourceUrl(self):
+        # fake IAbsoluteURL adapter
+        def resourceBase(site, request):
+            return 'http://cdn.example.com'
+        component.provideAdapter(resourceBase, (ISite, TestRequest), 
+            IAbsoluteURL, 'resource')
+
+        req = TestRequest()
+        r = Resource(req)
+        req._vh_root = support.site
+        r.__parent__ = support.site
+        r.__name__ = 'foo'
+        self.assertEquals(r(), 'http://cdn.example.com/@@/foo')
 
 
 def test_suite():

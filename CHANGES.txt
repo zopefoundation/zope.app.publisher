@@ -2,10 +2,17 @@
 Changes
 =======
 
-3.5.2 (Unreleased)
+3.5.3 (Unreleased)
 ==================
 
 - ...
+
+3.5.2a1 (2008-10-23)
+====================
+
+- Added a hook to specify a different BaseURL for resources. This makes sense
+  if you want to put resources on a Content Delivery Network. All you need to
+  do is to register an named Adapter 'resource' that implements IAbsoluteURL.
 
 3.5.1 (2008-10-13)
 ==================
