@@ -5,7 +5,8 @@ Changes
 3.5.3 (Unreleased)
 ==================
 
-- ...
+- Added possibility to specify custom item class in menuItem, subMenuItem
+  and addMenuItem directives using the ``item_class`` argument (LP #291865).
 
 3.5.2a1 (2008-10-23)
 ====================

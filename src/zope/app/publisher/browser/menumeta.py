@@ -31,6 +31,7 @@ from zope.app.publisher.browser.menu import BrowserMenu
 from zope.app.publisher.browser.menu import BrowserMenuItem, BrowserSubMenuItem
 from zope.app.publisher.interfaces.browser import IBrowserMenu
 from zope.app.publisher.interfaces.browser import IBrowserMenuItem
+from zope.app.publisher.interfaces.browser import IBrowserSubMenuItem
 from zope.app.publisher.interfaces.browser import IMenuItemType
 from zope.app.publisher.interfaces.browser import AddMenu
 
@@ -106,21 +107,21 @@ def menuDirective(_context, id=None, class_=BrowserMenu, interface=None,
 def menuItemDirective(_context, menu, for_,
                       action, title, description=u'', icon=None, filter=None,
                       permission=None, layer=IDefaultBrowserLayer, extra=None,
-                      order=0):
+                      order=0, item_class=None):
     """Register a single menu item."""
     return menuItemsDirective(_context, menu, for_, layer).menuItem(
         _context, action, title, description, icon, filter,
-        permission, extra, order)
+        permission, extra, order, item_class)
 
 
 def subMenuItemDirective(_context, menu, for_, title, submenu,
                          action=u'', description=u'', icon=None, filter=None,
                          permission=None, layer=IDefaultBrowserLayer,
-                         extra=None, order=0):
+                         extra=None, order=0, item_class=None):
     """Register a single sub-menu menu item."""
     return menuItemsDirective(_context, menu, for_, layer).subMenuItem(
         _context, submenu, title, description, action, icon, filter,
-        permission, extra, order)
+        permission, extra, order, item_class)
 
 
 class MenuItemFactory(object):
@@ -159,7 +160,8 @@ class menuItemsDirective(object):
         self.permission = permission
 
     def menuItem(self, _context, action, title, description=u'',
-                 icon=None, filter=None, permission=None, extra=None, order=0):
+                 icon=None, filter=None, permission=None, extra=None,
+                 order=0, item_class=None):
 
         if filter is not None:
             filter = Engine.compile(filter)
@@ -171,8 +173,14 @@ class menuItemsDirective(object):
             order = _order_counter.get(self.for_, 1)
             _order_counter[self.for_] = order + 1
 
+        if item_class is None:
+            item_class = self.menuItemClass
+
+        if not IBrowserMenuItem.implementedBy(item_class):
+            raise ValueError("Item class (%s) must implement IBrowserMenuItem" % item_class)
+
         factory = MenuItemFactory(
-            self.menuItemClass,
+            item_class,
             title=title, description=description, icon=icon, action=action,
             filter=filter, permission=permission, extra=extra, order=order,
             _for=self.for_)
@@ -181,7 +189,7 @@ class menuItemsDirective(object):
 
     def subMenuItem(self, _context, submenu, title, description=u'',
                     action=u'', icon=None, filter=None, permission=None,
-                    extra=None, order=0):
+                    extra=None, order=0, item_class=None):
 
         if filter is not None:
             filter = Engine.compile(filter)
@@ -193,8 +201,14 @@ class menuItemsDirective(object):
             order = _order_counter.get(self.for_, 1)
             _order_counter[self.for_] = order + 1
 
+        if item_class is None:
+            item_class = self.subMenuItemClass
+
+        if not IBrowserSubMenuItem.implementedBy(item_class):
+            raise ValueError("Item class (%s) must implement IBrowserSubMenuItem" % item_class)
+
         factory = MenuItemFactory(
-            self.subMenuItemClass,
+            item_class,
             title=title, description=description, icon=icon, action=action,
             filter=filter, permission=permission, extra=extra, order=order,
             _for=self.for_, submenuId=submenu)
@@ -230,7 +244,7 @@ def _checkViewFor(for_=None, layer=None, view_name=None):
 def addMenuItem(_context, title, description='', menu=None, for_=None,
                 class_=None, factory=None, view=None, icon=None, filter=None,
                 permission=None, layer=IDefaultBrowserLayer, extra=None,
-                order=0):
+                order=0, item_class=None):
     """Create an add menu item for a given class or factory
 
     As a convenience, a class can be provided, in which case, a
@@ -288,4 +302,4 @@ def addMenuItem(_context, title, description='', menu=None, for_=None,
 
     return menuItemsDirective(_context, menu, for_, layer=layer).menuItem(
         _context, action, title, description, icon, filter,
-        permission, extra, order)
+        permission, extra, order, item_class)

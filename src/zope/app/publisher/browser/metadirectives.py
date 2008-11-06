@@ -494,6 +494,13 @@ class IMenuItem(Interface):
         default=0
         )
 
+    item_class = GlobalObject(
+        title=u"Menu item class",
+        description=u"""
+        A class to be used as a factory for creating menu item""",
+        required=False
+        )
+
 class IMenuItemSubdirective(IMenuItem):
     """Define a menu item within a group of menu items"""
 

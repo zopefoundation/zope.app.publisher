@@ -587,6 +587,53 @@ Register several menu items for a particular menu.
     <InterfaceClass __builtin__.TestMenuItemType>,
     'View')]
 
+Custom menu item classes
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+We can register menu items and sub menu items with custom classes instead
+of ones used by default. For that, we need to create an implementation
+of IBrowserMenuItem or IBrowserSubMenuItem.
+
+  >>> context = Context()
+  >>> items = menumeta.menuItemsDirective(context, TestMenuItemType, ITest)
+  >>> context.actions
+  []
+
+Let's create a custom menu item class that inherits standard BrowserMenuItem:
+
+  >>> class MyMenuItem(menu.BrowserMenuItem):
+  ...    pass
+
+  >>> items.menuItem(context, u'view.html', 'View', item_class=MyMenuItem)
+
+Also create a custom sub menu item class inheriting standard BrowserSubMenuItem:
+
+  >>> class MySubMenuItem(menu.BrowserSubMenuItem):
+  ...    pass
+
+  >>> items.subMenuItem(context, SaveOptions, 'Save', item_class=MySubMenuItem)
+
+  >>> actions = sorted(context.actions, key=lambda a:a['discriminator'])
+  >>> factories = [action['args'][1] for action in actions][-2:]
+
+  >>> factories[0].factory is MySubMenuItem
+  True
+
+  >>> factories[1].factory is MyMenuItem
+  True
+
+These directive will fail if you provide an item_class that does not
+implement IBrowserMenuItem/IBrowserSubMenuItem:
+
+  >>> items.menuItem(context, u'fail', 'Failed', item_class=object)
+  Traceback (most recent call last):
+  ...
+  ValueError: Item class (<type 'object'>) must implement IBrowserMenuItem
+
+  >>> items.subMenuItem(context, SaveOptions, 'Failed', item_class=object)
+  Traceback (most recent call last):
+  ...
+  ValueError: Item class (<type 'object'>) must implement IBrowserSubMenuItem
 
 ``ManagementViewSelector``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
