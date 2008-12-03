@@ -182,8 +182,8 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             )))
         menu2 = component.getUtility(IBrowserMenu, 'test_menu')
         menuItem2 = getFirstMenuItem('test_menu', ob, TestRequest())
-        self.assert_(menu1 != menu2)
-        self.assert_(menuItem1 == menuItem2)
+        self.assertNotEqual(menu1, menu2)
+        self.assertEqual(menuItem1, menuItem2)
 
     def testPageWithClassWithMenu(self):
         self.assertEqual(
