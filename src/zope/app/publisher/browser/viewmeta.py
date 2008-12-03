@@ -342,7 +342,8 @@ class view(object):
 # transient _handle_menu registry
 _registeredMenus = {}
 
-def _handle_menu(_context, menu, title, for_, name, permission, layer=IDefaultBrowserLayer):
+def _handle_menu(_context, menu, title, for_, name, permission,
+                 layer=IDefaultBrowserLayer):
 
     if menu or title:
         if not (menu and title):
