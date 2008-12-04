@@ -339,9 +339,6 @@ class view(object):
                     _context.info),
             )
 
-# transient _handle_menu registry
-_registeredMenus = {}
-
 def _handle_menu(_context, menu, title, for_, name, permission,
                  layer=IDefaultBrowserLayer):
 
@@ -355,14 +352,9 @@ def _handle_menu(_context, menu, title, for_, name, permission,
                     "Menus can be specified only for single-view, not for "
                     "multi-views.")
 
-        registeredTitles = _registeredMenus.setdefault(menu, {})
-        registered = registeredTitles.setdefault(title, [])
-
-        if for_[0] not in registered:
-            registered.append(for_[0])
-            return menuItemDirective(
-                _context, menu, for_[0], '@@' + name, title,
-                permission=permission, layer=layer)
+        return menuItemDirective(
+            _context, menu, for_[0], '@@' + name, title,
+            permission=permission, layer=layer)
 
     return []
 
