@@ -15,7 +15,7 @@
 
 Menu items registered with <browser:page/> were not re-registered after the
 first functional test layer ran. In any subsequent functional test layer the
-items where not availabe (LP #XXX, introduced in 3.5.0a3)
+items where not availabe (introduced in 3.5.0a3)
 
 """
 
