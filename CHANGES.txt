@@ -2,7 +2,7 @@
 Changes
 =======
 
-3.5.3 (Unreleased)
+3.5.2 (2008-12-06)
 ==================
 
 - Added possibility to specify custom item class in menuItem, subMenuItem
@@ -11,9 +11,6 @@ Changes
 - Menu items registered with <browser:page/> were not re-registered after the
   first functional test layer ran. In any subsequent functional test layer the
   items where not availabe (introduced in 3.5.0a3).
-
-3.5.2a1 (2008-10-23)
-====================
 
 - Added a hook to specify a different BaseURL for resources. This makes sense
   if you want to put resources on a Content Delivery Network. All you need to
