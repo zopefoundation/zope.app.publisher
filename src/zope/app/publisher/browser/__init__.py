@@ -73,9 +73,44 @@ def getDefaultViewName(object, request, context=None):
                                context, request)
 
 def queryDefaultViewName(object, request, default=None, context=None):
+    """
+    query the default view for a given object and request.
+
+      >>> from zope.app.publisher.browser import queryDefaultViewName
+
+    lets create an object with a default view.
+
+      >>> import zope.interface
+      >>> class IMyObject(zope.interface.Interface):
+      ...   pass
+      >>> class MyObject(object):
+      ...   zope.interface.implements(IMyObject)
+      >>> queryDefaultViewName(MyObject(), object()) is None
+      True
+
+    Now we can will set a default view.
+
+      >>> import zope.component
+      >>> import zope.component.interfaces
+      >>> zope.component.provideAdapter('name',
+      ...     adapts=(IMyObject, zope.interface.Interface),
+      ...     provides=zope.component.interfaces.IDefaultViewName)
+      >>> queryDefaultViewName(MyObject(), object())
+      'name'
+
+    This also works if the name is empty
+
+      >>> zope.component.provideAdapter('',
+      ...     adapts=(IMyObject, zope.interface.Interface),
+      ...     provides=zope.component.interfaces.IDefaultViewName)
+      >>> queryDefaultViewName(MyObject(), object())
+      ''
+    """
     name = getSiteManager(context).adapters.lookup(
         map(zope.interface.providedBy, (object, request)), IDefaultViewName)
-    return name or default
+    if name is None:
+        return default
+    return name
 
 class NotCompatibleAdapterError(Exception):
     """Adapter not compatible with
