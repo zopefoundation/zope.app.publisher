@@ -2,7 +2,10 @@
 Changes
 =======
 
-3.5.3 (unreleased)
+3.5.4 (unreleased)
+==================
+
+3.5.3 (2009-01-27)
 ==================
 
 - Finally removed <browser:skin> and <browser:layer> that were marked as
