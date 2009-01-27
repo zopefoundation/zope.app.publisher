@@ -65,8 +65,6 @@ setup(name='zope.app.publisher',
                    'zope.app.testing',
                    'zope.app.securitypolicy',
                    'zope.app.zcmlfiles'],
-          'back35': ['zope.app.skins',
-                     'zope.app.layers'],
           },
 
       zip_safe = False,

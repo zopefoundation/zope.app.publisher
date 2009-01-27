@@ -5,7 +5,8 @@ Changes
 3.5.3 (unreleased)
 ==================
 
-- ...
+- Finally removed <browser:skin> and <browser:layer> that were marked as
+  deprecated in 2006/02.
 
 3.5.2 (2008-12-06)
 ==================
