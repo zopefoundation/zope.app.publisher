@@ -22,7 +22,7 @@ import zope.interface
 import zope.publisher.interfaces.xmlrpc
 from zope.testing import renormalizing
 
-import zope.app.folder.folder
+import zope.site.folder
 from zope.app.testing import functional, setup
 from zope.app.publisher.testing import AppPublisherLayer
 
@@ -38,7 +38,7 @@ def tearDown(test):
     # (OK, we could get it if we want. Maybe later.)
 
     zope.component.provideAdapter(None, (
-        zope.app.folder.folder.IFolder,
+        zope.site.interfaces.IFolder,
         zope.publisher.interfaces.xmlrpc.IXMLRPCRequest
         ), zope.interface, 'contents')
 

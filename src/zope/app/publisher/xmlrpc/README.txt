@@ -28,7 +28,7 @@ Now we'll register it as a view:
   ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
   ...
   ...   <xmlrpc:view
-  ...       for="zope.app.folder.folder.IFolder"
+  ...       for="zope.site.interfaces.IFolder"
   ...       methods="contents"
   ...       class="zope.app.publisher.xmlrpc.README.FolderListing"
   ...       permission="zope.ManageContent"
@@ -44,7 +44,7 @@ Now, we'll add some items to the root folder:
   ... Content-Length: 73
   ... Content-Type: application/x-www-form-urlencoded
   ...
-  ... type_name=BrowserAdd__zope.app.folder.folder.Folder&new_value=f1""")
+  ... type_name=BrowserAdd__zope.site.folder.Folder&new_value=f1""")
   HTTP/1.1 303 See Other
   ...
 
@@ -54,7 +54,7 @@ Now, we'll add some items to the root folder:
   ... Content-Length: 73
   ... Content-Type: application/x-www-form-urlencoded
   ...
-  ... type_name=BrowserAdd__zope.app.folder.folder.Folder&new_value=f2""")
+  ... type_name=BrowserAdd__zope.site.folder.Folder&new_value=f2""")
   HTTP/1.1 303 See Other
   ...
 
@@ -125,7 +125,7 @@ as as a named view:
   ...
   ...   <xmlrpc:view
   ...       name="listing"
-  ...       for="zope.app.folder.folder.IFolder"
+  ...       for="zope.site.folder.IFolder"
   ...       methods="contents"
   ...       class="zope.app.publisher.xmlrpc.README.FolderListing"
   ...       permission="zope.ManageContent"
@@ -175,7 +175,7 @@ Now we'll register it as a view:
   ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
   ...
   ...   <xmlrpc:view
-  ...       for="zope.app.folder.folder.IFolder"
+  ...       for="zope.site.folder.IFolder"
   ...       methods="add"
   ...       class="zope.app.publisher.xmlrpc.README.ParameterDemo"
   ...       permission="zope.ManageContent"
@@ -219,7 +219,7 @@ Now we'll register it as a view:
   ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
   ...
   ...   <xmlrpc:view
-  ...       for="zope.app.folder.folder.IFolder"
+  ...       for="zope.site.folder.IFolder"
   ...       methods="your_fault"
   ...       class="zope.app.publisher.xmlrpc.README.FaultDemo"
   ...       permission="zope.ManageContent"
@@ -265,7 +265,7 @@ Now we'll register it as a view:
   ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
   ...
   ...   <xmlrpc:view
-  ...       for="zope.app.folder.folder.IFolder"
+  ...       for="zope.site.folder.IFolder"
   ...       methods="epoch"
   ...       class="zope.app.publisher.xmlrpc.README.DateTimeDemo"
   ...       permission="zope.ManageContent"
@@ -310,7 +310,7 @@ deferred to the class that provides the view's implementation:
   ...
   ...   <xmlrpc:view
   ...       name="index"
-  ...       for="zope.app.folder.folder.IFolder"
+  ...       for="zope.site.interfaces.IFolder"
   ...       methods="public protected"
   ...       class="zope.app.publisher.xmlrpc.README.ProtectedView"
   ...       />
@@ -364,7 +364,7 @@ Now we'll register it as a view:
   ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
   ...
   ...   <xmlrpc:view
-  ...       for="zope.app.folder.folder.IFolder"
+  ...       for="zope.site.interfaces.IFolder"
   ...       methods="your_exception"
   ...       class="zope.app.publisher.xmlrpc.README.ExceptionDemo"
   ...       permission="zope.ManageContent"
