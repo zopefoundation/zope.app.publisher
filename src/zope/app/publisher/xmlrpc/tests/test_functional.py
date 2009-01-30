@@ -22,7 +22,7 @@ import zope.interface
 import zope.publisher.interfaces.xmlrpc
 from zope.testing import renormalizing
 
-import zope.site.folder
+import zope.site.interfaces
 from zope.app.testing import functional, setup
 from zope.app.publisher.testing import AppPublisherLayer
 

@@ -15,17 +15,19 @@
 
 $Id$
 """
+
 import zope.component
+import zope.location.interfaces
 from zope.interface import implements
 from zope.traversing.interfaces import IContainmentRoot
 
 from zope.app.component.hooks import setSite
-from zope.app.component.interfaces import ISite
 
 from zope.app.publisher.browser.menu import BrowserMenu
 
 class Site:
-    implements(ISite, IContainmentRoot)
+
+    implements(zope.location.interfaces.ISite, IContainmentRoot)
 
     def getSiteManager(self):
         return zope.component.getGlobalSiteManager()
@@ -43,6 +45,6 @@ class SiteHandler(object):
         setSite()
         super(SiteHandler, self).tearDown()
 
+
 class M1(BrowserMenu):
     pass
-

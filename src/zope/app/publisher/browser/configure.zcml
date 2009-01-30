@@ -65,7 +65,7 @@
 
 <browser:page
     name=""
-    for="zope.app.component.interfaces.ISite"
+    for="zope.location.interfaces.ISite"
     class="zope.app.publisher.browser.resources.Resources"
     permission="zope.Public"
     allowed_interface="zope.publisher.interfaces.browser.IBrowserPublisher"

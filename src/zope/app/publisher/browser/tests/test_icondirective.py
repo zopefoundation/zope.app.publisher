@@ -29,9 +29,9 @@ from zope.security.interfaces import Forbidden
 from zope.security.proxy import removeSecurityProxy
 from zope.traversing.interfaces import IContainmentRoot
 
+import zope.location.interfaces
 import zope.app.publisher.browser
 from zope.app.component.tests.views import IC
-from zope.app.component.interfaces import ISite
 from zope.app.publisher.browser.tests import support
 from zope.app.testing.placelesssetup import PlacelessSetup
 

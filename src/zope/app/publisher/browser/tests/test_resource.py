@@ -21,7 +21,7 @@ from zope import component
 
 from zope.publisher.browser import TestRequest
 
-from zope.app.component.interfaces import ISite
+import zope.location.interfaces
 from zope.app.publisher.browser.resource import Resource
 from zope.app.publisher.browser.tests import support
 from zope.app.testing.placelesssetup import PlacelessSetup
@@ -53,7 +53,9 @@ class TestResource(support.SiteHandler, PlacelessSetup, unittest.TestCase):
         # fake IAbsoluteURL adapter
         def resourceBase(site, request):
             return 'http://cdn.example.com'
-        component.provideAdapter(resourceBase, (ISite, TestRequest), 
+        component.provideAdapter(
+            resourceBase,
+            (zope.location.interfaces.ISite, TestRequest),
             IAbsoluteURL, 'resource')
 
         req = TestRequest()
@@ -66,6 +68,3 @@ class TestResource(support.SiteHandler, PlacelessSetup, unittest.TestCase):
 
 def test_suite():
     return unittest.makeSuite(TestResource)
-
-if __name__ == '__main__':
-    unittest.main(defaultTest="test_suite")

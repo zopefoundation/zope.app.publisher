@@ -175,7 +175,7 @@ Now we'll register it as a view:
   ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
   ...
   ...   <xmlrpc:view
-  ...       for="zope.site.folder.IFolder"
+  ...       for="zope.site.interfaces.IFolder"
   ...       methods="add"
   ...       class="zope.app.publisher.xmlrpc.README.ParameterDemo"
   ...       permission="zope.ManageContent"
@@ -219,7 +219,7 @@ Now we'll register it as a view:
   ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
   ...
   ...   <xmlrpc:view
-  ...       for="zope.site.folder.IFolder"
+  ...       for="zope.site.interfaces.IFolder"
   ...       methods="your_fault"
   ...       class="zope.app.publisher.xmlrpc.README.FaultDemo"
   ...       permission="zope.ManageContent"
@@ -265,7 +265,7 @@ Now we'll register it as a view:
   ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
   ...
   ...   <xmlrpc:view
-  ...       for="zope.site.folder.IFolder"
+  ...       for="zope.site.interfaces.IFolder"
   ...       methods="epoch"
   ...       class="zope.app.publisher.xmlrpc.README.DateTimeDemo"
   ...       permission="zope.ManageContent"
