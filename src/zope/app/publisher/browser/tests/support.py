@@ -21,7 +21,7 @@ import zope.location.interfaces
 from zope.interface import implements
 from zope.traversing.interfaces import IContainmentRoot
 
-from zope.app.component.hooks import setSite
+from zope.site.hooks import setSite
 
 from zope.app.publisher.browser.menu import BrowserMenu
 

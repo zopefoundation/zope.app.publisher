@@ -11,14 +11,6 @@
     component=".vocabulary.BrowserSkinsVocabulary"
     />
 
-<!-- BBB 2006/02/18, to be removed after 12 months -->
-<browser:layer
-    zcml:condition="have deprecatedlayers"
-    name="default"
-    interface="zope.publisher.interfaces.browser.IDefaultBrowserLayer"
-    bbb_aware="true"
-    />
-
 <class class="zope.publisher.browser.BrowserRequest">
   <allow
     interface="zope.publisher.interfaces.browser.IBrowserApplicationRequest"

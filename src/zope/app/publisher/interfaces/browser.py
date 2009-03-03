@@ -20,18 +20,6 @@ from zope.interface import Interface, directlyProvides
 from zope.interface.interfaces import IInterface
 from zope.schema import TextLine, Text, URI, Int
 
-##############################################################################
-# BBB 2006/04/03 - to be removed after 12 months
-
-import zope.deferredimport
-zope.deferredimport.deprecated(
-    "IBrowserView has been moved to zope.publisher.interfaces.browser. "
-    "This reference will be removed in Zope 3.5.",
-    IBrowserView = 'zope.publisher.interfaces.browser:IBrowserView',
-    )
-
-#
-##############################################################################
 
 class IMenuItemType(IInterface):
     """Menu item type

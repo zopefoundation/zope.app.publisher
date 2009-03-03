@@ -24,19 +24,6 @@ from zope.publisher.browser import BrowserLanguages
 from zope.i18n.interfaces import IUserPreferredLanguages
 from zope.i18n.interfaces import IModifiableUserPreferredLanguages
 
-##############################################################################
-# BBB 2006/04/03 - to be removed after 12 months
-
-import zope.deferredimport
-zope.deferredimport.deprecated(
-    "It has been moved to zope.publisher.browser. This reference will "
-    "be removed in Zope 3.5.",
-    BrowserView = 'zope.publisher.browser:BrowserView',
-    applySkin = 'zope.publisher.browser:applySkin',
-    )
-
-#
-##############################################################################
 
 class IDefaultViewNameAPI(zope.interface.Interface):
 

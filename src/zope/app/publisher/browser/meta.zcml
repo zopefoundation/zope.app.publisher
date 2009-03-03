@@ -126,23 +126,8 @@
 
     </meta:complexDirective>
 
+
     <!-- misc. directives -->
-
-    <!-- BBB 2006/02/18, to be removed after 12 months -->
-    <meta:directive
-        zcml:condition="have deprecatedlayers"
-        name="layer"
-        schema=".metadirectives.ILayerDirective"
-        handler=".metaconfigure.layer"
-        />
-
-    <!-- BBB 2006/02/18, to be removed after 12 months -->
-    <meta:directive
-        zcml:condition="have deprecatedlayers"
-        name="skin"
-        schema=".metadirectives.ISkinDirective"
-        handler=".metaconfigure.skin"
-        />
 
     <meta:directive
         name="defaultSkin"

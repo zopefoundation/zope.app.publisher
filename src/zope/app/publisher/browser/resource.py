@@ -22,7 +22,7 @@ from zope.interface import implements
 from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.location import Location
 
-from zope.app.component.hooks import getSite
+from zope.site.hooks import getSite
 
 class Resource(Location):
     implements(IResource)

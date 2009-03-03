@@ -21,10 +21,10 @@ from zope.interface.interface import InterfaceClass
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.security.checker import InterfaceChecker, CheckerPublic
+from zope.security.metaconfigure import ClassDirective
 from zope.component.interface import provideInterface
 from zope.component.zcml import adapter, proxify, utility
 
-from zope.app.component.contentdirective import ClassDirective
 from zope.app.pagetemplate.engine import Engine
 from zope.app.container.interfaces import IAdding
 from zope.app.publisher.browser.menu import BrowserMenu

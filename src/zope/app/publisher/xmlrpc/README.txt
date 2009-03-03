@@ -300,7 +300,7 @@ deferred to the class that provides the view's implementation:
   ...   <!-- We only need to do this include in this example,
   ...        Normally the include has already been done for us. -->
   ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
-  ...   <include package="zope.app.component" file="meta.zcml" />
+  ...   <include package="zope.security" file="meta.zcml" />
   ...
   ...   <class class="zope.app.publisher.xmlrpc.README.ProtectedView">
   ...       <require permission="zope.ManageContent"

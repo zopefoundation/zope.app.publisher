@@ -401,7 +401,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             component.queryMultiAdapter((ob, request), name='test'),
             None)
 
-        XMLConfig('meta.zcml', zope.app.component)()
+        XMLConfig('meta.zcml', zope.component)()
         xmlconfig(StringIO(template % (
             '''
             <interface
