@@ -15,12 +15,13 @@
 
 $Id$
 """
-from zope.component.interfaces import ComponentLookupError, IDefaultViewName
+from zope.component.interfaces import ComponentLookupError
 from zope.component import getSiteManager
 
 import zope.interface
 from zope.interface import implements
 from zope.publisher.browser import BrowserLanguages
+from zope.publisher.interfaces import IDefaultViewName
 from zope.i18n.interfaces import IUserPreferredLanguages
 from zope.i18n.interfaces import IModifiableUserPreferredLanguages
 
@@ -73,10 +74,10 @@ def queryDefaultViewName(object, request, default=None, context=None):
     Now we can will set a default view.
 
       >>> import zope.component
-      >>> import zope.component.interfaces
+      >>> import zope.publisher.interfaces
       >>> zope.component.provideAdapter('name',
       ...     adapts=(IMyObject, zope.interface.Interface),
-      ...     provides=zope.component.interfaces.IDefaultViewName)
+      ...     provides=zope.publisher.interfaces.IDefaultViewName)
       >>> queryDefaultViewName(MyObject(), object())
       'name'
 
@@ -84,7 +85,7 @@ def queryDefaultViewName(object, request, default=None, context=None):
 
       >>> zope.component.provideAdapter('',
       ...     adapts=(IMyObject, zope.interface.Interface),
-      ...     provides=zope.component.interfaces.IDefaultViewName)
+      ...     provides=zope.publisher.interfaces.IDefaultViewName)
       >>> queryDefaultViewName(MyObject(), object())
       ''
     """

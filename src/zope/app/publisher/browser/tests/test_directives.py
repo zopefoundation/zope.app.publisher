@@ -25,10 +25,10 @@ from zope import component
 from zope.interface import Interface, implements, directlyProvides, providedBy
 
 import zope.security.management
-from zope.component.interfaces import IDefaultViewName
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.configuration.exceptions import ConfigurationError
 from zope.publisher.browser import TestRequest
+from zope.publisher.interfaces import IDefaultViewName
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IBrowserSkinType, IDefaultSkin

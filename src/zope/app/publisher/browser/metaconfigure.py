@@ -19,12 +19,12 @@ __docformat__ = 'restructuredtext'
 
 import warnings
 from zope import component
-from zope.component.interfaces import IDefaultViewName
 from zope.component.interface import provideInterface
 from zope.component.zcml import handler
 from zope.configuration.exceptions import ConfigurationError
 from zope.interface import directlyProvides
 from zope.interface.interface import InterfaceClass
+from zope.publisher.interfaces import IDefaultViewName
 from zope.publisher.interfaces.browser import IBrowserRequest, IDefaultSkin
 from zope.publisher.interfaces.browser import IBrowserSkinType
 
