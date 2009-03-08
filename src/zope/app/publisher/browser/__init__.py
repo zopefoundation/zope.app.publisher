@@ -30,8 +30,6 @@ class IDefaultViewNameAPI(zope.interface.Interface):
     def getDefaultViewName(object, request, context=None):
         """Get the name of the default view for the object and request.
 
-        The request must implement IPresentationRequest, and provides the
-        desired view type.  The nearest one to the object is found.
         If a matching default view name cannot be found, raises
         ComponentLookupError.
 
@@ -42,10 +40,7 @@ class IDefaultViewNameAPI(zope.interface.Interface):
     def queryDefaultViewName(object, request, default=None, context=None):
         """Look for the name of the default view for the object and request.
 
-        The request must implement IPresentationRequest, and provides
-        the desired view type.  The nearest one to the object is
-        found.  If a matching default view name cannot be found,
-        returns the default.
+        If a matching default view name cannot be found, returns the default.
 
         If context is not specified, attempts to use object to specify
         a context.

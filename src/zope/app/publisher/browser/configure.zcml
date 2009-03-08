@@ -16,8 +16,6 @@
     interface="zope.publisher.interfaces.browser.IBrowserApplicationRequest"
     attributes="response locale __str__"
     />
-  <allow
-    interface="zope.component.interfaces.IPresentationRequest" />
 </class>
 
 <class class="zope.publisher.browser.TestRequest">
@@ -25,8 +23,6 @@
     interface="zope.publisher.interfaces.browser.IBrowserApplicationRequest"
     attributes="response"
     />
-  <allow
-    interface="zope.component.interfaces.IPresentationRequest" />
 </class>
 
 <class class="zope.publisher.browser.BrowserResponse">

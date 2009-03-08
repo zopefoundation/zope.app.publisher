@@ -15,15 +15,10 @@
 
 $Id$
 """
-from zope.component.interfaces import IPresentation
-from zope.component.interfaces import IView
+from zope.publisher.interfaces import IView
 
 
-class IHTTPPresentation(IPresentation):
-    """HTTP presentations are for interaction with users using Web HTTPs
-    """
-
-class IHTTPView(IHTTPPresentation, IView):
+class IHTTPView(IView):
     "HTTP View"
 
 

@@ -15,12 +15,8 @@
 
 $Id$
 """
-from zope.component.interfaces import IView
-from zope.component.interfaces import IPresentation
+from zope.publisher.interfaces import IView
 
-class IXMLRPCPresentation(IPresentation):
-    """XML-RPC presentation
-    """
 
-class IXMLRPCView(IXMLRPCPresentation, IView):
+class IXMLRPCView(IView):
     """XMLRPC View"""

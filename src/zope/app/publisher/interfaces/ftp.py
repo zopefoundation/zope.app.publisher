@@ -15,16 +15,11 @@
 
 $Id$
 """
-from zope.component.interfaces import IPresentation
-from zope.component.interfaces import IView
-
+from zope.publisher.interfaces import IView
 from zope.publisher.interfaces.ftp import IFTPPublisher
 
-class IFTPPresentation(IPresentation):
-    """FTP presentations"""
 
-
-class IFTPView(IFTPPresentation, IView):
+class IFTPView(IView):
     "FTP View"
 
 

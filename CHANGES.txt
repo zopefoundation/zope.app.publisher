@@ -7,6 +7,11 @@ Changes
 
 - Remove deprecated code.
 
+- Adapt to removal of deprecated interfaces from zope.component.interfaces.
+  The IResource is now moved to zope.app.publisher.interfaces. The IView
+  is now in zope.publisher.interfaces. The IPresentation interface was
+  removed completely.
+
 3.6.0 (2009-01-31)
 ==================
 

@@ -17,12 +17,12 @@ $Id$
 """
 from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
-from zope.component.interfaces import IResource
 from zope.interface import implements
-from zope.traversing.browser.interfaces import IAbsoluteURL
 from zope.location import Location
-
 from zope.site.hooks import getSite
+from zope.traversing.browser.interfaces import IAbsoluteURL
+
+from zope.app.publisher.interfaces import IResource
 
 class Resource(Location):
     implements(IResource)
