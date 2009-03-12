@@ -2,7 +2,7 @@
 Changes
 =======
 
-3.6.1 (unreleased)
+3.6.1 (2009-03-12)
 ==================
 
 - Remove deprecated code.
