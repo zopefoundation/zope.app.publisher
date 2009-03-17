@@ -5,7 +5,9 @@ Changes
 3.6.2 (unreleased)
 ==================
 
-- ...
+- Register ``IModifiableUserPreferredLanguages`` adapter in the ZCML
+  configuration of ``zope.app.publisher.browser`` package. This was previously
+  done by ``zope.app.i18n``.
 
 3.6.1 (2009-03-12)
 ==================

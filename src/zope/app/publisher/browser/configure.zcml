@@ -3,6 +3,12 @@
    xmlns:browser="http://namespaces.zope.org/browser"
    xmlns:zcml="http://namespaces.zope.org/zcml">
 
+<adapter
+    factory=".ModifiableBrowserLanguages"
+    for="zope.publisher.interfaces.http.IHTTPRequest"
+    provides="zope.i18n.interfaces.IModifiableUserPreferredLanguages"
+    />
+
 <interface
   interface="zope.app.publisher.interfaces.browser.IMenuItemType" />
 
