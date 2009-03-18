@@ -2,7 +2,12 @@
 Changes
 =======
 
-3.6.2 (unreleased)
+3.6.3 (unreleased)
+==================
+
+- ...
+
+3.6.2 (2009-03-18)
 ==================
 
 - Register ``IModifiableUserPreferredLanguages`` adapter in the ZCML
