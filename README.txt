@@ -2,6 +2,10 @@
 Overview
 ========
 
+*This package is at present not reusable without depending on a large 
+chunk of the Zope Toolkit and its assumptions. It is maintained by the* 
+`Zope Toolkit project <http://docs.zope.org/zopetoolkit/>`_.
+
 ``zope.publisher`` is a general purpose object publishing framework
 which delegates to a publication object for determining the
 to-be-published object.  With Zope 3's default publication from
