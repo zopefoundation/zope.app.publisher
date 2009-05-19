@@ -26,7 +26,7 @@ from zope.component.interface import provideInterface
 from zope.component.zcml import adapter, proxify, utility
 
 from zope.app.pagetemplate.engine import Engine
-from zope.app.container.interfaces import IAdding
+from zope.browser.interfaces import IAdding
 from zope.app.publisher.browser.menu import BrowserMenu
 from zope.app.publisher.browser.menu import BrowserMenuItem, BrowserSubMenuItem
 from zope.app.publisher.interfaces.browser import IBrowserMenu

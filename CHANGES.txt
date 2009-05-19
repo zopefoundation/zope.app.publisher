@@ -2,10 +2,13 @@
 Changes
 =======
 
-3.6.3 (unreleased)
+3.7 (unreleased)
 ==================
 
-- ...
+- Use zope.componentvocabulary instead of zope.app.component
+  (except for tests and IBasicViewInformation).
+
+- Use zope.browser for IAdding interface (instead of zope.app.container)
 
 3.6.2 (2009-03-18)
 ==================

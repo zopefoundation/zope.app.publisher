@@ -18,7 +18,7 @@ $Id$
 from zope.interface import classProvides
 from zope.publisher.interfaces.browser import IBrowserSkinType
 from zope.schema.interfaces import IVocabularyFactory
-from zope.app.component.vocabulary import UtilityVocabulary
+from zope.componentvocabulary.vocabulary import UtilityVocabulary
 
 class BrowserSkinsVocabulary(UtilityVocabulary):
     classProvides(IVocabularyFactory)
