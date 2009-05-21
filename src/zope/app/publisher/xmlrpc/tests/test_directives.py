@@ -20,7 +20,7 @@ import unittest
 from zope import component
 from zope.configuration import xmlconfig
 from zope.configuration.exceptions import ConfigurationError
-from zope.app.component.tests.views import Request, IC, V1
+from zope.component.testfiles.views import Request, IC, V1
 from zope.app.testing.placelesssetup import PlacelessSetup
 from zope.security.proxy import ProxyFactory
 from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest

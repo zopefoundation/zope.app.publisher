@@ -5,6 +5,9 @@ Changes
 3.7 (unreleased)
 ==================
 
+- Update references to ``zope.app.component.tests.views`` to point to the new
+  locations in ``zope.component.testfiles.views``.
+
 - Use zope.componentvocabulary instead of zope.app.component
   (except for tests and IBasicViewInformation).
 

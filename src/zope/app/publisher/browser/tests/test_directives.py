@@ -40,7 +40,7 @@ from zope.traversing.adapters import DefaultTraversable
 from zope.traversing.interfaces import ITraversable
 
 import zope.app.publisher.browser
-from zope.app.component.tests.views import IC, V1, VZMI, R1, IV
+from zope.component.testfiles.views import IC, V1, VZMI, R1, IV
 from zope.app.publisher.browser.fileresource import FileResource
 from zope.app.publisher.browser.i18nfileresource import I18nFileResource
 from zope.app.publisher.browser.menu import getFirstMenuItem
@@ -139,8 +139,8 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             '''
             <browser:page
                 name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
+                class="zope.component.testfiles.views.V1"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 attribute="index"
                 />
@@ -162,8 +162,8 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 id="test_menu" title="Test menu" />
             <browser:page
                 name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
+                class="zope.component.testfiles.views.V1"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 template="%s"
                 menu="test_menu"
@@ -198,8 +198,8 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 id="test_menu" title="Test menu" />
             <browser:page
                 name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
+                class="zope.component.testfiles.views.V1"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 template="%s"
                 menu="test_menu"
@@ -226,7 +226,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 id="test_menu" title="Test menu"/>
             <browser:page
                 name="test"
-                for="zope.app.component.tests.views.IC"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 template="%s"
                 menu="test_menu"
@@ -253,7 +253,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             <browser:menu
                 id="test_menu" title="Test menu" />
             <browser:pages
-                for="zope.app.component.tests.views.IC"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public">
               <browser:page
                   name="test"
@@ -283,8 +283,8 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             <browser:menu
                 id="test_menu" title="Test menu" />
             <browser:pages
-                for="zope.app.component.tests.views.IC"
-                class="zope.app.component.tests.views.V1"
+                for="zope.component.testfiles.views.IC"
+                class="zope.component.testfiles.views.V1"
                 permission="zope.Public">
               <browser:page
                   name="test"
@@ -311,7 +311,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             '''
             <browser:defaultView
                 name="test"
-                for="zope.app.component.tests.views.IC" />
+                for="zope.component.testfiles.views.IC" />
             '''
             )))
 
@@ -332,11 +332,11 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             '''
             <browser:defaultView
                 name="test"
-                for="zope.app.component.tests.views.IC" />
+                for="zope.component.testfiles.views.IC" />
 
             <browser:defaultView
                 name="test2"
-                for="zope.app.component.tests.views.IC"
+                for="zope.component.testfiles.views.IC"
                 layer="
                   zope.app.publisher.browser.tests.test_directives.ITestLayer"
                 />
@@ -377,13 +377,13 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             '''
             <browser:resource
                 name="test"
-                factory="zope.app.component.tests.views.RZMI"
+                factory="zope.component.testfiles.views.RZMI"
                 layer="
                   zope.app.publisher.browser.tests.test_directives.ITestLayer"
                 />
             <browser:resource
                 name="test"
-                factory="zope.app.component.tests.views.R1"
+                factory="zope.component.testfiles.views.R1"
                 />
             '''
             )))
@@ -413,16 +413,16 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             <browser:defaultSkin name="Test Skin" />
             <browser:page
                 name="test"
-                class="zope.app.component.tests.views.VZMI"
+                class="zope.component.testfiles.views.VZMI"
                 layer="
                   zope.app.publisher.browser.tests.test_directives.ITestLayer"
-                for="zope.app.component.tests.views.IC"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 attribute="index"
                 />
             <browser:page name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
+                class="zope.component.testfiles.views.V1"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 attribute="index"
                 />
@@ -445,16 +445,16 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         xmlconfig(StringIO(template % (
             '''
             <browser:page name="test"
-                class="zope.app.component.tests.views.VZMI"
+                class="zope.component.testfiles.views.VZMI"
                 layer="
                   zope.app.publisher.browser.tests.test_directives.ITestLayer"
-                for="zope.app.component.tests.views.IC"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 attribute="index"
                 />
             <browser:page name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
+                class="zope.component.testfiles.views.V1"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 attribute="index"
                 />
@@ -515,11 +515,11 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         xmlconfig(StringIO(template %
             '''
             <browser:page name="test"
-                class="zope.app.component.tests.views.V1"
+                class="zope.component.testfiles.views.V1"
                 attribute="index"
-                for="zope.app.component.tests.views.IC"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
-                allowed_interface="zope.app.component.tests.views.IV"
+                allowed_interface="zope.component.testfiles.views.IV"
                 />
             '''
             ))
@@ -534,7 +534,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             '''
             <browser:page name="test"
                 class="zope.app.publisher.browser.tests.test_directives.V2"
-                for="zope.app.component.tests.views.IC"
+                for="zope.component.testfiles.views.IC"
                 attribute="action"
                 permission="zope.Public"
                 allowed_attributes="action2"
@@ -553,7 +553,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             '''
             <browser:view name="test"
                 class="zope.app.publisher.browser.tests.test_directives.V2"
-                for="zope.app.component.tests.views.IC"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 allowed_attributes="action2"
                 >
@@ -573,12 +573,12 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         xmlconfig(StringIO(template %
             '''
             <browser:page name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
+                class="zope.component.testfiles.views.V1"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 attribute="index"
                 allowed_attributes="action"
-                allowed_interface="zope.app.component.tests.views.IV"
+                allowed_interface="zope.component.testfiles.views.IV"
                 />
             '''
             ))
@@ -591,12 +591,12 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         xmlconfig(StringIO(template %
             '''
             <browser:page name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
+                class="zope.component.testfiles.views.V1"
+                for="zope.component.testfiles.views.IC"
                 attribute="index"
                 permission="zope.Public"
                 allowed_attributes="action index"
-                allowed_interface="zope.app.component.tests.views.IV"
+                allowed_interface="zope.component.testfiles.views.IV"
                 />
             '''
             ))
@@ -612,7 +612,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 name="test"
                 class="
              zope.app.publisher.browser.tests.test_directives.C_w_implements"
-                for="zope.app.component.tests.views.IC"
+                for="zope.component.testfiles.views.IC"
                 attribute="index"
                 permission="zope.Public"
                 />
@@ -630,8 +630,8 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             StringIO(template %
             '''
             <browser:page name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
+                class="zope.component.testfiles.views.V1"
+                for="zope.component.testfiles.views.IC"
                 attribute="index"
                 allowed_attributes="action index"
                 />
@@ -648,8 +648,8 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         xmlconfig(StringIO(template %
             '''
             <browser:pages
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
+                class="zope.component.testfiles.views.V1"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 >
 
@@ -677,7 +677,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             <browser:view
                 name="test"
                 class="zope.app.publisher.browser.tests.test_directives.V1"
-                for="zope.app.component.tests.views.IC"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 >
 
@@ -710,7 +710,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             <browser:view
                 name="test"
                 class="zope.app.publisher.browser.tests.test_directives.CV"
-                for="zope.app.component.tests.views.IC"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 />
             '''
@@ -730,7 +730,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             <browser:view
                 name="test"
                 class="zope.app.publisher.browser.tests.test_directives.NCV"
-                for="zope.app.component.tests.views.IC"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 />
             '''
@@ -750,8 +750,8 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             '''
             <browser:view
                 name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
+                class="zope.component.testfiles.views.V1"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 >
 
@@ -787,8 +787,8 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             '''
             <browser:view
                 name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
+                class="zope.component.testfiles.views.V1"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 >
 
@@ -822,12 +822,12 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             '''
             <browser:view
                 name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
+                class="zope.component.testfiles.views.V1"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public" />
 
             <browser:page name="index.html"
-                for="zope.app.component.tests.views.IV"
+                for="zope.component.testfiles.views.IV"
                 class="zope.app.publisher.browser.tests.test_directives.CV"
                 permission="zope.Public" />
             '''
@@ -850,11 +850,11 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             <browser:view
                 name="test"
                 class="zope.app.publisher.browser.tests.test_directives.VT"
-                for="zope.app.component.tests.views.IC"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public" />
 
             <browser:page name="index.html"
-                for="zope.app.component.tests.views.IV"
+                for="zope.component.testfiles.views.IV"
                 class="zope.app.publisher.browser.tests.test_directives.CV"
                 permission="zope.Public" />
             '''
@@ -879,8 +879,8 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             <permission id="zope.TestPermission" title="Test permission" />
 
             <browser:pages
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
+                class="zope.component.testfiles.views.V1"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.TestPermission"
                 >
 
@@ -911,8 +911,8 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
 
             <browser:view
                 name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
+                class="zope.component.testfiles.views.V1"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 >
 
@@ -937,7 +937,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             '''
             <browser:pages
                 for="*"
-                class="zope.app.component.tests.views.V1"
+                class="zope.component.testfiles.views.V1"
                 permission="zope.Public"
                 >
               <browser:page name="index.html" attribute="index" />
@@ -945,7 +945,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
 
             <browser:pages
                 for="*"
-                class="zope.app.component.tests.views.V1"
+                class="zope.component.testfiles.views.V1"
                 layer="
                   zope.app.publisher.browser.tests.test_directives.ITestLayer"
                 permission="zope.Public"
@@ -1045,7 +1045,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 name="index.html"
                 template="%s"
                 permission="zope.Public"
-                for="zope.app.component.tests.views.IC" />
+                for="zope.component.testfiles.views.IC" />
             ''' % path
             ))
 
@@ -1068,14 +1068,14 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             <browser:page
                 name="index.html"
                 permission="zope.Public"
-                for="zope.app.component.tests.views.IC"
+                for="zope.component.testfiles.views.IC"
                 template="%s"
                 menu="test_menu" title="Index"/>
 
             <browser:page
                 name="index.html"
                 permission="zope.Public"
-                for="zope.app.component.tests.views.IC"
+                for="zope.component.testfiles.views.IC"
                 menu="test_menu" title="Index"
                 template="%s"
                 layer="zope.app.publisher.browser.tests.test_directives.ITestLayer"/>
@@ -1099,7 +1099,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 template="%s"
                 permission="zope.Public"
           class="zope.app.publisher.browser.tests.templateclass.templateclass"
-                for="zope.app.component.tests.views.IC" />
+                for="zope.component.testfiles.views.IC" />
             ''' % path
             ))
 
@@ -1125,7 +1125,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 name="xxx.html"
                 template="%s"
                 permission="zope.TestPermission"
-                for="zope.app.component.tests.views.IC" />
+                for="zope.component.testfiles.views.IC" />
             ''' % path
             ))
 
@@ -1135,7 +1135,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
                 name="index.html"
                 template="%s"
                 permission="zope.Public"
-                for="zope.app.component.tests.views.IC" />
+                for="zope.component.testfiles.views.IC" />
             ''' % path
             ))
 
@@ -1158,7 +1158,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             '''
             <browser:page
                 template="%s"
-                for="zope.app.component.tests.views.IC"
+                for="zope.component.testfiles.views.IC"
                 />
             ''' % path
             ))
@@ -1173,7 +1173,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             <browser:view
                 name="index.html"
                 template="%s"
-                for="zope.app.component.tests.views.IC"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 >
               <browser:page name="foo.html" attribute="index" />
@@ -1190,8 +1190,8 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             '''
             <browser:view
                 name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
+                class="zope.component.testfiles.views.V1"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 />
             '''
@@ -1204,9 +1204,9 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
             '''
             <browser:view
                 name="test"
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
-                provides="zope.app.component.tests.views.IV"
+                class="zope.component.testfiles.views.V1"
+                for="zope.component.testfiles.views.IC"
+                provides="zope.component.testfiles.views.IV"
                 permission="zope.Public"
                 />
             '''
@@ -1223,8 +1223,8 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         xmlconfig(StringIO(template %
             '''
             <browser:view
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
+                class="zope.component.testfiles.views.V1"
+                for="zope.component.testfiles.views.IC"
                 permission="zope.Public"
                 />
             '''
@@ -1236,9 +1236,9 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         xmlconfig(StringIO(template %
             '''
             <browser:view
-                class="zope.app.component.tests.views.V1"
-                for="zope.app.component.tests.views.IC"
-                provides="zope.app.component.tests.views.IV"
+                class="zope.component.testfiles.views.V1"
+                for="zope.component.testfiles.views.IC"
+                provides="zope.component.testfiles.views.IV"
                 permission="zope.Public"
                 />
             '''
@@ -1267,7 +1267,7 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
 	xmlconfig(StringIO(template %
             '''
             <browser:menuItem
-                for="zope.app.component.tests.views.IC"
+                for="zope.component.testfiles.views.IC"
                 title="Test Entry"
                 menu="test_menu"
                action="@@test"

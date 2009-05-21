@@ -23,7 +23,7 @@ from zope.configuration.fields import Tokens, Path, PythonIdentifier, MessageID
 from zope.schema import TextLine, Id, Int, Bool
 from zope.security.zcml import Permission
 
-from zope.app.component.metadirectives import IBasicViewInformation
+from zope.component.zcml import IBasicViewInformation
 from zope.app.publisher.browser.fields import MenuField
 
 #

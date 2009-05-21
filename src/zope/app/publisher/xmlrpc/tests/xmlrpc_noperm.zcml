@@ -6,8 +6,8 @@
 
   <xmlrpc:view
       name="index"
-      class="zope.app.component.tests.views.V1"
-      for="zope.app.component.tests.views.IC"
+      class="zope.component.testfiles.views.V1"
+      for="zope.component.testfiles.views.IC"
       />
 
 </configure>

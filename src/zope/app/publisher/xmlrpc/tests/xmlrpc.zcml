@@ -7,47 +7,47 @@
 
   <xmlrpc:view
       name="test"
-      class="zope.app.component.tests.views.V1"
-      for="zope.app.component.tests.views.IC"
+      class="zope.component.testfiles.views.V1"
+      for="zope.component.testfiles.views.IC"
       permission="zope.Public"
       />
 
   <xmlrpc:view
       name="test2"
-      class="zope.app.component.tests.views.V1"
-      for="zope.app.component.tests.views.IC"
+      class="zope.component.testfiles.views.V1"
+      for="zope.component.testfiles.views.IC"
       permission="zope.Public"
-      interface="zope.app.component.tests.views.IV"
+      interface="zope.component.testfiles.views.IV"
       />
 
   <xmlrpc:view
       name="test3"
-      class="zope.app.component.tests.views.V1"
-      for="zope.app.component.tests.views.IC"
+      class="zope.component.testfiles.views.V1"
+      for="zope.component.testfiles.views.IC"
       permission="zope.Public"
       methods="action" />
 
   <xmlrpc:view
       name="test4"
-      class="zope.app.component.tests.views.V1"
-      for="zope.app.component.tests.views.IC"
+      class="zope.component.testfiles.views.V1"
+      for="zope.component.testfiles.views.IC"
       permission="zope.Public"
       methods="action"
-      interface="zope.app.component.tests.views.IV" />
+      interface="zope.component.testfiles.views.IV" />
 
   <xmlrpc:view
       name="test5"
-      class="zope.app.component.tests.views.V1"
-      for="zope.app.component.tests.views.IC"
+      class="zope.component.testfiles.views.V1"
+      for="zope.component.testfiles.views.IC"
       permission="zope.Public"
       methods="action index"
-      interface="zope.app.component.tests.views.IV" />
+      interface="zope.component.testfiles.views.IV" />
 
 
   <xmlrpc:view
-      class="zope.app.component.tests.views.V1"
-      for="zope.app.component.tests.views.IC"
-      interface="zope.app.component.tests.views.IV"
+      class="zope.component.testfiles.views.V1"
+      for="zope.component.testfiles.views.IC"
+      interface="zope.component.testfiles.views.IV"
       methods="action"
       permission="zope.Public"
       />

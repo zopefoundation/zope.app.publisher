@@ -31,7 +31,7 @@ from zope.traversing.interfaces import IContainmentRoot
 
 import zope.location.interfaces
 import zope.app.publisher.browser
-from zope.app.component.tests.views import IC
+from zope.component.testfiles.views import IC
 from zope.app.publisher.browser.tests import support
 from zope.app.testing.placelesssetup import PlacelessSetup
 
@@ -80,13 +80,13 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
         xmlconfig(StringIO(template % (
             '''
             <browser:icon name="zmi_icon"
-                      for="zope.app.component.tests.views.IC"
+                      for="zope.component.testfiles.views.IC"
                       file="%s" />
             ''' % path
             )))
 
         view = component.getMultiAdapter((ob, request), name='zmi_icon')
-        rname = 'zope-app-component-tests-views-IC-zmi_icon.gif'
+        rname = 'zope-component-testfiles-views-IC-zmi_icon.gif'
         self.assertEqual(
             view(),
             '<img src="http://127.0.0.1/@@/%s" alt="IC" '
@@ -97,14 +97,14 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
         xmlconfig(StringIO(template % (
             '''
             <browser:icon name="zmi_icon_w_title"
-                      for="zope.app.component.tests.views.IC"
+                      for="zope.component.testfiles.views.IC"
                       file="%s" title="click this!" />
             ''' % path
             )))
 
         view = component.getMultiAdapter(
             (ob, request), name='zmi_icon_w_title')
-        rname = 'zope-app-component-tests-views-IC-zmi_icon_w_title.gif'
+        rname = 'zope-component-testfiles-views-IC-zmi_icon_w_title.gif'
         self.assertEqual(
             view(),
             '<img src="http://127.0.0.1/@@/%s" alt="click this!" '
@@ -115,7 +115,7 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
         xmlconfig(StringIO(template % (
             '''
             <browser:icon name="zmi_icon_w_width_and_height"
-                      for="zope.app.component.tests.views.IC"
+                      for="zope.component.testfiles.views.IC"
                       file="%s"
                       width="20" height="12" />
             ''' % path
@@ -123,7 +123,7 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
 
         view = component.getMultiAdapter((ob, request),
                                          name='zmi_icon_w_width_and_height')
-        rname = ('zope-app-component-tests-views-IC-'
+        rname = ('zope-component-testfiles-views-IC-'
                  'zmi_icon_w_width_and_height.gif')
         self.assertEqual(
             view(),
@@ -150,7 +150,7 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
             <browser:resource name="zmi_icon_res"
                       image="%s" />
             <browser:icon name="zmi_icon"
-                      for="zope.app.component.tests.views.IC"
+                      for="zope.component.testfiles.views.IC"
                       resource="zmi_icon_res" />
             ''' % path
             )))
@@ -182,7 +182,7 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
             <browser:resource name="zmi_icon_res"
                       image="%s" />
             <browser:icon name="zmi_icon"
-                      for="zope.app.component.tests.views.IC"
+                      for="zope.component.testfiles.views.IC"
                       file="%s"
                       resource="zmi_icon_res" />
             ''' % (path, path)
@@ -192,7 +192,7 @@ class Test(support.SiteHandler, PlacelessSetup, TestCase):
         config = StringIO(template % (
             """
             <browser:icon name="zmi_icon"
-                      for="zope.app.component.tests.views.IC"
+                      for="zope.component.testfiles.views.IC"
                       />
             """
             ))
