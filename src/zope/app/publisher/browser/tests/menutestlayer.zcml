@@ -1,0 +1,22 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:browser="http://namespaces.zope.org/browser"
+  i18n_domain="zope">
+
+  <include package="zope.app.publisher" file="meta.zcml" />
+
+  <browser:menu
+    id="test_menu"
+    title="Test Menu"
+    />
+
+  <browser:page
+    for="zope.interface.Interface"
+    name="foo"
+    class="zope.app.publisher.browser.tests.test_menutestlayer.View"
+    permission="zope.Public"
+    menu="test_menu" title="Foo"
+    />
+
+</configure>
+
