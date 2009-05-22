@@ -5,7 +5,7 @@ Changes
 3.7.1 (unreleased)
 ==================
 
-None.
+- There is no direct dependency on zope.app.component anymore (even in the tests).
 
 3.7.0 (2009-05-22)
 ==================

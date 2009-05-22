@@ -44,7 +44,7 @@ class MenuField(GlobalObject):
     ...     def resolve(self, path):
     ...         if path.startswith('zope.app.menus') and \
     ...             hasattr(menus, 'menu1') or \
-    ...             path == 'zope.app.component.menus.menu1':
+    ...             path == 'zope.app.publisher.menus.menu1':
     ...             return menu1
     ...         raise ConfigurationError('menu1')
 
@@ -54,7 +54,7 @@ class MenuField(GlobalObject):
     Test 1: Import the menu
     -----------------------
 
-    >>> field.fromUnicode('zope.app.component.menus.menu1') is menu1
+    >>> field.fromUnicode('zope.app.publisher.menus.menu1') is menu1
     True
 
     Test 2: We have a shortcut name. Import the menu from `zope.app.menus1`.
