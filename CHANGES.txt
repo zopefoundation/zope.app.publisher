@@ -10,6 +10,9 @@ Changes
 
 - Use zope.browser for IAdding interface (instead of zope.app.container)
 
+- Update references to ``zope.app.component.tests.views`` to point to the new
+  locations in ``zope.component.testfiles.views``.
+
 3.6.2 (2009-03-18)
 ==================
 
