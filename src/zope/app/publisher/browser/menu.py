@@ -25,9 +25,9 @@ from zope.security import checkPermission, canAccess
 from zope.security.interfaces import Unauthorized, Forbidden
 from zope.security.proxy import removeSecurityProxy
 from zope.publisher.browser import BrowserView
+from zope.traversing.publicationtraverse import PublicationTraverser
 
 from zope.app.pagetemplate.engine import Engine
-from zope.app.publication.browser import PublicationTraverser
 from zope.app.publisher.interfaces.browser import IMenuAccessView
 from zope.app.publisher.interfaces.browser import IBrowserMenu
 from zope.app.publisher.interfaces.browser import IBrowserMenuItem

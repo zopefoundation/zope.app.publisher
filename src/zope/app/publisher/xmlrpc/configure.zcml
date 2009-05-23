@@ -12,14 +12,6 @@
   </class>
 
   <view 
-      for="zope.interface.Interface"
-      type="zope.publisher.interfaces.xmlrpc.IXMLRPCRequest"
-      provides="zope.publisher.interfaces.xmlrpc.IXMLRPCPublisher"
-      factory="zope.app.publication.traversers.SimpleComponentTraverser"
-      permission="zope.Public"
-      />
-
-  <view 
       for="zope.container.interfaces.IItemContainer"
       type="zope.publisher.interfaces.xmlrpc.IXMLRPCRequest"
       provides="zope.publisher.interfaces.xmlrpc.IXMLRPCPublisher"
