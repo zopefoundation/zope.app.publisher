@@ -28,7 +28,6 @@ import zope.security.management
 from zope.configuration.xmlconfig import xmlconfig, XMLConfig
 from zope.configuration.exceptions import ConfigurationError
 from zope.publisher.browser import TestRequest
-from zope.publisher.interfaces import IDefaultViewName
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IBrowserSkinType, IDefaultSkin
@@ -301,73 +300,6 @@ class Test(placelesssetup.PlacelessSetup, unittest.TestCase):
         self.assertEqual(menuItem["action"], "@@test")
         v = component.queryMultiAdapter((ob, request), name='test')
         self.assertEqual(v(), "<html><body><p>test</p></body></html>\n")
-
-    def testDefaultView(self):
-        self.assertEqual(
-            component.queryMultiAdapter((ob, request), IDefaultViewName),
-            None)
-
-        xmlconfig(StringIO(template % (
-            '''
-            <browser:defaultView
-                name="test"
-                for="zope.component.testfiles.views.IC" />
-            '''
-            )))
-
-        self.assertEqual(
-            zope.app.publisher.browser.getDefaultViewName(ob, request),
-            'test')
-
-    def testDefaultViewWithLayer(self):
-        class FakeRequest(TestRequest):
-            implements(ITestLayer)
-        request2 = FakeRequest()
-
-        self.assertEqual(
-            component.queryMultiAdapter((ob, request2), IDefaultViewName),
-            None)
-
-        xmlconfig(StringIO(template % (
-            '''
-            <browser:defaultView
-                name="test"
-                for="zope.component.testfiles.views.IC" />
-
-            <browser:defaultView
-                name="test2"
-                for="zope.component.testfiles.views.IC"
-                layer="
-                  zope.app.publisher.browser.tests.test_directives.ITestLayer"
-                />
-            '''
-            )))
-
-        self.assertEqual(
-            zope.app.publisher.browser.getDefaultViewName(ob, request2),
-            'test2')
-        self.assertEqual(
-            zope.app.publisher.browser.getDefaultViewName(ob, request),
-            'test')
-
-    def testDefaultViewForClass(self):
-        self.assertEqual(
-            component.queryMultiAdapter((ob, request), IDefaultViewName),
-            None)
-
-        xmlconfig(StringIO(template % (
-            '''
-            <browser:defaultView
-                for="zope.app.publisher.browser.tests.test_directives.Ob"
-                name="test"
-                />
-            '''
-            )))
-
-        self.assertEqual(
-            zope.app.publisher.browser.getDefaultViewName(ob, request),
-            'test')
-
 
     def testSkinResource(self):
         self.assertEqual(

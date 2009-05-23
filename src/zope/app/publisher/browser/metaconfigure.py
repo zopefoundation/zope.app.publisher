@@ -19,14 +19,10 @@ __docformat__ = 'restructuredtext'
 
 import warnings
 from zope import component
-from zope.component.interface import provideInterface
 from zope.component.zcml import handler
-from zope.configuration.exceptions import ConfigurationError
-from zope.interface import directlyProvides
-from zope.interface.interface import InterfaceClass
-from zope.publisher.interfaces import IDefaultViewName
-from zope.publisher.interfaces.browser import IBrowserRequest, IDefaultSkin
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.publisher.interfaces.browser import IBrowserSkinType
+from zope.publisher.interfaces.browser import IDefaultSkin
 
 # referred to through ZCML
 from zope.app.publisher.browser.resourcemeta import resource
@@ -64,19 +60,3 @@ def defaultSkin(_context, name):
         callable = setDefaultSkin,
         args = (name, _context.info)
         )
-
-def defaultView(_context, name, for_=None, layer=IBrowserRequest):
-
-    _context.action(
-        discriminator = ('defaultViewName', for_, layer, name),
-        callable = handler,
-        args = ('registerAdapter',
-                name, (for_, layer), IDefaultViewName, '', _context.info)
-        )
-
-    if for_ is not None:
-        _context.action(
-            discriminator = None,
-            callable = provideInterface,
-            args = ('', for_)
-            )

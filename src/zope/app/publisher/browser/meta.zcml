@@ -70,13 +70,6 @@
 
     </meta:complexDirective>
 
-    <meta:directive
-        name="defaultView"
-        schema=".metadirectives.IDefaultViewDirective"
-        handler=".metaconfigure.defaultView"
-        />
-
-
     <!-- browser pages -->
 
     <meta:directive
