@@ -12,9 +12,9 @@ Changes
   zope.app.publisher -> zope.app.publication dependency (which was a
   cycle).
 
-- Moved the <browser:defaultView> directive handler to
-  zope.app.publication, since zope.app.publication is what
-  uses the registration.
+- Moved the DefaultViewName API from zope.app.publisher.browser to
+  zope.publisher.defaultview, making it accessible to other packages
+  that need it.
 
 3.7.0 (2009-05-22)
 ==================

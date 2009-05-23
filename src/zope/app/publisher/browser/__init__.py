@@ -24,9 +24,9 @@ from zope.i18n.interfaces import IModifiableUserPreferredLanguages
 import zope.deferredimport
 
 zope.deferredimport.deprecatedFrom(
-    "This import has moved to zope.app.publication.defaultview. "
+    "This import has moved to zope.publisher.defaultview. "
     "This import will stop working in the future.",
-    'zope.app.publisher.browser._defaultview',
+    'zope.publisher.defaultview',
     'IDefaultViewNameAPI',
     'getDefaultViewName',
     'queryDefaultViewName',
