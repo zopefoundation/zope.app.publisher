@@ -2,7 +2,7 @@
 Changes
 =======
 
-3.8.0 (unreleased)
+3.8.0 (2009-05-23)
 ==================
 
 - There is no direct dependency on zope.app.component anymore (even in
