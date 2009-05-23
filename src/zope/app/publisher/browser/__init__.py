@@ -21,16 +21,14 @@ from zope.publisher.browser import BrowserLanguages
 from zope.i18n.interfaces import IUserPreferredLanguages
 from zope.i18n.interfaces import IModifiableUserPreferredLanguages
 
-import zope.deferredimport
+from zope.deprecation import deprecated
+from zope.publisher.defaultview import IDefaultViewNameAPI
+from zope.publisher.defaultview import getDefaultViewName
+from zope.publisher.defaultview import queryDefaultViewName
+deprecated(
+    ['IDefaultViewNameAPI', 'getDefaultViewName', 'queryDefaultViewName'],
+    "moved to zope.publisher.defaultview")
 
-zope.deferredimport.deprecatedFrom(
-    "This import has moved to zope.publisher.defaultview. "
-    "This import will stop working in the future.",
-    'zope.publisher.defaultview',
-    'IDefaultViewNameAPI',
-    'getDefaultViewName',
-    'queryDefaultViewName',
-    )
 
 class NotCompatibleAdapterError(Exception):
     """Adapter not compatible with
