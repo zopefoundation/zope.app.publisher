@@ -2,10 +2,16 @@
 Changes
 =======
 
-3.7.1 (unreleased)
+3.8.0 (unreleased)
 ==================
 
-- There is no direct dependency on zope.app.component anymore (even in the tests).
+- There is no direct dependency on zope.app.component anymore (even in
+  the tests).
+
+- Moved the publicationtraverse module to zope.traversing, removing the
+  zope.app.publisher -> zope.app.publication dependency (which was a
+  cycle).
+
 
 3.7.0 (2009-05-22)
 ==================
