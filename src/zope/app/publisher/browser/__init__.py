@@ -21,13 +21,9 @@ from zope.publisher.browser import BrowserLanguages
 from zope.i18n.interfaces import IUserPreferredLanguages
 from zope.i18n.interfaces import IModifiableUserPreferredLanguages
 
-from zope.deprecation import deprecated
-from zope.publisher.defaultview import IDefaultViewNameAPI
-from zope.publisher.defaultview import getDefaultViewName
-from zope.publisher.defaultview import queryDefaultViewName
-deprecated(
-    ['IDefaultViewNameAPI', 'getDefaultViewName', 'queryDefaultViewName'],
-    "moved to zope.publisher.defaultview")
+from zope.publisher.defaultview import IDefaultViewNameAPI #BBB import
+from zope.publisher.defaultview import getDefaultViewName #BBB import
+from zope.publisher.defaultview import queryDefaultViewName #BBB import
 
 
 class NotCompatibleAdapterError(Exception):

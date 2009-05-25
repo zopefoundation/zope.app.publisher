@@ -5,7 +5,7 @@ Changes
 3.8.1 (unreleased)
 ==================
 
-- ...
+- Replaced zope.deprecation dependency with BBB imports
 
 3.8.0 (2009-05-23)
 ==================
