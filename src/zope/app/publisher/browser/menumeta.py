@@ -15,18 +15,21 @@
 
 $Id$
 """
-import zope.component
+from zope.browser.interfaces import IAdding
+from zope.component import getGlobalSiteManager
+from zope.component import getUtility
+from zope.component.interface import provideInterface
+from zope.component.zcml import adapter
+from zope.component.zcml import proxify
+from zope.component.zcml import utility
 from zope.configuration.exceptions import ConfigurationError
 from zope.interface.interface import InterfaceClass
 from zope.interface import Interface
+from zope.pagetemplate.engine import Engine
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.security.checker import InterfaceChecker, CheckerPublic
 from zope.security.metaconfigure import ClassDirective
-from zope.component.interface import provideInterface
-from zope.component.zcml import adapter, proxify, utility
 
-from zope.app.pagetemplate.engine import Engine
-from zope.browser.interfaces import IAdding
 from zope.app.publisher.browser.menu import BrowserMenu
 from zope.app.publisher.browser.menu import BrowserMenuItem, BrowserSubMenuItem
 from zope.app.publisher.interfaces.browser import IBrowserMenu
@@ -234,7 +237,7 @@ def _checkViewFor(for_=None, layer=None, view_name=None):
             " is optional but can\'t be empty"
             )
 
-    gsm = zope.component.getGlobalSiteManager()
+    gsm = getGlobalSiteManager()
     if gsm.adapters.lookup((for_, layer),
                            Interface, view_name) is None:
         raise ConfigurationError(
@@ -266,7 +269,7 @@ def addMenuItem(_context, title, description='', menu=None, for_=None,
 
     if menu is not None:
         if isinstance(menu, (str, unicode)):
-            menu = zope.component.getUtility(IMenuItemType, menu)
+            menu = getUtility(IMenuItemType, menu)
             if menu is None:
                 raise ValueError("Missing menu id '%s'" % menu)
 

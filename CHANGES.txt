@@ -5,6 +5,9 @@ Changes
 3.8.1 (unreleased)
 ==================
 
+- Updated to use ``zope.pagetemplate.engine`` module (requires versino
+  3.5.0 or later), instead of ``zope.app.pagetemplate`` precursor.
+
 - Replaced zope.deprecation dependency with BBB imports
 
 3.8.0 (2009-05-23)

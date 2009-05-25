@@ -18,16 +18,21 @@ $Id$
 __docformat__ = "reStructuredText"
 import sys
 
-import zope.component
-import zope.interface.interfaces
-from zope.interface import Interface, implements, providedBy
-from zope.security import checkPermission, canAccess
-from zope.security.interfaces import Unauthorized, Forbidden
-from zope.security.proxy import removeSecurityProxy
+from zope.component import getAdapters
+from zope.component import getUtility
+from zope.interface import Interface
+from zope.interface import implements
+from zope.interface import providedBy
+from zope.interface.interfaces import IInterface
+from zope.pagetemplate.engine import Engine
 from zope.publisher.browser import BrowserView
+from zope.security import canAccess
+from zope.security import checkPermission
+from zope.security.interfaces import Forbidden
+from zope.security.interfaces import Unauthorized
+from zope.security.proxy import removeSecurityProxy
 from zope.traversing.publicationtraverse import PublicationTraverser
 
-from zope.app.pagetemplate.engine import Engine
 from zope.app.publisher.interfaces.browser import IMenuAccessView
 from zope.app.publisher.interfaces.browser import IBrowserMenu
 from zope.app.publisher.interfaces.browser import IBrowserMenuItem
@@ -44,14 +49,14 @@ class BrowserMenu(object):
         self.description = description
 
     def getMenuItemType(self):
-        return zope.component.getUtility(IMenuItemType, self.id)
+        return getUtility(IMenuItemType, self.id)
 
     def getMenuItems(self, object, request):
         """Return menu item entries in a TAL-friendly form."""
 
         result = []
-        for name, item in zope.component.getAdapters((object, request),
-                                                     self.getMenuItemType()):
+        for name, item in getAdapters((object, request),
+                                      self.getMenuItemType()):
             if item.available():
                 result.append(item)
 
@@ -66,7 +71,7 @@ class BrowserMenu(object):
             iface = item._for
             if not iface:
                 iface = Interface
-            if zope.interface.interfaces.IInterface.providedBy(iface):
+            if IInterface.providedBy(iface):
                 return ifaces.index(iface)
             if isinstance(removeSecurityProxy(object), item._for):
                 # directly specified for class, this goes first.
@@ -186,7 +191,7 @@ class BrowserSubMenuItem(BrowserMenuItem):
 
 def getMenu(id, object, request):
     """Return menu item entries in a TAL-friendly form."""
-    menu = zope.component.getUtility(IBrowserMenu, id)
+    menu = getUtility(IBrowserMenu, id)
     return menu.getMenuItems(object, request)
 
 

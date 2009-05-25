@@ -16,8 +16,8 @@
 $Id$
 """
 
+from zope.pagetemplate.engine import TrustedAppPT
 from zope.pagetemplate.pagetemplatefile import PageTemplateFile
-from zope.app.pagetemplate.engine import TrustedAppPT
 
 class PageTemplate(TrustedAppPT, PageTemplateFile):
     """
