@@ -2,7 +2,7 @@
 Changes
 =======
 
-3.8.1 (unreleased)
+3.8.1 (2009-05-25)
 ==================
 
 - Updated to use ``zope.pagetemplate.engine`` module (requires versino
