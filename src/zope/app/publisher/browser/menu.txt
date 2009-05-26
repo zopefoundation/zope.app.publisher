@@ -181,7 +181,7 @@ raise this error:
 Now let's test filtering. If the filter is specified, it is assumed to be
 a TALES obejct.
 
-  >>> from zope.app.pagetemplate.engine import Engine
+  >>> from zope.pagetemplate.engine import Engine
   >>> item.action = u'a'
   >>> item.filter = Engine.compile('not:context')
   >>> item.available()
