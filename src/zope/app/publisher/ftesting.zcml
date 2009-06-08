@@ -46,4 +46,6 @@
 
   <grant role="zope.Manager" principal="zope.globalmgr" />
 
+  <include package="zope.app.publisher" />
+
 </configure>
