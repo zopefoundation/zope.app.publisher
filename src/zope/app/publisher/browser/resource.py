@@ -41,7 +41,7 @@ class Resource(Location):
         site = getSite()
         base = queryMultiAdapter((site, self.request), IAbsoluteURL,
             name="resource")
-        if base is None: 
+        if base is None:
             url = str(getMultiAdapter((site, self.request), IAbsoluteURL))
         else:
             url = str(base)
