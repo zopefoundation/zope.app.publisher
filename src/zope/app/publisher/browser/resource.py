@@ -15,26 +15,39 @@
 
 $Id$
 """
+from zope.app.publisher.interfaces import IResource
+from zope.component import adapts
 from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
-from zope.interface import implements
+from zope.interface import implements, implementsOnly
 from zope.location import Location
+from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.site.hooks import getSite
 from zope.traversing.browser.interfaces import IAbsoluteURL
-
-from zope.app.publisher.interfaces import IResource
+import zope.traversing.browser.absoluteurl
 
 class Resource(Location):
+
     implements(IResource)
 
     def __init__(self, request):
         self.request = request
 
-    def _createUrl(self, baseUrl, name):
-        return "%s/@@/%s" % (baseUrl, name)
-
     def __call__(self):
-        name = self.__name__
+        return str(getMultiAdapter((self, self.request), IAbsoluteURL))
+
+
+class AbsoluteURL(zope.traversing.browser.absoluteurl.AbsoluteURL):
+
+    implementsOnly(IAbsoluteURL)
+    adapts(IResource, IDefaultBrowserLayer)
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def __str__(self):
+        name = self.context.__name__
         if name.startswith('++resource++'):
             name = name[12:]
 
@@ -46,4 +59,5 @@ class Resource(Location):
         else:
             url = str(base)
 
-        return self._createUrl(url, name)
+        return "%s/@@/%s" % (url, name)
+

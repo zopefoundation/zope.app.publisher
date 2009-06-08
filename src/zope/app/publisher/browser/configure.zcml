@@ -57,6 +57,10 @@
   <allow attributes="get __getitem__" />
 </class>
 
+<adapter
+    factory=".resource.AbsoluteURL"
+    />
+
 <browser:page
     name=""
     for="zope.location.interfaces.ISite"

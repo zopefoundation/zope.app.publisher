@@ -40,6 +40,8 @@ class SiteHandler(object):
     def setUp(self):
         super(SiteHandler, self).setUp()
         setSite(site)
+        zope.component.provideAdapter(
+            zope.app.publisher.browser.resource.AbsoluteURL)
 
     def tearDown(self):
         setSite()
