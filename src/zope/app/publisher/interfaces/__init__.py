@@ -19,5 +19,14 @@ from zope.interface import Interface, Attribute
 
 
 class IResource(Interface):
-    
+
     request = Attribute('Request object that is requesting the resource')
+
+    def __call__():
+        """return the absolute URL of this resource."""
+
+
+class IResourceContentsHash(Interface):
+
+    def __str__():
+        """return a hash of the contents of the resource"""

@@ -2,10 +2,18 @@
 Changes
 =======
 
-3.8.2 (unreleased)
+3.9.0 (unreleased)
 ==================
 
-- Remove test dependency on ``zope.app.pagetemplate``.
+- To make browsers update their caches of resources immediately when the
+  resource changes, the absolute URLs of resources can now be made to contain a
+  hash of the resource's contents, so it will look like
+  /++noop++12345/@@/myresource instead of /@@/myresource.
+
+  This feature is deactivated by default, to activate it, use
+  <meta:provides feature="zope.app.publisher.hashed-resources" />
+
+- Removed test dependency on ``zope.app.pagetemplate``.
 
 3.8.1 (2009-05-25)
 ==================
