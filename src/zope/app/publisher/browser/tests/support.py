@@ -45,8 +45,6 @@ class SiteHandler(object):
 
     def tearDown(self):
         setSite()
-        zope.component.getSiteManager().unregisterAdapter(
-            zope.app.publisher.browser.resource.AbsoluteURL)
         super(SiteHandler, self).tearDown()
 
 
