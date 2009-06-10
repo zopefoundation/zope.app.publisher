@@ -57,8 +57,33 @@
   <allow attributes="get __getitem__" />
 </class>
 
-<adapter
+<adapter zcml:condition="not-have zope.app.publisher.hashed-resources"
     factory=".resource.AbsoluteURL"
+    />
+
+<adapter zcml:condition="have zope.app.publisher.hashed-resources"
+    factory=".resource.HashingURL"
+    />
+<adapter zcml:condition="have devmode"
+    factory=".resource.ContentsHash"
+    for=".directoryresource.DirectoryResource"
+    />
+<adapter zcml:condition="have devmode"
+    factory=".resource.ContentsHash"
+    for=".fileresource.FileResource"
+    />
+<adapter zcml:condition="not-have devmode"
+    factory=".resource.CachingContentsHash"
+    for=".directoryresource.DirectoryResource"
+    />
+<adapter zcml:condition="not-have devmode"
+    factory=".resource.CachingContentsHash"
+    for=".fileresource.FileResource"
+    />
+
+<adapter
+    factory=".resource.NoOpTraverser"
+    name="noop"
     />
 
 <browser:page

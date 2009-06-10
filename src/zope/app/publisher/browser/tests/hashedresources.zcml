@@ -1,0 +1,18 @@
+<configure
+   xmlns="http://namespaces.zope.org/zope"
+   xmlns:browser="http://namespaces.zope.org/browser"
+   xmlns:meta="http://namespaces.zope.org/meta"
+   i18n_domain="zope"
+   package="zope.app.publisher"
+   >
+
+  <meta:provides feature="zope.app.publisher.hashed-resources" />
+
+  <include package="zope.app.publisher" file="ftesting.zcml" />
+
+  <!-- example resource for testing -->
+  <browser:resourceDirectory
+    directory="browser/tests/testfiles"
+    name="myresource"
+    />
+</configure>

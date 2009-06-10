@@ -24,3 +24,9 @@ class IResource(Interface):
 
     def __call__():
         """return the absolute URL of this resource."""
+
+
+class IResourceContentsHash(Interface):
+
+    def __str__():
+        """return a hash of the contents of the resource"""

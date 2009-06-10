@@ -86,9 +86,9 @@ e. g. `http://localhost/@@/main-images/subdir/sample.jpg`
 
 Rather than putting together the URL to a resource manually, you should use
 zope.traversing.browser.interfaces.IAbsoluteURL to get the URL, or for a
-shorthand, call the resource object. This has an additional benefit:
+shorthand, call the resource object. This has two additional benefits.
 
-If you want to serve resources from a different URL, for example
+Firstly, if you want to serve resources from a different URL, for example
 because you want to use a web server specialized in serving static files instead
 of the appserver, you can register an IAbsoluteURL adapter for the site under
 the name 'resource' that will be used to compute the base URLs for resources.
@@ -98,3 +98,28 @@ URL, the resources from the above example would yield the following absolute
 URLs: http://static.example.com/myfile and
 http://static.example.com/main-images
 (XXX what about http://static.example.com/main-images/subdir/sample.jpg?)
+
+The other benefit of using generated URLs is about dealing with browser caches,
+as described in the next section.
+
+Browser Caches
+~~~~~~~~~~~~~~
+
+While we want browsers to cache static resources such as CSS-stylesheets and
+JavaScript files, we also want them *not* to use the cached version if the
+files on the server have been updated. (And we don't want to make end-users
+have to empty their browser cache to get the latest version. Nor explain how
+to do that over the phone every time.)
+
+To make browsers update their caches of resources immediately when the
+resource changes, the absolute URLs of resources can now be made to contain a
+hash of the resource's contents, so it will look like
+/++noop++12345/@@/myresource instead of /@@/myresource.
+
+In developer mode the hash is recomputed each time the resource is asked for
+its URL, while in production mode the hash is computed only once, so remember
+to restart the server after changing resource files (else browsers will still
+see the old URL unchanged and use their outdated cached versions of the files).
+
+This feature is deactivated by default, to activate it, use
+<meta:provides feature="zope.app.publisher.hashed-resources" />
