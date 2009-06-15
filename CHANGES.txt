@@ -6,6 +6,7 @@ Changes
 ==================
 
 - Remove test dependency on ``zope.app.pagetemplate``.
+- Calling a resource to get its URL now uses IAbsoluteURL.
 
 3.8.1 (2009-05-25)
 ==================
