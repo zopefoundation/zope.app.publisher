@@ -76,8 +76,10 @@ so to later retrieve a resource, use
 `zope.component.getAdapter(request, name='myfile')`.
 
 There are two ways to traverse to a resource,
+
 1. with the 'empty' view on a site, e. g. `http://localhost/@@/myfile`
    (This is declared by zope.app.publisher.browser)
+
 2. with the `++resource++` namespace, e. g. `http://localhost/++resource++myfile`
    (This is declared by zope.traversing.namespace)
 
