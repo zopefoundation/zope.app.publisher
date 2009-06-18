@@ -21,7 +21,7 @@ from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
 from zope.interface import implements, implementsOnly
 from zope.location import Location
-from zope.publisher.interfaces.browser import IDefaultBrowserLayer
+from zope.publisher.interfaces.browser import IBrowserRequest
 from zope.site.hooks import getSite
 from zope.traversing.browser.interfaces import IAbsoluteURL
 import zope.traversing.browser.absoluteurl
@@ -40,7 +40,7 @@ class Resource(Location):
 class AbsoluteURL(zope.traversing.browser.absoluteurl.AbsoluteURL):
 
     implementsOnly(IAbsoluteURL)
-    adapts(IResource, IDefaultBrowserLayer)
+    adapts(IResource, IBrowserRequest)
 
     def __init__(self, context, request):
         self.context = context
@@ -60,4 +60,3 @@ class AbsoluteURL(zope.traversing.browser.absoluteurl.AbsoluteURL):
             url = str(base)
 
         return "%s/@@/%s" % (url, name)
-

@@ -5,7 +5,11 @@ Changes
 3.8.3 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Bugfix: fix IAbsoulteURL for IResource configuration. The latest release
+  was moving the url generation for resources to an adapter which was a good
+  idea. But the adapter was configured for IDefaultBrowserLayer. This means
+  every existing project which dosen't use IDefaultBrowserLayer will get a
+  wrong IAbsoluteURL adapter and is loosing the @@ part in the resource url.
 
 
 3.8.2 (2009-06-16)
