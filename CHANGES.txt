@@ -2,7 +2,7 @@
 Changes
 =======
 
-3.8.3 (unreleased)
+3.8.3 (2009-06-18)
 ==================
 
 - Bugfix: fix IAbsoulteURL for IResource configuration. The latest release
