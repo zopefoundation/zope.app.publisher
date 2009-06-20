@@ -10,7 +10,7 @@ Changes
 3.8.3 (2009-06-18)
 ==================
 
-- Bugfix: fix IAbsoulteURL for IResource configuration. The latest release
+- Bugfix: fix IAbsoluteURL for IResource configuration. The latest release
   was moving the url generation for resources to an adapter which was a good
   idea. But the adapter was configured for IDefaultBrowserLayer. This means
   every existing project which dosen't use IDefaultBrowserLayer will get a
