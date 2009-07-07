@@ -5,7 +5,8 @@ Changes
 3.8.4 (unreleased)
 ==================
 
-- ...
+- Added dependency on zope.app.pagetemplate, it is used by
+  zope.app.publisher.browser.viewmeta.
 
 3.8.3 (2009-06-18)
 ==================

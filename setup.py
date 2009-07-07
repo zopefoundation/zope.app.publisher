@@ -57,6 +57,7 @@ setup(name='zope.app.publisher',
                         'zope.traversing>3.7.0',
                         'zope.componentvocabulary',
                         'zope.browser',
+                        'zope.app.pagetemplate',
                         ],
       extras_require={
           'test': ['zope.testing',
