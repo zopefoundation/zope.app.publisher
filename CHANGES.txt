@@ -1,28 +1,30 @@
 =======
-Changes
+CHANGES
 =======
 
-3.8.4 (unreleased)
+3.8.4 (2009-07-23)
 ==================
 
-- Added dependency on zope.app.pagetemplate, it is used by
-  zope.app.publisher.browser.viewmeta.
+- Added dependency on ``zope.app.pagetemplate``, it is used by
+  ``zope.app.publisher.browser.viewmeta``.
 
 3.8.3 (2009-06-18)
 ==================
 
-- Bugfix: fix IAbsoluteURL for IResource configuration. The latest release
-  was moving the url generation for resources to an adapter which was a good
-  idea. But the adapter was configured for IDefaultBrowserLayer. This means
-  every existing project which dosen't use IDefaultBrowserLayer will get a
-  wrong IAbsoluteURL adapter and is loosing the @@ part in the resource url.
+- Bugfix: Fix ``IAbsoluteURL`` for ``IResource`` configuration. The latest
+  release was moving the url generation for resources to an adapter which was
+  a good idea. But the adapter was configured for
+  ``IDefaultBrowserLayer``. This means every existing project which dosen't
+  use ``IDefaultBrowserLayer`` will get a wrong ``IAbsoluteURL`` adapter and
+  is loosing the ``@@`` part in the resource url.
 
 
 3.8.2 (2009-06-16)
 ==================
 
 - Remove test dependency on ``zope.app.pagetemplate``.
-- Calling a resource to get its URL now uses IAbsoluteURL.
+
+- Calling a resource to get its URL now uses ``IAbsoluteURL``.
 
 3.8.1 (2009-05-25)
 ==================
@@ -30,7 +32,7 @@ Changes
 - Updated to use ``zope.pagetemplate.engine`` module (requires versino
   3.5.0 or later), instead of ``zope.app.pagetemplate`` precursor.
 
-- Replaced zope.deprecation dependency with BBB imports
+- Replaced ``zope.deprecation`` dependency with BBB imports
 
 3.8.0 (2009-05-23)
 ==================
