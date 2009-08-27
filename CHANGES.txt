@@ -2,7 +2,7 @@
 CHANGES
 =======
 
-3.9.0 (unreleased)
+3.9.0 (2009-08-27)
 ==================
 
 Refactor package, spliting it to several new packages:
