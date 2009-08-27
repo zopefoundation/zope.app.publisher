@@ -15,56 +15,11 @@
 
 $Id$
 """
-
-from zope.interface import implements
+# BBB imports
 from zope.publisher.browser import BrowserLanguages
-from zope.i18n.interfaces import IUserPreferredLanguages
-from zope.i18n.interfaces import IModifiableUserPreferredLanguages
-
-from zope.publisher.defaultview import IDefaultViewNameAPI #BBB import
-from zope.publisher.defaultview import getDefaultViewName #BBB import
-from zope.publisher.defaultview import queryDefaultViewName #BBB import
-
-
-class NotCompatibleAdapterError(Exception):
-    """Adapter not compatible with
-       zope.i18n.interfaces.IModifiableBrowserLanguages has been used.
-    """
-
-key = "zope.app.publisher.browser.IUserPreferredLanguages"
-
-class CacheableBrowserLanguages(BrowserLanguages):
-
-    implements(IUserPreferredLanguages)
-
-    def getPreferredLanguages(self):
-        languages_data = self._getLanguagesData()
-        if "overridden" in languages_data:
-            return languages_data["overridden"]
-        elif "cached" not in languages_data:
-            languages_data["cached"] = super(
-                CacheableBrowserLanguages, self).getPreferredLanguages()
-        return languages_data["cached"]
-
-    def _getLanguagesData(self):
-        annotations = self.request.annotations
-        languages_data = annotations.get(key)
-        if languages_data is None:
-            annotations[key] = languages_data = {}
-        return languages_data
-
-class ModifiableBrowserLanguages(CacheableBrowserLanguages):
-
-    implements(IModifiableUserPreferredLanguages)
-
-    def setPreferredLanguages(self, languages):
-        languages_data = self.request.annotations.get(key)
-        if languages_data is None:
-            # Better way to create a compatible with
-            # IModifiableUserPreferredLanguages adapter is to use
-            # CacheableBrowserLanguages as base class or as example.
-            raise NotCompatibleAdapterError("Adapter not compatible with "
-                "zope.i18n.interfaces.IModifiableBrowserLanguages "
-                "has been used.")
-        languages_data["overridden"] = languages
-        self.request.setupLocale()
+from zope.publisher.browser import CacheableBrowserLanguages
+from zope.publisher.browser import ModifiableBrowserLanguages
+from zope.publisher.browser import NotCompatibleAdapterError
+from zope.publisher.defaultview import IDefaultViewNameAPI
+from zope.publisher.defaultview import getDefaultViewName
+from zope.publisher.defaultview import queryDefaultViewName

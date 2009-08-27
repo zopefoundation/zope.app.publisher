@@ -15,12 +15,4 @@
 
 $Id$
 """
-from zope.interface import Interface, Attribute
-
-
-class IResource(Interface):
-
-    request = Attribute('Request object that is requesting the resource')
-
-    def __call__():
-        """return the absolute URL of this resource."""
+from zope.browserresource.interfaces import IResource # BBB import

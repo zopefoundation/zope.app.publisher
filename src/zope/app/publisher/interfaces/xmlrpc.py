@@ -15,8 +15,4 @@
 
 $Id$
 """
-from zope.publisher.interfaces import IView
-
-
-class IXMLRPCView(IView):
-    """XMLRPC View"""
+from zope.publisher.interfaces.xmlrpc import IXMLRPCView # BBB import

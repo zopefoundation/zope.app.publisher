@@ -3,9 +3,9 @@
     xmlns:apidoc="http://namespaces.zope.org/apidoc"
     >
 
+  <include package="zope.publisher" />
   <include package=".browser" />
   <include package=".xmlrpc" />
-  <include file="http.zcml" />
 
 
 </configure>

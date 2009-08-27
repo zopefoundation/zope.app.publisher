@@ -15,11 +15,7 @@
 
 $Id$
 """
-from zope.publisher.interfaces import IView
-
-
-class IHTTPView(IView):
-    "HTTP View"
+from zope.publisher.interfaces.http import IHTTPView
 
 
 class ILogin(IHTTPView):

@@ -15,37 +15,5 @@
 
 $Id$
 """
-import zope.component
-from zope.publisher.interfaces.browser import IBrowserPublisher
-from zope.publisher.interfaces import NotFound
-from zope.publisher.browser import BrowserView
-from zope.interface import implements
-from zope.location import locate
 
-class Resources(BrowserView):
-    """Provide a URL-accessible resource namespace
-    """
-
-    implements(IBrowserPublisher)
-
-    def publishTraverse(self, request, name):
-        '''See interface IBrowserPublisher'''
-
-        resource = zope.component.queryAdapter(request, name=name)
-        if resource is None:
-            raise NotFound(self, name)
-
-        sm = zope.component.getSiteManager()
-        locate(resource, sm, name)
-        return resource
-
-    def browserDefault(self, request):
-        '''See IBrowserPublisher'''
-        return empty, ()
-
-    def __getitem__(self, name):
-        return self.publishTraverse(self.request, name)
-
-
-def empty():
-    return ''
+from zope.browserresource.resources import Resources, empty # BBB imports

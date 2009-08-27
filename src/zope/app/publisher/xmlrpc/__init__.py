@@ -22,13 +22,8 @@ import zope.location
 import zope.publisher.interfaces.xmlrpc
 import zope.app.publisher.interfaces.xmlrpc
 
-class XMLRPCView(object):
-    """A base XML-RPC view that can be used as mix-in for XML-RPC views.""" 
-    zope.interface.implements(zope.app.publisher.interfaces.xmlrpc.IXMLRPCView)
+from zope.publisher.xmlrpc import XMLRPCView
 
-    def __init__(self, context, request):
-        self.context = context
-        self.request = request
 
 class IMethodPublisher(zope.interface.Interface):
     """Marker interface for an object that wants to publish methods

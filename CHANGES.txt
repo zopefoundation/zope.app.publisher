@@ -2,10 +2,36 @@
 CHANGES
 =======
 
-3.8.5 (unreleased)
+3.9.0 (unreleased)
 ==================
 
-- ...
+Refactor package, spliting it to several new packages:
+
+   * ``zope.browserresource`` - the resources mechanism was moved here, see its
+     CHANGES.txt for more information about changes during move.
+
+   * ``zope.ptresource`` - the page template resource was moved into another
+     package so zope.browserresource doesn't depend on any templating system.
+     See zope.ptresource's CHANGES.txt for more information.
+
+   * ``zope.browsermenu`` - the menu mechanism was moved here completely.
+   
+   * ``zope.browserpage`` - the browser:page directive and friends were
+     moved here. Also, these directives don't depend hardly on menu system
+     anymore, so they simply ignore the "menu" argument when zope.browsermenu
+     is not available.
+   
+Backward-compatibility imports are provided, so there should not be much impact
+for those who uses old imports.
+
+The CacheableBrowserLanguages and ModifiableBrowserLanguages adapters were
+moved into ``zope.publisher`` package, as well as browser:defaultSkin and
+browser:defaultView ZCML directives and ZCML class configuration for
+zope.publisher classes.
+
+ZCML registrations of IXMLRPCPublisher adapters for zope.container were moved
+into zope.container for now.
+
 
 3.8.4 (2009-07-23)
 ==================

@@ -15,12 +15,7 @@
 
 $Id$
 """
-from zope.publisher.interfaces import IView
-from zope.publisher.interfaces.ftp import IFTPPublisher
-
-
-class IFTPView(IView):
-    "FTP View"
+from zope.publisher.interfaces.ftp import IFTPPublisher, IFTPView
 
 
 class IFTPDirectoryPublisher(IFTPPublisher, IFTPView):

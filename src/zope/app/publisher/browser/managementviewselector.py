@@ -18,7 +18,7 @@ $Id$
 from zope.interface import implements
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.browser import BrowserView
-from zope.app.publisher.browser.menu import getFirstMenuItem
+from zope.browsermenu.menu import getFirstMenuItem
 
 class ManagementViewSelector(BrowserView):
     """View that selects the first available management view.
