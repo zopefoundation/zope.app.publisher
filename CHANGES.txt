@@ -2,10 +2,12 @@
 CHANGES
 =======
 
-3.9.1 (unreleased)
-==================
+3.10.0 (2009-08-31)
+===================
 
-- ...
+- Fix test dependency on zope.container, now we depend on
+  zope.container >= 3.9.
+    
 
 3.9.0 (2009-08-27)
 ==================
