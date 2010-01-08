@@ -5,8 +5,7 @@ CHANGES
 3.10.1 (unreleased)
 ===================
 
-- ...
-
+- Fix tests using a newer zope.publisher that requires zope.login.
 
 3.10.0 (2009-08-31)
 ===================
