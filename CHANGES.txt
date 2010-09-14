@@ -5,8 +5,7 @@ CHANGES
 3.10.2 (unreleased)
 ===================
 
-- Nothing changed yet.
-
+- Remove a testing dependency on zope.app.securitypolicy.
 
 3.10.1 (2010-01-08)
 ===================
@@ -18,7 +17,6 @@ CHANGES
 
 - Fix test dependency on zope.container, now we depend on
   zope.container >= 3.9.
-    
 
 3.9.0 (2009-08-27)
 ==================

@@ -11,8 +11,8 @@
 
   <include package="zope.app.zcmlfiles" />
   <include package="zope.app.authentication" />
-  <include package="zope.app.securitypolicy" />
   <include package="zope.login" />
+  <include package="zope.securitypolicy" />
 
   <securityPolicy
       component="zope.securitypolicy.zopepolicy.ZopeSecurityPolicy" />
@@ -20,7 +20,6 @@
   <role id="zope.Manager" title="Site Manager" />
 
   <grantAll role="zope.Manager" />
-  <include package="zope.app.securitypolicy.browser.tests" file="functional.zcml" />
 
   <!-- Principal that tests generally run as -->
   <principal
@@ -28,6 +27,7 @@
       title="Manager"
       login="mgr"
       password="mgrpw" />
+  <grant role="zope.Manager" principal="zope.mgr" />
 
   <!-- A user that only has zope.View -->
   <principal
@@ -37,15 +37,6 @@
       password="usrpw"
       />
   <grant permission="zope.View" principal="zope.user" />
-
-  <!-- Bootstrap principal used to make local grant to the principal above -->
-  <principal
-      id="zope.globalmgr"
-      title="Manager"
-      login="globalmgr"
-      password="globalmgrpw" />
-
-  <grant role="zope.Manager" principal="zope.globalmgr" />
 
   <include package="zope.app.publisher" />
 
