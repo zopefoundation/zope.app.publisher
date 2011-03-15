@@ -5,6 +5,8 @@ CHANGES
 3.10.3 (unreleased)
 ===================
 
+- Replaced an undeclared test dependency on zope.app.authentication with
+  zope.password.
 
 3.10.2 (2010-09-14)
 ===================

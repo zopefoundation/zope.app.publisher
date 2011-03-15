@@ -68,6 +68,7 @@ setup(name='zope.app.publisher',
                    'zope.securitypolicy',
                    'zope.site',
                    'zope.login',
+                   'zope.password',
                    ],
           },
 
