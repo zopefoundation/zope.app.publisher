@@ -55,6 +55,9 @@ class FileResource(BrowserView, Resource):
         """Choose the appropriate context"""
         return self.context
 
+    def POST(self):
+        """ POST default """
+        return self.GET()
 
     def GET(self):
         """Default document"""
