@@ -2,6 +2,12 @@
 CHANGES
 =======
 
+3.8.5 (2011-03-23)
+==================
+
+- Patch to make POST requests work as GET does
+  instead of returning a 500
+
 3.8.4 (2009-07-23)
 ==================
 
