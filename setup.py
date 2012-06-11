@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2007 Zope Corporation and Contributors.
+# Copyright (c) 2007 Zope Foundation and Contributors.
 # All Rights Reserved.
 #
 # This software is subject to the provisions of the Zope Public License,
@@ -28,6 +28,7 @@ setup(name='zope.app.publisher',
       url='http://pypi.python.org/pypi/zope.app.publisher/',
       author='Zope Corporation and Contributors',
       author_email='zope-dev@zope.org',
+      license='ZPL 2.1',
       classifiers = ['Environment :: Web Environment',
                      'Intended Audience :: Developers',
                      'License :: OSI Approved :: Zope Public License',
