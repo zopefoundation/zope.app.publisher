@@ -39,6 +39,7 @@ setup(name='zope.app.publisher',
       description='Implementations and means for configuration of Zope 3-'
                   'style views and resources.',
       long_description=long_description,
+      license='ZPL 2.1',
 
       packages=find_packages('src'),
       package_dir={'': 'src'},
