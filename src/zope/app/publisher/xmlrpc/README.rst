@@ -12,6 +12,15 @@ XML-RPC views
   HTTP/1.0 302 Moved Temporarily
   Content-Length: 0
   Content-Type: text/plain;charset=utf-8
+  Location: @@registration.html
+
+  >>> print(http(r"""
+  ...   GET /@@SelectedManagementView.html HTTP/1.0
+  ...   Authorization: Basic bWdyOm1ncnB3
+  ... """))
+  HTTP/1.0 302 Moved Temporarily
+  Content-Length: 0
+  Content-Type: text/plain;charset=utf-8
   Location: .
 
   >>> print(http(r"""

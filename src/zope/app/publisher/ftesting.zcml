@@ -22,11 +22,11 @@
   <include package="zope.browsermenu" file="meta.zcml" />
 
   <!-- editform/addform directive; required by
-	   zope.app.authentication.browser -->
+       zope.app.authentication.browser -->
   <include package="zope.app.form.browser" file="meta.zcml" />
 
   <!-- containerViews directive; required by
-	   zope.app.authentication.browser -->
+       zope.app.authentication.browser -->
   <include package="zope.app.container.browser" file="meta.zcml" />
 
   <include package="zope.componentvocabulary" />
@@ -73,6 +73,16 @@
                    containment constraints"
       interface="zope.app.publisher.interfaces.browser.AddMenu"
       />
+
+  <!-- add an item available to the public for testing -->
+  <browser:menuItem
+      menu="zmi_views"
+      title="Registration"
+      for="zope.site.interfaces.ILocalSiteManager"
+      action="@@registration.html"
+      permission="zope.Public"
+      />
+
 
   <!-- Normally done in zope.app.principalannotation's bootstrap
        subscriber -->
