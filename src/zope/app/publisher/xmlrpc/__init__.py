@@ -14,9 +14,8 @@
 """XML-RPC Publisher Components
 
 This module contains the XMLRPCView.
-
-$Id$
 """
+
 import zope.interface
 import zope.location
 import zope.publisher.interfaces.xmlrpc
@@ -30,32 +29,32 @@ class IMethodPublisher(zope.interface.Interface):
     """
 
 # Need to test new __parent__ attribute
+@zope.interface.implementer(IMethodPublisher)
 class MethodPublisher(XMLRPCView, zope.location.Location):
     """Base class for very simple XML-RPC views that publish methods
 
-    This class is meant to be more of an example than a standard base class. 
+    This class is meant to be more of an example than a standard base class.
 
     This example is explained in the README.txt file for this package
     """
-    zope.interface.implements(IMethodPublisher)
 
-    def __getParent(self):
+    @property
+    def __parent__(self):
         return hasattr(self, '_parent') and self._parent or self.context
 
-    def __setParent(self, parent):
+    @__parent__.setter
+    def __parent__(self, parent):
         self._parent = parent
 
-    __parent__ = property(__getParent, __setParent)
 
-
+@zope.interface.implementer(
+    zope.publisher.interfaces.xmlrpc.IXMLRPCPublisher)
 class MethodTraverser(object):
-    zope.interface.implements(
-        zope.publisher.interfaces.xmlrpc.IXMLRPCPublisher)
 
     __used_for__ = IMethodPublisher
 
     def __init__(self, context, request):
         self.context = context
-        
+
     def publishTraverse(self, request, name):
         return getattr(self.context, name)

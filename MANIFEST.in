@@ -1,6 +1,10 @@
 include *.py
 include *.txt
+include *.rst
 include buildout.cfg
+include .travis.yml
+include tox.ini
+include .coverage
 recursive-include src *.pt
-recursive-include src *.txt
+recursive-include src *.rst
 recursive-include src *.zcml

@@ -13,13 +13,13 @@
 ##############################################################################
 """Browser vocabularies
 
-$Id$
 """
-from zope.interface import classProvides
+from zope.interface import provider
 from zope.publisher.interfaces.browser import IBrowserSkinType
 from zope.schema.interfaces import IVocabularyFactory
 from zope.componentvocabulary.vocabulary import UtilityVocabulary
 
+@provider(IVocabularyFactory)
 class BrowserSkinsVocabulary(UtilityVocabulary):
-    classProvides(IVocabularyFactory)
+
     interface = IBrowserSkinType

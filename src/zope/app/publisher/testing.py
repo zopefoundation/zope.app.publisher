@@ -12,15 +12,15 @@
 #
 ##############################################################################
 """zope.app.publisher common test related classes/functions/objects.
-
-$Id$
 """
 
 __docformat__ = "reStructuredText"
 
-import os
-from zope.app.testing.functional import ZCMLLayer
 
-AppPublisherLayer = ZCMLLayer(
-    os.path.join(os.path.split(__file__)[0], 'ftesting.zcml'),
-    __name__, 'AppPublisherLayer', allow_teardown=True)
+from zope.app.wsgi.testlayer import BrowserLayer
+
+import zope.app.publisher
+
+AppPublisherLayer = BrowserLayer(
+    zope.app.publisher,
+    allowTearDown=True)

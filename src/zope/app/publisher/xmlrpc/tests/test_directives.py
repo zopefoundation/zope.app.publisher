@@ -12,27 +12,28 @@
 #
 ##############################################################################
 """Test 'xmlrpc' ZCML Namespace directives.
-
-$Id$
 """
+
 import unittest
 
 from zope import component
 from zope.configuration import xmlconfig
 from zope.configuration.exceptions import ConfigurationError
 from zope.component.testfiles.views import Request, IC, V1
-from zope.app.testing.placelesssetup import PlacelessSetup
+
+from zope.testing.cleanup import CleanUp as PlacelessSetup
 from zope.security.proxy import ProxyFactory
 from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
 
 from zope.app.publisher import xmlrpc
-from zope.interface import implements
+from zope.interface import implementer
 
 
 request = Request(IXMLRPCRequest)
 
+@implementer(IC)
 class Ob(object):
-    implements(IC)
+    pass
 
 ob = Ob()
 
@@ -94,9 +95,7 @@ class DirectivesTest(PlacelessSetup, unittest.TestCase):
 
 
 def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(DirectivesTest),
-        ))
+    return unittest.defaultTestLoader.loadTestsFromName(__name__)
 
 if __name__ == '__main__':
     unittest.main()

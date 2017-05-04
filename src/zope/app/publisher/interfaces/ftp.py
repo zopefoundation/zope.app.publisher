@@ -42,7 +42,7 @@ class IFTPDirectoryPublisher(IFTPPublisher, IFTPView):
         If the filter is not None, include only those names for which
         the filter returns a true value.
         """
-        return list(tuple(str, str))
+
 
     def readfile(name, outstream, start=0, end=None):
         """Outputs the file at name to a stream.

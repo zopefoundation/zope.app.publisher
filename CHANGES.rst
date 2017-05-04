@@ -1,12 +1,17 @@
-=======
-CHANGES
-=======
+=========
+ CHANGES
+=========
 
-3.10.3 (unreleased)
-===================
+4.0.0 (unreleased)
+==================
+
+- Add support for Python 3.4, 3.5, 3.6 and PyPy.
 
 - Replaced an undeclared test dependency on zope.app.authentication with
   zope.password.
+
+- Removed test dependency on ``zope.app.testing``,
+  ``zope.app.zcmlfiles`` and others.
 
 3.10.2 (2010-09-14)
 ===================
@@ -37,12 +42,12 @@ Refactor package, spliting it to several new packages:
      See zope.ptresource's CHANGES.txt for more information.
 
    * ``zope.browsermenu`` - the menu mechanism was moved here completely.
-   
+
    * ``zope.browserpage`` - the browser:page directive and friends were
      moved here. Also, these directives don't depend hardly on menu system
      anymore, so they simply ignore the "menu" argument when zope.browsermenu
      is not available.
-   
+
 Backward-compatibility imports are provided, so there should not be much impact
 for those who uses old imports.
 
