@@ -12,49 +12,78 @@
 #
 ##############################################################################
 """Functional tests for xmlrpc
-
-$Id$
 """
+import unittest
+import doctest
 import re
 
 import zope.component
 import zope.interface
 import zope.publisher.interfaces.xmlrpc
 from zope.testing import renormalizing
+from zope.testing import module
 
-import zope.site.interfaces
-from zope.app.testing import functional, setup
+from zope.site.interfaces import IFolder
+from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
+
 from zope.app.publisher.testing import AppPublisherLayer
+from zope.app.publisher.xmlrpc.tests import http
+
+class TestMethodPublisher(unittest.TestCase):
+
+    def test_parent(self):
+        from zope.app.publisher.xmlrpc import MethodPublisher
+
+        p = MethodPublisher(42, None)
+        # Comes from the context first
+        self.assertEqual(p.__parent__, 42)
+
+        p.__parent__ = self
+        self.assertEqual(p.__parent__, self)
+        self.assertEqual(p._parent, self)
 
 def setUp(test):
-    setup.setUpTestAsModule(test, 'zope.app.publisher.xmlrpc.README')
+    module.setUp(test, 'zope.app.publisher.xmlrpc.README')
 
 def tearDown(test):
     # clean up the views we registered:
-    
+
     # we use the fact that registering None unregisters whatever is
     # registered. We can't use an unregistration call because that
     # requires the object that was registered and we don't have that handy.
     # (OK, we could get it if we want. Maybe later.)
 
     zope.component.provideAdapter(None, (
-        zope.site.interfaces.IFolder,
-        zope.publisher.interfaces.xmlrpc.IXMLRPCRequest
+        IFolder,
+        IXMLRPCRequest
         ), zope.interface, 'contents')
 
-    setup.tearDownTestAsModule(test)
+    module.tearDown(test, 'zope.app.publisher.xmlrpc.README')
+
 
 def test_suite():
     checker = renormalizing.RENormalizing((
         (re.compile('<DateTime \''), '<DateTime u\''),
         (re.compile('at [-0-9a-fA-F]+'), 'at <SOME ADDRESS>'),
-        ))
-    suite = functional.FunctionalDocFileSuite(
-        '../README.txt', setUp=setUp, tearDown=tearDown,
-        checker=checker
-        )
+        (re.compile("HTTP/1.0"), "HTTP/1.1"),
+    ))
+
+
+    suite = doctest.DocFileSuite(
+        '../README.rst',
+        setUp=setUp,
+        tearDown=tearDown,
+        checker=checker,
+        globs={'http': http},
+        optionflags=(doctest.ELLIPSIS
+                     | doctest.NORMALIZE_WHITESPACE
+                     | renormalizing.IGNORE_EXCEPTION_MODULE_IN_PYTHON2)
+    )
     suite.layer = AppPublisherLayer
-    return suite
+    return unittest.TestSuite((
+        suite,
+        unittest.defaultTestLoader.loadTestsFromName(__name__),
+    ))
 
 if __name__ == '__main__':
     import unittest

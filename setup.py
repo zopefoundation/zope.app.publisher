@@ -20,58 +20,95 @@
 """
 from setuptools import setup, find_packages
 
-long_description = (open('README.txt').read() + '\n\n' +
-                    open('CHANGES.txt').read())
+version = '4.0.0.dev0'
+
+def _read(fname):
+    with open(fname, 'r') as f:
+        return f.read()
+
+long_description = (_read('README.rst') + '\n\n' +
+                    _read('CHANGES.rst'))
+
+tests_require = [
+    'zope.app.appsetup',
+    'zope.app.authentication',
+    'zope.app.basicskin >= 4.0.0',
+    'zope.app.container >= 4.0.0',
+    'zope.app.form >= 5.0.0',
+    'zope.app.publisher',
+    'zope.app.publication',
+    'zope.app.rotterdam >= 4.0.0',
+    'zope.app.schema >= 4.0.0',
+    'zope.app.wsgi',
+
+    'zope.browserpage',
+    'zope.browserresource',
+    'zope.container',
+    'zope.formlib',
+    'zope.login',
+    'zope.principalannotation',
+    'zope.principalregistry',
+    'zope.publisher',
+    'zope.securitypolicy',
+    'zope.testbrowser >= 5.2',
+    'zope.testing',
+    'zope.testrunner',
+    'zope.traversing >= 4.1.0',
+
+    'webtest',
+]
 
 setup(name='zope.app.publisher',
-      version = '3.10.3dev',
-      url='http://pypi.python.org/pypi/zope.app.publisher/',
+      version=version,
+      url='http://github.com/zopefoundation/zope.app.publisher/',
       author='Zope Corporation and Contributors',
       author_email='zope-dev@zope.org',
-      classifiers = ['Environment :: Web Environment',
-                     'Intended Audience :: Developers',
-                     'License :: OSI Approved :: Zope Public License',
-                     'Programming Language :: Python',
-                     'Operating System :: OS Independent',
-                     'Topic :: Internet :: WWW/HTTP',
-                     'Framework :: Zope3',
-                     ],
+      classifiers=[
+          'Development Status :: 5 - Production/Stable',
+          'Environment :: Web Environment',
+          'Intended Audience :: Developers',
+          'License :: OSI Approved :: Zope Public License',
+          'Programming Language :: Python',
+          'Programming Language :: Python:: 2',
+          'Programming Language :: Python:: 2.7',
+          'Programming Language :: Python:: 3',
+          'Programming Language :: Python:: 3.4',
+          'Programming Language :: Python:: 3.5',
+          'Programming Language :: Python:: 3.6',
+          'Programming Language :: Python :: Implementation :: CPython',
+          'Programming Language :: Python :: Implementation :: PyPy',
+          'Natural Language :: English',
+          'Operating System :: OS Independent',
+          'Topic :: Internet :: WWW/HTTP',
+          'Framework :: Zope3',
+      ],
       description='Implementations and means for configuration of Zope 3-'
                   'style views and resources.',
       long_description=long_description,
       license='ZPL 2.1',
-
       packages=find_packages('src'),
       package_dir={'': 'src'},
-
       namespace_packages=['zope', 'zope.app'],
       include_package_data=True,
-      install_requires=['setuptools',
-                        'zope.browsermenu',
-                        'zope.browserpage',
-                        'zope.browserresource',
-                        'zope.component',
-                        'zope.configuration',
-                        'zope.datetime',
-                        'zope.interface',
-                        'zope.location',
-                        'zope.ptresource',
-                        'zope.publisher>=3.12',
-                        'zope.schema',
-                        'zope.security',
-                        'zope.componentvocabulary',
-                        ],
+      install_requires=[
+          'setuptools',
+          'zope.browsermenu',
+          'zope.browserpage',
+          'zope.browserresource',
+          'zope.component',
+          'zope.configuration',
+          'zope.datetime',
+          'zope.interface',
+          'zope.location',
+          'zope.ptresource',
+          'zope.publisher>=3.12',
+          'zope.schema',
+          'zope.security',
+          'zope.componentvocabulary',
+      ],
       extras_require={
-          'test': ['zope.testing',
-                   'zope.app.testing',
-                   'zope.app.zcmlfiles',
-                   'zope.container>=3.9',
-                   'zope.securitypolicy',
-                   'zope.site',
-                   'zope.login',
-                   'zope.password',
-                   ],
-          },
-
-      zip_safe = False,
-      )
+          'test': tests_require,
+      },
+      tests_require=tests_require,
+      zip_safe=False,
+)

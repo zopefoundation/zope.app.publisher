@@ -3,7 +3,7 @@
     xmlns:xmlrpc="http://namespaces.zope.org/xmlrpc"
     >
 
-  <view 
+  <view
       for=".IMethodPublisher"
       type="zope.publisher.interfaces.xmlrpc.IXMLRPCRequest"
       provides="zope.publisher.interfaces.xmlrpc.IXMLRPCPublisher"

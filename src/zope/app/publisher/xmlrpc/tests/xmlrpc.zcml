@@ -3,7 +3,6 @@
            i18n_domain="zope">
 
   <include package="zope.app.publisher.xmlrpc" file="meta.zcml"/>
-  <include package="zope.app.security" file="meta.zcml"/>
 
   <xmlrpc:view
       name="test"
@@ -38,6 +37,14 @@
   <xmlrpc:view
       name="test5"
       class="zope.component.testfiles.views.V1"
+      for="zope.component.testfiles.views.IC"
+      permission="zope.Public"
+      methods="action index"
+      interface="zope.component.testfiles.views.IV" />
+
+
+  <xmlrpc:view
+      name="test6"
       for="zope.component.testfiles.views.IC"
       permission="zope.Public"
       methods="action index"

@@ -13,19 +13,18 @@
 ##############################################################################
 """Test of field converters.
 
-$Id$
 """
-from unittest import TestCase, TestSuite, main, makeSuite
+import unittest
 from datetime import datetime
 
-class TestFieldConverters(TestCase):
+from zope.app.publisher.fieldconverters import field2date_via_datetimeutils
+from zope.app.publisher.fieldconverters import registerZopeConverters
 
-    def test_field2date_dateonly(self):
 
-        from zope.app.publisher.fieldconverters \
-            import field2date_via_datetimeutils
+class TestFieldConverters(unittest.TestCase):
 
-        dt = field2date_via_datetimeutils('2003/05/04')
+    def test_field2date_dateonly(self, value="2003/05/04"):
+        dt = field2date_via_datetimeutils(value)
         self.failUnless(isinstance(dt, datetime))
         self.assertEqual(dt.year, 2003)
         self.assertEqual(dt.month, 5)
@@ -35,11 +34,12 @@ class TestFieldConverters(TestCase):
         self.assertEqual(dt.second, 0)
         self.assertEqual(dt.tzinfo, None)
 
+    def test_field2date_reads(self):
+        from io import StringIO
+        sio = StringIO(u'2003/05/04')
+        self.test_field2date_dateonly(sio)
+
     def test_field2date_timestamp(self):
-
-        from zope.app.publisher.fieldconverters \
-            import field2date_via_datetimeutils
-
         dt = field2date_via_datetimeutils('2003/05/04 19:26:54')
         self.failUnless(isinstance(dt, datetime))
         self.assertEqual(dt.year, 2003)
@@ -50,10 +50,11 @@ class TestFieldConverters(TestCase):
         self.assertEqual(dt.second, 54)
         self.assertEqual(dt.tzinfo, None)
 
+    def test_register(self):
+        registerZopeConverters()
+
 def test_suite():
-    suite = TestSuite()
-    suite.addTest(makeSuite(TestFieldConverters))
-    return suite
+    return unittest.defaultTestLoader.loadTestsFromName(__name__)
 
 
 if __name__ == '__main__':

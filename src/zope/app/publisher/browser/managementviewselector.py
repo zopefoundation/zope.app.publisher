@@ -13,20 +13,20 @@
 ##############################################################################
 """Selecting first available and allowed management view
 
-$Id$
 """
-from zope.interface import implements
+
+from zope.interface import implementer
 from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.browser import BrowserView
 from zope.browsermenu.menu import getFirstMenuItem
 
+@implementer(IBrowserPublisher)
 class ManagementViewSelector(BrowserView):
     """View that selects the first available management view.
 
-    Support 'zmi_views' actions like: 'javascript:alert("hello")', 
+    Support 'zmi_views' actions like: 'javascript:alert("hello")',
     '../view_on_parent.html' or '++rollover++'.
     """
-    implements(IBrowserPublisher)
 
     def browserDefault(self, request):
         return self, ()

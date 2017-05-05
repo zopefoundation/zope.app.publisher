@@ -1,6 +1,36 @@
 XML-RPC views
 =============
 
+..
+  Let's first establish that our management views are around
+  so we know that we're running in the right context:
+
+  >>> print(http(r"""
+  ...   GET /++etc++site/@@SelectedManagementView.html HTTP/1.0
+  ...   Authorization: Basic bWdyOm1ncnB3
+  ... """))
+  HTTP/1.0 302 Moved Temporarily
+  Content-Length: 0
+  Content-Type: text/plain;charset=utf-8
+  Location: @@registration.html
+
+  >>> print(http(r"""
+  ...   GET /@@SelectedManagementView.html HTTP/1.0
+  ...   Authorization: Basic bWdyOm1ncnB3
+  ... """))
+  HTTP/1.0 302 Moved Temporarily
+  Content-Length: 0
+  Content-Type: text/plain;charset=utf-8
+  Location: .
+
+  >>> print(http(r"""
+  ...   GET /++etc++site/manage HTTP/1.1
+  ...   Authorization: Basic bWdyOm1ncnB3
+  ...
+  ... """, handle_errors=False))
+  Traceback (most recent call last):
+  zope.security.interfaces.Unauthorized: ...
+
 XML-RPC Methods
 ---------------
 
@@ -26,7 +56,7 @@ Now we'll register it as a view:
   ...   <!-- We only need to do this include in this example,
   ...        Normally the include has already been done for us. -->
   ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
-  ...
+  ...   <include package="zope.security" />
   ...   <xmlrpc:view
   ...       for="zope.site.interfaces.IFolder"
   ...       methods="contents"
@@ -38,29 +68,29 @@ Now we'll register it as a view:
 
 Now, we'll add some items to the root folder:
 
-  >>> print http(r"""
+  >>> print(http(r"""
   ... POST /@@contents.html HTTP/1.1
   ... Authorization: Basic bWdyOm1ncnB3
   ... Content-Length: 73
   ... Content-Type: application/x-www-form-urlencoded
   ...
-  ... type_name=BrowserAdd__zope.site.folder.Folder&new_value=f1""")
+  ... type_name=BrowserAdd__zope.site.folder.Folder&new_value=f1"""))
   HTTP/1.1 303 See Other
   ...
 
-  >>> print http(r"""
+  >>> print(http(r"""
   ... POST /@@contents.html HTTP/1.1
   ... Authorization: Basic bWdyOm1ncnB3
   ... Content-Length: 73
   ... Content-Type: application/x-www-form-urlencoded
   ...
-  ... type_name=BrowserAdd__zope.site.folder.Folder&new_value=f2""")
+  ... type_name=BrowserAdd__zope.site.folder.Folder&new_value=f2"""))
   HTTP/1.1 303 See Other
   ...
 
 And call our xmlrpc method:
 
-  >>> from zope.app.testing.xmlrpc import ServerProxy
+  >>> from zope.app.publisher.xmlrpc.tests import ServerProxy
   >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
   >>> proxy.contents()
   ['f1', 'f2']
@@ -68,10 +98,11 @@ And call our xmlrpc method:
 Note that we get an unauthorized error if we don't supply authentication
 credentials:
 
-  >>> proxy = ServerProxy("http://localhost/")
+  >>> proxy = ServerProxy("http://localhost/", handleErrors=False)
   >>> proxy.contents()
   Traceback (most recent call last):
-  ProtocolError: <ProtocolError for localhost/: 401 401 Unauthorized>
+  ...
+  zope.security.interfaces.Unauthorized: ...
 
 
 Named XML-RPC Views
@@ -144,10 +175,11 @@ Now, when we access the `contents`, we do so through the listing view:
 
 as before, we will get an error if we don't supply credentials:
 
-  >>> proxy = ServerProxy("http://localhost/listing/")
+  >>> proxy = ServerProxy("http://localhost/listing/", handleErrors=False)
   >>> proxy.contents()
   Traceback (most recent call last):
-  ProtocolError: <ProtocolError for localhost/listing/: 401 401 Unauthorized>
+  ...
+  zope.security.interfaces.Unauthorized: ...
 
 Parameters
 ----------
@@ -196,7 +228,10 @@ Faults
 If you need to raise an error, the prefered way to do it is via an
 `xmlrpclib.Fault`:
 
-  >>> import xmlrpclib
+  >>> try:
+  ...    import xmlrpclib
+  ... except ImportError:
+  ...    import xmlrpc.client as xmlrpclib
 
   >>> class FaultDemo:
   ...     def __init__(self, context, request):
@@ -232,7 +267,7 @@ Now, when we call it, we get a proper XML-RPC fault:
   >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
   >>> proxy.your_fault()
   Traceback (most recent call last):
-  Fault: <Fault 42: "It's your fault!">
+  xmlrpc.client.Fault: <Fault 42: "It's your fault!">
 
 
 DateTime values
@@ -242,7 +277,6 @@ Unfortunately, `xmlrpclib` does not support Python 2.3's new
 `datetime.datetime` class (it should be made to, really).  DateTime
 values need to be encoded as `xmlrpclib.DateTime` instances:
 
-  >>> import xmlrpclib
 
   >>> class DateTimeDemo:
   ...     def __init__(self, context, request):
@@ -277,7 +311,7 @@ Now, when we call it, we get a DateTime value
 
   >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
   >>> proxy.epoch()
-  <DateTime u'19700101T01:00:01' at -4bcac114>
+  <DateTime u'19700101T01:00:01' at ...>
 
 Protecting XML/RPC views with class-based permissions
 -----------------------------------------------------
@@ -325,8 +359,7 @@ one:
   'foo'
   >>> proxy.protected() # doctest: +NORMALIZE_WHITESPACE
   Traceback (most recent call last):
-  Unauthorized: (<zope.app.publisher.xmlrpc.metaconfigure.ProtectedView
-   object at 0x...>, 'protected', 'zope.ManageContent')
+  zope.security.interfaces.Unauthorized: (<zope.app.publisher.xmlrpc.metaconfigure.ProtectedView object at 0x...>, 'protected', 'zope.ManageContent')
 
 As a manager, we can access both:
 
@@ -377,7 +410,7 @@ Now, when we call it, we get an XML-RPC fault:
   >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
   >>> proxy.your_exception()
   Traceback (most recent call last):
-  Fault: <Fault -1: 'Unexpected Zope exception: Exception: Something went wrong!'>
+  xmlrpc.client.Fault: <Fault -1: 'Unexpected Zope exception: Exception: Something went wrong!'>
 
 We can also give the parameter `handleErrors` to have the errors not be
 handled:
