@@ -20,7 +20,7 @@
 """
 from setuptools import setup, find_packages
 
-version = '4.0.0'
+version = '4.0.1.dev0'
 
 def _read(fname):
     with open(fname, 'r') as f:
