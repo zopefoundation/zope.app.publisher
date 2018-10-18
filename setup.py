@@ -80,7 +80,7 @@ setup(name='zope.app.publisher',
           'Natural Language :: English',
           'Operating System :: OS Independent',
           'Topic :: Internet :: WWW/HTTP',
-          'Framework :: Zope3',
+          'Framework :: Zope :: 3',
       ],
       description='Implementations and means for configuration of Zope 3-'
                   'style views and resources.',
