@@ -20,7 +20,7 @@
 """
 from setuptools import setup, find_packages
 
-version = '4.0.1.dev0'
+version = '4.1.0.dev0'
 
 def _read(fname):
     with open(fname, 'r') as f:
@@ -60,7 +60,7 @@ tests_require = [
 
 setup(name='zope.app.publisher',
       version=version,
-      url='http://github.com/zopefoundation/zope.app.publisher/',
+      url='https://github.com/zopefoundation/zope.app.publisher/',
       author='Zope Corporation and Contributors',
       author_email='zope-dev@zope.org',
       classifiers=[
@@ -75,6 +75,7 @@ setup(name='zope.app.publisher',
           'Programming Language :: Python :: 3.4',
           'Programming Language :: Python :: 3.5',
           'Programming Language :: Python :: 3.6',
+          'Programming Language :: Python :: 3.7',
           'Programming Language :: Python :: Implementation :: CPython',
           'Programming Language :: Python :: Implementation :: PyPy',
           'Natural Language :: English',

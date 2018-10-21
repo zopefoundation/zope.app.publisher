@@ -25,7 +25,7 @@ class TestFieldConverters(unittest.TestCase):
 
     def test_field2date_dateonly(self, value="2003/05/04"):
         dt = field2date_via_datetimeutils(value)
-        self.failUnless(isinstance(dt, datetime))
+        self.assertTrue(isinstance(dt, datetime))
         self.assertEqual(dt.year, 2003)
         self.assertEqual(dt.month, 5)
         self.assertEqual(dt.day, 4)
@@ -41,7 +41,7 @@ class TestFieldConverters(unittest.TestCase):
 
     def test_field2date_timestamp(self):
         dt = field2date_via_datetimeutils('2003/05/04 19:26:54')
-        self.failUnless(isinstance(dt, datetime))
+        self.assertTrue(isinstance(dt, datetime))
         self.assertEqual(dt.year, 2003)
         self.assertEqual(dt.month, 5)
         self.assertEqual(dt.day, 4)

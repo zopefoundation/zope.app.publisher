@@ -6,8 +6,8 @@
 
   <xmlrpc:view
         name="test"
-        factory="zope.component.testfiles.views.V1"
-        for="zope.component.testfiles.views.IC"
+        factory="zope.app.publisher.xmlrpc.tests.test_directives.V1"
+        for="zope.app.publisher.xmlrpc.tests.test_directives.IC"
         methods="action index"
         permission="zope.Public" />
 

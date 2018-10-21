@@ -17,9 +17,10 @@
 import unittest
 
 from zope import component
+from zope.interface import Interface
+from zope.interface import directlyProvides
 from zope.configuration import xmlconfig
 from zope.configuration.exceptions import ConfigurationError
-from zope.component.testfiles.views import Request, IC, V1
 
 from zope.testing.cleanup import CleanUp as PlacelessSetup
 from zope.security.proxy import ProxyFactory
@@ -29,7 +30,35 @@ from zope.app.publisher import xmlrpc
 from zope.interface import implementer
 
 
+class IV(Interface):
+    def index():
+        "A method"
+
+class IC(Interface):
+    pass
+
+@implementer(IV)
+class V1(object):
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def index(self):
+        return 'V1 here'
+
+    def action(self):
+        return 'done'
+
+
+class Request(object):
+
+    def __init__(self, type):
+        directlyProvides(self, type)
+
+
 request = Request(IXMLRPCRequest)
+
 
 @implementer(IC)
 class Ob(object):
@@ -44,8 +73,8 @@ class DirectivesTest(PlacelessSetup, unittest.TestCase):
             component.queryMultiAdapter((ob, request), name='test'), None)
         xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
         view = component.queryMultiAdapter((ob, request), name='test')
-        self.assert_(V1 in view.__class__.__bases__)
-        self.assert_(xmlrpc.MethodPublisher in view.__class__.__bases__)
+        self.assertTrue(V1 in view.__class__.__bases__)
+        self.assertTrue(xmlrpc.MethodPublisher in view.__class__.__bases__)
 
     def testInterfaceProtectedView(self):
         xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
