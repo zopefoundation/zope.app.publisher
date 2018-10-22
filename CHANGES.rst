@@ -2,10 +2,10 @@
  CHANGES
 =========
 
-4.0.1 (unreleased)
+4.1.0 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Add support for Python 3.7.
 
 
 4.0.0 (2017-05-05)

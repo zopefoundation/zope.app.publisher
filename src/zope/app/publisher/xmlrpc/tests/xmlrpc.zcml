@@ -6,55 +6,55 @@
 
   <xmlrpc:view
       name="test"
-      class="zope.component.testfiles.views.V1"
-      for="zope.component.testfiles.views.IC"
+      class="zope.app.publisher.xmlrpc.tests.test_directives.V1"
+      for="zope.app.publisher.xmlrpc.tests.test_directives.IC"
       permission="zope.Public"
       />
 
   <xmlrpc:view
       name="test2"
-      class="zope.component.testfiles.views.V1"
-      for="zope.component.testfiles.views.IC"
+      class="zope.app.publisher.xmlrpc.tests.test_directives.V1"
+      for="zope.app.publisher.xmlrpc.tests.test_directives.IC"
       permission="zope.Public"
-      interface="zope.component.testfiles.views.IV"
+      interface="zope.app.publisher.xmlrpc.tests.test_directives.IV"
       />
 
   <xmlrpc:view
       name="test3"
-      class="zope.component.testfiles.views.V1"
-      for="zope.component.testfiles.views.IC"
+      class="zope.app.publisher.xmlrpc.tests.test_directives.V1"
+      for="zope.app.publisher.xmlrpc.tests.test_directives.IC"
       permission="zope.Public"
       methods="action" />
 
   <xmlrpc:view
       name="test4"
-      class="zope.component.testfiles.views.V1"
-      for="zope.component.testfiles.views.IC"
+      class="zope.app.publisher.xmlrpc.tests.test_directives.V1"
+      for="zope.app.publisher.xmlrpc.tests.test_directives.IC"
       permission="zope.Public"
       methods="action"
-      interface="zope.component.testfiles.views.IV" />
+      interface="zope.app.publisher.xmlrpc.tests.test_directives.IV" />
 
   <xmlrpc:view
       name="test5"
-      class="zope.component.testfiles.views.V1"
-      for="zope.component.testfiles.views.IC"
+      class="zope.app.publisher.xmlrpc.tests.test_directives.V1"
+      for="zope.app.publisher.xmlrpc.tests.test_directives.IC"
       permission="zope.Public"
       methods="action index"
-      interface="zope.component.testfiles.views.IV" />
+      interface="zope.app.publisher.xmlrpc.tests.test_directives.IV" />
 
 
   <xmlrpc:view
       name="test6"
-      for="zope.component.testfiles.views.IC"
+      for="zope.app.publisher.xmlrpc.tests.test_directives.IC"
       permission="zope.Public"
       methods="action index"
-      interface="zope.component.testfiles.views.IV" />
+      interface="zope.app.publisher.xmlrpc.tests.test_directives.IV" />
 
 
   <xmlrpc:view
-      class="zope.component.testfiles.views.V1"
-      for="zope.component.testfiles.views.IC"
-      interface="zope.component.testfiles.views.IV"
+      class="zope.app.publisher.xmlrpc.tests.test_directives.V1"
+      for="zope.app.publisher.xmlrpc.tests.test_directives.IC"
+      interface="zope.app.publisher.xmlrpc.tests.test_directives.IV"
       methods="action"
       permission="zope.Public"
       />

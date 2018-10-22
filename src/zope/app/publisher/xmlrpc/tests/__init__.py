@@ -70,7 +70,11 @@ class ZopeTestTransport(xmlrpclib.Transport):
 
         assert errcode == 200
 
-        content = 'HTTP/1.0 ' + errmsg + '\n\n' + response.getBody()
+        body = response.getBody()
+        if not isinstance(body, str):
+            # Python 3
+            body = body.decode("utf-8")
+        content = 'HTTP/1.0 ' + errmsg + '\n\n' + body
 
         res = httplib.HTTPResponse(FakeSocket(content))
         res.begin()

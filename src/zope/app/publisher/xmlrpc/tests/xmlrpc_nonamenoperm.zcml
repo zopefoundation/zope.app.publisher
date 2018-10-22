@@ -5,8 +5,8 @@
   <include package="zope.app.publisher.xmlrpc" file="meta.zcml"/>
 
   <xmlrpc:view
-      class="zope.component.testfiles.views.V1"
-      for="zope.component.testfiles.views.IC"
+      class="zope.app.publisher.xmlrpc.tests.test_directives.V1"
+      for="zope.app.publisher.xmlrpc.tests.test_directives.IC"
       />
 
 </configure>
