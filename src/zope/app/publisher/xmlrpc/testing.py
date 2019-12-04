@@ -10,7 +10,6 @@ except ImportError:
 
 from io import BytesIO
 
-from zope.app.publisher.testing import AppPublisherLayer
 from zope.app.wsgi.testlayer import http as _http
 
 
@@ -28,7 +27,6 @@ class FakeSocket(object):
 
 
 def http(wsgi_app, query_str, *args, **kwargs):
-    wsgi_app = AppPublisherLayer.make_wsgi_app()
     # Strip leading \n
     query_str = query_str.lstrip()
     kwargs.setdefault('handle_errors', True)
