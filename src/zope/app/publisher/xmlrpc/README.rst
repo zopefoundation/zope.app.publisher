@@ -378,6 +378,9 @@ As a manager, we can access both:
 Handling errors with the ServerProxy
 ------------------------------------
 
+Normal exceptions
++++++++++++++++++
+
 Our server proxy for functional testing also supports getting the original
 errors from Zope by not handling the errors in the publisher:
 
@@ -426,3 +429,81 @@ handled:
   >>> proxy.your_exception()
   Traceback (most recent call last):
   Exception: Something went wrong!
+
+Custom exception handlers
++++++++++++++++++++++++++
+
+Custom exception handlers might lead to status codes != 200.
+They are handled as ProtocolError:
+
+  >>> import zope.security.interfaces
+  >>> class ExceptionHandlingDemo:
+  ...     def __init__(self, context, request):
+  ...         self.context = context
+  ...         self.request = request
+  ...
+  ...     def your_runtimeerror(self):
+  ...         raise RuntimeError('BadLuck!')
+
+  >>> class ExceptionHandlingDemoHandler:
+  ...    def __init__(self, context, request):
+  ...        self.context = context
+  ...        self.request = request
+  ...
+  ...    def __call__(self):
+  ...        self.request.unauthorized('basic realm="Zope"')
+  ...        return ''
+
+Now we'll register it as a view:
+
+  >>> from zope.configuration import xmlconfig
+  >>> ignored = xmlconfig.string("""
+  ... <configure
+  ...     xmlns="http://namespaces.zope.org/zope"
+  ...     xmlns:browser="http://namespaces.zope.org/browser"
+  ...     xmlns:xmlrpc="http://namespaces.zope.org/xmlrpc"
+  ...     >
+  ...   <!-- We only need to do this include in this example,
+  ...        Normally the include has already been done for us. -->
+  ...   <include package="zope.component" file="meta.zcml" />
+  ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
+  ...   <include package="zope.app.publisher.browser" file="meta.zcml" />
+  ...
+  ...   <view
+  ...       for="RuntimeError"
+  ...       type="zope.publisher.interfaces.http.IHTTPRequest"
+  ...       name="index.html"
+  ...       permission="zope.Public"
+  ...       factory="zope.app.publisher.xmlrpc.README.ExceptionHandlingDemoHandler"
+  ...       />
+  ...
+  ...   <browser:defaultView
+  ...       for="RuntimeError"
+  ...       layer="zope.publisher.interfaces.http.IHTTPRequest"
+  ...       name="index.html"
+  ...       />
+  ...
+  ...   <xmlrpc:view
+  ...       for="zope.site.interfaces.IFolder"
+  ...       methods="your_runtimeerror"
+  ...       class="zope.app.publisher.xmlrpc.README.ExceptionHandlingDemo"
+  ...       permission="zope.ManageContent"
+  ...       />
+  ... </configure>
+  ... """)
+
+Now, when we call it, we get an XML-RPC ProtocolError:
+
+  >>> proxy = ServerProxy(wsgi_app, "http://mgr:mgrpw@localhost/")
+  >>> proxy.your_runtimeerror()
+  Traceback (most recent call last):
+  xmlrpc.client.ProtocolError: <ProtocolError for localhost/: 401 401 Unauthorized>
+
+We can also give the parameter `handleErrors` to have the errors not be
+handled:
+
+  >>> proxy = ServerProxy(
+  ...     wsgi_app, "http://mgr:mgrpw@localhost/", handleErrors=False)
+  >>> proxy.your_runtimeerror()
+  Traceback (most recent call last):
+  RuntimeError: BadLuck!

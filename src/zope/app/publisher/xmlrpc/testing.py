@@ -65,7 +65,15 @@ class ZopeTestTransport(xmlrpclib.Transport):
 
         errcode = response.getStatus()
         errmsg = response.getStatusString()
-        assert errcode == 200
+        # This is not the same way that the normal transport deals with the
+        # headers.
+        headers = response.getHeaders()
+
+        if errcode != 200:
+            raise xmlrpclib.ProtocolError(
+                host + handler,
+                errcode, errmsg,
+                headers)
 
         body = response.getBody()
         if not isinstance(body, str):
