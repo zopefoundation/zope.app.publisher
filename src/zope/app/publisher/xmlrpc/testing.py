@@ -47,10 +47,6 @@ class ZopeTestTransport(xmlrpclib.Transport):
     verbose = False
     handleErrors = True
 
-    def __init__(self, wsgi_app):
-        super(ZopeTestTransport, self).__init__()
-        self.wsgi_app = wsgi_app
-
     def request(self, host, handler, request_body, verbose=0):
         request = "POST %s HTTP/1.0\n" % (handler,)
         request += "Content-Length: %i\n" % len(request_body)
@@ -90,7 +86,8 @@ def ServerProxy(wsgi_app, uri, transport=None, encoding=None,
     by default.
     """
     if transport is None:
-        transport = ZopeTestTransport(wsgi_app)
+        transport = ZopeTestTransport()
+        transport.wsgi_app = wsgi_app
     if isinstance(transport, ZopeTestTransport):
         transport.handleErrors = handleErrors
     return xmlrpclib.ServerProxy(uri, transport, encoding, verbose, allow_none)
