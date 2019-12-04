@@ -27,7 +27,7 @@ from zope.site.interfaces import IFolder
 from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
 
 from zope.app.publisher.testing import AppPublisherLayer
-from zope.app.publisher.xmlrpc.tests import http
+from zope.app.publisher.xmlrpc.testing import http
 
 class TestMethodPublisher(unittest.TestCase):
 

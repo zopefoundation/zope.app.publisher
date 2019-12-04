@@ -20,7 +20,7 @@
 """
 from setuptools import setup, find_packages
 
-version = '4.1.1.dev0'
+version = '4.2.dev0'
 
 def _read(fname):
     with open(fname, 'r') as f:
@@ -44,6 +44,7 @@ tests_require = [
     'zope.browserpage',
     'zope.browserresource',
     'zope.container',
+    'zope.deferredimport',
     'zope.formlib',
     'zope.login',
     'zope.principalannotation',
@@ -109,6 +110,7 @@ setup(name='zope.app.publisher',
       ],
       extras_require={
           'test': tests_require,
+          'testing': 'zope.app.wsgi',
       },
       tests_require=tests_require,
       zip_safe=False,
