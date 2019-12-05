@@ -5,7 +5,9 @@ XML-RPC views
   Let's first establish that our management views are around
   so we know that we're running in the right context:
 
-  >>> print(http(r"""
+  >>> from zope.app.publisher.testing import AppPublisherLayer
+  >>> wsgi_app = AppPublisherLayer.make_wsgi_app()
+  >>> print(http(wsgi_app, r"""
   ...   GET /++etc++site/@@SelectedManagementView.html HTTP/1.0
   ...   Authorization: Basic bWdyOm1ncnB3
   ... """))
@@ -14,7 +16,7 @@ XML-RPC views
   Content-Type: text/plain;charset=utf-8
   Location: @@registration.html
 
-  >>> print(http(r"""
+  >>> print(http(wsgi_app, r"""
   ...   GET /@@SelectedManagementView.html HTTP/1.0
   ...   Authorization: Basic bWdyOm1ncnB3
   ... """))
@@ -23,7 +25,7 @@ XML-RPC views
   Content-Type: text/plain;charset=utf-8
   Location: .
 
-  >>> print(http(r"""
+  >>> print(http(wsgi_app, r"""
   ...   GET /++etc++site/manage HTTP/1.1
   ...   Authorization: Basic bWdyOm1ncnB3
   ...
@@ -68,7 +70,7 @@ Now we'll register it as a view:
 
 Now, we'll add some items to the root folder:
 
-  >>> print(http(r"""
+  >>> print(http(wsgi_app, r"""
   ... POST /@@contents.html HTTP/1.1
   ... Authorization: Basic bWdyOm1ncnB3
   ... Content-Length: 73
@@ -78,7 +80,7 @@ Now, we'll add some items to the root folder:
   HTTP/1.1 303 See Other
   ...
 
-  >>> print(http(r"""
+  >>> print(http(wsgi_app, r"""
   ... POST /@@contents.html HTTP/1.1
   ... Authorization: Basic bWdyOm1ncnB3
   ... Content-Length: 73
@@ -90,15 +92,16 @@ Now, we'll add some items to the root folder:
 
 And call our xmlrpc method:
 
-  >>> from zope.app.publisher.xmlrpc.tests import ServerProxy
-  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
+  >>> from zope.app.publisher.xmlrpc.testing import ServerProxy
+  >>> proxy = ServerProxy(wsgi_app, "http://mgr:mgrpw@localhost/")
   >>> proxy.contents()
   ['f1', 'f2']
 
 Note that we get an unauthorized error if we don't supply authentication
 credentials:
 
-  >>> proxy = ServerProxy("http://localhost/", handleErrors=False)
+  >>> proxy = ServerProxy(
+  ...     wsgi_app, "http://localhost/", handleErrors=False)
   >>> proxy.contents()
   Traceback (most recent call last):
   ...
@@ -166,16 +169,18 @@ as as a named view:
 
 Now, when we access the `contents`, we do so through the listing view:
 
-  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/listing/")
+  >>> proxy = ServerProxy(
+  ...     wsgi_app, "http://mgr:mgrpw@localhost/listing/")
   >>> proxy.contents()
   ['f1', 'f2']
-  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
+  >>> proxy = ServerProxy(wsgi_app, "http://mgr:mgrpw@localhost/")
   >>> proxy.listing.contents()
   ['f1', 'f2']
 
 as before, we will get an error if we don't supply credentials:
 
-  >>> proxy = ServerProxy("http://localhost/listing/", handleErrors=False)
+  >>> proxy = ServerProxy(
+  ...     wsgi_app, "http://localhost/listing/", handleErrors=False)
   >>> proxy.contents()
   Traceback (most recent call last):
   ...
@@ -218,7 +223,7 @@ Now we'll register it as a view:
 Then we can issue a remote procedure call with a parameter and get
 back, surprise!, the sum:
 
-  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
+  >>> proxy = ServerProxy(wsgi_app, "http://mgr:mgrpw@localhost/")
   >>> proxy.add(20, 22)
   42
 
@@ -264,7 +269,7 @@ Now we'll register it as a view:
 
 Now, when we call it, we get a proper XML-RPC fault:
 
-  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
+  >>> proxy = ServerProxy(wsgi_app, "http://mgr:mgrpw@localhost/")
   >>> proxy.your_fault()
   Traceback (most recent call last):
   xmlrpc.client.Fault: <Fault 42: "It's your fault!">
@@ -309,7 +314,7 @@ Now we'll register it as a view:
 
 Now, when we call it, we get a DateTime value
 
-  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
+  >>> proxy = ServerProxy(wsgi_app, "http://mgr:mgrpw@localhost/")
   >>> proxy.epoch()
   <DateTime u'19700101T01:00:01' at ...>
 
@@ -354,7 +359,8 @@ deferred to the class that provides the view's implementation:
 An unauthenticated user can access the public method, but not the protected
 one:
 
-  >>> proxy = ServerProxy("http://usr:usrpw@localhost/index", handleErrors=False)
+  >>> proxy = ServerProxy(
+  ...     wsgi_app, "http://usr:usrpw@localhost/index", handleErrors=False)
   >>> proxy.public()
   'foo'
   >>> proxy.protected() # doctest: +NORMALIZE_WHITESPACE
@@ -363,7 +369,7 @@ one:
 
 As a manager, we can access both:
 
-  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/index")
+  >>> proxy = ServerProxy(wsgi_app, "http://mgr:mgrpw@localhost/index")
   >>> proxy.public()
   'foo'
   >>> proxy.protected()
@@ -371,6 +377,9 @@ As a manager, we can access both:
 
 Handling errors with the ServerProxy
 ------------------------------------
+
+Normal exceptions
++++++++++++++++++
 
 Our server proxy for functional testing also supports getting the original
 errors from Zope by not handling the errors in the publisher:
@@ -407,7 +416,7 @@ Now we'll register it as a view:
 
 Now, when we call it, we get an XML-RPC fault:
 
-  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/")
+  >>> proxy = ServerProxy(wsgi_app, "http://mgr:mgrpw@localhost/")
   >>> proxy.your_exception()
   Traceback (most recent call last):
   xmlrpc.client.Fault: <Fault -1: 'Unexpected Zope exception: Exception: Something went wrong!'>
@@ -415,7 +424,86 @@ Now, when we call it, we get an XML-RPC fault:
 We can also give the parameter `handleErrors` to have the errors not be
 handled:
 
-  >>> proxy = ServerProxy("http://mgr:mgrpw@localhost/", handleErrors=False)
+  >>> proxy = ServerProxy(
+  ...     wsgi_app, "http://mgr:mgrpw@localhost/", handleErrors=False)
   >>> proxy.your_exception()
   Traceback (most recent call last):
   Exception: Something went wrong!
+
+Custom exception handlers
++++++++++++++++++++++++++
+
+Custom exception handlers might lead to status codes != 200.
+They are handled as ProtocolError:
+
+  >>> import zope.security.interfaces
+  >>> class ExceptionHandlingDemo:
+  ...     def __init__(self, context, request):
+  ...         self.context = context
+  ...         self.request = request
+  ...
+  ...     def your_runtimeerror(self):
+  ...         raise RuntimeError('BadLuck!')
+
+  >>> class ExceptionHandlingDemoHandler:
+  ...    def __init__(self, context, request):
+  ...        self.context = context
+  ...        self.request = request
+  ...
+  ...    def __call__(self):
+  ...        self.request.unauthorized('basic realm="Zope"')
+  ...        return ''
+
+Now we'll register it as a view:
+
+  >>> from zope.configuration import xmlconfig
+  >>> ignored = xmlconfig.string("""
+  ... <configure
+  ...     xmlns="http://namespaces.zope.org/zope"
+  ...     xmlns:browser="http://namespaces.zope.org/browser"
+  ...     xmlns:xmlrpc="http://namespaces.zope.org/xmlrpc"
+  ...     >
+  ...   <!-- We only need to do this include in this example,
+  ...        Normally the include has already been done for us. -->
+  ...   <include package="zope.component" file="meta.zcml" />
+  ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
+  ...   <include package="zope.app.publisher.browser" file="meta.zcml" />
+  ...
+  ...   <view
+  ...       for="RuntimeError"
+  ...       type="zope.publisher.interfaces.http.IHTTPRequest"
+  ...       name="index.html"
+  ...       permission="zope.Public"
+  ...       factory="zope.app.publisher.xmlrpc.README.ExceptionHandlingDemoHandler"
+  ...       />
+  ...
+  ...   <browser:defaultView
+  ...       for="RuntimeError"
+  ...       layer="zope.publisher.interfaces.http.IHTTPRequest"
+  ...       name="index.html"
+  ...       />
+  ...
+  ...   <xmlrpc:view
+  ...       for="zope.site.interfaces.IFolder"
+  ...       methods="your_runtimeerror"
+  ...       class="zope.app.publisher.xmlrpc.README.ExceptionHandlingDemo"
+  ...       permission="zope.ManageContent"
+  ...       />
+  ... </configure>
+  ... """)
+
+Now, when we call it, we get an XML-RPC ProtocolError:
+
+  >>> proxy = ServerProxy(wsgi_app, "http://mgr:mgrpw@localhost/")
+  >>> proxy.your_runtimeerror()
+  Traceback (most recent call last):
+  xmlrpc.client.ProtocolError: <ProtocolError for localhost/: 401 401 Unauthorized>
+
+We can also give the parameter `handleErrors` to have the errors not be
+handled:
+
+  >>> proxy = ServerProxy(
+  ...     wsgi_app, "http://mgr:mgrpw@localhost/", handleErrors=False)
+  >>> proxy.your_runtimeerror()
+  Traceback (most recent call last):
+  RuntimeError: BadLuck!

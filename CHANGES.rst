@@ -2,11 +2,14 @@
  CHANGES
 =========
 
-4.1.1 (unreleased)
-==================
+4.2 (unreleased)
+================
 
-- Nothing changed yet.
-
+- Move XMLRPC testing infrastructure from ``.xmlrpc.tests`` to
+  ``.xmlrpc.testing`` and make it reusable by requiring the WSGI app to be
+  provided. Use the ``testing`` extra from `setup.py` to use this testing
+  infrastructure.
+  (`#8 <https://github.com/zopefoundation/zope.app.publisher/pull/8>`_)
 
 4.1.0 (2018-10-22)
 ==================
