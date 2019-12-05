@@ -2,8 +2,8 @@
  CHANGES
 =========
 
-4.2 (unreleased)
-================
+4.2.0 (2019-12-05)
+==================
 
 - Move XMLRPC testing infrastructure from ``.xmlrpc.tests`` to
   ``.xmlrpc.testing`` and make it reusable by requiring the WSGI app to be
