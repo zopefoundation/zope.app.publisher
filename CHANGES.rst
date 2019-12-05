@@ -11,6 +11,11 @@
   infrastructure.
   (`#8 <https://github.com/zopefoundation/zope.app.publisher/pull/8>`_)
 
+- Add support for Python 3.8.
+
+- Drop support for Python 3.4.
+
+
 4.1.0 (2018-10-22)
 ==================
 

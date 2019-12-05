@@ -22,6 +22,7 @@ from setuptools import setup, find_packages
 
 version = '4.2.dev0'
 
+
 def _read(fname):
     with open(fname, 'r') as f:
         return f.read()
@@ -73,10 +74,10 @@ setup(name='zope.app.publisher',
           'Programming Language :: Python :: 2',
           'Programming Language :: Python :: 2.7',
           'Programming Language :: Python :: 3',
-          'Programming Language :: Python :: 3.4',
           'Programming Language :: Python :: 3.5',
           'Programming Language :: Python :: 3.6',
           'Programming Language :: Python :: 3.7',
+          'Programming Language :: Python :: 3.8',
           'Programming Language :: Python :: Implementation :: CPython',
           'Programming Language :: Python :: Implementation :: PyPy',
           'Natural Language :: English',
