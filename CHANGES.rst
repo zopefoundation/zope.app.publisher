@@ -5,7 +5,7 @@
 4.3.0 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Support options `use_datetime` and `use_builtin_types` of ``ServerProxy``.
 
 
 4.2.0 (2019-12-05)

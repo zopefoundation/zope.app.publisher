@@ -9,6 +9,7 @@ except ImportError:
     import http.client as httplib
 
 from io import BytesIO
+import six
 
 from zope.app.wsgi.testlayer import http as _http
 
@@ -87,12 +88,17 @@ class ZopeTestTransport(xmlrpclib.Transport):
 
 
 def ServerProxy(wsgi_app, uri, transport=None, encoding=None,
-                verbose=0, allow_none=0, handleErrors=True):
+                verbose=0, allow_none=0, handleErrors=True,
+                use_datetime=False, use_builtin_types=False):
     """A factory that creates a server proxy using the ZopeTestTransport
     by default.
     """
+    transport_options = dict(use_datetime=use_datetime)
+    if six.PY3:
+        # use_builtin_types is only available since 3.3
+        transport_options['use_builtin_types'] = use_builtin_types
     if transport is None:
-        transport = ZopeTestTransport()
+        transport = ZopeTestTransport(**transport_options)
         transport.wsgi_app = wsgi_app
     if isinstance(transport, ZopeTestTransport):
         transport.handleErrors = handleErrors
