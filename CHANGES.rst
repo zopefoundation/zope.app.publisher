@@ -5,7 +5,9 @@
 4.3.0 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Fix handling of HTTP body in ``.xmlrpc.testing`` to enable characters
+  beyond ASCII.
+  (`#11 <https://github.com/zopefoundation/zope.app.publisher/issues/11>`_)
 
 
 4.2.0 (2019-12-05)

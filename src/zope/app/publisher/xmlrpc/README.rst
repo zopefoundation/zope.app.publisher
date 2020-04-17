@@ -244,7 +244,7 @@ If you need to raise an error, the prefered way to do it is via an
   ...         self.request = request
   ...
   ...     def your_fault(self):
-  ...         return xmlrpclib.Fault(42, "It's your fault!")
+  ...         return xmlrpclib.Fault(42, "It's your fault 😢!")
 
 Now we'll register it as a view:
 
@@ -269,10 +269,23 @@ Now we'll register it as a view:
 
 Now, when we call it, we get a proper XML-RPC fault:
 
+  >>> try:
+  ...     from xmlrpc.client import Fault
+  ...     expected = '<Fault 42: "It\'s your fault 😢!">'
+  ... except ImportError:  # PY2
+  ...     from xmlrpclib import Fault
+  ...     expected = '<Fault 42: u"It\'s your fault \U0001f622!">'
   >>> proxy = ServerProxy(wsgi_app, "http://mgr:mgrpw@localhost/")
-  >>> proxy.your_fault()
-  Traceback (most recent call last):
-  xmlrpc.client.Fault: <Fault 42: "It's your fault!">
+  >>> # When dropping PY2 we can come back here to asserting the text of the
+  >>> # exception:
+  >>> try:
+  ...     proxy.your_fault()
+  ... except Fault as e:
+  ...     assert str(e) == expected, str(e)
+  ... except Exception as e:
+  ...     raise AssertionError('Raised %s instead of `Fault`!')
+  ... else:
+  ...     raise AssertionError('Nothing raised.')
 
 
 DateTime values
