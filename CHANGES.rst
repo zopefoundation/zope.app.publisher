@@ -2,7 +2,7 @@
  CHANGES
 =========
 
-4.3.0 (unreleased)
+4.3.0 (2020-05-12)
 ==================
 
 - Support options *use_datetime* (Python >= 2.7) and *use_builtin_types*
