@@ -1,15 +1,14 @@
 try:
     import xmlrpclib
-except ImportError:
+except ImportError:  # PY3
     import xmlrpc.client as xmlrpclib
 
 try:
     import httplib
-except ImportError:
+except ImportError:  # PY3
     import http.client as httplib
 
 from io import BytesIO
-import six
 
 from zope.app.wsgi.testlayer import http as _http
 
@@ -89,14 +88,15 @@ class ZopeTestTransport(xmlrpclib.Transport):
 
 def ServerProxy(wsgi_app, uri, transport=None, encoding=None,
                 verbose=0, allow_none=0, handleErrors=True,
-                use_datetime=False, use_builtin_types=False):
-    """A factory that creates a server proxy using the ZopeTestTransport
-    by default.
+                **transport_options):
+    """A factory that creates a server proxy.
+
+    If ``transport`` is ``None`` use the ``ZopeTestTransport``, it gets
+    initialized with ``**transport_options``. Which options are supported
+    depends on the used Python version, see
+    ``xmlrpc.client.Transport.__init__`` resp. ``xmlrpclib.Transport.__init__``
+    for details.
     """
-    transport_options = dict(use_datetime=use_datetime)
-    if six.PY3:
-        # use_builtin_types is only available since 3.3
-        transport_options['use_builtin_types'] = use_builtin_types
     if transport is None:
         transport = ZopeTestTransport(**transport_options)
         transport.wsgi_app = wsgi_app

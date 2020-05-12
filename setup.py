@@ -111,10 +111,7 @@ setup(name='zope.app.publisher',
       ],
       extras_require={
           'test': tests_require,
-          'testing': [
-              'six',
-              'zope.app.wsgi',
-          ]
+          'testing': 'zope.app.wsgi',
       },
       tests_require=tests_require,
       zip_safe=False,
