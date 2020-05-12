@@ -5,7 +5,8 @@
 4.3.0 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Support options *use_datetime* (Python >= 2.7) and *use_builtin_types*
+  (`Python >= 3.5`) in ``.xmlrpc.testing.ServerProxy``.
 
 
 4.2.0 (2019-12-05)
