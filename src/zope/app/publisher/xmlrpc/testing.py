@@ -76,9 +76,10 @@ class ZopeTestTransport(xmlrpclib.Transport):
                 headers)
 
         body = response.getBody()
-        if not isinstance(errmsg, bytes):
-            # Python 3
-            errmsg = errmsg.encode("ascii")
+        body = body if isinstance(body, bytes) else body.encode('latin-1')
+        errmsg = (errmsg
+                  if isinstance(errmsg, bytes)
+                  else errmsg.encode('ascii'))  # HTTP response lines are ASCII
         content = b'HTTP/1.0 ' + errmsg + b'\n\n' + body
 
         res = httplib.HTTPResponse(FakeSocket(content))
