@@ -21,8 +21,7 @@ class FakeSocket(object):
     def makefile(self, mode, bufsize=None):
         assert 'b' in mode
         data = self.data
-        if not isinstance(data, bytes):
-            data = data.encode('iso-8859-1')
+        assert isinstance(data, bytes)
         return BytesIO(data)
 
 
