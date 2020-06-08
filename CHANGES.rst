@@ -11,6 +11,10 @@
 4.3.0 (2020-05-12)
 ==================
 
+- Fix handling of HTTP body in ``.xmlrpc.testing`` to enable characters
+  beyond ASCII.
+  (`#11 <https://github.com/zopefoundation/zope.app.publisher/issues/11>`_)
+
 - Support options *use_datetime* (Python >= 2.7) and *use_builtin_types*
   (`Python >= 3.5`) in ``.xmlrpc.testing.ServerProxy``.
 

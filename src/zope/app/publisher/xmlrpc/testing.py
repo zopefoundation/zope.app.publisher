@@ -21,8 +21,7 @@ class FakeSocket(object):
     def makefile(self, mode, bufsize=None):
         assert 'b' in mode
         data = self.data
-        if not isinstance(data, bytes):
-            data = data.encode('iso-8859-1')
+        assert isinstance(data, bytes)
         return BytesIO(data)
 
 
@@ -76,10 +75,11 @@ class ZopeTestTransport(xmlrpclib.Transport):
                 headers)
 
         body = response.getBody()
-        if not isinstance(body, str):
-            # Python 3
-            body = body.decode("utf-8")
-        content = 'HTTP/1.0 ' + errmsg + '\n\n' + body
+        body = body if isinstance(body, bytes) else body.encode('latin-1')
+        errmsg = (errmsg
+                  if isinstance(errmsg, bytes)
+                  else errmsg.encode('ascii'))  # HTTP response lines are ASCII
+        content = b'HTTP/1.0 ' + errmsg + b'\n\n' + body
 
         res = httplib.HTTPResponse(FakeSocket(content))
         res.begin()
