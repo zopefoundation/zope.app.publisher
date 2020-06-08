@@ -2,7 +2,7 @@
  CHANGES
 =========
 
-4.3.1 (unreleased)
+4.3.1 (2020-06-08)
 ==================
 
 - Fix handling of HTTP body in ``.xmlrpc.testing`` to enable characters
