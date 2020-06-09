@@ -107,6 +107,41 @@ credentials:
   ...
   zope.security.interfaces.Unauthorized: ...
 
+`ServerProxy` sets an appropriate `Host` header, so applications that serve
+multiple virtual hosts can tell the difference:
+
+  >>> class Headers:
+  ...     def host(self):
+  ...         return self.request.headers.get("Host")
+
+  >>> from zope.configuration import xmlconfig
+  >>> ignored = xmlconfig.string("""
+  ... <configure
+  ...     xmlns="http://namespaces.zope.org/zope"
+  ...     xmlns:xmlrpc="http://namespaces.zope.org/xmlrpc"
+  ...     >
+  ...   <!-- We only need to do this include in this example,
+  ...        Normally the include has already been done for us. -->
+  ...   <include package="zope.app.publisher.xmlrpc" file="meta.zcml" />
+  ...   <include package="zope.security" file="meta.zcml" />
+  ...
+  ...   <class class="zope.app.publisher.xmlrpc.README.Headers">
+  ...       <allow attributes="host" />
+  ...   </class>
+  ...
+  ...   <xmlrpc:view
+  ...       name="headers"
+  ...       for="zope.site.interfaces.IFolder"
+  ...       methods="host"
+  ...       class="zope.app.publisher.xmlrpc.README.Headers"
+  ...       />
+  ... </configure>
+  ... """)
+
+  >>> proxy = ServerProxy(wsgi_app, "http://mgr:mgrpw@nonsense.test:81/headers")
+  >>> print(proxy.host())
+  nonsense.test:81
+
 
 Named XML-RPC Views
 -------------------

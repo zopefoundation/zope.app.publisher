@@ -50,6 +50,7 @@ class ZopeTestTransport(xmlrpclib.Transport):
         request += "Content-Type: text/xml\n"
 
         host, extra_headers, _x509 = self.get_host_info(host)
+        request += "Host: %s\n" % host
         if extra_headers:
             request += "Authorization: %s\n" % (
                 dict(extra_headers)["Authorization"],)
