@@ -9,8 +9,6 @@
   its request, allowing WSGI applications that serve multiple virtual hosts
   to tell the difference between them.
 
-- Nothing changed yet.
-
 
 4.3.1 (2020-06-08)
 ==================
