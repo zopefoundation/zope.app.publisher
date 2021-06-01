@@ -11,10 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Menu Registration code.
-
-$Id$
-"""
+"""Menu Registration code."""
 # BBB imports
 from zope.browsermenu.menu import (
     BrowserMenu,

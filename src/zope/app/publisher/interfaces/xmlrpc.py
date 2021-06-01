@@ -11,8 +11,5 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""XML-RPC Publisher Interfaces
-
-$Id$
-"""
-from zope.publisher.interfaces.xmlrpc import IXMLRPCView # BBB import
+"""XML-RPC Publisher Interfaces"""
+from zope.publisher.interfaces.xmlrpc import IXMLRPCView  # BBB import

@@ -43,7 +43,6 @@ class IFTPDirectoryPublisher(IFTPPublisher, IFTPView):
         the filter returns a true value.
         """
 
-
     def readfile(name, outstream, start=0, end=None):
         """Outputs the file at name to a stream.
 

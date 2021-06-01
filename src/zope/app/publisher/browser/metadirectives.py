@@ -14,8 +14,6 @@
 """Browser configuration code
 
 This module defines the schemas for browser directives.
-
-$Id$
 """
 # BBB imports
 from zope.browserresource.metadirectives import (

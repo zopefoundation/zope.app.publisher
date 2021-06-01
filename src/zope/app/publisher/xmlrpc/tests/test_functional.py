@@ -29,6 +29,7 @@ from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
 from zope.app.publisher.testing import AppPublisherLayer
 from zope.app.publisher.xmlrpc.testing import http
 
+
 class TestMethodPublisher(unittest.TestCase):
 
     def test_parent(self):
@@ -42,8 +43,10 @@ class TestMethodPublisher(unittest.TestCase):
         self.assertEqual(p.__parent__, self)
         self.assertEqual(p._parent, self)
 
+
 def setUp(test):
     module.setUp(test, 'zope.app.publisher.xmlrpc.README')
+
 
 def tearDown(test):
     # clean up the views we registered:
@@ -56,7 +59,7 @@ def tearDown(test):
     zope.component.provideAdapter(None, (
         IFolder,
         IXMLRPCRequest
-        ), zope.interface, 'contents')
+    ), zope.interface, 'contents')
 
     module.tearDown(test, 'zope.app.publisher.xmlrpc.README')
 
@@ -67,7 +70,6 @@ def test_suite():
         (re.compile('at [-0-9a-fA-F]+'), 'at <SOME ADDRESS>'),
         (re.compile("HTTP/1.0"), "HTTP/1.1"),
     ))
-
 
     suite = doctest.DocFileSuite(
         '../README.rst',
@@ -84,7 +86,3 @@ def test_suite():
         suite,
         unittest.defaultTestLoader.loadTestsFromName(__name__),
     ))
-
-if __name__ == '__main__':
-    import unittest
-    unittest.main(defaultTest='test_suite')

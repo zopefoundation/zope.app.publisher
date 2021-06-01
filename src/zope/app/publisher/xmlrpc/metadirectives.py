@@ -20,6 +20,7 @@ import zope.interface
 import zope.schema
 import zope.security.zcml
 
+
 class IViewDirective(zope.interface.Interface):
     """View Directive for XML-RPC methods."""
 
@@ -30,25 +31,25 @@ class IViewDirective(zope.interface.Interface):
         This can be expressed with either a class or an interface
         """,
         required=True,
-        )
+    )
 
     interface = zope.configuration.fields.Tokens(
         title=u"Interface to be published.",
         required=False,
         value_type=zope.configuration.fields.GlobalInterface()
-        )
+    )
 
     methods = zope.configuration.fields.Tokens(
         title=u"Methods (or attributes) to be published",
         required=False,
         value_type=zope.configuration.fields.PythonIdentifier()
-        )
+    )
 
     class_ = zope.configuration.fields.GlobalObject(
         title=u"Class",
         description=u"A class that provides attributes used by the view.",
         required=False
-        )
+    )
 
     permission = zope.security.zcml.Permission(
         title=u"Permission",
@@ -83,4 +84,4 @@ class IViewDirective(zope.interface.Interface):
 
         """,
         required=False,
-        )
+    )

@@ -53,9 +53,6 @@ class TestFieldConverters(unittest.TestCase):
     def test_register(self):
         registerZopeConverters()
 
+
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
-
-
-if __name__ == '__main__':
-    main()

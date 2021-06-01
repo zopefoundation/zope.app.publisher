@@ -11,8 +11,5 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Browser-Presentation related Fields.
-
-$Id$
-"""
-from zope.browsermenu.field import MenuField # BBB import
+"""Browser-Presentation related Fields."""
+from zope.browsermenu.field import MenuField  # BBB import

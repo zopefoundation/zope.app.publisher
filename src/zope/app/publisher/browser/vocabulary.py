@@ -19,6 +19,7 @@ from zope.publisher.interfaces.browser import IBrowserSkinType
 from zope.schema.interfaces import IVocabularyFactory
 from zope.componentvocabulary.vocabulary import UtilityVocabulary
 
+
 @provider(IVocabularyFactory)
 class BrowserSkinsVocabulary(UtilityVocabulary):
 

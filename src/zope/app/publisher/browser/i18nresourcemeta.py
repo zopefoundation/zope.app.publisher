@@ -11,8 +11,5 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Browser configuration code
-
-$Id$
-"""
-from zope.browserresource.metaconfigure import I18nResource # BBB import
+"""Browser configuration code"""
+from zope.browserresource.metaconfigure import I18nResource  # BBB import

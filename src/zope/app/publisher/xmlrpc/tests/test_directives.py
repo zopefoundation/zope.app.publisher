@@ -34,8 +34,10 @@ class IV(Interface):
     def index():
         "A method"
 
+
 class IC(Interface):
     pass
+
 
 @implementer(IV)
 class V1(object):
@@ -64,7 +66,9 @@ request = Request(IXMLRPCRequest)
 class Ob(object):
     pass
 
+
 ob = Ob()
+
 
 class DirectivesTest(PlacelessSetup, unittest.TestCase):
 
@@ -125,6 +129,3 @@ class DirectivesTest(PlacelessSetup, unittest.TestCase):
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)
-
-if __name__ == '__main__':
-    unittest.main()

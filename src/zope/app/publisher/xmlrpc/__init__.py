@@ -29,6 +29,8 @@ class IMethodPublisher(zope.interface.Interface):
     """
 
 # Need to test new __parent__ attribute
+
+
 @zope.interface.implementer(IMethodPublisher)
 class MethodPublisher(XMLRPCView, zope.location.Location):
     """Base class for very simple XML-RPC views that publish methods

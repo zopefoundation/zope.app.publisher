@@ -11,10 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Provide zope app-server customizatioin of publisher browser facilities
-
-$Id$
-"""
+"""Provide zope app-server customizatioin of publisher browser facilities"""
 # BBB imports
 from zope.publisher.browser import BrowserLanguages
 from zope.publisher.browser import CacheableBrowserLanguages
