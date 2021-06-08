@@ -11,9 +11,5 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Resource URL acess
-
-$Id$
-"""
-
-from zope.browserresource.resources import Resources, empty # BBB imports
+"""Resource URL access"""
+from zope.browserresource.resources import Resources, empty  # BBB imports

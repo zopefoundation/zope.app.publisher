@@ -20,6 +20,7 @@ from zope.publisher.interfaces.browser import IBrowserPublisher
 from zope.publisher.browser import BrowserView
 from zope.browsermenu.menu import getFirstMenuItem
 
+
 @implementer(IBrowserPublisher)
 class ManagementViewSelector(BrowserView):
     """View that selects the first available management view.
@@ -36,11 +37,11 @@ class ManagementViewSelector(BrowserView):
 
         if item:
             redirect_url = item['action']
-            if not (redirect_url.startswith('../') or \
-                    redirect_url.lower().startswith('javascript:') or \
+            if not (redirect_url.startswith('../') or
+                    redirect_url.lower().startswith('javascript:') or
                     redirect_url.lower().startswith('++')):
                 self.request.response.redirect(redirect_url)
                 return u''
 
-        self.request.response.redirect('.') # Redirect to content/
+        self.request.response.redirect('.')  # Redirect to content/
         return u''

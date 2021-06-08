@@ -11,8 +11,5 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Browser Resource
-
-$Id$
-"""
-from zope.browserresource.resource import Resource, AbsoluteURL # BBB imports
+"""Browser Resource"""
+from zope.browserresource.resource import Resource, AbsoluteURL  # BBB imports

@@ -1,0 +1,51 @@
+# Generated from:
+# https://github.com/zopefoundation/meta/tree/master/config/pure-python
+[meta]
+template = "pure-python"
+commit-id = "d38d4a51cd2453eb800866e6e01bfb0fd4e80019"
+
+[python]
+with-appveyor = false
+with-pypy = true
+with-legacy-python = true
+with-docs = false
+with-sphinx-doctests = false
+
+[tox]
+use-flake8 = true
+
+[coverage]
+fail-under = 98
+
+[flake8]
+additional-config = [
+    "# F401 imported but unused",
+    "per-file-ignores =",
+    "    src/zope/app/publisher/browser/__init__.py: F401",
+    "    src/zope/app/publisher/browser/directoryresource.py: F401",
+    "    src/zope/app/publisher/browser/fields.py: F401",
+    "    src/zope/app/publisher/browser/fileresource.py: F401",
+    "    src/zope/app/publisher/browser/i18nfileresource.py: F401",
+    "    src/zope/app/publisher/browser/i18nresourcemeta.py: F401",
+    "    src/zope/app/publisher/browser/icon.py: F401",
+    "    src/zope/app/publisher/browser/menu.py: F401",
+    "    src/zope/app/publisher/browser/menumeta.py: F401",
+    "    src/zope/app/publisher/browser/metaconfigure.py: F401",
+    "    src/zope/app/publisher/browser/metadirectives.py: F401",
+    "    src/zope/app/publisher/browser/pagetemplateresource.py: F401",
+    "    src/zope/app/publisher/browser/resource.py: F401",
+    "    src/zope/app/publisher/browser/resourcemeta.py: F401",
+    "    src/zope/app/publisher/browser/resources.py: F401",
+    "    src/zope/app/publisher/browser/viewmeta.py: F401",
+    "    src/zope/app/publisher/interfaces/__init__.py: F401",
+    "    src/zope/app/publisher/interfaces/browser.py: F401",
+    "    src/zope/app/publisher/interfaces/xmlrpc.py: F401",
+    "    src/zope/app/publisher/pagetemplateresource.py: F401",
+    ]
+
+[manifest]
+additional-rules = [
+    "recursive-include src *.pt",
+    "recursive-include src *.rst",
+    "recursive-include src *.zcml",
+    ]

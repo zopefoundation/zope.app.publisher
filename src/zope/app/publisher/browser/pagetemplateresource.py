@@ -11,10 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Page Template Resource
-
-$Id$
-"""
+"""Page Template Resource"""
 # BBB imports
 from zope.ptresource.ptresource import PageTemplateResource
 from zope.ptresource.ptresource import PageTemplateResourceFactory

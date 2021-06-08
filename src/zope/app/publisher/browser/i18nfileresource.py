@@ -11,10 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Internationalized file resource.
-
-$Id$
-"""
+"""Internationalized file resource."""
 # BBB imports
 from zope.browserresource.i18nfile import I18nFileResource
 from zope.browserresource.i18nfile import I18nFileResourceFactory

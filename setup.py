@@ -27,6 +27,7 @@ def _read(fname):
     with open(fname, 'r') as f:
         return f.read()
 
+
 long_description = (_read('README.rst') + '\n\n' +
                     _read('CHANGES.rst'))
 
@@ -78,6 +79,7 @@ setup(name='zope.app.publisher',
           'Programming Language :: Python :: 3.6',
           'Programming Language :: Python :: 3.7',
           'Programming Language :: Python :: 3.8',
+          'Programming Language :: Python :: 3.9',
           'Programming Language :: Python :: Implementation :: CPython',
           'Programming Language :: Python :: Implementation :: PyPy',
           'Natural Language :: English',
@@ -115,4 +117,4 @@ setup(name='zope.app.publisher',
       },
       tests_require=tests_require,
       zip_safe=False,
-)
+      )

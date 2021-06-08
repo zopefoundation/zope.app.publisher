@@ -11,10 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Menu Directives Configuration Handlers
-
-$Id$
-"""
+"""Menu Directives Configuration Handlers"""
 # BBB imports
 from zope.browsermenu.metaconfigure import (
     menuDirective,

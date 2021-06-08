@@ -11,10 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Browser-Specific Publisher interfaces
-
-$Id$
-"""
+"""Browser-Specific Publisher interfaces"""
 
 # BBB imports
 from zope.browsermenu.interfaces import (

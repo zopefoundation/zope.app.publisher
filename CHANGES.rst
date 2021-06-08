@@ -9,6 +9,8 @@
   its request, allowing WSGI applications that serve multiple virtual hosts
   to tell the difference between them.
 
+- Add support for Python 3.9.
+
 
 4.3.1 (2020-06-08)
 ==================

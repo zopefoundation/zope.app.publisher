@@ -11,8 +11,4 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Resource
-
-$Id$
-"""
-from zope.browserresource.interfaces import IResource # BBB import
+from zope.browserresource.interfaces import IResource  # BBB import

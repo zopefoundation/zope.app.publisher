@@ -20,6 +20,7 @@ from datetime import datetime
 from zope.publisher.browser import registerTypeConverter
 from zope.datetime import parse as parseDateTime
 
+
 def field2date_via_datetimeutils(v):
     """Converter for request fields marshalled as ':date'.
 
@@ -28,7 +29,7 @@ def field2date_via_datetimeutils(v):
             would be more I18N / L10N aware, perhaps even adapting to
             the expressed preferences of the user.
     """
-    if hasattr(v,'read'):
+    if hasattr(v, 'read'):
         v = v.read()
     else:
         v = str(v)
@@ -50,10 +51,12 @@ def field2date_via_datetimeutils(v):
     #   tzinfo = tz_lookup(tzname)
     #
     return datetime(year, month, day, hour, minute, second,
-                  # tzinfo=tzinfo
-                   )
+                    # tzinfo=tzinfo
+                    )
+
 
 ZOPE_CONVERTERS = [('date', field2date_via_datetimeutils)]
+
 
 def registerZopeConverters():
 

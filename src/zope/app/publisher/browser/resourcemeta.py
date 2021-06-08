@@ -11,10 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Browser configuration code
-
-$Id$
-"""
+"""Browser configuration code"""
 # BBB imports
 from zope.browserresource.metaconfigure import (
     allowed_names,
