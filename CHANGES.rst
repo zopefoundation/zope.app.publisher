@@ -5,6 +5,8 @@
 5.0 (unreleased)
 ================
 
+- Drop support for Python 2.7, 3.5, 3.6.
+
 - Make ``.xmlrpc.testing.ServerProxy`` set an appropriate ``Host`` header in
   its request, allowing WSGI applications that serve multiple virtual hosts
   to tell the difference between them.
