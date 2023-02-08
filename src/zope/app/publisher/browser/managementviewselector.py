@@ -15,10 +15,10 @@
 
 """
 
-from zope.interface import implementer
-from zope.publisher.interfaces.browser import IBrowserPublisher
-from zope.publisher.browser import BrowserView
 from zope.browsermenu.menu import getFirstMenuItem
+from zope.interface import implementer
+from zope.publisher.browser import BrowserView
+from zope.publisher.interfaces.browser import IBrowserPublisher
 
 
 @implementer(IBrowserPublisher)

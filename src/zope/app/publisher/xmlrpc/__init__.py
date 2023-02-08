@@ -19,9 +19,9 @@ This module contains the XMLRPCView.
 import zope.interface
 import zope.location
 import zope.publisher.interfaces.xmlrpc
-import zope.app.publisher.interfaces.xmlrpc
-
 from zope.publisher.xmlrpc import XMLRPCView
+
+import zope.app.publisher.interfaces.xmlrpc
 
 
 class IMethodPublisher(zope.interface.Interface):

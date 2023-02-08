@@ -14,11 +14,9 @@
 """Browser-Specific Publisher interfaces"""
 
 # BBB imports
-from zope.browsermenu.interfaces import (
-    IMenuItemType,
-    AddMenu,
-    IBrowserMenu,
-    IBrowserMenuItem,
-    IBrowserSubMenuItem,
-    IMenuAccessView
-)
+from zope.browsermenu.interfaces import AddMenu
+from zope.browsermenu.interfaces import IBrowserMenu
+from zope.browsermenu.interfaces import IBrowserMenuItem
+from zope.browsermenu.interfaces import IBrowserSubMenuItem
+from zope.browsermenu.interfaces import IMenuAccessView
+from zope.browsermenu.interfaces import IMenuItemType

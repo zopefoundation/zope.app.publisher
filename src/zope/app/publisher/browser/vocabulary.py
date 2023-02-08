@@ -14,10 +14,10 @@
 """Browser vocabularies
 
 """
+from zope.componentvocabulary.vocabulary import UtilityVocabulary
 from zope.interface import provider
 from zope.publisher.interfaces.browser import IBrowserSkinType
 from zope.schema.interfaces import IVocabularyFactory
-from zope.componentvocabulary.vocabulary import UtilityVocabulary
 
 
 @provider(IVocabularyFactory)

@@ -1,5 +1,6 @@
 from zope.deferredimport import deprecated
 
+
 deprecated(
     "The contents of zope/app/publisher/xmlrpc/tests/__init__.py have been"
     " moved to zope/app/publisher/xmlrpc/testing.py for reusability."

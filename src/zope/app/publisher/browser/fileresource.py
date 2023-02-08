@@ -13,6 +13,9 @@
 ##############################################################################
 """File-based browser resources."""
 # BBB imports
-from zope.browserresource.file import FileResource, setCacheControl
+from zope.browserresource.file import FileResource
 from zope.browserresource.file import FileResourceFactory
+from zope.browserresource.file import setCacheControl
+
+
 ImageResourceFactory = FileResourceFactory

@@ -18,4 +18,6 @@ $Id$
 
 # BBB imports
 from zope.browserresource.file import File
+
+
 Image = File

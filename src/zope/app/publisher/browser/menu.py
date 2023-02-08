@@ -13,11 +13,9 @@
 ##############################################################################
 """Menu Registration code."""
 # BBB imports
-from zope.browsermenu.menu import (
-    BrowserMenu,
-    BrowserMenuItem,
-    BrowserSubMenuItem,
-    getMenu,
-    getFirstMenuItem,
-    MenuAccessView,
-)
+from zope.browsermenu.menu import BrowserMenu
+from zope.browsermenu.menu import BrowserMenuItem
+from zope.browsermenu.menu import BrowserSubMenuItem
+from zope.browsermenu.menu import MenuAccessView
+from zope.browsermenu.menu import getFirstMenuItem
+from zope.browsermenu.menu import getMenu

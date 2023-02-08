@@ -12,4 +12,5 @@
 #
 ##############################################################################
 """Browser Resource"""
-from zope.browserresource.resource import Resource, AbsoluteURL  # BBB imports
+from zope.browserresource.resource import AbsoluteURL  # BBB imports
+from zope.browserresource.resource import Resource

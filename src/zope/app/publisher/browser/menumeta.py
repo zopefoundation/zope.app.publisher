@@ -13,12 +13,10 @@
 ##############################################################################
 """Menu Directives Configuration Handlers"""
 # BBB imports
-from zope.browsermenu.metaconfigure import (
-    menuDirective,
-    menuItemDirective,
-    subMenuItemDirective,
-    MenuItemFactory,
-    menuItemsDirective,
-    _checkViewFor,
-    addMenuItem,
-)
+from zope.browsermenu.metaconfigure import MenuItemFactory
+from zope.browsermenu.metaconfigure import _checkViewFor
+from zope.browsermenu.metaconfigure import addMenuItem
+from zope.browsermenu.metaconfigure import menuDirective
+from zope.browsermenu.metaconfigure import menuItemDirective
+from zope.browsermenu.metaconfigure import menuItemsDirective
+from zope.browsermenu.metaconfigure import subMenuItemDirective
