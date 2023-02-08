@@ -41,7 +41,7 @@ class ManagementViewSelector(BrowserView):
                     redirect_url.lower().startswith('javascript:') or
                     redirect_url.lower().startswith('++')):
                 self.request.response.redirect(redirect_url)
-                return u''
+                return ''
 
         self.request.response.redirect('.')  # Redirect to content/
-        return u''
+        return ''

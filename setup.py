@@ -12,7 +12,7 @@
 #
 ##############################################################################
 # This package is developed by the Zope Toolkit project, documented here:
-# http://docs.zope.org/zopetoolkit
+# https://zopetoolkit.readthedocs.io
 # When developing and releasing this package, please follow the documented
 # Zope Toolkit policies as described by this documentation.
 ##############################################################################
@@ -26,7 +26,7 @@ version = '5.0.dev0'
 
 
 def _read(fname):
-    with open(fname, 'r') as f:
+    with open(fname) as f:
         return f.read()
 
 
@@ -67,7 +67,7 @@ setup(name='zope.app.publisher',
       version=version,
       url='https://github.com/zopefoundation/zope.app.publisher/',
       author='Zope Corporation and Contributors',
-      author_email='zope-dev@zope.org',
+      author_email='zope-dev@zope.dev',
       classifiers=[
           'Development Status :: 5 - Production/Stable',
           'Environment :: Web Environment',
@@ -95,6 +95,7 @@ setup(name='zope.app.publisher',
       package_dir={'': 'src'},
       namespace_packages=['zope', 'zope.app'],
       include_package_data=True,
+      python_requires='>=3.7',
       install_requires=[
           'setuptools',
           'zope.browsermenu',

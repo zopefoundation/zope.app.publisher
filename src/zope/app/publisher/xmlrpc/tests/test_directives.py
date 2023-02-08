@@ -39,7 +39,7 @@ class IC(Interface):
 
 
 @implementer(IV)
-class V1(object):
+class V1:
 
     def __init__(self, context, request):
         self.context = context
@@ -52,7 +52,7 @@ class V1(object):
         return 'done'
 
 
-class Request(object):
+class Request:
 
     def __init__(self, type):
         directlyProvides(self, type)
@@ -62,7 +62,7 @@ request = Request(IXMLRPCRequest)
 
 
 @implementer(IC)
-class Ob(object):
+class Ob:
     pass
 
 

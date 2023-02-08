@@ -25,8 +25,8 @@ class IViewDirective(zope.interface.Interface):
     """View Directive for XML-RPC methods."""
 
     for_ = zope.configuration.fields.GlobalObject(
-        title=u"Published Object Type",
-        description=u"""The types of objects to be published via XML-RPC
+        title="Published Object Type",
+        description="""The types of objects to be published via XML-RPC
 
         This can be expressed with either a class or an interface
         """,
@@ -34,26 +34,26 @@ class IViewDirective(zope.interface.Interface):
     )
 
     interface = zope.configuration.fields.Tokens(
-        title=u"Interface to be published.",
+        title="Interface to be published.",
         required=False,
         value_type=zope.configuration.fields.GlobalInterface()
     )
 
     methods = zope.configuration.fields.Tokens(
-        title=u"Methods (or attributes) to be published",
+        title="Methods (or attributes) to be published",
         required=False,
         value_type=zope.configuration.fields.PythonIdentifier()
     )
 
     class_ = zope.configuration.fields.GlobalObject(
-        title=u"Class",
-        description=u"A class that provides attributes used by the view.",
+        title="Class",
+        description="A class that provides attributes used by the view.",
         required=False
     )
 
     permission = zope.security.zcml.Permission(
-        title=u"Permission",
-        description=u"""The permission needed to use the view.
+        title="Permission",
+        description="""The permission needed to use the view.
 
         If this option is used and a name is given for the view, then
         the names defined by the given methods or interfaces will be
@@ -71,8 +71,8 @@ class IViewDirective(zope.interface.Interface):
         required=False)
 
     name = zope.schema.TextLine(
-        title=u"The name of the view.",
-        description=u"""
+        title="The name of the view.",
+        description="""
 
         If a name is given, then rpc methods are accessed by
         traversing the name and then accessing the methods.  In this

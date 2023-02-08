@@ -51,7 +51,7 @@ class MethodPublisher(XMLRPCView, zope.location.Location):
 
 @zope.interface.implementer(
     zope.publisher.interfaces.xmlrpc.IXMLRPCPublisher)
-class MethodTraverser(object):
+class MethodTraverser:
 
     __used_for__ = IMethodPublisher
 

@@ -265,13 +265,10 @@ back, surprise!, the sum:
 Faults
 ------
 
-If you need to raise an error, the prefered way to do it is via an
-`xmlrpclib.Fault`:
+If you need to raise an error, the preferred way to do it is via an
+`xmlrpc.client.Fault`:
 
-  >>> try:
-  ...    import xmlrpclib
-  ... except ImportError:
-  ...    import xmlrpc.client as xmlrpclib
+  >>> import xmlrpc.client
 
   >>> class FaultDemo:
   ...     def __init__(self, context, request):
@@ -279,7 +276,7 @@ If you need to raise an error, the prefered way to do it is via an
   ...         self.request = request
   ...
   ...     def your_fault(self):
-  ...         return xmlrpclib.Fault(42, u"It's your fault \N{SNOWMAN}!")
+  ...         return xmlrpc.client.Fault(42, u"It's your fault \N{SNOWMAN}!")
 
 Now we'll register it as a view:
 
@@ -304,28 +301,18 @@ Now we'll register it as a view:
 
 Now, when we call it, we get a proper XML-RPC fault:
 
-  >>> try:
-  ...     from xmlrpc.client import Fault
-  ...     expected = '<Fault 42: "It\'s your fault \N{SNOWMAN}!">'
-  ... except ImportError:  # PY2
-  ...     from xmlrpclib import Fault
-  ...     expected = '<Fault 42: u"It\'s your fault \u2603!">'
+  >>> from xmlrpc.client import Fault
   >>> proxy = ServerProxy(wsgi_app, "http://mgr:mgrpw@localhost/")
-  >>> # When dropping PY2 we can come back here to asserting the text of the
-  >>> # exception:
-  >>> try:
-  ...     proxy.your_fault()
-  ... except Fault as e:
-  ...     str(e) == expected
-  True
-
+  >>> proxy.your_fault()
+  Traceback (most recent call last):
+  xmlrpc.client.Fault: <Fault 42: "It's your fault ☃!">
 
 DateTime values
 ---------------
 
-Unfortunately, `xmlrpclib` does not support Python 2.3's new
+Unfortunately, `xmlrpc.client` does not support Python's
 `datetime.datetime` class (it should be made to, really).  DateTime
-values need to be encoded as `xmlrpclib.DateTime` instances:
+values need to be encoded as `xmlrpc.client.DateTime` instances:
 
 
   >>> class DateTimeDemo:
@@ -334,7 +321,7 @@ values need to be encoded as `xmlrpclib.DateTime` instances:
   ...         self.request = request
   ...
   ...     def epoch(self):
-  ...         return xmlrpclib.DateTime("19700101T01:00:01")
+  ...         return xmlrpc.client.DateTime("19700101T01:00:01")
 
 Now we'll register it as a view:
 

@@ -1,19 +1,11 @@
-try:
-    import xmlrpclib
-except ImportError:  # PY3
-    import xmlrpc.client as xmlrpclib
-
-try:
-    import httplib
-except ImportError:  # PY3
-    import http.client as httplib
-
+import http.client as http_client
+import xmlrpc.client
 from io import BytesIO
 
 from zope.app.wsgi.testlayer import http as _http
 
 
-class FakeSocket(object):
+class FakeSocket:
 
     def __init__(self, data):
         self.data = data
@@ -34,8 +26,8 @@ def http(wsgi_app, query_str, *args, **kwargs):
     return _http(wsgi_app, query_str, *args, **kwargs)
 
 
-class ZopeTestTransport(xmlrpclib.Transport):
-    """xmlrpclib transport that delegates to
+class ZopeTestTransport(xmlrpc.client.Transport):
+    """xmlrpc.client transport that delegates to
     zope.app.wsgi.testlayer.http
     It can be used like a normal transport, including support for basic
     authentication.
@@ -45,19 +37,18 @@ class ZopeTestTransport(xmlrpclib.Transport):
     handleErrors = True
 
     def request(self, host, handler, request_body, verbose=0):
-        request = "POST %s HTTP/1.0\n" % (handler,)
+        request = "POST {} HTTP/1.0\n".format(handler)
         request += "Content-Length: %i\n" % len(request_body)
         request += "Content-Type: text/xml\n"
 
         host, extra_headers, _x509 = self.get_host_info(host)
         request += "Host: %s\n" % host
         if extra_headers:
-            request += "Authorization: %s\n" % (
-                dict(extra_headers)["Authorization"],)
+            request += "Authorization: {}\n".format(
+                dict(extra_headers)["Authorization"])
 
         request += "\n"
-        if isinstance(request_body, bytes) and str is not bytes:
-            # Python 3
+        if isinstance(request_body, bytes):
             request = request.encode("ascii")
         request += request_body
         response = http(
@@ -70,7 +61,7 @@ class ZopeTestTransport(xmlrpclib.Transport):
         headers = response.getHeaders()
 
         if errcode != 200:
-            raise xmlrpclib.ProtocolError(
+            raise xmlrpc.client.ProtocolError(
                 host + handler,
                 errcode, errmsg,
                 headers)
@@ -82,7 +73,7 @@ class ZopeTestTransport(xmlrpclib.Transport):
                   else errmsg.encode('ascii'))  # HTTP response lines are ASCII
         content = b'HTTP/1.0 ' + errmsg + b'\n\n' + body
 
-        res = httplib.HTTPResponse(FakeSocket(content))
+        res = http_client.HTTPResponse(FakeSocket(content))
         res.begin()
         return self.parse_response(res)
 
@@ -95,12 +86,13 @@ def ServerProxy(wsgi_app, uri, transport=None, encoding=None,
     If ``transport`` is ``None`` use the ``ZopeTestTransport``, it gets
     initialized with ``**transport_options``. Which options are supported
     depends on the used Python version, see
-    ``xmlrpc.client.Transport.__init__`` resp. ``xmlrpclib.Transport.__init__``
-    for details.
+    ``xmlrpc.client.Transport.__init__`` resp.
+    ``xmlrpc.client.Transport.__init__`` for details.
     """
     if transport is None:
         transport = ZopeTestTransport(**transport_options)
         transport.wsgi_app = wsgi_app
     if isinstance(transport, ZopeTestTransport):
         transport.handleErrors = handleErrors
-    return xmlrpclib.ServerProxy(uri, transport, encoding, verbose, allow_none)
+    return xmlrpc.client.ServerProxy(
+        uri, transport, encoding, verbose, allow_none)
