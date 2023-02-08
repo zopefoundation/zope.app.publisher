@@ -2,8 +2,8 @@
  CHANGES
 =========
 
-4.4.0 (unreleased)
-==================
+5.0 (unreleased)
+================
 
 - Make ``.xmlrpc.testing.ServerProxy`` set an appropriate ``Host`` header in
   its request, allowing WSGI applications that serve multiple virtual hosts
