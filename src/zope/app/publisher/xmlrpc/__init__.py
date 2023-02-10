@@ -19,9 +19,9 @@ This module contains the XMLRPCView.
 import zope.interface
 import zope.location
 import zope.publisher.interfaces.xmlrpc
-import zope.app.publisher.interfaces.xmlrpc
-
 from zope.publisher.xmlrpc import XMLRPCView
+
+import zope.app.publisher.interfaces.xmlrpc
 
 
 class IMethodPublisher(zope.interface.Interface):
@@ -51,7 +51,7 @@ class MethodPublisher(XMLRPCView, zope.location.Location):
 
 @zope.interface.implementer(
     zope.publisher.interfaces.xmlrpc.IXMLRPCPublisher)
-class MethodTraverser(object):
+class MethodTraverser:
 
     __used_for__ = IMethodPublisher
 

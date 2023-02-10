@@ -15,7 +15,8 @@
 
 $Id$
 """
-from zope.publisher.interfaces.ftp import IFTPPublisher, IFTPView
+from zope.publisher.interfaces.ftp import IFTPPublisher
+from zope.publisher.interfaces.ftp import IFTPView
 
 
 class IFTPDirectoryPublisher(IFTPPublisher, IFTPView):

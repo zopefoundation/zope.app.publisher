@@ -15,31 +15,27 @@
 
 This module defines the schemas for browser directives.
 """
+from zope.browsermenu.metadirectives import IAddMenuItemDirective
+from zope.browsermenu.metadirectives import IMenuDirective
+from zope.browsermenu.metadirectives import IMenuItem
+from zope.browsermenu.metadirectives import IMenuItemDirective
+from zope.browsermenu.metadirectives import IMenuItemsDirective
+from zope.browsermenu.metadirectives import IMenuItemSubdirective
+from zope.browsermenu.metadirectives import ISubMenuItemDirective
+from zope.browsermenu.metadirectives import ISubMenuItemSubdirective
+from zope.browserpage.metadirectives import IPageDirective
+from zope.browserpage.metadirectives import IPagesDirective
+from zope.browserpage.metadirectives import IPagesPageSubdirective
+from zope.browserpage.metadirectives import IViewDefaultPageSubdirective
+from zope.browserpage.metadirectives import IViewDirective
+from zope.browserpage.metadirectives import IViewPageSubdirective
 # BBB imports
-from zope.browserresource.metadirectives import (
-    IBasicResourceInformation,
-    IResourceDirective,
-    II18nResourceDirective,
-    II18nResourceTranslationSubdirective,
-    IResourceDirectoryDirective,
-    IIconDirective
-)
-from zope.browsermenu.metadirectives import (
-    IMenuDirective,
-    IMenuItemsDirective,
-    IMenuItem,
-    IMenuItemSubdirective,
-    IMenuItemDirective,
-    ISubMenuItemSubdirective,
-    ISubMenuItemDirective,
-    IAddMenuItemDirective,
-)
-from zope.browserpage.metadirectives import (
-    IPagesDirective,
-    IViewDirective,
-    IViewPageSubdirective,
-    IViewDefaultPageSubdirective,
-    IPagesPageSubdirective,
-    IPageDirective,
-)
-from zope.publisher.zcml import IDefaultSkinDirective, IDefaultViewDirective
+from zope.browserresource.metadirectives import IBasicResourceInformation
+from zope.browserresource.metadirectives import II18nResourceDirective
+from zope.browserresource.metadirectives import \
+    II18nResourceTranslationSubdirective
+from zope.browserresource.metadirectives import IIconDirective
+from zope.browserresource.metadirectives import IResourceDirective
+from zope.browserresource.metadirectives import IResourceDirectoryDirective
+from zope.publisher.zcml import IDefaultSkinDirective
+from zope.publisher.zcml import IDefaultViewDirective

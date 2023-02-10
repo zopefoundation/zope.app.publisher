@@ -13,5 +13,6 @@
 ##############################################################################
 """Icon support"""
 # BBB imports
-from zope.browserresource.icon import IconView, IconViewFactory
+from zope.browserresource.icon import IconView
+from zope.browserresource.icon import IconViewFactory
 from zope.browserresource.metaconfigure import icon as IconDirective

@@ -13,18 +13,17 @@
 ##############################################################################
 """Functional tests for xmlrpc
 """
-import unittest
 import doctest
 import re
+import unittest
 
 import zope.component
 import zope.interface
 import zope.publisher.interfaces.xmlrpc
-from zope.testing import renormalizing
-from zope.testing import module
-
-from zope.site.interfaces import IFolder
 from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
+from zope.site.interfaces import IFolder
+from zope.testing import module
+from zope.testing import renormalizing
 
 from zope.app.publisher.testing import AppPublisherLayer
 from zope.app.publisher.xmlrpc.testing import http
@@ -78,8 +77,7 @@ def test_suite():
         checker=checker,
         globs={'http': http},
         optionflags=(doctest.ELLIPSIS
-                     | doctest.NORMALIZE_WHITESPACE
-                     | renormalizing.IGNORE_EXCEPTION_MODULE_IN_PYTHON2)
+                     | doctest.NORMALIZE_WHITESPACE)
     )
     suite.layer = AppPublisherLayer
     return unittest.TestSuite((

@@ -17,8 +17,8 @@ $Id$
 """
 from datetime import datetime
 
-from zope.publisher.browser import registerTypeConverter
 from zope.datetime import parse as parseDateTime
+from zope.publisher.browser import registerTypeConverter
 
 
 def field2date_via_datetimeutils(v):

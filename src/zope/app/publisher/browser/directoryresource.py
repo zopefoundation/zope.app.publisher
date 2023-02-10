@@ -22,5 +22,6 @@ __name__ values which include a '/' separating the __name__ of the
 resource directory from the name of the file within the directory.
 """
 # BBB imports
-from zope.browserresource.directory import Directory, DirectoryResource
+from zope.browserresource.directory import Directory
+from zope.browserresource.directory import DirectoryResource
 from zope.browserresource.directory import DirectoryResourceFactory

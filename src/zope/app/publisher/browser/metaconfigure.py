@@ -12,9 +12,11 @@
 #
 ##############################################################################
 """Browser configuration code"""
+from zope.browserpage.metaconfigure import view
 # BBB imports
+from zope.browserresource.metaconfigure import I18nResource
 from zope.browserresource.metaconfigure import resource
 from zope.browserresource.metaconfigure import resourceDirectory
-from zope.browserresource.metaconfigure import I18nResource
-from zope.browserpage.metaconfigure import view
-from zope.publisher.zcml import setDefaultSkin, defaultSkin, defaultView
+from zope.publisher.zcml import defaultSkin
+from zope.publisher.zcml import defaultView
+from zope.publisher.zcml import setDefaultSkin

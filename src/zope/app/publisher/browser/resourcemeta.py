@@ -13,9 +13,7 @@
 ##############################################################################
 """Browser configuration code"""
 # BBB imports
-from zope.browserresource.metaconfigure import (
-    allowed_names,
-    ResourceFactoryWrapper,
-    resource,
-    resourceDirectory
-)
+from zope.browserresource.metaconfigure import ResourceFactoryWrapper
+from zope.browserresource.metaconfigure import allowed_names
+from zope.browserresource.metaconfigure import resource
+from zope.browserresource.metaconfigure import resourceDirectory

@@ -12,13 +12,14 @@
 #
 ##############################################################################
 """XMLRPC configuration code"""
-from zope.interface import Interface
-from zope.configuration.exceptions import ConfigurationError
-from zope.security.checker import CheckerPublic, Checker
-from zope.security.checker import getCheckerForInstancesOf
-from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
 from zope.component.interface import provideInterface
 from zope.component.zcml import handler
+from zope.configuration.exceptions import ConfigurationError
+from zope.interface import Interface
+from zope.publisher.interfaces.xmlrpc import IXMLRPCRequest
+from zope.security.checker import Checker
+from zope.security.checker import CheckerPublic
+from zope.security.checker import getCheckerForInstancesOf
 
 from zope.app.publisher.xmlrpc import MethodPublisher
 

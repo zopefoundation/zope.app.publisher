@@ -13,15 +13,13 @@
 ##############################################################################
 """Browser configuration code"""
 # BBB imports
-from zope.browserpage.metaconfigure import (
-    page,
-    pages,
-    view,
-    _handle_menu,
-    _handle_permission,
-    _handle_allowed_interface,
-    _handle_allowed_attributes,
-    _handle_for,
-    simple,
-    providesCallable,
-)
+from zope.browserpage.metaconfigure import _handle_allowed_attributes
+from zope.browserpage.metaconfigure import _handle_allowed_interface
+from zope.browserpage.metaconfigure import _handle_for
+from zope.browserpage.metaconfigure import _handle_menu
+from zope.browserpage.metaconfigure import _handle_permission
+from zope.browserpage.metaconfigure import page
+from zope.browserpage.metaconfigure import pages
+from zope.browserpage.metaconfigure import providesCallable
+from zope.browserpage.metaconfigure import simple
+from zope.browserpage.metaconfigure import view

@@ -36,7 +36,7 @@ class TestFieldConverters(unittest.TestCase):
 
     def test_field2date_reads(self):
         from io import StringIO
-        sio = StringIO(u'2003/05/04')
+        sio = StringIO('2003/05/04')
         self.test_field2date_dateonly(sio)
 
     def test_field2date_timestamp(self):

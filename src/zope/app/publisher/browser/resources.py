@@ -12,4 +12,5 @@
 #
 ##############################################################################
 """Resource URL access"""
-from zope.browserresource.resources import Resources, empty  # BBB imports
+from zope.browserresource.resources import Resources  # BBB imports
+from zope.browserresource.resources import empty
