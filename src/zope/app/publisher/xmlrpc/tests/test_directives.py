@@ -76,8 +76,8 @@ class DirectivesTest(PlacelessSetup, unittest.TestCase):
             component.queryMultiAdapter((ob, request), name='test'), None)
         xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
         view = component.queryMultiAdapter((ob, request), name='test')
-        self.assertTrue(V1 in view.__class__.__bases__)
-        self.assertTrue(xmlrpc.MethodPublisher in view.__class__.__bases__)
+        self.assertIn(V1, view.__class__.__bases__)
+        self.assertIn(xmlrpc.MethodPublisher, view.__class__.__bases__)
 
     def testInterfaceProtectedView(self):
         xmlconfig.file("xmlrpc.zcml", xmlrpc.tests)
