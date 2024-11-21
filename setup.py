@@ -22,7 +22,7 @@ from setuptools import find_packages
 from setuptools import setup
 
 
-version = '5.1'
+version = '5.2.dev0'
 
 
 def _read(fname):
