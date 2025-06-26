@@ -18,7 +18,6 @@
 ##############################################################################
 """zope.app.publisher setup
 """
-from setuptools import find_packages
 from setuptools import setup
 
 
@@ -57,7 +56,7 @@ tests_require = [
     'zope.securitypolicy',
     'zope.testbrowser >= 5.2',
     'zope.testing',
-    'zope.testrunner',
+    'zope.testrunner >= 6.4',
     'zope.traversing >= 4.1.0',
 
     'webtest',
@@ -91,9 +90,6 @@ setup(name='zope.app.publisher',
                   'style views and resources.',
       long_description=long_description,
       license='ZPL-2.1',
-      packages=find_packages('src'),
-      package_dir={'': 'src'},
-      namespace_packages=['zope', 'zope.app'],
       include_package_data=True,
       python_requires='>=3.9',
       install_requires=[
