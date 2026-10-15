@@ -15,9 +15,9 @@ However, some potentially useful things are still contained in this package:
 
  * "date" field converter for zope.publisher's BrowserRequest field converter
    mechanism.
- 
+
  * "Browser Skins" vocabulary (a vocabulary for IBrowserSkinType utilities)
- 
+
  * ManagementViewSelector (a browser view that redirects to a first available
    management view)
 

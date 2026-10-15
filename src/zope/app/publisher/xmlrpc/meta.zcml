@@ -1,10 +1,10 @@
-<configure 
+<configure
     xmlns:meta="http://namespaces.zope.org/meta"
     xmlns="http://namespaces.zope.org/zope">
-  
-  <meta:directive 
+
+  <meta:directive
        namespace="http://namespaces.zope.org/xmlrpc"
-       name="view" 
+       name="view"
        schema=".metadirectives.IViewDirective"
        handler=".metaconfigure.view" />
 
